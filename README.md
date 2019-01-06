@@ -10,6 +10,6 @@ However, not every AngularJs application can be migrated this way - not when the
 2. we add tests and refactor the application to make it modular, well structured and more compatible with Angular 2+;
 3. we migrate the application one component at a time, while having an AngularJs-Angular hybrid;
 4. we migrate all components and transform the application to a complete Angular 2+ application;
-5. we optionally (highly recommended) incorporate TypeScript in our application.
+5. we optionally (highly recommended) incorporate TypeScript in our application (the end product is on master branch).
 
 You can find the source code for every step of the migration process under corresponding branches, and every step will have accompanying guide documenting important details during the step.
