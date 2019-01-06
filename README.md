@@ -6,7 +6,7 @@ The fundamental idea is to migrate one component at a time, while having Angular
 
 However, not every AngularJs application can be migrated this way - not when the code is non-modular, inconsistently structured or lacking tests, or the code is following patterns that can't work well with Angular 2+. For this reason, we want to make sure our AngularJs code is modular and well structured enough before we start migrating (and ideally, covered by healthy amount of tests):
 
-1. we start off with an AngularJs application that is poorly structured, has no test and many other bad practices;
+1. we start off with an AngularJs application that is poorly structured, has many bad practices and no tests;
 2. we add tests and refactor the application to make it modular, well structured and more compatible with Angular 2+;
 3. we migrate the application one component at a time, while having an AngularJs-Angular hybrid;
 4. we migrate all components and transform the application to a complete Angular 2+ application;
