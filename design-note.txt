@@ -91,16 +91,19 @@ Other notes:
 
 game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }], genre) & (image, view count)
 channel (id, provider_id, provider_channel_id) & (title, streamer_name, game_id, game_name, image, view count)
-user (id, name, email, view_histories : url, bookmarks : url, keywords : [keywords])
+user (id, role, name, password, email, oauth_provider, oauth_identifier, view_histories : url, bookmarks : url, keywords : [keywords])
 view_history (id, channel_id, title, streamer_name, game_id, game_name, image) & (is_live)
 bookmark (id, channel_id, title, streamer_name, playlist) & (is_live)
 ------- (hidden below)
 provider (id, name, urls : { site, search_game, search_channel })
-account (id, username, password, oauth_provider, oauth_identifier)
 keywords (date, game_searches : [{ game_id, count }])
 counter
 
 4. APIs
+
+api/v1/authenticate
+    (1). POST - authenticate user credentials (200 OK/401 Unauthorized)
+    (2). otherwise - 405 Method Not Allowed
 
 api/v1/games
     (1). GET - retrieve list of all games (200 OK)
@@ -126,10 +129,11 @@ api/v1/channels
     (7). GET ?orderByViewCount=[boolean] - order by view counts in descending order
     (8). otherwise - 405 Method Not Allowed
 
-api/v1/user - needs authentication
+api/v1/user - needs authentication (except for POST)
     (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). PUT - update user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (3). otherwise - 405 Method Not Allowed
+    (2). POST - create user record (201 Created/400 Bad Request)
+    (3). PUT - update user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+    (4). otherwise - 405 Method Not Allowed
 
 api/v1/user/histories - needs authentication
     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)

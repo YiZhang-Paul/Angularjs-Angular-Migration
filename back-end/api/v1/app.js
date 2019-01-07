@@ -10,6 +10,7 @@ const routes = require('./routes');
 app.get('/', (_, res) => res.redirect(rootUrl));
 
 app.use(rootUrl, routes.Index);
+app.use(`${rootUrl}/users`, routes.User);
 
 app.get('*', (_, res) => res.sendStatus(404));
 
