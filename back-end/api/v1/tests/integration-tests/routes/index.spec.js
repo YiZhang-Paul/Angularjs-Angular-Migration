@@ -28,7 +28,7 @@ context('index route integration test', () => {
         });
     });
 
-    describe('/api/version', () => {
+    describe(`${rootUrl}`, () => {
 
         it('should return 200 OK status code', done => {
 
