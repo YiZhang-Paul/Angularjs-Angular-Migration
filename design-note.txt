@@ -71,58 +71,21 @@ Other notes:
     user clicks on bookmark tab
         show bookmarked/followed channels with their status (live/offline)
 
-2. APIs
+2. authentication
 
-    api/v1/games
-    (1). GET - retrieve list of all games (200 OK)
-    (2). GET ?name=[string] - partial or full game name, letter casing ignored (200 OK)
-    (3). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
-    (4). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
-    (5). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
-    (6). GET ?orderByViewCount=[boolean] - order by view counts in descending order (200 OK)
-    (7). otherwise - 405 Method Not Allowed
-
-    api/v1/games/:id
-    (1). GET - retrieve details of particular game (name, view count, genre, channels, etc) (200 OK/404 Not Found)
-    (2). GET ?fields=[string] - comma separated fields to be included in response (200 OK/404 Not Found)
-    (3). otherwise - 405 Method Not Allowed
-
-    api/v1/channels
-    (1). GET - retrieve list of live channels (200 OK)
-    (2). GET ?gameId=[integer] - id to retrieve live channels relate to a particular game
-    (3). GET ?gameName=[string] (ignored when gameId is specified) - partial/full game name, letter casing ignored (200 OK)
-    (4). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
-    (5). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
-    (6). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
-    (7). GET ?orderByViewCount=[boolean] - order by view counts in descending order
-    (8). otherwise - 405 Method Not Allowed
-
-    api/v1/users/:id - needs access token
-    (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). PUT - update user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (3). DELETE - delete user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (4). otherwise - 405 Method Not Allowed
-
-    api/v1/users/:id/histories - needs access token
-    (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). POST - create user histories (201 Created/401 Unauthorized/403 Forbidden)
-    (3). DELETE - delete user histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (4). otherwise - 405 Method Not Allowed
-
-    api/v1/users/:userId/histories/:historyId - needs access token
-    (1). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). otherwise - 405 Method Not Allowed
-
-    api/v1/users/:id/bookmarks - needs access token
-    (1). GET - retrieve user bookmarks (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). POST - create user bookmarks (201 Created/401 Unauthorized/403 Forbidden)
-    (3). DELETE - delete user bookmarks (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-    (4). otherwise - 405 Method Not Allowed
-
-    api/v1/users/:userId/bookmarks/:bookmarkId - needs access token
-    (1). PUT - update user bookmark (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (2). DELETE - delete user bookmark (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
-    (3). otherwise - 405 Method Not Allowed
+(1). on first request - client side must send login credentials (username/password; oauth-2 credentials)
+(2). server receives credentials and authenticate
+    if succeed
+        create a JWT and send it back to client side with response
+    else
+        redirect to login and display error message
+(3). client side receives JWT and store it in local storage
+(4). client side send JWT with every request to server
+(5). server verifies JWT
+    if JWT is valid
+        process request
+    else
+        return error
 
 3. entities/models - format: name (fields in models) & (fields added on the fly)
 
@@ -136,3 +99,57 @@ provider (id, name, urls : { site, search_game, search_channel })
 account (id, username, password, oauth_provider, oauth_identifier)
 keywords (date, game_searches : [{ game_id, count }])
 counter
+
+4. APIs
+
+api/v1/games
+    (1). GET - retrieve list of all games (200 OK)
+    (2). GET ?name=[string] - partial or full game name, letter casing ignored (200 OK)
+    (3). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
+    (4). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
+    (5). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
+    (6). GET ?orderByViewCount=[boolean] - order by view counts in descending order (200 OK)
+    (7). otherwise - 405 Method Not Allowed
+
+api/v1/games/:id
+    (1). GET - retrieve details of particular game (name, view count, genre, channels, etc) (200 OK/404 Not Found)
+    (2). GET ?fields=[string] - comma separated fields to be included in response (200 OK/404 Not Found)
+    (3). otherwise - 405 Method Not Allowed
+
+api/v1/channels
+    (1). GET - retrieve list of live channels (200 OK)
+    (2). GET ?gameId=[integer] - id to retrieve live channels relate to a particular game
+    (3). GET ?gameName=[string] (ignored when gameId is specified) - partial/full game name, letter casing ignored (200 OK)
+    (4). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
+    (5). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
+    (6). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
+    (7). GET ?orderByViewCount=[boolean] - order by view counts in descending order
+    (8). otherwise - 405 Method Not Allowed
+
+api/v1/user - needs authentication
+    (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (2). PUT - update user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+    (3). otherwise - 405 Method Not Allowed
+
+api/v1/user/histories - needs authentication
+    (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (2). POST - create user view histories (201 Created/401 Unauthorized/403 Forbidden)
+    (3). DELETE - delete user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (4). otherwise - 405 Method Not Allowed
+
+api/v1/user/histories/:id - needs authentication
+    (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+    (3). otherwise - 405 Method Not Allowed
+
+api/v1/user/bookmarks - needs authentication
+    (1). GET - retrieve user bookmarks (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (2). POST - create user bookmarks (201 Created/401 Unauthorized/403 Forbidden)
+    (3). DELETE - delete user bookmarks (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (4). otherwise - 405 Method Not Allowed
+
+api/v1/user/bookmarks/:id - needs authentication
+    (1). GET - retrieve user bookmark (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+    (2). PUT - update user bookmark (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+    (3). DELETE - delete user bookmark (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+    (4). otherwise - 405 Method Not Allowed
