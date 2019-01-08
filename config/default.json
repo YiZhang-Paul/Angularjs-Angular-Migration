@@ -1,0 +1,11 @@
+{
+    "root_url": "/api/v1",
+    "port": {
+        "server": "3050",
+        "api": "4050"
+    },
+    "database": {
+        "host": "ds151354.mlab.com:51354",
+        "name": "angular-migration"
+    }
+}

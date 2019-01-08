@@ -1,0 +1,49 @@
+{
+    "name": "sample-angularjs-migration",
+    "version": "0.1.0",
+    "description": "sample application to demonstrate angularjs migration",
+    "scripts": {
+        "build": "tsc && cp -r config dist/backend",
+        "rebuild": "rm -rf dist && npm run build",
+        "server": "cd dist/backend && node server",
+        "api": "cd dist/backend && node apis/v1/app",
+        "start": "npm run build && concurrently \"npm run server\" \"npm run api\"",
+        "dev": "nodemon -e ts --exec \"npm start\"",
+        "test-unit": "npm run build && set NODE_ENV=testing&& mocha **/unit-tests/**/*.spec.js --reporter spec",
+        "test-int": "npm run build && set NODE_ENV=testing&& mocha **/integration-tests/**/*.spec.js --reporter spec"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YiZhang-Paul/Angularjs-Angular-Migration.git"
+    },
+    "author": "Yi Zhang",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/YiZhang-Paul/Angularjs-Angular-Migration/issues"
+    },
+    "homepage": "https://github.com/YiZhang-Paul/Angularjs-Angular-Migration#readme",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "concurrently": "^4.1.0",
+        "config": "^3.0.1",
+        "express": "^4.16.4",
+        "jsonwebtoken": "^8.4.0",
+        "mongoose": "^5.4.2"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.1.7",
+        "@types/config": "0.0.34",
+        "@types/express": "^4.16.0",
+        "@types/mocha": "^5.2.5",
+        "@types/mongoose": "^5.3.7",
+        "@types/node": "^10.12.18",
+        "@types/sinon": "^7.0.3",
+        "@types/superagent": "^3.8.6",
+        "chai": "^4.2.0",
+        "chai-http": "^4.2.1",
+        "mocha": "^5.2.0",
+        "nodemon": "^1.18.9",
+        "sinon": "^7.2.2",
+        "typescript": "^3.2.2"
+    }
+}

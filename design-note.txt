@@ -91,10 +91,11 @@ Other notes:
 
 game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }], genre) & (image, view count)
 channel (id, provider_id, provider_channel_id) & (title, streamer_name, game_id, game_name, image, view count)
-user (id, role, name, password, email, oauth_provider, oauth_identifier, view_histories : url, bookmarks : url, keywords : [keywords])
+user (id, name, view_histories : url, bookmarks : url, keywords : [keywords])
 view_history (id, channel_id, title, streamer_name, game_id, game_name, image) & (is_live)
 bookmark (id, channel_id, title, streamer_name, playlist) & (is_live)
 ------- (hidden below)
+account (id, role, username, password, email, oauth_provider, oauth_identifier)
 provider (id, name, urls : { site, search_game, search_channel })
 keywords (date, game_searches : [{ game_id, count }])
 counter
