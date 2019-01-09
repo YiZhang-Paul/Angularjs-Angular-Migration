@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var schema = new mongoose_1.Schema({
+    id: { type: Number, required: true },
     field_1: { type: String, default: 'field_1' },
     field_2: { type: String, default: 'field_2' },
     field_3: { type: String, default: 'field_3', select: false },
@@ -44,15 +45,15 @@ var schema = new mongoose_1.Schema({
 });
 schema.statics.addDefault = function (total) {
     return __awaiter(this, void 0, void 0, function () {
-        var i;
+        var i, counter;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    i = 0;
+                    i = 0, counter = 0;
                     _a.label = 1;
                 case 1:
                     if (!(i < total)) return [3 /*break*/, 4];
-                    return [4 /*yield*/, new this().save()];
+                    return [4 /*yield*/, new this({ id: ++counter }).save()];
                 case 2:
                     _a.sent();
                     _a.label = 3;

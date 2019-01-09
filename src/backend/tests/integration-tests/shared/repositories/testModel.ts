@@ -3,6 +3,7 @@ import ITestModel from './ITestModel.interface';
 
 const schema = new Schema({
 
+    id: { type: Number, required: true },
     field_1: { type: String, default: 'field_1' },
     field_2: { type: String, default: 'field_2' },
     field_3: { type: String, default: 'field_3', select: false },
@@ -11,9 +12,9 @@ const schema = new Schema({
 
 schema.statics.addDefault = async function(total: number): Promise<void> {
 
-    for (let i = 0; i < total; i++) {
+    for (let i = 0, counter = 0; i < total; i++) {
 
-        await new this().save();
+        await new this({ id: ++counter }).save();
     }
 }
 

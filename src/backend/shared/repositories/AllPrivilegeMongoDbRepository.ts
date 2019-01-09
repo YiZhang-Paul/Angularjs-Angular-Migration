@@ -65,36 +65,37 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
         return (await query)[0];
     }
 
-    protected async updateWithResult(document: Document, data: any): Promise<boolean> {
+    protected async updateWithResult(id: string, data: any): Promise<Document | null> {
 
         try {
 
-            await document.update(data);
+            const filter = { '_id': id };
+            const option = { new: true };
 
-            return true;
+            return this._model.findOneAndUpdate(filter, data, option);
 
         } catch (error) {
 
-            return false;
+            return null;
         }
     }
 
     public async update(data: any, filter: any = {}): Promise<Document[]> {
 
-        const updated: Document[] = [];
-        const documents = await this.find(filter);
+        const oldDocuments = await this.find(filter);
+        const newDocuments: Document[] = [];
 
-        for (const document of documents) {
+        for (const document of oldDocuments) {
 
-            const isUpdated = await this.updateWithResult(document, data);
+            const updated = await this.updateWithResult(document._id, data);
 
-            if (isUpdated) {
+            if (updated) {
 
-                updated.push(document);
+                newDocuments.push(updated);
             }
         }
 
-        return updated;
+        return newDocuments;
     }
 
     public async updateOne(data: any, filter: any): Promise<Document> {
@@ -106,9 +107,9 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
             return new Array<Document>()[0];
         }
 
-        const isUpdated = await this.updateWithResult(document, data);
+        const updated = await this.updateWithResult(document._id, data);
 
-        return isUpdated ? document : <Document>{};
+        return updated ? updated : <Document>{};
     }
 
     protected async deleteWithResult(document: Document): Promise<boolean> {

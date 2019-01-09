@@ -4,6 +4,7 @@ var config = require("config");
 var mongoose = require("mongoose");
 var useNewUrlParser = true;
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 mongoose.connect(createConnectionString(), { useNewUrlParser: useNewUrlParser });
 mongoose.connection.on('error', function () { return console.log('Database connection failed.'); });
 function createConnectionString() {

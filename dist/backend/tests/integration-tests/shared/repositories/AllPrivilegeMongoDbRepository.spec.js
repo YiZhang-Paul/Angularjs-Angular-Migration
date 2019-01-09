@@ -60,6 +60,7 @@ var AllPrivilegeMongoDbRepositoryForTest = /** @class */ (function (_super) {
     return AllPrivilegeMongoDbRepositoryForTest;
 }(AllPrivilegeMongoDbRepository_1.default));
 context('AllPrivilegeMongoDbRepository integration test', function () {
+    var fields = ['field_1', 'field_2', 'field_3', 'field_4'];
     var repository;
     beforeEach('test setup', function () { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -75,25 +76,216 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
             }
         });
     }); });
-    describe('insertOne()', function () {
-        it('should insert one document into database', function () { return __awaiter(_this, void 0, void 0, function () {
-            var total, fields, expected, inserted, result, _a;
+    describe('insert()', function () {
+        it('should insert documents into database', function () { return __awaiter(_this, void 0, void 0, function () {
+            var total, expected, inserted, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, testModel_1.default.total()];
                     case 1:
                         total = _b.sent();
-                        fields = ['field_1', 'field_2', 'field_3', 'field_4'];
-                        expected = createData(fields);
-                        return [4 /*yield*/, repository.insertOne(expected)];
+                        expected = createDataList(fields, 5, total + 1);
+                        return [4 /*yield*/, repository.insert(expected)];
                     case 2:
                         inserted = _b.sent();
-                        result = inserted.toObject();
+                        _a = chai_1.expect;
+                        return [4 /*yield*/, testModel_1.default.total()];
+                    case 3:
+                        _a.apply(void 0, [_b.sent()]).to.equal(total + inserted.length);
+                        chai_1.expect(hasSameDataList(expected, inserted)).to.be.true;
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('insertOne()', function () {
+        it('should insert one document into database', function () { return __awaiter(_this, void 0, void 0, function () {
+            var total, expected, result, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, testModel_1.default.total()];
+                    case 1:
+                        total = _b.sent();
+                        expected = createData(fields, total + 1);
+                        return [4 /*yield*/, repository.insertOne(expected)];
+                    case 2:
+                        result = _b.sent();
                         _a = chai_1.expect;
                         return [4 /*yield*/, testModel_1.default.total()];
                     case 3:
                         _a.apply(void 0, [_b.sent()]).to.equal(total + 1);
-                        chai_1.expect(areSame(expected, result, fields)).to.be.true;
+                        chai_1.expect(hasSameData(expected, result)).to.be.true;
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('find()', function () {
+        it('should find all documents', function () { return __awaiter(_this, void 0, void 0, function () {
+            var result, _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, repository.find()];
+                    case 1:
+                        result = _c.sent();
+                        chai_1.expect(result).is.not.empty;
+                        _b = (_a = chai_1.expect(result.length).to).equal;
+                        return [4 /*yield*/, testModel_1.default.total()];
+                    case 2:
+                        _b.apply(_a, [_c.sent()]);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should find all documents matching the criteria', function () { return __awaiter(_this, void 0, void 0, function () {
+            var total, expected, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, testModel_1.default.total()];
+                    case 1:
+                        total = _a.sent();
+                        expected = 2;
+                        return [4 /*yield*/, repository.find({ id: { $gt: total - expected } })];
+                    case 2:
+                        result = _a.sent();
+                        chai_1.expect(total).to.be.greaterThan(expected);
+                        chai_1.expect(result.length).to.equal(expected);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should include expected fields in projection', function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a, expected, projection, option, result;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        expected = [fields[0], fields[2]];
+                        projection = (_a = { '_id': 0 }, _a[expected[0]] = 1, _a[expected[1]] = 1, _a);
+                        option = { projection: projection };
+                        return [4 /*yield*/, repository.find({}, option)];
+                    case 1:
+                        result = _b.sent();
+                        result.forEach(function (document) {
+                            var paths = Object.keys(document.toObject());
+                            chai_1.expect(paths).to.deep.equal(expected);
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should include selected fields', function () { return __awaiter(_this, void 0, void 0, function () {
+            var expected, option, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        expected = fields.slice(2);
+                        option = { select: expected };
+                        return [4 /*yield*/, repository.find({}, option)];
+                    case 1:
+                        result = _a.sent();
+                        result.forEach(function (document) {
+                            var paths = Object.keys(document.toObject());
+                            // ensure field 3 and field 4 are not the only fields in result
+                            chai_1.expect(isSubArray(expected, paths)).to.be.true;
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('findOne()', function () {
+        it('should find document matching the criteria', function () { return __awaiter(_this, void 0, void 0, function () {
+            var expected, result, id;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        expected = 2;
+                        return [4 /*yield*/, repository.findOne({ id: expected })];
+                    case 1:
+                        result = _a.sent();
+                        id = result.toObject()['id'];
+                        chai_1.expect(result).is.not.null;
+                        chai_1.expect(id).to.equal(expected);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should include expected fields in projection', function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a, id, expected, projection, option, result, paths;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        id = 1;
+                        expected = [fields[0], fields[2]];
+                        projection = (_a = { '_id': 0 }, _a[expected[0]] = 1, _a[expected[1]] = 1, _a);
+                        option = { projection: projection };
+                        return [4 /*yield*/, repository.findOne({ id: id }, option)];
+                    case 1:
+                        result = _b.sent();
+                        paths = Object.keys(result.toObject());
+                        chai_1.expect(result).is.not.null;
+                        chai_1.expect(paths).to.deep.equal(expected);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should include selected fields', function () { return __awaiter(_this, void 0, void 0, function () {
+            var id, expected, option, result, paths;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        id = 1;
+                        expected = fields.slice(2);
+                        option = { select: expected };
+                        return [4 /*yield*/, repository.findOne({ id: id }, option)];
+                    case 1:
+                        result = _a.sent();
+                        paths = Object.keys(result.toObject());
+                        chai_1.expect(result).is.not.null;
+                        // ensure field 3 and field 4 are not the only fields in result
+                        chai_1.expect(isSubArray(expected, paths)).to.be.true;
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('update()', function () {
+        it('should update all documents', function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a, field, value, original, result;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        field = fields[1];
+                        value = 'updated_field';
+                        return [4 /*yield*/, repository.find({})];
+                    case 1:
+                        original = _b.sent();
+                        return [4 /*yield*/, repository.update((_a = {}, _a[field] = value, _a))];
+                    case 2:
+                        result = _b.sent();
+                        chai_1.expect(original.some(function (_) { return _.toObject()[field] === value; })).to.be.false;
+                        chai_1.expect(result.every(function (_) { return _.toObject()[field] === value; })).to.be.true;
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should update all documents matching the criteria', function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a, field, value, filter, original, result;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        field = fields[1];
+                        value = 'updated_field';
+                        filter = { id: { $gt: 2 } };
+                        return [4 /*yield*/, repository.find(filter)];
+                    case 1:
+                        original = _b.sent();
+                        return [4 /*yield*/, repository.update((_a = {}, _a[field] = value, _a), filter)];
+                    case 2:
+                        result = _b.sent();
+                        chai_1.expect(result.length).to.equal(original.length);
+                        chai_1.expect(original.some(function (_) { return _.toObject()[field] === value; })).to.be.false;
+                        chai_1.expect(result.every(function (_) { return _.toObject()[field] === value; })).to.be.true;
                         return [2 /*return*/];
                 }
             });
@@ -104,14 +296,33 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
 function getRandomString() {
     return Math.random() + "." + Math.random() + "." + Math.random();
 }
-function createData(fields) {
-    var data = {};
+function createData(fields, id) {
+    var data = { id: id };
     fields.forEach(function (field) {
         data[field] = getRandomString();
     });
     return data;
 }
-function areSame(expected, result, fields) {
-    return fields.every(function (field) { return result[field] === expected[field]; });
+function createDataList(fields, total, startId) {
+    var data = [];
+    for (var i = 0; i < total; i++) {
+        data.push(createData(fields, startId + i));
+    }
+    return data;
+}
+function hasSameData(expected, result) {
+    return Object.keys(expected).every(function (key) { return result[key] === expected[key]; });
+}
+function hasSameDataList(expected, result) {
+    if (result.length !== expected.length) {
+        return false;
+    }
+    return result.every(function (data, index) { return hasSameData(expected[index], data); });
+}
+function isSubArray(array1, array2) {
+    if (array1.length >= array2.length) {
+        return false;
+    }
+    return array1.every(function (_) { return array2.includes(_); });
 }
 //# sourceMappingURL=AllPrivilegeMongoDbRepository.spec.js.map

@@ -135,14 +135,79 @@ var AllPrivilegeMongoDbRepository = /** @class */ (function (_super) {
             });
         });
     };
-    AllPrivilegeMongoDbRepository.prototype.updateWithResult = function (document, data) {
+    AllPrivilegeMongoDbRepository.prototype.updateWithResult = function (id, data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var filter, option;
+            return __generator(this, function (_a) {
+                try {
+                    filter = { '_id': id };
+                    option = { new: true };
+                    return [2 /*return*/, this._model.findOneAndUpdate(filter, data, option)];
+                }
+                catch (error) {
+                    return [2 /*return*/, null];
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    AllPrivilegeMongoDbRepository.prototype.update = function (data, filter) {
+        if (filter === void 0) { filter = {}; }
+        return __awaiter(this, void 0, void 0, function () {
+            var oldDocuments, newDocuments, _i, oldDocuments_1, document_2, updated;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.find(filter)];
+                    case 1:
+                        oldDocuments = _a.sent();
+                        newDocuments = [];
+                        _i = 0, oldDocuments_1 = oldDocuments;
+                        _a.label = 2;
+                    case 2:
+                        if (!(_i < oldDocuments_1.length)) return [3 /*break*/, 5];
+                        document_2 = oldDocuments_1[_i];
+                        return [4 /*yield*/, this.updateWithResult(document_2._id, data)];
+                    case 3:
+                        updated = _a.sent();
+                        if (updated) {
+                            newDocuments.push(updated);
+                        }
+                        _a.label = 4;
+                    case 4:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 5: return [2 /*return*/, newDocuments];
+                }
+            });
+        });
+    };
+    AllPrivilegeMongoDbRepository.prototype.updateOne = function (data, filter) {
+        return __awaiter(this, void 0, void 0, function () {
+            var document, updated;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.findOne(filter)];
+                    case 1:
+                        document = _a.sent();
+                        if (!document) {
+                            return [2 /*return*/, new Array()[0]];
+                        }
+                        return [4 /*yield*/, this.updateWithResult(document._id, data)];
+                    case 2:
+                        updated = _a.sent();
+                        return [2 /*return*/, updated ? updated : {}];
+                }
+            });
+        });
+    };
+    AllPrivilegeMongoDbRepository.prototype.deleteWithResult = function (document) {
         return __awaiter(this, void 0, void 0, function () {
             var error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, document.update(data)];
+                        return [4 /*yield*/, document.remove()];
                     case 1:
                         _a.sent();
                         return [2 /*return*/, true];
@@ -154,78 +219,9 @@ var AllPrivilegeMongoDbRepository = /** @class */ (function (_super) {
             });
         });
     };
-    AllPrivilegeMongoDbRepository.prototype.update = function (data, filter) {
-        if (filter === void 0) { filter = {}; }
-        return __awaiter(this, void 0, void 0, function () {
-            var updated, documents, _i, documents_2, document_2, isUpdated;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        updated = [];
-                        return [4 /*yield*/, this.find(filter)];
-                    case 1:
-                        documents = _a.sent();
-                        _i = 0, documents_2 = documents;
-                        _a.label = 2;
-                    case 2:
-                        if (!(_i < documents_2.length)) return [3 /*break*/, 5];
-                        document_2 = documents_2[_i];
-                        return [4 /*yield*/, this.updateWithResult(document_2, data)];
-                    case 3:
-                        isUpdated = _a.sent();
-                        if (isUpdated) {
-                            updated.push(document_2);
-                        }
-                        _a.label = 4;
-                    case 4:
-                        _i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [2 /*return*/, updated];
-                }
-            });
-        });
-    };
-    AllPrivilegeMongoDbRepository.prototype.updateOne = function (data, filter) {
-        return __awaiter(this, void 0, void 0, function () {
-            var document, isUpdated;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.findOne(filter)];
-                    case 1:
-                        document = _a.sent();
-                        if (!document) {
-                            return [2 /*return*/, new Array()[0]];
-                        }
-                        return [4 /*yield*/, this.updateWithResult(document, data)];
-                    case 2:
-                        isUpdated = _a.sent();
-                        return [2 /*return*/, isUpdated ? document : {}];
-                }
-            });
-        });
-    };
-    AllPrivilegeMongoDbRepository.prototype.deleteWithResult = function (document) {
-        return __awaiter(this, void 0, void 0, function () {
-            var error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, document.remove()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, true];
-                    case 2:
-                        error_2 = _a.sent();
-                        return [2 /*return*/, false];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
     AllPrivilegeMongoDbRepository.prototype.delete = function (filter) {
         return __awaiter(this, void 0, void 0, function () {
-            var totalDeleted, documents, _i, documents_3, document_3, isDeleted;
+            var totalDeleted, documents, _i, documents_2, document_3, isDeleted;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -233,11 +229,11 @@ var AllPrivilegeMongoDbRepository = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.find(filter)];
                     case 1:
                         documents = _a.sent();
-                        _i = 0, documents_3 = documents;
+                        _i = 0, documents_2 = documents;
                         _a.label = 2;
                     case 2:
-                        if (!(_i < documents_3.length)) return [3 /*break*/, 5];
-                        document_3 = documents_3[_i];
+                        if (!(_i < documents_2.length)) return [3 /*break*/, 5];
+                        document_3 = documents_2[_i];
                         return [4 /*yield*/, this.deleteWithResult(document_3)];
                     case 3:
                         isDeleted = _a.sent();
