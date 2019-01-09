@@ -148,7 +148,7 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
             return 0;
         }
 
-        const isDeleted = this.deleteWithResult(document);
+        const isDeleted = await this.deleteWithResult(document);
 
         return isDeleted ? 1 : 0;
     }

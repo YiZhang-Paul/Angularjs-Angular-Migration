@@ -262,7 +262,9 @@ var AllPrivilegeMongoDbRepository = /** @class */ (function (_super) {
                         if (!document) {
                             return [2 /*return*/, 0];
                         }
-                        isDeleted = this.deleteWithResult(document);
+                        return [4 /*yield*/, this.deleteWithResult(document)];
+                    case 2:
+                        isDeleted = _a.sent();
                         return [2 /*return*/, isDeleted ? 1 : 0];
                 }
             });
