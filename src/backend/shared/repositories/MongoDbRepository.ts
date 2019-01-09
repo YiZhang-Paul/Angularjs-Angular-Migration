@@ -11,7 +11,7 @@ export default abstract class MongoDbRepository implements IRepository {
         this._model = model;
     }
 
-    protected abstract createDocument(data: any): Document;
+    protected abstract toDocument(data: any): Document;
 
     public insert(data: any[]): Promise<Document[]> {
 

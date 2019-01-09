@@ -7,10 +7,11 @@
         "rebuild": "rm -rf dist && npm run build",
         "server": "cd dist/backend && node server",
         "api": "cd dist/backend && node apis/v1/app",
-        "start": "npm run build && concurrently \"npm run server\" \"npm run api\"",
         "dev": "nodemon -e ts --exec \"npm start\"",
-        "test-unit": "npm run build && set NODE_ENV=testing&& mocha **/unit-tests/**/*.spec.js --reporter spec",
-        "test-int": "npm run build && set NODE_ENV=testing&& mocha **/integration-tests/**/*.spec.js --reporter spec"
+        "start": "npm run build && concurrently \"npm run api\" \"npm run server\"",
+        "test": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& mocha **/tests/**/*.spec.js --reporter spec",
+        "test-int": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& mocha **/integration-tests/**/*.spec.js --reporter spec",
+        "test-unit": "npm run build && mocha **/unit-tests/**/*.spec.js --reporter spec"
     },
     "repository": {
         "type": "git",

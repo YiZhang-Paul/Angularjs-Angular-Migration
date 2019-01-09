@@ -5,7 +5,7 @@
         "api": "4050"
     },
     "database": {
-        "host": "ds151354.mlab.com:51354",
-        "name": "angular-migration"
+        "host": "ds231719.mlab.com:31719",
+        "name": "angular-migration-development"
     }
 }
