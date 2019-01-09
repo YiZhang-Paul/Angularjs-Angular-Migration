@@ -3,10 +3,7 @@ import { expect } from 'chai';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import MongoDbRepository from '../../../../shared/repositories/MongoDbRepository';
 
-class MongoDbRepositoryForTest extends MongoDbRepository {
-
-    protected toDocument(data: any): Document { return <Document>{}; }
-}
+class MongoDbRepositoryForTest extends MongoDbRepository { }
 
 context('MongoDbRepository unit test', () => {
 

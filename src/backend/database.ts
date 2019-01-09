@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(createConnectionString(), { useNewUrlParser });
 mongoose.connection.on('error', () => console.log('Database connection failed.'));
 
-function createConnectionString() {
+function createConnectionString(): string {
 
     const credentials = config.get<any>('database');
     const url = `${credentials.host}/${credentials.name}`;

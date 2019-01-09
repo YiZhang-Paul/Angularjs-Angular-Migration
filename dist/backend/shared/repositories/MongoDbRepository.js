@@ -4,6 +4,9 @@ var MongoDbRepository = /** @class */ (function () {
     function MongoDbRepository(model) {
         this._model = model;
     }
+    MongoDbRepository.prototype.toDocument = function (data) {
+        return new this._model(data);
+    };
     MongoDbRepository.prototype.insert = function (data) {
         throw new Error('not supported');
     };

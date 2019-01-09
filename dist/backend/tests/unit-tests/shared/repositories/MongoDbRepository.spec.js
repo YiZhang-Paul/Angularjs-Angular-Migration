@@ -20,7 +20,6 @@ var MongoDbRepositoryForTest = /** @class */ (function (_super) {
     function MongoDbRepositoryForTest() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    MongoDbRepositoryForTest.prototype.toDocument = function (data) { return {}; };
     return MongoDbRepositoryForTest;
 }(MongoDbRepository_1.default));
 context('MongoDbRepository unit test', function () {
