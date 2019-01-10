@@ -3,6 +3,7 @@ import mongoose = require('mongoose');
 
 const useNewUrlParser = true;
 mongoose.Promise = global.Promise;
+mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 mongoose.connect(createConnectionString(), { useNewUrlParser });
 mongoose.connection.on('error', () => console.log('Database connection failed.'));

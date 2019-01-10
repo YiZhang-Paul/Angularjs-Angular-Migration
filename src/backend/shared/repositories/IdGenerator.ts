@@ -9,8 +9,22 @@ export default abstract class IdGenerator implements IIdGenerator {
     protected _model: Model<Document, {}>;
 
     constructor(model: Model<Document, {}>) {
-        // TODO: create index here
+
         this._model = model;
+        this.createIndex();
+    }
+
+    private createIndex(): void {
+
+        this._model.ensureIndexes({ [this.key]: -1 });
+
+        const isDebugMode = process.env.DEBUG;
+        const hasListener = this._model.listeners('index').length > 0;
+
+        if (isDebugMode && !hasListener) {
+
+            this._model.on('index', _ => console.log(_ ? _ : 'created index.'));
+        }
     }
 
     protected async getCurrentId(): Promise<string> {

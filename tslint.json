@@ -7,8 +7,6 @@
             true,
             {
                 "method-regex": "^[a-z]\\w+$",
-                "private-method-regex": "^_[a-z]\\w+$",
-                "protected-method-regex": "^[a-z_]\\w+$",
                 "static-method-regex": "^[a-z]\\w+$",
                 "function-regex": "^\\w+$"
             }
