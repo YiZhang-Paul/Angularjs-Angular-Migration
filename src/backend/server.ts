@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import Express = require('express');
 import config = require('config');
+import Express = require('express');
+import { Request, Response } from 'express';
 
 const app = Express();
 const port = config.get<{ server: string }>('port').server;

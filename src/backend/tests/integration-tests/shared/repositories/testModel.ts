@@ -1,4 +1,5 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
+
 import ITestModel from './ITestModel.interface';
 
 const schema = new Schema({
@@ -10,22 +11,24 @@ const schema = new Schema({
     field_4: { type: String, default: 'field_4', select: false }
 });
 
-schema.statics.addDefault = async function(total: number): Promise<void> {
+schema.statics.addDefault = async function (total: number): Promise<void> {
 
-    for (let i = 0, counter = 0; i < total; i++) {
+    let counter = 0;
+
+    for (let i = 0; i < total; i++) {
 
         await new this({ id: ++counter }).save();
     }
-}
+};
 
-schema.statics.clear = async function(): Promise<void> {
+schema.statics.clear = async function (): Promise<void> {
 
     await this.deleteMany({});
-}
+};
 
-schema.statics.total = async function(): Promise<number> {
+schema.statics.total = async function (): Promise<number> {
     // convert Query<number> to Promise<number>
     return await this.countDocuments({});
-}
+};
 
 export default model<Document, ITestModel>('TestModel', schema);

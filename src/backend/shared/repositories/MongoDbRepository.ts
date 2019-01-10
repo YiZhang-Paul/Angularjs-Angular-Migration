@@ -1,4 +1,5 @@
 import { Document, Model } from 'mongoose';
+
 import IQueryOption from './IQueryOption.interface';
 import IRepository from './IRepository.interface';
 
@@ -16,42 +17,42 @@ export default abstract class MongoDbRepository implements IRepository {
         return new this._model(data);
     }
 
-    public insert(data: any[]): Promise<Document[]> {
+    public insert(_data: any[]): Promise<Document[]> {
 
         throw new Error('not supported');
     }
 
-    public insertOne(data: any): Promise<Document | null> {
+    public insertOne(_data: any): Promise<Document | null> {
 
         throw new Error('not supported');
     }
 
-    public find(filter?: any, option?: IQueryOption): Promise<Document[]> {
+    public find(_filter?: any, _option?: IQueryOption): Promise<Document[]> {
 
         throw new Error('not supported');
     }
 
-    public findOne(filter: any, option?: IQueryOption): Promise<Document | null> {
+    public findOne(_filter: any, _option?: IQueryOption): Promise<Document | null> {
 
         throw new Error('not supported');
     }
 
-    public update(data: any, filter?: any): Promise<Document[]> {
+    public update(_data: any, _filter?: any): Promise<Document[]> {
 
         throw new Error('not supported');
     }
 
-    public updateOne(data: any, filter: any): Promise<Document | null> {
+    public updateOne(_data: any, _filter: any): Promise<Document | null> {
 
         throw new Error('not supported');
     }
 
-    public delete(filter: any): Promise<number> {
+    public delete(_filter: any): Promise<number> {
 
         throw new Error('not supported');
     }
 
-    public deleteOne(filter: any): Promise<boolean> {
+    public deleteOne(_filter: any): Promise<boolean> {
 
         throw new Error('not supported');
     }

@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import IQueryOption from './IQueryOption.interface';
 
 export default interface IRepository {

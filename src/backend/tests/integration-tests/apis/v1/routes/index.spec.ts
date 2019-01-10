@@ -1,11 +1,12 @@
+import * as chai from 'chai';
+import chaiHttp = require('chai-http');
 import config = require('config');
 import 'mocha';
-import * as chai from 'chai';
-import { expect } from 'chai';
-import chaiHttp = require('chai-http');
+
 import { server } from '../../../../../apis/v1/app';
 
 chai.use(chaiHttp);
+const expect = chai.expect;
 
 context('index route integration test', () => {
 

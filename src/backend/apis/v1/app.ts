@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
-import Express = require('express');
 import config = require('config');
-import routes from './routes';
+import Express = require('express');
+import { Request, Response } from 'express';
+
 import '../../database';
+
+import routes from './routes';
 
 const app = Express();
 const port = config.get<{ api: string }>('port').api;

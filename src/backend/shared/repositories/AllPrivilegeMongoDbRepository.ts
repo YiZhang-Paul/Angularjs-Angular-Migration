@@ -1,12 +1,14 @@
 import { Document, DocumentQuery } from 'mongoose';
+
 import IQueryOption from './IQueryOption.interface';
 import MongoDbRepository from './MongoDbRepository';
+
 // TODO: move this to somewhere else
 type Query<T> = DocumentQuery<T, Document, {}>;
 
 export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
-    public async insert(data: any[]): Promise<Document[]> {
+    public async insert (data: any[]): Promise<Document[]> {
 
         const documents = data.map(_ => this.toDocument(_));
         const result: Document[] = [];

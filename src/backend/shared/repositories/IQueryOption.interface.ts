@@ -1,5 +1,7 @@
+import IProjection from './IProjection.interface';
+
 export default interface IQueryOption {
 
-    projection?: { [field: string]: 0 | 1 };
+    projection?: IProjection;
     select?: string[];
 }

@@ -1,5 +1,6 @@
-import { Document, Model } from 'mongoose';
 import { expect } from 'chai';
+import { Document, Model } from 'mongoose';
+
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import MongoDbRepository from '../../../../shared/repositories/MongoDbRepository';
 
@@ -19,7 +20,7 @@ context('MongoDbRepository unit test', () => {
         data = {};
         filter = {};
         option = {};
-        model = <Model<Document, {}>>{};
+        model = {} as Model<Document, {}>;
         repository = new MongoDbRepositoryForTest(model);
     });
 

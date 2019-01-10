@@ -1,7 +1,10 @@
 import { expect } from 'chai';
-import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
-import TestModel from './testModel';
+
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
+import IProjection from '../../../../shared/repositories/IProjection.interface';
+import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
+
+import TestModel from './testModel';
 
 class AllPrivilegeMongoDbRepositoryForTest extends AllPrivilegeMongoDbRepository { }
 
@@ -20,7 +23,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
     describe('insert()', () => {
 
-        it('should insert documents into database', async() => {
+        it('should insert documents into database', async () => {
 
             const total = await TestModel.total();
             // TODO: integrate id check into repository
@@ -97,8 +100,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should include expected fields in projection', async () => {
 
             const expected = [fields[0], fields[2]];
-            const projection = { '_id': 0, [expected[0]]: 1, [expected[1]]: 1 };
-            const option = <IQueryOption>{ projection };
+            const projection: IProjection = { '_id': 0, [expected[0]]: 1, [expected[1]]: 1 };
+            const option: IQueryOption = { projection };
 
             const result = await repository.find({}, option);
 
@@ -112,7 +115,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should include selected fields', async () => {
             // field 3 and field 4 are hidden on default
             const expected = fields.slice(2);
-            const option = <IQueryOption>{ select: expected };
+            const option: IQueryOption = { select: expected };
 
             const result = await repository.find({}, option);
 
@@ -156,8 +159,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should include expected fields in projection', async () => {
 
             const expected = [fields[0], fields[2]];
-            const projection = { '_id': 0, [expected[0]]: 1, [expected[1]]: 1 };
-            const option = <IQueryOption>{ projection };
+            const projection: IProjection = { '_id': 0, [expected[0]]: 1, [expected[1]]: 1 };
+            const option: IQueryOption = { projection };
 
             const result = await repository.findOne(filter, option);
 
@@ -173,7 +176,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should include selected fields', async () => {
             // field 3 and field 4 are hidden on default
             const expected = fields.slice(2);
-            const option = <IQueryOption>{ select: expected };
+            const option: IQueryOption = { select: expected };
 
             const result = await repository.findOne(filter, option);
 
