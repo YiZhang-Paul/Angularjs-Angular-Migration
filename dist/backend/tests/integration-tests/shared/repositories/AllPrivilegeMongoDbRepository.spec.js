@@ -194,32 +194,32 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
         }); });
     });
     describe('findOne()', function () {
+        var filter = { id: 2 };
         it('should find document matching the criteria', function () { return __awaiter(_this, void 0, void 0, function () {
-            var expected, result, id;
+            var expected, result, resultId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        expected = 2;
-                        return [4 /*yield*/, repository.findOne({ id: expected })];
+                        expected = filter.id;
+                        return [4 /*yield*/, repository.findOne(filter)];
                     case 1:
                         result = _a.sent();
-                        id = result.toObject()['id'];
+                        resultId = result.toObject()['id'];
                         chai_1.expect(result).is.not.null;
-                        chai_1.expect(id).to.equal(expected);
+                        chai_1.expect(resultId).to.equal(expected);
                         return [2 /*return*/];
                 }
             });
         }); });
         it('should include expected fields in projection', function () { return __awaiter(_this, void 0, void 0, function () {
-            var _a, id, expected, projection, option, result, paths;
+            var _a, expected, projection, option, result, paths;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        id = 1;
                         expected = [fields[0], fields[2]];
                         projection = (_a = { '_id': 0 }, _a[expected[0]] = 1, _a[expected[1]] = 1, _a);
                         option = { projection: projection };
-                        return [4 /*yield*/, repository.findOne({ id: id }, option)];
+                        return [4 /*yield*/, repository.findOne(filter, option)];
                     case 1:
                         result = _b.sent();
                         paths = Object.keys(result.toObject());
@@ -230,14 +230,13 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
             });
         }); });
         it('should include selected fields', function () { return __awaiter(_this, void 0, void 0, function () {
-            var id, expected, option, result, paths;
+            var expected, option, result, paths;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        id = 1;
                         expected = fields.slice(2);
                         option = { select: expected };
-                        return [4 /*yield*/, repository.findOne({ id: id }, option)];
+                        return [4 /*yield*/, repository.findOne(filter, option)];
                     case 1:
                         result = _a.sent();
                         paths = Object.keys(result.toObject());
@@ -250,19 +249,20 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
         }); });
     });
     describe('update()', function () {
+        var _a;
+        var field = fields[1];
+        var value = 'updated_field';
+        var updateOption = (_a = {}, _a[field] = value, _a);
         it('should update all documents', function () { return __awaiter(_this, void 0, void 0, function () {
-            var _a, field, value, original, result;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        field = fields[1];
-                        value = 'updated_field';
-                        return [4 /*yield*/, repository.find({})];
+            var original, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, repository.find({})];
                     case 1:
-                        original = _b.sent();
-                        return [4 /*yield*/, repository.update((_a = {}, _a[field] = value, _a))];
+                        original = _a.sent();
+                        return [4 /*yield*/, repository.update(updateOption)];
                     case 2:
-                        result = _b.sent();
+                        result = _a.sent();
                         chai_1.expect(original.some(function (_) { return _.toObject()[field] === value; })).to.be.false;
                         chai_1.expect(result.every(function (_) { return _.toObject()[field] === value; })).to.be.true;
                         return [2 /*return*/];
@@ -270,19 +270,17 @@ context('AllPrivilegeMongoDbRepository integration test', function () {
             });
         }); });
         it('should update all documents matching the criteria', function () { return __awaiter(_this, void 0, void 0, function () {
-            var _a, field, value, filter, original, result;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var filter, original, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        field = fields[1];
-                        value = 'updated_field';
                         filter = { id: { $gt: 2 } };
                         return [4 /*yield*/, repository.find(filter)];
                     case 1:
-                        original = _b.sent();
-                        return [4 /*yield*/, repository.update((_a = {}, _a[field] = value, _a), filter)];
+                        original = _a.sent();
+                        return [4 /*yield*/, repository.update(updateOption, filter)];
                     case 2:
-                        result = _b.sent();
+                        result = _a.sent();
                         chai_1.expect(result.length).to.equal(original.length);
                         chai_1.expect(original.some(function (_) { return _.toObject()[field] === value; })).to.be.false;
                         chai_1.expect(result.every(function (_) { return _.toObject()[field] === value; })).to.be.true;
