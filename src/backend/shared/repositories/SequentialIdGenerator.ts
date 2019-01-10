@@ -11,13 +11,8 @@ export default class SequentialIdGenerator extends IdGenerator {
 
     public async generate(): Promise<string> {
 
-        const maxId = await this.getMaximumId();
+        const currentId = await this.getCurrentId();
 
-        if (maxId.length === 0) {
-
-            return '0';
-        }
-
-        return String(+maxId + 1);
+        return currentId ? String(+currentId + 1) : '0';
     }
 }

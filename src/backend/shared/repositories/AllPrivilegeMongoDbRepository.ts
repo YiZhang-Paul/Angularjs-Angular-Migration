@@ -28,9 +28,9 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
 
     public async insertOne(data: any): Promise<Document | null> {
 
-        const document = await this.toDocument(data);
+        const inserted = await this.insert([data]);
 
-        return document.save().catch(() => null);
+        return inserted.length ? inserted[0] : null;
     }
 
     protected appendSelect<T>(query: Query<T>, select: string[]): Query<T> {

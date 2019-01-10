@@ -9,22 +9,17 @@ export default abstract class IdGenerator implements IIdGenerator {
     protected _model: Model<Document, {}>;
 
     constructor(model: Model<Document, {}>) {
-
+        // TODO: create index here
         this._model = model;
     }
 
-    protected async getMaximumId(): Promise<string> {
+    protected async getCurrentId(): Promise<string> {
 
         const sortOption = { [this.key]: -1 };
         const query = this._model.find().sort(sortOption).limit(1);
         const document = (await query)[0];
 
-        if (!document) {
-
-            return '';
-        }
-
-        return document.toObject()[this.key];
+        return document ? document[this.key] : '';
     }
 
     public abstract async generate(): Promise<string>;
