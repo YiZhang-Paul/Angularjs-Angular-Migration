@@ -2,6 +2,15 @@
     "name": "sample-angularjs-migration",
     "version": "0.1.0",
     "description": "sample application to demonstrate angularjs migration",
+    "nyc": {
+        "all": true,
+        "include": [
+            "dist/**/!(*interface).js"
+        ],
+        "exclude": [
+            "dist/**/tests"
+        ]
+    },
     "scripts": {
         "lint": "tslint -c tslint.json 'src/**/*.ts'",
         "build": "npm run lint && tsc && cp -r config dist/backend",
@@ -10,9 +19,9 @@
         "api": "cd dist/backend && node apis/v1/app",
         "dev": "nodemon -e ts --exec \"npm start\"",
         "start": "npm run build && concurrently \"npm run api\" \"npm run server\"",
-        "test": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& mocha **/tests/**/*.spec.js --reporter spec",
-        "test-int": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& mocha **/integration-tests/**/*.spec.js --reporter spec",
-        "test-unit": "npm run build && mocha **/unit-tests/**/*.spec.js --reporter spec"
+        "test": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha **/tests/**/*.spec.js --reporter spec",
+        "test-int": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha **/integration-tests/**/*.spec.js --reporter spec",
+        "test-unit": "npm run build && nyc mocha **/unit-tests/**/*.spec.js --reporter spec"
     },
     "repository": {
         "type": "git",
@@ -46,6 +55,7 @@
         "chai-http": "^4.2.1",
         "mocha": "^5.2.0",
         "nodemon": "^1.18.9",
+        "nyc": "^13.1.0",
         "sinon": "^7.2.2",
         "tslint": "^5.12.0",
         "tslint-microsoft-contrib": "^6.0.0",
