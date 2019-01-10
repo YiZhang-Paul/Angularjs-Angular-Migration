@@ -26,10 +26,17 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             // TODO: integrate id check into repository
             const expected = createDataList(fields, 5, total + 1);
 
-            const inserted = await repository.insert(expected);
+            const result = await repository.insert(expected);
 
-            expect(await TestModel.total()).to.equal(total + inserted.length);
-            expect(hasSameDataList(expected, inserted)).to.be.true;
+            expect(await TestModel.total()).to.equal(total + result.length);
+            expect(hasSameDataList(expected, result)).to.be.true;
+        });
+
+        it('should return empty collection when no document inserted', async () => {
+
+            const result = await repository.insert([]);
+
+            expect(result).to.be.empty;
         });
     });
 
@@ -45,6 +52,15 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             expect(await TestModel.total()).to.equal(total + 1);
             expect(hasSameData(expected, result)).to.be.true;
+        });
+
+        it('should return null when no document inserted', async () => {
+
+            const data = { 'invalid_field': 'will_trigger_validation_error' };
+
+            const result = await repository.insertOne(data);
+
+            expect(result).to.be.null;
         });
     });
 
@@ -67,6 +83,15 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             expect(total).to.be.greaterThan(expected);
             expect(result.length).to.equal(expected);
+        });
+
+        it('should return empty collection when no document found', async () => {
+
+            const filter = { 'field_not_exist': 'random_value' };
+
+            const result = await repository.find(filter);
+
+            expect(result).to.be.empty;
         });
 
         it('should include expected fields in projection', async () => {
@@ -109,10 +134,23 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const expected = filter.id;
 
             const result = await repository.findOne(filter);
-            const resultId = result.toObject()['id'];
 
             expect(result).is.not.null;
-            expect(resultId).to.equal(expected);
+
+            if (result) {
+
+                const id = result.toObject()['id'];
+                expect(id).to.equal(expected);
+            }
+        });
+
+        it('should return null when no document found', async () => {
+
+            const filter = { 'field_not_exist': 'random_value' };
+
+            const result = await repository.findOne(filter);
+
+            expect(result).to.be.null;
         });
 
         it('should include expected fields in projection', async () => {
@@ -122,10 +160,14 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const option = <IQueryOption>{ projection };
 
             const result = await repository.findOne(filter, option);
-            const paths = Object.keys(result.toObject());
 
             expect(result).is.not.null;
-            expect(paths).to.deep.equal(expected);
+
+            if (result) {
+
+                const paths = Object.keys(result.toObject());
+                expect(paths).to.deep.equal(expected);
+            }
         });
 
         it('should include selected fields', async () => {
@@ -134,11 +176,15 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const option = <IQueryOption>{ select: expected };
 
             const result = await repository.findOne(filter, option);
-            const paths = Object.keys(result.toObject());
 
             expect(result).is.not.null;
-            // ensure field 3 and field 4 are not the only fields in result
-            expect(isSubArray(expected, paths)).to.be.true;
+
+            if (result) {
+
+                // ensure field 3 and field 4 are not the only fields in result
+                const paths = Object.keys(result.toObject());
+                expect(isSubArray(expected, paths)).to.be.true;
+            }
         });
     });
 
@@ -168,6 +214,110 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             expect(result.length).to.equal(original.length);
             expect(original.some(_ => _.toObject()[field] === value)).to.be.false;
             expect(result.every(_ => _.toObject()[field] === value)).to.be.true;
+        });
+
+        it('should not update when no matching document found', async () => {
+
+            const invalidFilter = { 'field_not_exist': 'random_value' };
+
+            const result = await repository.update({}, invalidFilter);
+
+            expect(result).to.be.empty;
+        });
+    });
+
+    describe('updateOne()', () => {
+
+        it('should update document matching the criteria', async () => {
+
+            const field = fields[1];
+            const value = 'updated_field';
+            const updateOption = { [field]: value };
+            const filter = { id: { $gt: 2 } };
+            const original = await repository.findOne(filter);
+
+            const result = await repository.updateOne(updateOption, filter);
+
+            expect(original).is.not.null;
+            expect(result).is.not.null;
+
+            if (original && result) {
+
+                expect(result._id).to.deep.equal(original._id);
+                expect(original.toObject()[field]).to.not.equal(value);
+                expect(result.toObject()[field]).to.equal(value);
+            }
+        });
+
+        it('should return null when no document updated', async () => {
+
+            const filter = { 'field_not_exist': 'random_value' };
+            const original = await repository.findOne(filter);
+
+            const result = await repository.updateOne({}, filter);
+
+            expect(original).to.be.null;
+            expect(result).to.be.null;
+        });
+    });
+
+    describe('delete()', () => {
+
+        it('should delete all documents', async () => {
+
+            const total = await TestModel.total();
+
+            await repository.delete({});
+
+            expect(total).to.be.greaterThan(0);
+            expect(await TestModel.total()).to.equal(0);
+        });
+
+        it('should delete all documents matching the criteria', async () => {
+
+            const filter = { id: { $gt: 2 } };
+            const total = await TestModel.total();
+
+            const result = await repository.delete(filter);
+
+            expect(result).to.be.greaterThan(0);
+            expect(await TestModel.total()).to.equal(total - result);
+        });
+
+        it('should not delete when no matching document found', async () => {
+
+            const filter = { 'field_not_exist': 'random_value' };
+            const total = await TestModel.total();
+
+            const result = await repository.delete(filter);
+
+            expect(result).to.equal(0);
+            expect(await TestModel.total()).to.equal(total);
+        });
+    });
+
+    describe('deleteOne()', () => {
+
+        it('should delete document matching the criteria', async () => {
+
+            const filter = { id: 2 };
+            const total = await TestModel.total();
+
+            const result = await repository.deleteOne(filter);
+
+            expect(result).to.be.true;
+            expect(await TestModel.total()).to.equal(total - 1);
+        });
+
+        it('should not delete when no matching document found', async () => {
+
+            const filter = { 'field_not_exist': 'random_value' };
+            const total = await TestModel.total();
+
+            const result = await repository.deleteOne(filter);
+
+            expect(result).to.be.false;
+            expect(await TestModel.total()).to.equal(total);
         });
     });
 });

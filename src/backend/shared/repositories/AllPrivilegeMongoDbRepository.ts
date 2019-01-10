@@ -8,27 +8,27 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
 
     public async insert(data: any[]): Promise<Document[]> {
 
-        const inserted: Document[] = [];
         const documents = data.map(_ => this.toDocument(_));
+        const result: Document[] = [];
 
         for (const document of documents) {
 
-            const isInserted = !!await document.save().catch(() => false);
+            const inserted = await document.save().catch(() => null);
 
-            if (isInserted) {
+            if (inserted) {
 
-                inserted.push(document);
+                result.push(inserted);
             }
         }
 
-        return inserted;
+        return result;
     }
 
-    public async insertOne(data: any): Promise<Document> {
+    public async insertOne(data: any): Promise<Document | null> {
 
-        const inserted = await this.insert([data]);
+        const result = await this.insert([data]);
 
-        return inserted[0];
+        return result.length ? result[0] : null;
     }
 
     protected appendSelect<T>(query: Query<T>, select: string[]): Query<T> {
@@ -53,16 +53,16 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
         return query;
     }
 
-    public async findOne(filter: any = {}, option: IQueryOption = {}): Promise<Document> {
+    public async findOne(filter: any = {}, option: IQueryOption = {}): Promise<Document | null> {
 
-        let query = this._model.find(filter, option.projection).limit(1);
+        let query = this._model.findOne(filter, option.projection);
 
         if (option.select) {
 
-            query = this.appendSelect<Document[]>(query, option.select);
+            query = this.appendSelect<Document | null>(query, option.select);
         }
 
-        return (await query)[0];
+        return query;
     }
 
     protected async updateWithResult(id: string, data: any): Promise<Document | null> {
@@ -82,34 +82,34 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
 
     public async update(data: any, filter: any = {}): Promise<Document[]> {
 
-        const oldDocuments = await this.find(filter);
-        const newDocuments: Document[] = [];
+        const documents = await this.find(filter);
+        const result: Document[] = [];
 
-        for (const document of oldDocuments) {
+        for (const document of documents) {
 
             const updated = await this.updateWithResult(document._id, data);
 
             if (updated) {
 
-                newDocuments.push(updated);
+                result.push(updated);
             }
         }
 
-        return newDocuments;
+        return result;
     }
 
-    public async updateOne(data: any, filter: any): Promise<Document> {
+    public async updateOne(data: any, filter: any): Promise<Document | null> {
 
         const document = await this.findOne(filter);
 
         if (!document) {
 
-            return new Array<Document>()[0];
+            return null;
         }
 
         const updated = await this.updateWithResult(document._id, data);
 
-        return updated ? updated : <Document>{};
+        return updated ? updated : null;
     }
 
     protected async deleteWithResult(document: Document): Promise<boolean> {
@@ -128,29 +128,22 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
 
     public async delete(filter: any): Promise<number> {
 
-        let totalDeleted = 0;
+        let result = 0;
         const documents = await this.find(filter);
 
         for (const document of documents) {
 
             const isDeleted = await this.deleteWithResult(document);
-            totalDeleted += isDeleted ? 1 : 0;
+            result += isDeleted ? 1 : 0;
         }
 
-        return totalDeleted;
+        return result;
     }
 
-    public async deleteOne(filter: any): Promise<number> {
+    public async deleteOne(filter: any): Promise<boolean> {
 
         const document = await this.findOne(filter);
 
-        if (!document) {
-
-            return 0;
-        }
-
-        const isDeleted = await this.deleteWithResult(document);
-
-        return isDeleted ? 1 : 0;
+        return document ? await this.deleteWithResult(document) : false;
     }
 }

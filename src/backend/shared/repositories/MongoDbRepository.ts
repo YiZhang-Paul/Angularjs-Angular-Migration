@@ -21,7 +21,7 @@ export default abstract class MongoDbRepository implements IRepository {
         throw new Error('not supported');
     }
 
-    public insertOne(data: any): Promise<Document> {
+    public insertOne(data: any): Promise<Document | null> {
 
         throw new Error('not supported');
     }
@@ -31,7 +31,7 @@ export default abstract class MongoDbRepository implements IRepository {
         throw new Error('not supported');
     }
 
-    public findOne(filter: any, option?: IQueryOption): Promise<Document> {
+    public findOne(filter: any, option?: IQueryOption): Promise<Document | null> {
 
         throw new Error('not supported');
     }
@@ -41,7 +41,7 @@ export default abstract class MongoDbRepository implements IRepository {
         throw new Error('not supported');
     }
 
-    public updateOne(data: any, filter: any): Promise<Document> {
+    public updateOne(data: any, filter: any): Promise<Document | null> {
 
         throw new Error('not supported');
     }
@@ -51,7 +51,7 @@ export default abstract class MongoDbRepository implements IRepository {
         throw new Error('not supported');
     }
 
-    public deleteOne(filter: any): Promise<number> {
+    public deleteOne(filter: any): Promise<boolean> {
 
         throw new Error('not supported');
     }
