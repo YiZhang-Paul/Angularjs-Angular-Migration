@@ -1,18 +1,24 @@
 import { Document, Model } from 'mongoose';
 
+import IIdGenerator from './IIdGenerator.interface';
 import IQueryOption from './IQueryOption.interface';
 import IRepository from './IRepository.interface';
 
 export default abstract class MongoDbRepository implements IRepository {
 
     protected _model: Model<Document, {}>;
+    protected _generator: IIdGenerator;
 
-    constructor(model: Model<Document, {}>) {
+    constructor(model: Model<Document, {}>, generator: IIdGenerator) {
 
         this._model = model;
+        this._generator = generator;
     }
 
-    protected toDocument(data: any): Document {
+    protected async toDocument(data: any): Promise<Document> {
+
+        const idField = this._generator.key;
+        data[idField] = await this._generator.generate();
 
         return new this._model(data);
     }

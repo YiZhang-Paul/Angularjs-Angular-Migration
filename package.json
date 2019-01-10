@@ -39,7 +39,7 @@
         "config": "^3.0.1",
         "express": "^4.16.4",
         "jsonwebtoken": "^8.4.0",
-        "mongoose": "^5.4.2"
+        "mongoose": "^5.4.3"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",

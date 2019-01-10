@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
 import IProjection from '../../../../shared/repositories/IProjection.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
+import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
 
 import TestModel from './testModel';
 
@@ -11,6 +12,7 @@ class AllPrivilegeMongoDbRepositoryForTest extends AllPrivilegeMongoDbRepository
 context('AllPrivilegeMongoDbRepository integration test', () => {
 
     const fields = ['field_1', 'field_2', 'field_3', 'field_4'];
+    let generator: SequentialIdGenerator;
     let repository: AllPrivilegeMongoDbRepositoryForTest;
 
     beforeEach('test setup', async () => {
@@ -18,7 +20,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         await TestModel.clear();
         await TestModel.addDefault(3);
 
-        repository = new AllPrivilegeMongoDbRepositoryForTest(TestModel);
+        generator = new SequentialIdGenerator(TestModel);
+        repository = new AllPrivilegeMongoDbRepositoryForTest(TestModel, generator);
     });
 
     describe('insert()', () => {
@@ -26,8 +29,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should insert documents into database', async () => {
 
             const total = await TestModel.total();
-            // TODO: integrate id check into repository
-            const expected = createDataList(fields, 5, total + 1);
+            const expected = createDataList(fields, 5);
 
             const result = await repository.insert(expected);
 
@@ -48,8 +50,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should insert one document into database', async () => {
 
             const total = await TestModel.total();
-            // TODO: integrate id check into repository
-            const expected = createData(fields, total + 1);
+            const expected = createData(fields);
 
             const result = await repository.insertOne(expected);
 
@@ -108,7 +109,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             result.forEach(document => {
 
                 const paths = Object.keys(document.toObject());
-                expect(paths).to.deep.equal(expected);
+                expect(hasSameElements(expected, paths)).to.be.true;
             });
         });
 
@@ -169,7 +170,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             if (result) {
 
                 const paths = Object.keys(result.toObject());
-                expect(paths).to.deep.equal(expected);
+                expect(hasSameElements(expected, paths)).to.be.true;
             }
         });
 
@@ -331,9 +332,9 @@ function getRandomString(): string {
     return `${Math.random()}.${Math.random()}.${Math.random()}`;
 }
 
-function createData(fields: string[], id: number): any {
+function createData(fields: string[]): any {
 
-    const data: { [key: string]: any } = { id };
+    const data: { [key: string]: any } = {};
 
     fields.forEach(field => {
 
@@ -343,21 +344,35 @@ function createData(fields: string[], id: number): any {
     return data;
 }
 
-function createDataList(fields: string[], total: number, startId: number): any {
+function createDataList(fields: string[], total: number): any {
 
     const data = [];
 
     for (let i = 0; i < total; i++) {
 
-        data.push(createData(fields, startId + i));
+        data.push(createData(fields));
     }
 
     return data;
 }
 
+function hasSameElements(expected: any[], result: any[]): boolean {
+
+    if (expected.length !== result.length) {
+
+        return false;
+    }
+
+    const lookup = new Set(result);
+
+    return expected.every(_ => lookup.has(_));
+}
+
 function hasSameData(expected: any, result: any): boolean {
 
-    return Object.keys(expected).every(key => result[key] === expected[key]);
+    const fields = Object.keys(expected);
+
+    return fields.every(_ => String(result[_]) === String(expected[_]));
 }
 
 function hasSameDataList(expected: any[], result: any[]): boolean {

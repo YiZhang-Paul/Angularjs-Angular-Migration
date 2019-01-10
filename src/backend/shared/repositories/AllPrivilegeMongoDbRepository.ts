@@ -9,8 +9,8 @@ type Query<T> = DocumentQuery<T, Document, {}>;
 export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
     public async insert (data: any[]): Promise<Document[]> {
-
-        const documents = data.map(_ => this.toDocument(_));
+        // TODO: optimize this step
+        const documents = await Promise.all(data.map(async _ => await this.toDocument(_)));
         const result: Document[] = [];
 
         for (const document of documents) {
@@ -28,9 +28,9 @@ export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepos
 
     public async insertOne(data: any): Promise<Document | null> {
 
-        const result = await this.insert([data]);
+        const document = await this.toDocument(data);
 
-        return result.length ? result[0] : null;
+        return document.save().catch(() => null);
     }
 
     protected appendSelect<T>(query: Query<T>, select: string[]): Query<T> {
