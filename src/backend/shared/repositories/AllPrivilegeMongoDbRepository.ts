@@ -8,12 +8,12 @@ type Query<T> = DocumentQuery<T, Document, {}>;
 
 export default abstract class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
-    public async insert (data: any[]): Promise<Document[]> {
-        // TODO: optimize this step
-        const documents = await Promise.all(data.map(async _ => await this.toDocument(_)));
+    public async insert(data: any[]): Promise<Document[]> {
+
+        const id = await this._generator.generate();
         const result: Document[] = [];
 
-        for (const document of documents) {
+        for (const document of this.toDocuments(data, id)) {
 
             const inserted = await document.save().catch(() => null);
 

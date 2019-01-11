@@ -9,10 +9,15 @@ export default class SequentialIdGenerator extends IdGenerator {
         super(model);
     }
 
+    public showNext(id: string): string {
+
+        return String(+id + 1);
+    }
+
     public async generate(): Promise<string> {
 
-        const currentId = await this.getCurrentId();
+        const latestId = await this.getLatestId();
 
-        return currentId ? String(+currentId + 1) : '0';
+        return latestId ? this.showNext(latestId) : '0';
     }
 }

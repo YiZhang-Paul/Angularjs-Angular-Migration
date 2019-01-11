@@ -15,12 +15,24 @@ export default abstract class MongoDbRepository implements IRepository {
         this._generator = generator;
     }
 
-    protected async toDocument(data: any): Promise<Document> {
+    protected toDocument(data: any, id: string): Document {
 
-        const key = this._generator.key;
-        data[key] = await this._generator.generate();
+        data[this._generator.key] = id;
 
         return new this._model(data);
+    }
+
+    protected toDocuments(data: any[], latestId: string): Document[] {
+
+        const documents: Document[] = [];
+
+        for (const _ of data) {
+
+            documents.push(this.toDocument(_, latestId));
+            latestId = this._generator.showNext(latestId);
+        }
+
+        return documents;
     }
 
     public insert(_data: any[]): Promise<Document[]> {

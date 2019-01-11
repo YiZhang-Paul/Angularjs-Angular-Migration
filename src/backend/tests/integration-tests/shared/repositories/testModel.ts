@@ -4,7 +4,7 @@ import ITestModel from './ITestModel.interface';
 
 const schema = new Schema({
 
-    id: { type: Number, required: true },
+    id: { type: Number, required: true, unique: true },
     field_1: { type: String, required: true },
     field_2: { type: String, default: 'field_2' },
     field_3: { type: String, default: 'field_3', select: false },

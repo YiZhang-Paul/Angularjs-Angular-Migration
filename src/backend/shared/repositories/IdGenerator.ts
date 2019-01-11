@@ -27,7 +27,7 @@ export default abstract class IdGenerator implements IIdGenerator {
         }
     }
 
-    protected async getCurrentId(): Promise<string> {
+    protected async getLatestId(): Promise<string> {
 
         const sortOption = { [this.key]: -1 };
         const query = this._model.find().sort(sortOption).limit(1);
@@ -35,6 +35,8 @@ export default abstract class IdGenerator implements IIdGenerator {
 
         return document ? document[this.key] : '';
     }
+
+    public abstract showNext(id: string): string;
 
     public abstract async generate(): Promise<string>;
 }
