@@ -7,13 +7,11 @@ import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdG
 
 import TestModel from './testModel';
 
-class AllPrivilegeMongoDbRepositoryForTest extends AllPrivilegeMongoDbRepository { }
-
 context('AllPrivilegeMongoDbRepository integration test', () => {
 
     const fields = ['field_1', 'field_2', 'field_3', 'field_4'];
     let generator: SequentialIdGenerator;
-    let repository: AllPrivilegeMongoDbRepositoryForTest;
+    let repository: AllPrivilegeMongoDbRepository;
 
     beforeEach('test setup', async () => {
 
@@ -21,7 +19,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         await TestModel.addDefault(3);
 
         generator = new SequentialIdGenerator(TestModel);
-        repository = new AllPrivilegeMongoDbRepositoryForTest(TestModel, generator);
+        repository = new AllPrivilegeMongoDbRepository(TestModel, generator);
     });
 
     describe('insert()', () => {
@@ -42,6 +40,19 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const result = await repository.insert([]);
 
             expect(result).to.be.empty;
+        });
+
+        it('should ensure unique ids', async () => {
+
+            const latestId = await TestModel.total();
+            const data = createDataList(fields, 5);
+
+            const result = await repository.insert(data);
+            const ids = result.map(_ => _.toObject()['id']);
+
+            expect(ids).is.not.empty;
+            expect(ids.every(id => +id > latestId)).to.be.true;
+            expect(ids.length).to.equal(new Set(ids).size);
         });
     });
 
@@ -65,6 +76,23 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const result = await repository.insertOne(data);
 
             expect(result).to.be.null;
+        });
+
+        it('should ensure unique id', async () => {
+
+            const data = createData(fields);
+
+            const result = await repository.insertOne(data);
+
+            expect(result).is.not.null;
+
+            if (result) {
+
+                const id = result.toObject()['id'];
+                const expected = await TestModel.total();
+
+                expect(id).to.equal(expected);
+            }
         });
     });
 
