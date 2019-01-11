@@ -4,8 +4,7 @@ import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPr
 import IProjection from '../../../../shared/repositories/IProjection.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
-
-import TestModel from './testModel';
+import TestModel from '../../../testModel';
 
 context('AllPrivilegeMongoDbRepository integration test', () => {
 
