@@ -20,7 +20,7 @@ export default abstract class IdGenerator implements IIdGenerator {
 
         const isDebugMode = process.env.DEBUG;
         const hasListener = this._model.listeners('index').length > 0;
-
+        /* istanbul ignore if */
         if (isDebugMode && !hasListener) {
 
             this._model.on('index', _ => console.log(_ ? _ : 'created index.'));
