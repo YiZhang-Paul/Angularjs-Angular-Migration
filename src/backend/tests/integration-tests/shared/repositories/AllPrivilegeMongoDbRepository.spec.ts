@@ -5,11 +5,13 @@ import IProjection from '../../../../shared/repositories/IProjection.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
 import TestModel from '../../../testModel';
+import UniqueIdDocumentFactory from '../../../../shared/repositories/UniqueIdDocumentFactory';
 
 context('AllPrivilegeMongoDbRepository integration test', () => {
 
     const fields = ['field_1', 'field_2', 'field_3', 'field_4'];
     let generator: SequentialIdGenerator;
+    let documentFactory: UniqueIdDocumentFactory;
     let repository: AllPrivilegeMongoDbRepository;
 
     beforeEach('test setup', async () => {
@@ -18,7 +20,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         await TestModel.addDefault(3);
 
         generator = new SequentialIdGenerator(TestModel);
-        repository = new AllPrivilegeMongoDbRepository(TestModel, generator);
+        documentFactory = new UniqueIdDocumentFactory(TestModel, generator);
+        repository = new AllPrivilegeMongoDbRepository(TestModel, documentFactory);
     });
 
     describe('insert()', () => {

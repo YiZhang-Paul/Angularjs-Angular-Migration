@@ -1,57 +1,104 @@
 import { expect } from 'chai';
-import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
+import { Document } from 'mongoose';
+import { assert as sinonExpect, SinonStubbedInstance, stub } from 'sinon';
 
 // TODO: review other tests
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
-import IIdGenerator from '../../../../shared/repositories/IIdGenerator.interface';
+import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import TestModel from '../../../testModel';
 
 context('AllPrivilegeMongoDbRepository unit test', () => {
 
-    let generator: SinonStubbedInstance<IIdGenerator>;
-    let showNextStub: SinonStub;
-    let generateStub: SinonStub;
-    let saveStub: SinonStub;
+    let documentFactory: SinonStubbedInstance<IDocumentFactory>;
     let repository: AllPrivilegeMongoDbRepository;
 
     beforeEach('test setup', () => {
 
-        generator = stub({} as IIdGenerator);
-        showNextStub = stub(generator, 'showNext');
-        generateStub = stub(generator, 'generate');
-        repository = new AllPrivilegeMongoDbRepository(TestModel, generator);
-    });
-
-    afterEach('test teardown', () => {
-
-        showNextStub.restore();
-        generateStub.restore();
-        saveStub.restore();
+        documentFactory = createDocumentFactoryStub();
+        repository = new AllPrivilegeMongoDbRepository(TestModel, documentFactory);
     });
 
     describe('insert()', () => {
 
-        it('should return all inserted documents when all documents were inserted', async () => {
+        let data: any[];
+        let documents: SinonStubbedInstance<Document>[];
 
-            const id = '2';
-            const field_1 = 'field_1';
-            const data = [{ field_1 }, { field_1 }, { field_1 }, { field_1 }];
-            showNextStub.callsFake(value => String(+value + 1));
-            generateStub.resolves(id);
+        beforeEach('insert() setup', () => {
+
+            data = new Array<any>(4);
+            documents = createDocumentStubs(data.length);
+            documentFactory.createDocuments.resolves(documents);
+        });
+
+        it('should attempt to create and insert all documents', async () => {
+
+            await repository.insert(data);
+
+            sinonExpect.calledOnce(documentFactory.createDocuments);
+            sinonExpect.calledWith(documentFactory.createDocuments, data);
+
+            for (const document of documents) {
+
+                sinonExpect.calledOnce(document.save);
+            }
+        });
+
+        it('should return all inserted documents when all documents were inserted', async () => {
 
             const result = await repository.insert(data);
 
             expect(result.length).to.equal(data.length);
-            expect(result.every((_, index) => _.toObject()['id'] === String(+id + index)));
-            sinonExpect.callCount(saveStub, result.length);
         });
 
-        // it('should only return documents that were successfully inserted', () => {
+        it('should only return documents that were successfully inserted', async () => {
+            // last document will fail to save
+            documents[documents.length - 1] = createDocumentStub(false);
 
-        // });
+            const result = await repository.insert(data);
 
-        // it('should return empty collection when no documents were inserted', () => {
+            expect(result.length).to.be.equal(data.length - 1);
 
-        // });
+            for (const document of documents) {
+
+                sinonExpect.calledOnce(document.save);
+            }
+        });
+
+        it('should return empty collection when no documents were inserted', async () => {
+
+            documents = createDocumentStubs(data.length, false);
+            documentFactory.createDocuments.resolves(documents);
+
+            const result = await repository.insert(data);
+
+            expect(result).to.be.empty;
+        });
     });
 });
+
+function createDocumentStub(canResolve = true): SinonStubbedInstance<Document> {
+
+    const stubObject = stub({} as Document);
+    stubObject.save = stub();
+    stubObject.save.rejects(stubObject);
+
+    if (canResolve) {
+
+        stubObject.save.resolves(stubObject);
+    }
+
+    return stubObject;
+}
+
+function createDocumentStubs(total: number, canResolve = true): SinonStubbedInstance<Document>[] {
+
+    return new Array(total).fill(0).map(_ => createDocumentStub(canResolve));
+}
+
+function createDocumentFactoryStub(): SinonStubbedInstance<IDocumentFactory> {
+
+    const stubObject = stub({} as IDocumentFactory);
+    stubObject.createDocuments = stub();
+
+    return stubObject;
+}

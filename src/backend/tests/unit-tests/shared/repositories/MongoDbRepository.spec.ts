@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Document, Model } from 'mongoose';
 import { SinonStubbedInstance, stub } from 'sinon';
 
-import IIdGenerator from '../../../../shared/repositories/IIdGenerator.interface';
+import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import MongoDbRepository from '../../../../shared/repositories/MongoDbRepository';
 
@@ -14,7 +14,7 @@ context('MongoDbRepository unit test', () => {
     let filter: any;
     let option: IQueryOption;
     let model: Model<Document, {}>;
-    let generator: SinonStubbedInstance<IIdGenerator>;
+    let documentFactory: SinonStubbedInstance<IDocumentFactory>;
     let repository: MongoDbRepositoryForTest;
     const notSupportedError = 'not supported';
 
@@ -24,8 +24,8 @@ context('MongoDbRepository unit test', () => {
         filter = {};
         option = {};
         model = {} as Model<Document, {}>;
-        generator = stub({} as IIdGenerator);
-        repository = new MongoDbRepositoryForTest(model, generator);
+        documentFactory = stub({} as IDocumentFactory);
+        repository = new MongoDbRepositoryForTest(model, documentFactory);
     });
 
     describe('insert()', () => {

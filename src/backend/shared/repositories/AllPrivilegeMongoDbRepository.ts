@@ -10,10 +10,10 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
     public async insert(data: any[]): Promise<Document[]> {
 
-        const id = await this._generator.generate();
+        const documents = this._documentFactory.createDocuments(data);
         const result: Document[] = [];
 
-        for (const document of this.toDocuments(data, id)) {
+        for (const document of await documents) {
 
             const inserted = await document.save().catch(() => null);
 
