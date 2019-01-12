@@ -1,10 +1,11 @@
 import { expect } from 'chai';
 import { Document, Model } from 'mongoose';
-import { SinonStubbedInstance, stub } from 'sinon';
+import { SinonStubbedInstance } from 'sinon';
 
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
+import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
-import MongoDbRepositoryForTest from '../../../testClasses/MongoDbRepositoryForTest';
+import MongoDbRepository from '../../../testClasses/MongoDbRepository.testClass';
 
 context('MongoDbRepository unit test', () => {
 
@@ -13,7 +14,7 @@ context('MongoDbRepository unit test', () => {
     let option: IQueryOption;
     let model: Model<Document, {}>;
     let documentFactory: SinonStubbedInstance<IDocumentFactory>;
-    let repository: MongoDbRepositoryForTest;
+    let repository: MongoDbRepository;
     const notSupportedError = 'not supported';
 
     beforeEach('test setup', () => {
@@ -22,8 +23,8 @@ context('MongoDbRepository unit test', () => {
         filter = {};
         option = {};
         model = {} as Model<Document, {}>;
-        documentFactory = stub({} as IDocumentFactory);
-        repository = new MongoDbRepositoryForTest(model, documentFactory);
+        documentFactory = createDocumentFactoryStub();
+        repository = new MongoDbRepository(model, documentFactory);
     });
 
     describe('insert()', () => {

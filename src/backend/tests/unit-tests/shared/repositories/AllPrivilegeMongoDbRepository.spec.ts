@@ -1,11 +1,13 @@
 import { expect } from 'chai';
 import { Document } from 'mongoose';
-import { assert as sinonExpect, SinonStubbedInstance, stub } from 'sinon';
+import { assert as sinonExpect, SinonStubbedInstance } from 'sinon';
 
-// TODO: review other tests
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
+import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
+import { createDocumentStub, createDocumentStubs } from '../../../stubs/MongoDbDocument.stub';
 import TestModel from '../../../testModel';
+import { createEmptyObjects } from '../../../testUtilities';
 
 context('AllPrivilegeMongoDbRepository unit test', () => {
 
@@ -25,7 +27,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         beforeEach('insert() setup', () => {
 
-            data = new Array<any>(4);
+            data = createEmptyObjects(4);
             documents = createDocumentStubs(data.length);
             documentFactory.createDocuments.resolves(documents);
         });
@@ -75,30 +77,3 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
         });
     });
 });
-
-function createDocumentStub(canResolve = true): SinonStubbedInstance<Document> {
-
-    const stubObject = stub({} as Document);
-    stubObject.save = stub();
-    stubObject.save.rejects(stubObject);
-
-    if (canResolve) {
-
-        stubObject.save.resolves(stubObject);
-    }
-
-    return stubObject;
-}
-
-function createDocumentStubs(total: number, canResolve = true): SinonStubbedInstance<Document>[] {
-
-    return new Array(total).fill(0).map(_ => createDocumentStub(canResolve));
-}
-
-function createDocumentFactoryStub(): SinonStubbedInstance<IDocumentFactory> {
-
-    const stubObject = stub({} as IDocumentFactory);
-    stubObject.createDocuments = stub();
-
-    return stubObject;
-}

@@ -1,17 +1,17 @@
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
-import IdGeneratorForTest from '../../../testClasses/IdGeneratorForTest';
+import IdGenerator from '../../../testClasses/IdGenerator.testClass';
 import TestModel from '../../../testModel';
 
 context('IdGenerator unit test', () => {
 
     let ensureIndexesStub: SinonStub;
-    let generator: IdGeneratorForTest;
+    let generator: IdGenerator;
 
     beforeEach('test setup', () => {
 
         ensureIndexesStub = stub(TestModel, 'ensureIndexes');
-        generator = new IdGeneratorForTest(TestModel);
+        generator = new IdGenerator(TestModel);
     });
 
     afterEach('test teardown', () => {

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { assert as sinonExpect, SinonStubbedInstance } from 'sinon';
 
-import { createIdGeneratorStub } from '../../../stubs/IdGeneratorStub';
 import IIdGenerator from '../../../../shared/repositories/IIdGenerator.interface';
+import { createIdGeneratorStub } from '../../../stubs/IIdGenerator.stub';
 import TestModel from '../../../testModel';
 import { createEmptyObjects, getField } from '../../../testUtilities';
 import UniqueIdDocumentFactory from '../../../../shared/repositories/UniqueIdDocumentFactory';
