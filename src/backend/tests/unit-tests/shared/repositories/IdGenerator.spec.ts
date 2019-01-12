@@ -1,6 +1,6 @@
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
-import IdGenerator from '../../../testClasses/IdGenerator.testClass';
+import IdGenerator from '../../../test-classes/IdGenerator.testClass';
 import TestModel from '../../../testModel';
 
 context('IdGenerator unit test', () => {

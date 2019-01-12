@@ -4,7 +4,8 @@ import { SinonStubbedInstance } from 'sinon';
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
-import MongoDbRepository from '../../../testClasses/MongoDbRepository.testClass';
+import MongoDbRepository from '../../../test-classes/MongoDbRepository.testClass';
+import TestModel from '../../../testModel';
 
 context('MongoDbRepository unit test', () => {
 
@@ -20,7 +21,7 @@ context('MongoDbRepository unit test', () => {
         data = {};
         filter = {};
         option = {};
-        documentFactory = createDocumentFactoryStub();
+        documentFactory = createDocumentFactoryStub(TestModel);
         repository = new MongoDbRepository(documentFactory);
     });
 

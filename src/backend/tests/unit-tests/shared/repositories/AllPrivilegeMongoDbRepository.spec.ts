@@ -1,22 +1,34 @@
 import { expect } from 'chai';
-import { Document } from 'mongoose';
-import { assert as sinonExpect, SinonStubbedInstance } from 'sinon';
+import { Document, DocumentQuery } from 'mongoose';
+import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
 
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
+import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import { createDocumentStub, createDocumentStubs } from '../../../stubs/MongoDbDocument.stub';
+import { createDocumentQueryStub } from '../../../stubs/MongoDbDocumentQuery.stub';
+import TestModel from '../../../testModel';
 import { createEmptyObjects } from '../../../testUtilities';
 
 context('AllPrivilegeMongoDbRepository unit test', () => {
 
     let documentFactory: SinonStubbedInstance<IDocumentFactory>;
+    let queryStub: SinonStubbedInstance<DocumentQuery<Document[], Document, {}>>;
+    let findStub: SinonStub;
     let repository: AllPrivilegeMongoDbRepository;
 
     beforeEach('test setup', () => {
 
-        documentFactory = createDocumentFactoryStub();
+        documentFactory = createDocumentFactoryStub(TestModel);
+        queryStub = createDocumentQueryStub();
+        findStub = stub(documentFactory.model, 'find').returns(queryStub);
         repository = new AllPrivilegeMongoDbRepository(documentFactory);
+    });
+
+    afterEach('test teardown', () => {
+
+        findStub.restore();
     });
 
     describe('insert()', () => {
@@ -73,6 +85,82 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
             const result = await repository.insert(data);
 
             expect(result).to.be.empty;
+        });
+    });
+
+    describe('insertOne()', () => {
+
+        let data: any;
+        let document: SinonStubbedInstance<Document>;
+
+        beforeEach('insertOne() setup', () => {
+
+            data = {};
+            document = createDocumentStub();
+            documentFactory.createDocuments.resolves([document]);
+        });
+
+        it('should attempt to create and insert document', async () => {
+
+            await repository.insertOne(data);
+
+            sinonExpect.calledOnce(documentFactory.createDocuments);
+            sinonExpect.calledWith(documentFactory.createDocuments, [data]);
+            sinonExpect.calledOnce(document.save);
+        });
+
+        it('should return inserted document', async () => {
+
+            const result = await repository.insertOne(data);
+
+            expect(result).is.not.null;
+        });
+
+        it('should return null when failed to insert document', async () => {
+
+            document = createDocumentStub(false);
+            documentFactory.createDocuments.resolves([document]);
+
+            const result = await repository.insertOne(data);
+
+            expect(result).to.be.null;
+        });
+    });
+
+    describe('find()', () => {
+
+        let filter: any;
+        let option: IQueryOption;
+
+        beforeEach('find() setup', () => {
+
+            filter = {};
+            option = {};
+        });
+
+        it('should attempt to find documents', async () => {
+
+            await repository.find(filter, option);
+
+            sinonExpect.calledOnce(findStub);
+        });
+
+        it('should include projection when specified', async () => {
+
+            option.projection = {};
+
+            await repository.find(filter, option);
+
+            sinonExpect.calledWith(findStub, filter, option.projection);
+        });
+
+        it('should include all field selections', async () => {
+
+            option.select = ['field_1', 'field_2', 'field_3'];
+
+            await repository.find(filter, option);
+
+            sinonExpect.callCount(queryStub.select, option.select.length);
         });
     });
 });
