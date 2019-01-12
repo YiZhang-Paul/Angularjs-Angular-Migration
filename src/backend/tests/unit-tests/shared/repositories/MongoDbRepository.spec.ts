@@ -4,9 +4,7 @@ import { SinonStubbedInstance, stub } from 'sinon';
 
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
-import MongoDbRepository from '../../../../shared/repositories/MongoDbRepository';
-
-class MongoDbRepositoryForTest extends MongoDbRepository { }
+import MongoDbRepositoryForTest from '../../../testClasses/MongoDbRepositoryForTest';
 
 context('MongoDbRepository unit test', () => {
 
