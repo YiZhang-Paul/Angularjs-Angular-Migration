@@ -211,7 +211,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         let data: any;
         let filter: any;
-        let documents: Document[];
+        let documents: SinonStubbedInstance<Document>[];
 
         beforeEach('update() setup', () => {
 
@@ -272,14 +272,13 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         let data: any;
         let filter: any;
-        let document: Document;
+        let document: SinonStubbedInstance<Document>;
 
         beforeEach('updateOne() setup', () => {
 
             data = {};
             filter = {};
             document = createDocumentStub();
-            // TODO: resolves?
             findOneStub.resolves(document);
             findOneAndUpdateStub.resolves(document);
         });
@@ -322,6 +321,115 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
             expect(result).to.be.null;
             sinonExpect.calledOnce(findOneAndUpdateStub);
+        });
+    });
+
+    describe('delete()', () => {
+
+        let filter: any;
+        let documents: SinonStubbedInstance<Document>[];
+
+        beforeEach('delete() setup', () => {
+
+            filter = {};
+            documents = createDocumentStubs(5);
+            findStub.resolves(documents);
+        });
+
+        it('should find all documents that need to be deleted', async () => {
+
+            await repository.delete(filter);
+
+            sinonExpect.calledOnce(findStub);
+        });
+
+        it('should attempt to delete all documents that match the criteria', async () => {
+
+            await repository.delete(filter);
+
+            for (const document of documents) {
+
+                sinonExpect.calledOnce(document.remove);
+            }
+        });
+
+        it('should return total number of documents when they were all deleted', async () => {
+
+            const result = await repository.delete(filter);
+
+            expect(result).to.equal(documents.length);
+        });
+
+        it('should only return number of documents that were successfully deleted', async () => {
+            // last document will fail to delete
+            documents[documents.length - 1] = createDocumentStub(false);
+
+            const result = await repository.delete(filter);
+
+            expect(result).to.equal(documents.length - 1);
+        });
+
+        it('should return zero when no documents were deleted', async () => {
+
+            findStub.resolves([]);
+
+            const result = await repository.delete(filter);
+
+            expect(result).to.equal(0);
+        });
+    });
+
+    describe('deleteOne()', () => {
+
+        let filter: any;
+        let document: SinonStubbedInstance<Document>;
+
+        beforeEach('deleteOne() setup', () => {
+
+            filter = {};
+            document = createDocumentStub();
+            findOneStub.resolves(document);
+        });
+
+        it('should find document that needs to be deleted', async () => {
+
+            await repository.deleteOne(filter);
+
+            sinonExpect.calledOnce(findOneStub);
+        });
+
+        it('should attempt to delete document that matches the criteria', async () => {
+
+            await repository.deleteOne(filter);
+
+            sinonExpect.calledOnce(document.remove);
+        });
+
+        it('should return true when successfully deleted', async () => {
+
+            const result = await repository.deleteOne(filter);
+
+            expect(result).to.be.true;
+        });
+
+        it('should return false when no document was deleted', async () => {
+
+            findOneStub.returns(Promise.resolve(null));
+
+            const result = await repository.deleteOne(filter);
+
+            expect(result).to.be.false;
+        });
+
+        it('should return false when failed to delete the document', async () => {
+
+            document = createDocumentStub(false);
+            findOneStub.resolves(document);
+
+            const result = await repository.deleteOne(filter);
+
+            expect(result).to.be.false;
+            sinonExpect.calledOnce(document.remove);
         });
     });
 });

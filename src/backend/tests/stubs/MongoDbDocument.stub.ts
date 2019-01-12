@@ -10,9 +10,13 @@ export function createDocumentStub(resolve = true): Stubbed {
     stubbed.save = stub();
     stubbed.save.rejects(new Error());
 
+    stubbed.remove = stub();
+    stubbed.remove.rejects(new Error());
+
     if (resolve) {
 
         stubbed.save.resolves(stubbed);
+        stubbed.remove.resolves(stubbed);
     }
 
     return stubbed;
