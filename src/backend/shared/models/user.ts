@@ -1,29 +1,43 @@
 import mongoose = require('mongoose');
 
+import { isInteger, isUrl } from '../../shared/models/validators';
+
+const integerValidator = {
+
+    validator: isInteger,
+    message: '{PATH} must be an integer.'
+};
+
+const urlValidator = {
+
+    validator: isUrl,
+    message: '{PATH} must be a valid URI.'
+};
+
 const nameField = {
 
     type: String,
-    minlength: 2,
+    minlength: 4,
     maxlength: 40,
     required: true
 };
 
-const gameSearchesField = [{
+const gameSearchField = [{
 
-    game_id: { type: Number, required: true },
-    count: { type: Number, min: 1, default: 1 }
+    game_id: { type: Number, min: 0, required: true, validate: integerValidator },
+    count: { type: Number, min: 1, default: 1, validate: integerValidator }
 }];
 
 const schema = new mongoose.Schema({
 
-    user_id: { type: Number, required: true },
+    user_id: { type: Number, min: 0, required: true, validate: integerValidator },
     name: nameField,
-    view_histories: { type: String, required: true },
-    bookmarks: { type: String, required: true },
+    view_histories: { type: String, required: true, validate: urlValidator },
+    bookmarks: { type: String, required: true, validate: urlValidator },
     keywords: [{
 
-        date: { type: Date, default: new Date() },
-        game_searches: gameSearchesField
+        date: { type: Date, default: new Date(), required: true },
+        game_search: gameSearchField
     }]
 });
 
