@@ -15,8 +15,8 @@ context('UniqueIdDocumentFactory unit test', () => {
 
     beforeEach('test setup', () => {
 
-        generator = createIdGeneratorStub(id);
-        factory = new UniqueIdDocumentFactory(TestModel, generator);
+        generator = createIdGeneratorStub(TestModel, id);
+        factory = new UniqueIdDocumentFactory(generator);
     });
 
     describe('createDocument()', () => {

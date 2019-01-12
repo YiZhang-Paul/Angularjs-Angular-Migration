@@ -5,6 +5,7 @@ import IProjection from '../../../../shared/repositories/IProjection.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
 import TestModel from '../../../testModel';
+import { areSubObjects, createDataObjects, getField, getFieldNames, isSameArray, isSubArray, isSubObject } from '../../../testUtilities';
 import UniqueIdDocumentFactory from '../../../../shared/repositories/UniqueIdDocumentFactory';
 
 context('AllPrivilegeMongoDbRepository integration test', () => {
@@ -20,8 +21,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         await TestModel.addDefault(3);
 
         generator = new SequentialIdGenerator(TestModel);
-        documentFactory = new UniqueIdDocumentFactory(TestModel, generator);
-        repository = new AllPrivilegeMongoDbRepository(TestModel, documentFactory);
+        documentFactory = new UniqueIdDocumentFactory(generator);
+        repository = new AllPrivilegeMongoDbRepository(documentFactory);
     });
 
     describe('insert()', () => {
@@ -29,12 +30,12 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should insert documents into database', async () => {
 
             const total = await TestModel.total();
-            const expected = createDataList(fields, 5);
+            const expected = createDataObjects(fields, 5);
 
             const result = await repository.insert(expected);
 
             expect(await TestModel.total()).to.equal(total + result.length);
-            expect(hasSameDataList(expected, result)).to.be.true;
+            expect(areSubObjects(expected, result)).to.be.true;
         });
 
         it('should return empty collection when no document inserted', async () => {
@@ -47,10 +48,10 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should ensure unique ids', async () => {
 
             const latestId = await TestModel.total();
-            const data = createDataList(fields, 5);
+            const data = createDataObjects(fields, 5);
 
             const result = await repository.insert(data);
-            const ids = result.map(_ => _.toObject()['id']);
+            const ids = result.map(_ => getField(_, 'id'));
 
             expect(ids).is.not.empty;
             expect(ids.every(id => +id > latestId)).to.be.true;
@@ -63,12 +64,12 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         it('should insert one document into database', async () => {
 
             const total = await TestModel.total();
-            const expected = createData(fields);
+            const expected = createDataObjects(fields, 1)[0];
 
             const result = await repository.insertOne(expected);
 
             expect(await TestModel.total()).to.equal(total + 1);
-            expect(hasSameData(expected, result)).to.be.true;
+            expect(isSubObject(expected, result)).to.be.true;
         });
 
         it('should return null when no document inserted', async () => {
@@ -82,7 +83,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
         it('should ensure unique id', async () => {
 
-            const data = createData(fields);
+            const data = createDataObjects(fields, 1)[0];
 
             const result = await repository.insertOne(data);
 
@@ -90,10 +91,10 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             if (result) {
 
-                const id = result.toObject()['id'];
+                const id = getField(result, 'id');
                 const expected = await TestModel.total();
 
-                expect(id).to.equal(expected);
+                expect(+id).to.equal(expected);
             }
         });
     });
@@ -138,8 +139,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             result.forEach(document => {
 
-                const paths = Object.keys(document.toObject());
-                expect(hasSameElements(expected, paths)).to.be.true;
+                const paths = getFieldNames(document);
+                expect(isSameArray(expected, paths)).to.be.true;
             });
         });
 
@@ -152,7 +153,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             result.forEach(document => {
 
-                const paths = Object.keys(document.toObject());
+                const paths = getFieldNames(document);
                 // ensure field 3 and field 4 are not the only fields in result
                 expect(isSubArray(expected, paths)).to.be.true;
             });
@@ -173,8 +174,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             if (result) {
 
-                const id = result.toObject()['id'];
-                expect(id).to.equal(expected);
+                expect(+getField(result, 'id')).to.equal(expected);
             }
         });
 
@@ -199,8 +199,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             if (result) {
 
-                const paths = Object.keys(result.toObject());
-                expect(hasSameElements(expected, paths)).to.be.true;
+                const paths = getFieldNames(result);
+                expect(isSameArray(expected, paths)).to.be.true;
             }
         });
 
@@ -214,9 +214,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             expect(result).is.not.null;
 
             if (result) {
-
                 // ensure field 3 and field 4 are not the only fields in result
-                const paths = Object.keys(result.toObject());
+                const paths = getFieldNames(result);
                 expect(isSubArray(expected, paths)).to.be.true;
             }
         });
@@ -234,8 +233,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             const result = await repository.update(updateOption);
 
-            expect(original.some(_ => _.toObject()[field] === value)).to.be.false;
-            expect(result.every(_ => _.toObject()[field] === value)).to.be.true;
+            expect(original.some(_ => getField(_, field) === value)).to.be.false;
+            expect(result.every(_ => getField(_, field) === value)).to.be.true;
         });
 
         it('should update all documents matching the criteria', async () => {
@@ -246,8 +245,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const result = await repository.update(updateOption, filter);
 
             expect(result.length).to.equal(original.length);
-            expect(original.some(_ => _.toObject()[field] === value)).to.be.false;
-            expect(result.every(_ => _.toObject()[field] === value)).to.be.true;
+            expect(original.some(_ => getField(_, field) === value)).to.be.false;
+            expect(result.every(_ => getField(_, field) === value)).to.be.true;
         });
 
         it('should not update when no matching document found', async () => {
@@ -278,8 +277,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             if (original && result) {
 
                 expect(result._id).to.deep.equal(original._id);
-                expect(original.toObject()[field]).to.not.equal(value);
-                expect(result.toObject()[field]).to.equal(value);
+                expect(getField(original, field)).to.not.equal(value);
+                expect(getField(result, field)).to.equal(value);
             }
         });
 
@@ -355,72 +354,3 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
         });
     });
 });
-
-// TODO: move these to separate class
-function getRandomString(): string {
-
-    return `${Math.random()}.${Math.random()}.${Math.random()}`;
-}
-
-function createData(fields: string[]): any {
-
-    const data: { [key: string]: any } = {};
-
-    fields.forEach(field => {
-
-        data[field] = getRandomString();
-    });
-
-    return data;
-}
-
-function createDataList(fields: string[], total: number): any {
-
-    const data = [];
-
-    for (let i = 0; i < total; i++) {
-
-        data.push(createData(fields));
-    }
-
-    return data;
-}
-
-function hasSameElements(expected: any[], result: any[]): boolean {
-
-    if (expected.length !== result.length) {
-
-        return false;
-    }
-
-    const lookup = new Set(result);
-
-    return expected.every(_ => lookup.has(_));
-}
-
-function hasSameData(expected: any, result: any): boolean {
-
-    const fields = Object.keys(expected);
-
-    return fields.every(_ => String(result[_]) === String(expected[_]));
-}
-
-function hasSameDataList(expected: any[], result: any[]): boolean {
-
-    if (result.length !== expected.length) {
-
-        return false;
-    }
-
-    return result.every((data, index) => hasSameData(expected[index], data));
-}
-
-function isSubArray<T>(array1: T[], array2: T[]): boolean {
-
-    if (array1.length >= array2.length) {
-
-        return false;
-    }
-
-    return array1.every(_ => array2.includes(_));
-}

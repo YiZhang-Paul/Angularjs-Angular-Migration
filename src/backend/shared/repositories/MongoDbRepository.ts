@@ -6,13 +6,13 @@ import IRepository from './IRepository.interface';
 
 export default abstract class MongoDbRepository implements IRepository {
 
-    protected _model: Model<Document, {}>;
     protected _documentFactory: IDocumentFactory;
+    protected _model: Model<Document, {}>;
 
-    constructor(model: Model<Document, {}>, documentFactory: IDocumentFactory) {
+    constructor(documentFactory: IDocumentFactory) {
 
-        this._model = model;
         this._documentFactory = documentFactory;
+        this._model = documentFactory.model;
     }
 
     public insert(_data: any[]): Promise<Document[]> {

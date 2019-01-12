@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { Document, Model } from 'mongoose';
 import { SinonStubbedInstance } from 'sinon';
 
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
@@ -12,7 +11,6 @@ context('MongoDbRepository unit test', () => {
     let data: any;
     let filter: any;
     let option: IQueryOption;
-    let model: Model<Document, {}>;
     let documentFactory: SinonStubbedInstance<IDocumentFactory>;
     let repository: MongoDbRepository;
     const notSupportedError = 'not supported';
@@ -22,9 +20,8 @@ context('MongoDbRepository unit test', () => {
         data = {};
         filter = {};
         option = {};
-        model = {} as Model<Document, {}>;
         documentFactory = createDocumentFactoryStub();
-        repository = new MongoDbRepository(model, documentFactory);
+        repository = new MongoDbRepository(documentFactory);
     });
 
     describe('insert()', () => {

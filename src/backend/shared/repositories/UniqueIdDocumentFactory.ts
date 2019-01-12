@@ -5,13 +5,16 @@ import IIdGenerator from './IIdGenerator.interface';
 
 export default class UniqueIdDocumentFactory implements IDocumentFactory {
 
-    private _model: Model<Document, {}>;
     private _generator: IIdGenerator;
 
-    constructor(model: Model<Document, {}>, generator: IIdGenerator) {
+    constructor(generator: IIdGenerator) {
 
-        this._model = model;
         this._generator = generator;
+    }
+
+    get model(): Model<Document, {}> {
+
+        return this._generator.model;
     }
 
     public async createDocument(data: any): Promise<Document> {
@@ -30,7 +33,7 @@ export default class UniqueIdDocumentFactory implements IDocumentFactory {
 
             _[this._generator.key] = id;
             id = this._generator.showNext(id);
-            documents.push(new this._model(_));
+            documents.push(new this.model(_));
         }
 
         return documents;

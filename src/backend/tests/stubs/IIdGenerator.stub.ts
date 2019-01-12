@@ -1,15 +1,19 @@
+import { Document, Model } from 'mongoose';
 import { SinonStubbedInstance, stub } from 'sinon';
 
 import IIdGenerator from '../../shared/repositories/IIdGenerator.interface';
 
-export function createIdGeneratorStub(id: string): SinonStubbedInstance<IIdGenerator> {
+type Stubbed = SinonStubbedInstance<IIdGenerator>;
+
+export function createIdGeneratorStub(model: Model<Document, {}>, id: string): Stubbed {
 
     const stubbed = stub({} as IIdGenerator);
 
     Object.defineProperty(stubbed, 'key', { value: 'id' });
+    Object.defineProperty(stubbed, 'model', { value: model });
 
     stubbed.showNext = stub();
-    stubbed.showNext.callsFake((_: string) => String(+_ + 1));
+    stubbed.showNext.callsFake((_: string) => `${+_ + 1}`);
 
     stubbed.generate = stub();
     stubbed.generate.resolves(id);

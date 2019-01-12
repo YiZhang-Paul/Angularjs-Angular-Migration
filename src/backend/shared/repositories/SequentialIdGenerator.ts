@@ -11,7 +11,7 @@ export default class SequentialIdGenerator extends IdGenerator {
 
     public showNext(id: string): string {
 
-        return String(+id + 1);
+        return `${+id + 1}`;
     }
 
     public async generate(): Promise<string> {

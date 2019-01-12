@@ -6,7 +6,6 @@ import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPr
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
 import { createDocumentStub, createDocumentStubs } from '../../../stubs/MongoDbDocument.stub';
-import TestModel from '../../../testModel';
 import { createEmptyObjects } from '../../../testUtilities';
 
 context('AllPrivilegeMongoDbRepository unit test', () => {
@@ -17,7 +16,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
     beforeEach('test setup', () => {
 
         documentFactory = createDocumentFactoryStub();
-        repository = new AllPrivilegeMongoDbRepository(TestModel, documentFactory);
+        repository = new AllPrivilegeMongoDbRepository(documentFactory);
     });
 
     describe('insert()', () => {
@@ -58,7 +57,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
             const result = await repository.insert(data);
 
-            expect(result.length).to.be.equal(data.length - 1);
+            expect(result.length).to.equal(data.length - 1);
 
             for (const document of documents) {
 

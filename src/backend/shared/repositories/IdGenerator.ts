@@ -14,6 +14,11 @@ export default abstract class IdGenerator implements IIdGenerator {
         this.createIndex();
     }
 
+    get model(): Model<Document, {}> {
+
+        return this._model;
+    }
+
     private createIndex(): void {
 
         this._model.ensureIndexes({ [this.key]: -1 });
