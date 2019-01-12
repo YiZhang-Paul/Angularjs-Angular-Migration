@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Document } from 'mongoose';
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
+import { createDocumentQueryStub } from '../../../stubs/MongoDbDocumentQuery.stub';
 import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
 import TestModel from '../../../testModel';
 
@@ -15,6 +15,7 @@ context('SequentialIdGenerator unit test', () => {
 
         ensureIndexesStub = stub(TestModel, 'ensureIndexes');
         findStub = stub(TestModel, 'find');
+        findStub.returns(createDocumentQueryStub());
         generator = new SequentialIdGenerator(TestModel);
     });
 
@@ -40,8 +41,6 @@ context('SequentialIdGenerator unit test', () => {
 
         it('should find current id from database', async () => {
 
-            setupFind(findStub, []);
-
             await generator.generate();
 
             sinonExpect.calledOnce(findStub);
@@ -52,7 +51,8 @@ context('SequentialIdGenerator unit test', () => {
             const key = generator.key;
             const id = '1';
             const document = new TestModel({ [key]: id });
-            setupFind(findStub, [document]);
+            const query = createDocumentQueryStub([document]);
+            findStub.returns(query);
 
             const result = await generator.generate();
 
@@ -62,7 +62,6 @@ context('SequentialIdGenerator unit test', () => {
         it('should generate default id when collection is empty', async () => {
 
             const expected = '0';
-            setupFind(findStub, []);
 
             const result = await generator.generate();
 
@@ -70,11 +69,3 @@ context('SequentialIdGenerator unit test', () => {
         });
     });
 });
-
-function setupFind(findStub: SinonStub, result: Document[]): void {
-
-    const limitQuery = { limit: () => Promise.resolve(result) };
-    const sortQuery = { sort: () => limitQuery };
-
-    findStub.returns(sortQuery);
-}
