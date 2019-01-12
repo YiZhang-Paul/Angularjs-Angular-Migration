@@ -218,7 +218,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
             data = {};
             filter = {};
             documents = createDocumentStubs(5);
-            findStub.returns(documents);
+            findStub.resolves(documents);
 
             documents.forEach((_, index) => {
 
@@ -260,7 +260,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should return empty collection when no documents were updated', async () => {
 
-            findStub.returns([]);
+            findStub.resolves([]);
 
             const result = await repository.update(data, filter);
 
