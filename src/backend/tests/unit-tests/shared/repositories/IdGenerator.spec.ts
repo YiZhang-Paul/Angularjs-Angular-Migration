@@ -1,14 +1,7 @@
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
-import IdGenerator from '../../../../shared/repositories/IdGenerator';
+import IdGeneratorForTest from '../../../testClasses/IdGeneratorForTest';
 import TestModel from '../../../testModel';
-
-class IdGeneratorForTest extends IdGenerator {
-
-    public showNext(_id: string): string { return ''; }
-
-    public async generate(): Promise<string> { return Promise.resolve(''); }
-}
 
 context('IdGenerator unit test', () => {
 
