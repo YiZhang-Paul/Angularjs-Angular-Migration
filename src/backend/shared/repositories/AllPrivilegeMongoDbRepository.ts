@@ -74,7 +74,7 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
             const filter = { '_id': id };
             const option = { new: true };
 
-            return this._model.findOneAndUpdate(filter, data, option);
+            return await this._model.findOneAndUpdate(filter, data, option);
 
         } catch (error) {
 

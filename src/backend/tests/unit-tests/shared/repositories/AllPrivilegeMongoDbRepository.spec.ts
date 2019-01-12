@@ -16,6 +16,8 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
     let documentFactory: SinonStubbedInstance<IDocumentFactory>;
     let queryStub: SinonStubbedInstance<DocumentQuery<Document[], Document, {}>>;
     let findStub: SinonStub;
+    let findOneStub: SinonStub;
+    let findOneAndUpdateStub: SinonStub;
     let repository: AllPrivilegeMongoDbRepository;
 
     beforeEach('test setup', () => {
@@ -23,12 +25,16 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
         documentFactory = createDocumentFactoryStub(TestModel);
         queryStub = createDocumentQueryStub();
         findStub = stub(documentFactory.model, 'find').returns(queryStub);
+        findOneStub = stub(documentFactory.model, 'findOne').returns(queryStub);
+        findOneAndUpdateStub = stub(documentFactory.model, 'findOneAndUpdate');
         repository = new AllPrivilegeMongoDbRepository(documentFactory);
     });
 
     afterEach('test teardown', () => {
 
         findStub.restore();
+        findOneStub.restore();
+        findOneAndUpdateStub.restore();
     });
 
     describe('insert()', () => {
@@ -161,6 +167,161 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
             await repository.find(filter, option);
 
             sinonExpect.callCount(queryStub.select, option.select.length);
+        });
+    });
+
+    describe('findOne()', () => {
+
+        let filter: any;
+        let option: IQueryOption;
+
+        beforeEach('findOne() setup', () => {
+
+            filter = {};
+            option = {};
+        });
+
+        it('should attempt to find document', async () => {
+
+            await repository.findOne(filter, option);
+
+            sinonExpect.calledOnce(findOneStub);
+        });
+
+        it('should include projection when specified', async () => {
+
+            option.projection = {};
+
+            await repository.findOne(filter, option);
+
+            sinonExpect.calledWith(findOneStub, filter, option.projection);
+        });
+
+        it('should include all field selections', async () => {
+
+            option.select = ['field_1', 'field_2', 'field_3'];
+
+            await repository.findOne(filter, option);
+
+            sinonExpect.callCount(queryStub.select, option.select.length);
+        });
+    });
+
+    describe('update()', () => {
+
+        let data: any;
+        let filter: any;
+        let documents: Document[];
+
+        beforeEach('update() setup', () => {
+
+            data = {};
+            filter = {};
+            documents = createDocumentStubs(5);
+            findStub.returns(documents);
+
+            documents.forEach((_, index) => {
+
+                findOneAndUpdateStub.onCall(index).resolves(_);
+            });
+        });
+
+        it('should find all documents that need to be updated', async () => {
+
+            await repository.update(data, filter);
+
+            sinonExpect.calledOnce(findStub);
+        });
+
+        it('should attempt to update all documents that match the criteria', async () => {
+
+            await repository.update(data, filter);
+
+            sinonExpect.callCount(findOneAndUpdateStub, documents.length);
+        });
+
+        it('should return all documents if they were all updated', async () => {
+
+            const result = await repository.update(data, filter);
+
+            expect(result).is.not.empty;
+            expect(result.length).to.equal(documents.length);
+        });
+
+        it('should only return documents that were successfully updated', async () => {
+            // last document will fail to update
+            findOneAndUpdateStub.onCall(documents.length - 1).rejects(new Error());
+
+            const result = await repository.update(data, filter);
+
+            expect(result).is.not.empty;
+            expect(result.length).to.equal(documents.length - 1);
+        });
+
+        it('should return empty collection when no documents were updated', async () => {
+
+            findStub.returns([]);
+
+            const result = await repository.update(data, filter);
+
+            expect(result).to.be.empty;
+        });
+    });
+
+    describe('updateOne()', () => {
+
+        let data: any;
+        let filter: any;
+        let document: Document;
+
+        beforeEach('updateOne() setup', () => {
+
+            data = {};
+            filter = {};
+            document = createDocumentStub();
+            // TODO: resolves?
+            findOneStub.resolves(document);
+            findOneAndUpdateStub.resolves(document);
+        });
+
+        it('should find document that needs to be updated', async () => {
+
+            await repository.updateOne(data, filter);
+
+            sinonExpect.calledOnce(findOneStub);
+        });
+
+        it('should attempt to update document that matches the criteria', async () => {
+
+            await repository.updateOne(data, filter);
+
+            sinonExpect.calledOnce(findOneAndUpdateStub);
+        });
+
+        it('should return document when successfully updated', async () => {
+
+            const result = await repository.updateOne(data, filter);
+
+            expect(result).is.not.null;
+        });
+
+        it('should return null when no document was updated', async () => {
+
+            findOneStub.returns(Promise.resolve(null));
+
+            const result = await repository.updateOne(data, filter);
+
+            expect(result).to.be.null;
+        });
+
+        it('should return null when failed to update the document', async () => {
+
+            findOneAndUpdateStub.rejects(new Error());
+
+            const result = await repository.updateOne(data, filter);
+
+            expect(result).to.be.null;
+            sinonExpect.calledOnce(findOneAndUpdateStub);
         });
     });
 });
