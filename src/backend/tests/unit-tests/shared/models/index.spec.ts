@@ -16,6 +16,11 @@ context('models index unit test', () => {
             expect(Models.Channel.modelName).to.equal('Channel');
         });
 
+        it('should correctly export Game model', () => {
+
+            expect(Models.Game.modelName).to.equal('Game');
+        });
+
         it('should correctly export Provider model', () => {
 
             expect(Models.Provider.modelName).to.equal('Provider');
@@ -24,6 +29,11 @@ context('models index unit test', () => {
         it('should correctly export User model', () => {
 
             expect(Models.User.modelName).to.equal('User');
+        });
+
+        it('should correctly export ViewHistory model', () => {
+
+            expect(Models.ViewHistory.modelName).to.equal('ViewHistory');
         });
     });
 });
