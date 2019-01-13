@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { getField, getValidationError } from '../../../mongooseTestUtilities';
 import UserModel from '../../../../shared/models/user';
 
-const userIdField = 'user_id';
+const userIdField = 'id';
 const nameField = 'name';
 const viewHistoriesField = 'view_histories';
 const bookmarksField = 'bookmarks';
@@ -15,7 +15,7 @@ const countField = 'count';
 
 context('User model unit test', () => {
 
-    describe('user_id', () => {
+    describe(`${userIdField}`, () => {
 
         it('should be required', async () => {
 
@@ -58,7 +58,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('name', () => {
+    describe(`${nameField}`, () => {
 
         it('should be required', async () => {
 
@@ -101,7 +101,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('view_histories', () => {
+    describe(`${viewHistoriesField}`, () => {
 
         it('should be required', async () => {
 
@@ -134,7 +134,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('bookmarks', () => {
+    describe(`${bookmarksField}`, () => {
 
         it('should be required', async () => {
 
@@ -167,7 +167,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('keywords::date', () => {
+    describe(`${keywordsField}::${dateField}`, () => {
 
         it('should default to current date', () => {
 
@@ -182,7 +182,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('keywords::game_search::game_id', () => {
+    describe(`${keywordsField}::${gameSearchField}::${gameIdField}`, () => {
         // equivalent to <model>.keywords[0].game_search[0].game_id
         const targetField = `${keywordsField}.0.${gameSearchField}.0.${gameIdField}`;
 
@@ -227,7 +227,7 @@ context('User model unit test', () => {
         });
     });
 
-    describe('keywords::game_search::count', () => {
+    describe(`${keywordsField}::${gameSearchField}::${countField}`, () => {
         // equivalent to model.keywords[0].game_search[0].count
         const targetField = `${keywordsField}.0.${gameSearchField}.0.${countField}`;
 
