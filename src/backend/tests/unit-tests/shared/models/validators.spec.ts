@@ -59,6 +59,27 @@ context('validators unit test', () => {
         });
     });
 
+    describe('isEmail()', () => {
+
+        it('should return true when e-mail is valid', () => {
+
+            const email = 'valid@email.com';
+
+            const result = Validator.isEmail(email);
+
+            expect(result).to.be.true;
+        });
+
+        it('should return false when e-mail is invalid', () => {
+
+            const email = '.@invalid.email';
+
+            const result = Validator.isEmail(email);
+
+            expect(result).to.be.false;
+        });
+    });
+
     describe('isUrl()', () => {
 
         it('should return true when url is valid', () => {

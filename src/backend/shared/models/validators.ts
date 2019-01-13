@@ -1,4 +1,4 @@
-import { isWebUri } from 'valid-url';
+import * as validatorJs from 'validator';
 
 export function isInteger(value: string | number): boolean {
 
@@ -10,9 +10,14 @@ export function isNonEmptyArray(array: any[]): boolean {
     return array.length > 0;
 }
 
+export function isEmail(value: string): boolean {
+
+    return validatorJs.isEmail(value);
+}
+
 export function isUrl(value: string): boolean {
 
-    return isWebUri(value) !== undefined;
+    return validatorJs.isURL(value);
 }
 
 export const integerValidator = {
@@ -27,6 +32,12 @@ export const nonEmptyArrayValidator = {
     message: '{PATH} must be non-empty.'
 };
 
+export const emailValidator = {
+
+    validator: isEmail,
+    message: '{PATH} must be a valid e-mail.'
+};
+
 export const urlValidator = {
 
     validator: isUrl,
@@ -37,8 +48,10 @@ export default {
 
     isInteger,
     isNonEmptyArray,
+    isEmail,
     isUrl,
     integerValidator,
     nonEmptyArrayValidator,
+    emailValidator,
     urlValidator
 };

@@ -6,6 +6,11 @@ context('models index unit test', () => {
 
     describe('model exports', () => {
 
+        it('should correctly export Account model', () => {
+
+            expect(Models.Account.modelName).to.equal('Account');
+        });
+
         it('should correctly export Bookmark model', () => {
 
             expect(Models.Bookmark.modelName).to.equal('Bookmark');

@@ -53,7 +53,7 @@
         "express": "^4.16.4",
         "jsonwebtoken": "^8.4.0",
         "mongoose": "^5.4.3",
-        "valid-url": "^1.0.9"
+        "validator": "^10.10.0"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",
@@ -65,7 +65,7 @@
         "@types/node": "^10.12.18",
         "@types/sinon": "^7.0.3",
         "@types/superagent": "^3.8.6",
-        "@types/valid-url": "^1.0.2",
+        "@types/validator": "^10.9.0",
         "chai": "^4.2.0",
         "chai-http": "^4.2.1",
         "mocha": "^5.2.0",
