@@ -1,9 +1,9 @@
 import { model, Schema } from 'mongoose';
 
-import Validator from '../../shared/models/validators';
+import validator from '../../shared/models/validators';
 
-const integerValidator = Validator.integerValidator;
-const urlValidator = Validator.urlValidator;
+const integerValidator = validator.integerValidator;
+const urlValidator = validator.urlValidator;
 
 const UrlSchema = new Schema({
 

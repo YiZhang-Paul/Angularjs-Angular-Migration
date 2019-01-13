@@ -53,7 +53,8 @@
         "express": "^4.16.4",
         "jsonwebtoken": "^8.4.0",
         "mongoose": "^5.4.3",
-        "validator": "^10.10.0"
+        "validator": "^10.10.0",
+        "xss": "^1.0.3"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",

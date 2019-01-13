@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose';
 
-import Validator from '../../shared/models/validators';
+import validator from '../../shared/models/validators';
 
-const integerValidator = Validator.integerValidator;
+const integerValidator = validator.integerValidator;
 
 const ChannelSchema = new Schema({
 

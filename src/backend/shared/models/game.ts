@@ -1,9 +1,9 @@
 import { model, Schema } from 'mongoose';
 
-import Validator from '../../shared/models/validators';
+import validator from '../../shared/models/validators';
 
-const integerValidator = Validator.integerValidator;
-const nonEmptyArrayValidator = Validator.nonEmptyArrayValidator;
+const integerValidator = validator.integerValidator;
+const nonEmptyArrayValidator = validator.nonEmptyArrayValidator;
 
 const SearchApiKeysSchema = new Schema({
 

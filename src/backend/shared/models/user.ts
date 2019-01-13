@@ -1,10 +1,10 @@
 import { model, Schema } from 'mongoose';
 
-import Validator from '../../shared/models/validators';
+import validator from '../../shared/models/validators';
 
-const integerValidator = Validator.integerValidator;
-const nonEmptyArrayValidator = Validator.nonEmptyArrayValidator;
-const urlValidator = Validator.urlValidator;
+const integerValidator = validator.integerValidator;
+const nonEmptyArrayValidator = validator.nonEmptyArrayValidator;
+const urlValidator = validator.urlValidator;
 
 const GameSearchSchema = new Schema({
 
