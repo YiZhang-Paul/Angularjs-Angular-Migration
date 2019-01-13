@@ -182,6 +182,21 @@ context('User model unit test', () => {
         });
     });
 
+    describe(`${keywordsField}::${gameSearchField}`, () => {
+        // equivalent to <model>.keywords[0].game_search
+        const targetField = `${keywordsField}.0.${gameSearchField}`;
+
+        it('should be non-empty', async () => {
+
+            const model = new UserModel(setKeyword());
+
+            const error = await getValidationError(model, targetField);
+
+            expect(error).is.not.null;
+            expect(error.message).to.equal(`${gameSearchField} must be non-empty.`);
+        });
+    });
+
     describe(`${keywordsField}::${gameSearchField}::${gameIdField}`, () => {
         // equivalent to <model>.keywords[0].game_search[0].game_id
         const targetField = `${keywordsField}.0.${gameSearchField}.0.${gameIdField}`;
@@ -275,16 +290,26 @@ context('User model unit test', () => {
     });
 });
 
+function setKeyword(field = '', value: any = {}): any {
+
+    const keyword: any = {};
+
+    if (field.length > 0) {
+
+        keyword[field] = value;
+    }
+
+    return { [keywordsField]: [keyword] };
+}
+
 function setGameSearch(field = '', value: any = {}): any {
 
     const gameSearch: any = {};
-    const gameSearches = [gameSearch];
-    const keywords = [{ [gameSearchField]: gameSearches }];
 
     if (field.length > 0) {
 
         gameSearch[field] = value;
     }
 
-    return { [keywordsField]: keywords };
+    return setKeyword(gameSearchField, [gameSearch]);
 }

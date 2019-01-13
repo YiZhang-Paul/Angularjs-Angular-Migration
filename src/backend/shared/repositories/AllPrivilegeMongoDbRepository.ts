@@ -3,7 +3,6 @@ import { Document, DocumentQuery } from 'mongoose';
 import IQueryOption from './IQueryOption.interface';
 import MongoDbRepository from './MongoDbRepository';
 
-// TODO: move this to somewhere else
 type Query<T> = DocumentQuery<T, Document, {}>;
 
 export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {

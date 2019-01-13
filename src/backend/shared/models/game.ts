@@ -3,6 +3,7 @@ import { model, Schema } from 'mongoose';
 import Validator from '../../shared/models/validators';
 
 const integerValidator = Validator.integerValidator;
+const nonEmptyArrayValidator = Validator.nonEmptyArrayValidator;
 
 const SearchApiKeysSchema = new Schema({
 
@@ -15,7 +16,7 @@ const GameSchema = new Schema({
 
     id: { type: Number, required: true, min: 0, validate: integerValidator },
     name: { type: String, required: true, maxlength: 100 },
-    search_api_keys: { type: [ SearchApiKeysSchema ], required: true },
+    search_api_keys: { type: [ SearchApiKeysSchema ], validate: nonEmptyArrayValidator },
     genre: { type: String, required: true, maxlength: 40 }
 });
 

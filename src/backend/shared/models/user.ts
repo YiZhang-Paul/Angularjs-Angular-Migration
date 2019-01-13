@@ -3,6 +3,7 @@ import { model, Schema } from 'mongoose';
 import Validator from '../../shared/models/validators';
 
 const integerValidator = Validator.integerValidator;
+const nonEmptyArrayValidator = Validator.nonEmptyArrayValidator;
 const urlValidator = Validator.urlValidator;
 
 const GameSearchSchema = new Schema({
@@ -13,8 +14,8 @@ const GameSearchSchema = new Schema({
 
 const KeywordSchema = new Schema({
 
-    date: { type: Date, required: true, default: new Date() },
-    game_search: { type: [ GameSearchSchema ], required: true }
+    date: { type: Date, default: new Date() },
+    game_search: { type: [ GameSearchSchema ], validate: nonEmptyArrayValidator }
 });
 
 const UserSchema = new Schema({

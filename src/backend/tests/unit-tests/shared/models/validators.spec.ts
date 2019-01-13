@@ -42,6 +42,23 @@ context('validators unit test', () => {
         });
     });
 
+    describe('isNonEmptyArray()', () => {
+
+        it('should return true when array is not empty', () => {
+
+            const result = Validator.isNonEmptyArray([{}]);
+
+            expect(result).to.be.true;
+        });
+
+        it('should return false when array is empty', () => {
+
+            const result = Validator.isNonEmptyArray([]);
+
+            expect(result).to.be.false;
+        });
+    });
+
     describe('isUrl()', () => {
 
         it('should return true when url is valid', () => {
