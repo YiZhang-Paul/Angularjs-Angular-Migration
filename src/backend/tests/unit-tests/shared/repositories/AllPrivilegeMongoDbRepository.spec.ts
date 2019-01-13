@@ -3,13 +3,13 @@ import { Document, DocumentQuery } from 'mongoose';
 import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
 
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
+import { createEmptyObjects } from '../../../genericTestUtilities';
 import IDocumentFactory from '../../../../shared/repositories/IDocumentFactory.interface';
 import { createDocumentFactoryStub } from '../../../stubs/IDocumentFactory.stub';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
 import { createDocumentStub, createDocumentStubs } from '../../../stubs/MongoDbDocument.stub';
 import { createDocumentQueryStub } from '../../../stubs/MongoDbDocumentQuery.stub';
 import TestModel from '../../../testModel';
-import { createEmptyObjects } from '../../../testUtilities';
 
 context('AllPrivilegeMongoDbRepository unit test', () => {
 

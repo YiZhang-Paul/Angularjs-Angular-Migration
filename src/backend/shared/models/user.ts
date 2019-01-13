@@ -1,44 +1,29 @@
-import mongoose = require('mongoose');
+import { model, Schema } from 'mongoose';
 
-import { isInteger, isUrl } from '../../shared/models/validators';
+import Validator from '../../shared/models/validators';
 
-const integerValidator = {
+const integerValidator = Validator.integerValidator;
+const urlValidator = Validator.urlValidator;
 
-    validator: isInteger,
-    message: '{PATH} must be an integer.'
-};
+const GameSearchSchema = new Schema({
 
-const urlValidator = {
-
-    validator: isUrl,
-    message: '{PATH} must be a valid URI.'
-};
-
-const nameField = {
-
-    type: String,
-    minlength: 4,
-    maxlength: 40,
-    required: true
-};
-
-const gameSearchField = [{
-
-    game_id: { type: Number, min: 0, required: true, validate: integerValidator },
-    count: { type: Number, min: 1, default: 1, validate: integerValidator }
-}];
-
-const schema = new mongoose.Schema({
-
-    user_id: { type: Number, min: 0, required: true, validate: integerValidator },
-    name: nameField,
-    view_histories: { type: String, required: true, validate: urlValidator },
-    bookmarks: { type: String, required: true, validate: urlValidator },
-    keywords: [{
-
-        date: { type: Date, default: new Date(), required: true },
-        game_search: gameSearchField
-    }]
+    game_id: { type: Number, required: true, min: 0, validate: integerValidator },
+    count: { type: Number, default: 1, min: 1, validate: integerValidator }
 });
 
-export default mongoose.model('User', schema);
+const KeywordSchema = new Schema({
+
+    date: { type: Date, required: true, default: new Date() },
+    game_search: { type: [ GameSearchSchema ], required: true }
+});
+
+const UserSchema = new Schema({
+
+    user_id: { type: Number, required: true, min: 0, validate: integerValidator },
+    name: { type: String, required: true, minlength: 4, maxlength: 40 },
+    view_histories: { type: String, required: true, validate: urlValidator },
+    bookmarks: { type: String, required: true, validate: urlValidator },
+    keywords: [ KeywordSchema ]
+});
+
+export default model('User', UserSchema);

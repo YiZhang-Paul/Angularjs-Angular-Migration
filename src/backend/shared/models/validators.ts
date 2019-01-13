@@ -10,4 +10,16 @@ export function isUrl(value: string): boolean {
     return isWebUri(value) !== undefined;
 }
 
-export default { isInteger, isUrl };
+export const integerValidator = {
+
+    validator: isInteger,
+    message: '{PATH} must be an integer.'
+};
+
+export const urlValidator = {
+
+    validator: isUrl,
+    message: '{PATH} must be a valid URI.'
+};
+
+export default { isInteger, isUrl, integerValidator, urlValidator };

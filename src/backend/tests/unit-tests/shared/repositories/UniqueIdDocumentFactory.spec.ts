@@ -1,10 +1,11 @@
 import { expect } from 'chai';
 import { assert as sinonExpect, SinonStubbedInstance } from 'sinon';
 
+import { createEmptyObjects } from '../../../genericTestUtilities';
 import IIdGenerator from '../../../../shared/repositories/IIdGenerator.interface';
 import { createIdGeneratorStub } from '../../../stubs/IIdGenerator.stub';
+import { getFieldString } from '../../../mongooseTestUtilities';
 import TestModel from '../../../testModel';
-import { createEmptyObjects, getField } from '../../../testUtilities';
 import UniqueIdDocumentFactory from '../../../../shared/repositories/UniqueIdDocumentFactory';
 
 context('UniqueIdDocumentFactory unit test', () => {
@@ -25,7 +26,7 @@ context('UniqueIdDocumentFactory unit test', () => {
 
             const result = await factory.createDocument({});
 
-            expect(getField(result, generator.key)).to.equal(id);
+            expect(getFieldString(result, generator.key)).to.equal(id);
             sinonExpect.calledOnce(generator.generate);
         });
     });
@@ -46,7 +47,7 @@ context('UniqueIdDocumentFactory unit test', () => {
             result.forEach((_, index) => {
 
                 const expectedId = `${+id + index}`;
-                expect(getField(_, generator.key)).to.equal(expectedId);
+                expect(getFieldString(_, generator.key)).to.equal(expectedId);
             });
         });
     });

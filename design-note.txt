@@ -98,7 +98,6 @@ bookmark (id, channel_id, title, streamer_name, playlist) & (is_live)
 account (id, role, username, password, email, oauth_provider, oauth_identifier)
 provider (id, name, urls : { site, search_game, search_channel })
 keywords (date, game_searches : [{ game_id, count }])
-counter
 
 4. APIs
 

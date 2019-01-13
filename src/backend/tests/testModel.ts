@@ -2,7 +2,7 @@ import { Document, model, Schema } from 'mongoose';
 
 import ITestModel from './ITestModel.interface';
 
-const schema = new Schema({
+const TestModelSchema = new Schema({
 
     id: { type: Number, min: 0, required: true, unique: true },
     field_1: { type: String, required: true },
@@ -11,7 +11,7 @@ const schema = new Schema({
     field_4: { type: String, default: 'field_4', select: false }
 });
 
-schema.statics.addDefault = async function (total: number): Promise<void> {
+TestModelSchema.statics.addDefault = async function (total: number): Promise<void> {
 
     let counter = 0;
 
@@ -22,14 +22,14 @@ schema.statics.addDefault = async function (total: number): Promise<void> {
     }
 };
 
-schema.statics.clear = async function (): Promise<void> {
+TestModelSchema.statics.clear = async function (): Promise<void> {
 
     await this.deleteMany({});
 };
 
-schema.statics.total = async function (): Promise<number> {
+TestModelSchema.statics.total = async function (): Promise<number> {
     // convert Query<number> to Promise<number>
     return await this.countDocuments({});
 };
 
-export default model<Document, ITestModel>('TestModel', schema);
+export default model<Document, ITestModel>('TestModel', TestModelSchema);

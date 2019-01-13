@@ -1,5 +1,3 @@
-import { Document } from 'mongoose';
-
 export function createEmptyObjects(total: number): any[] {
 
     return new Array(total).fill(0).map(_ => ({}));
@@ -73,14 +71,4 @@ export function isSubArray<T>(subArray: T[], array: T[]): boolean {
 export function getRandomString(): string {
 
     return `${Math.random()}.${Math.random()}.${Math.random()}`;
-}
-
-export function getField(document: Document, field: string): string {
-
-    return `${document.toObject()[field]}`;
-}
-
-export function getFieldNames(document: Document): string[] {
-
-    return Object.keys(document.toObject());
 }

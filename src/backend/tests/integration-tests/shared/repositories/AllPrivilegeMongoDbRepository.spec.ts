@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 
 import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/AllPrivilegeMongoDbRepository';
+import { areSubObjects, createDataObjects, isSameArray, isSubArray, isSubObject } from '../../../genericTestUtilities';
 import IProjection from '../../../../shared/repositories/IProjection.interface';
 import IQueryOption from '../../../../shared/repositories/IQueryOption.interface';
+import { getFieldNames, getFieldString } from '../../../mongooseTestUtilities';
 import SequentialIdGenerator from '../../../../shared/repositories/SequentialIdGenerator';
 import TestModel from '../../../testModel';
-import { areSubObjects, createDataObjects, getField, getFieldNames, isSameArray, isSubArray, isSubObject } from '../../../testUtilities';
 import UniqueIdDocumentFactory from '../../../../shared/repositories/UniqueIdDocumentFactory';
 
 context('AllPrivilegeMongoDbRepository integration test', () => {
@@ -51,7 +52,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const data = createDataObjects(fields, 5);
 
             const result = await repository.insert(data);
-            const ids = result.map(_ => getField(_, 'id'));
+            const ids = result.map(_ => getFieldString(_, 'id'));
 
             expect(ids).is.not.empty;
             expect(ids.every(id => +id > latestId)).to.be.true;
@@ -91,7 +92,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             if (result) {
 
-                const id = getField(result, 'id');
+                const id = getFieldString(result, 'id');
                 const expected = await TestModel.total();
 
                 expect(+id).to.equal(expected);
@@ -174,7 +175,7 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             if (result) {
 
-                expect(+getField(result, 'id')).to.equal(expected);
+                expect(+getFieldString(result, 'id')).to.equal(expected);
             }
         });
 
@@ -233,8 +234,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
 
             const result = await repository.update(updateOption);
 
-            expect(original.some(_ => getField(_, field) === value)).to.be.false;
-            expect(result.every(_ => getField(_, field) === value)).to.be.true;
+            expect(original.some(_ => getFieldString(_, field) === value)).to.be.false;
+            expect(result.every(_ => getFieldString(_, field) === value)).to.be.true;
         });
 
         it('should update all documents matching the criteria', async () => {
@@ -245,8 +246,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             const result = await repository.update(updateOption, filter);
 
             expect(result.length).to.equal(original.length);
-            expect(original.some(_ => getField(_, field) === value)).to.be.false;
-            expect(result.every(_ => getField(_, field) === value)).to.be.true;
+            expect(original.some(_ => getFieldString(_, field) === value)).to.be.false;
+            expect(result.every(_ => getFieldString(_, field) === value)).to.be.true;
         });
 
         it('should not update when no matching document found', async () => {
@@ -277,8 +278,8 @@ context('AllPrivilegeMongoDbRepository integration test', () => {
             if (original && result) {
 
                 expect(result._id).to.deep.equal(original._id);
-                expect(getField(original, field)).to.not.equal(value);
-                expect(getField(result, field)).to.equal(value);
+                expect(getFieldString(original, field)).to.not.equal(value);
+                expect(getFieldString(result, field)).to.equal(value);
             }
         });
 
