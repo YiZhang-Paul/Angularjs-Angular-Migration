@@ -21,21 +21,21 @@ export default abstract class IdGenerator implements IIdGenerator {
 
     private createIndex(): void {
 
-        this._model.ensureIndexes({ [this.key]: -1 });
+        this.model.ensureIndexes({ [this.key]: -1 });
 
         const isDebugMode = process.env.DEBUG;
-        const hasListener = this._model.listeners('index').length > 0;
+        const hasListener = this.model.listeners('index').length > 0;
         /* istanbul ignore if */
         if (isDebugMode && !hasListener) {
 
-            this._model.on('index', _ => console.log(_ ? _ : 'created index.'));
+            this.model.on('index', _ => console.log(_ ? _ : 'created index.'));
         }
     }
 
     protected async getLatestId(): Promise<string> {
 
         const sortOption = { [this.key]: -1 };
-        const query = this._model.find().sort(sortOption).limit(1);
+        const query = this.model.find().sort(sortOption).limit(1);
         const document = (await query)[0];
 
         return document ? document[this.key] : '';

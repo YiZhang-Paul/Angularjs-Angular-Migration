@@ -12,4 +12,4 @@ export function sanitize(input: string): string {
     return xss(input, option).replace(/[{}$]/g, '');
 }
 
-export default { sanitize }
+export default { sanitize };
