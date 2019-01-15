@@ -1,7 +1,5 @@
-import { expect } from 'chai';
-
 import BookmarkModel from '../../../../shared/models/bookmark';
-import { getValidationError } from '../../../mongooseTestUtilities';
+import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';
 const channelIdField = 'channel_id';
@@ -16,40 +14,29 @@ context('User model unit test', () => {
 
             const model = new BookmarkModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new BookmarkModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new BookmarkModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new BookmarkModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -59,40 +46,29 @@ context('User model unit test', () => {
 
             const model = new BookmarkModel();
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, channelIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new BookmarkModel({ [channelIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, channelIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new BookmarkModel({ [channelIdField]: '55.5' });
+            const errorMessage = `${channelIdField} must be an integer.`;
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${channelIdField} must be an integer.`);
+            await verifyCustomError(model, channelIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new BookmarkModel({ [channelIdField]: '-1' });
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, channelIdField, 'min');
         });
     });
 
@@ -102,20 +78,14 @@ context('User model unit test', () => {
 
             const model = new BookmarkModel({ [titleField]: {} });
 
-            const error = await getValidationError(model, titleField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, titleField);
         });
 
         it('should be shorter than or equal to 150 characters', async () => {
 
             const model = new BookmarkModel({ [titleField]: 'x'.repeat(151) });
 
-            const error = await getValidationError(model, titleField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, titleField, 'maxlength');
         });
     });
 
@@ -125,20 +95,14 @@ context('User model unit test', () => {
 
             const model = new BookmarkModel({ [streamerNameField]: {} });
 
-            const error = await getValidationError(model, streamerNameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, streamerNameField);
         });
 
         it('should be shorter than or equal to 150 characters', async () => {
 
             const model = new BookmarkModel({ [streamerNameField]: 'x'.repeat(51) });
 
-            const error = await getValidationError(model, streamerNameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, streamerNameField, 'maxlength');
         });
     });
 });

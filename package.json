@@ -52,7 +52,7 @@
         "config": "^3.0.1",
         "express": "^4.16.4",
         "jsonwebtoken": "^8.4.0",
-        "mongoose": "^5.4.3",
+        "mongoose": "^5.4.4",
         "validator": "^10.10.0",
         "xss": "^1.0.3"
     },

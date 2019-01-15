@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { Document } from 'mongoose';
 
 export function getField(document: Document, field: string): any {
@@ -15,7 +16,12 @@ export function getFieldNames(document: Document): string[] {
     return Object.keys(document.toObject());
 }
 
-export async function getValidationError(document: Document, field: string): Promise<any> {
+export async function getValidationError(
+
+    document: Document,
+    field: string
+
+    ): Promise<any> {
 
     let result = null;
 
@@ -28,4 +34,45 @@ export async function getValidationError(document: Document, field: string): Pro
     });
 
     return result;
+}
+
+export async function verifyValidationError(
+
+    document: Document,
+    field: string,
+    type: string
+
+): Promise<void> {
+
+    const error = await getValidationError(document, field);
+
+    expect(error).is.not.null;
+    expect(error.kind).to.equal(type);
+}
+
+export async function verifyCastError(
+
+    document: Document,
+    field: string
+
+): Promise<void> {
+
+    const error = await getValidationError(document, field);
+
+    expect(error).is.not.null;
+    expect(error.name).to.equal('CastError');
+}
+
+export async function verifyCustomError(
+
+    document: Document,
+    field: string,
+    message: string
+
+): Promise<void> {
+
+    const error = await getValidationError(document, field);
+
+    expect(error).is.not.null;
+    expect(error.message).to.equal(message);
 }

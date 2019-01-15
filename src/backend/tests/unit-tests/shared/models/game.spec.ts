@@ -1,7 +1,5 @@
-import { expect } from 'chai';
-
 import GameModel from '../../../../shared/models/game';
-import { getValidationError } from '../../../mongooseTestUtilities';
+import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';
 const nameField = 'name';
@@ -19,40 +17,29 @@ context('Game model unit test', () => {
 
             const model = new GameModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new GameModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new GameModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new GameModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -62,30 +49,21 @@ context('Game model unit test', () => {
 
             const model = new GameModel();
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, nameField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new GameModel({ [nameField]: {} });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, nameField);
         });
 
         it('should be shorter than or equal to 100 characters', async () => {
 
             const model = new GameModel({ [nameField]: 'x'.repeat(101) });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, nameField, 'maxlength');
         });
     });
 
@@ -95,30 +73,21 @@ context('Game model unit test', () => {
 
             const model = new GameModel();
 
-            const error = await getValidationError(model, genreField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, genreField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new GameModel({ [genreField]: {} });
 
-            const error = await getValidationError(model, genreField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, genreField);
         });
 
         it('should be shorter than or equal to 40 characters', async () => {
 
             const model = new GameModel({ [genreField]: 'x'.repeat(41) });
 
-            const error = await getValidationError(model, genreField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, genreField, 'maxlength');
         });
     });
 
@@ -127,11 +96,9 @@ context('Game model unit test', () => {
         it('should be non-empty', async () => {
 
             const model = new GameModel();
+            const errorMessage = `${searchApiKeysField} must be non-empty.`;
 
-            const error = await getValidationError(model, searchApiKeysField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${searchApiKeysField} must be non-empty.`);
+            await verifyCustomError(model, searchApiKeysField, errorMessage);
         });
     });
 
@@ -143,40 +110,29 @@ context('Game model unit test', () => {
 
             const model = new GameModel(setSearchApiKeys());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerIdField, 'not_a_number'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be an integer', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerIdField, '55.5'));
+            const errorMessage = `${providerIdField} must be an integer.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${providerIdField} must be an integer.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerIdField, '-1'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, targetField, 'min');
         });
     });
 
@@ -188,40 +144,29 @@ context('Game model unit test', () => {
 
             const model = new GameModel(setSearchApiKeys());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerGameIdField, 'not_a_number'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be an integer', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerGameIdField, '55.5'));
+            const errorMessage = `${providerGameIdField} must be an integer.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${providerGameIdField} must be an integer.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerGameIdField, '-1'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, targetField, 'min');
         });
     });
 
@@ -233,30 +178,21 @@ context('Game model unit test', () => {
 
             const model = new GameModel(setSearchApiKeys());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerGameNameField, {}));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be shorter than or equal to 100 characters', async () => {
 
             const model = new GameModel(setSearchApiKeys(providerGameNameField, 'x'.repeat(101)));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, targetField, 'maxlength');
         });
     });
 });

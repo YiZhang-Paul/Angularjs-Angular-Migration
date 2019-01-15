@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import AccountModel from '../../../../shared/models/account';
-import { getFieldString, getValidationError } from '../../../mongooseTestUtilities';
+import { getFieldString, verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';
 const roleField = 'role';
@@ -19,40 +19,29 @@ context('Account model unit test', () => {
 
             const model = new AccountModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new AccountModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new AccountModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new AccountModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -62,30 +51,22 @@ context('Account model unit test', () => {
 
             const model = new AccountModel();
 
-            const error = await getValidationError(model, roleField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, roleField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new AccountModel({ [roleField]: 'not_a_number' });
 
-            const error = await getValidationError(model, roleField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, roleField);
         });
 
         it('should be an integer', async () => {
 
             const model = new AccountModel({ [roleField]: '55.5' });
+            const errorMessage = `${roleField} must be an integer.`;
 
-            const error = await getValidationError(model, roleField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${roleField} must be an integer.`);
+            await verifyCustomError(model, roleField, errorMessage);
         });
     });
 
@@ -95,30 +76,21 @@ context('Account model unit test', () => {
 
             const model = new AccountModel();
 
-            const error = await getValidationError(model, usernameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, usernameField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new AccountModel({ [usernameField]: {} });
 
-            const error = await getValidationError(model, usernameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, usernameField);
         });
 
         it('should be shorter than or equal to 60 characters', async () => {
 
             const model = new AccountModel({ [usernameField]: 'x'.repeat(61) });
 
-            const error = await getValidationError(model, usernameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, usernameField, 'maxlength');
         });
 
         it('should be trimmed before validating', () => {
@@ -152,20 +124,14 @@ context('Account model unit test', () => {
 
             const model = new AccountModel({ [passwordField]: {} });
 
-            const error = await getValidationError(model, passwordField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, passwordField);
         });
 
         it('should be shorter than or equal to 255 characters', async () => {
 
             const model = new AccountModel({ [passwordField]: 'x'.repeat(256) });
 
-            const error = await getValidationError(model, passwordField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, passwordField, 'maxlength');
         });
     });
 
@@ -175,30 +141,22 @@ context('Account model unit test', () => {
 
             const model = new AccountModel();
 
-            const error = await getValidationError(model, emailField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, emailField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new AccountModel({ [emailField]: {} });
 
-            const error = await getValidationError(model, emailField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, emailField);
         });
 
         it('should be a valid email', async () => {
 
             const model = new AccountModel({ [emailField]: '.@invalid.email' });
+            const errorMessage = `${emailField} must be a valid e-mail.`;
 
-            const error = await getValidationError(model, emailField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${emailField} must be a valid e-mail.`);
+            await verifyCustomError(model, emailField, errorMessage);
         });
     });
 
@@ -208,20 +166,14 @@ context('Account model unit test', () => {
 
             const model = new AccountModel({ [oauthProviderField]: {} });
 
-            const error = await getValidationError(model, oauthProviderField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, oauthProviderField);
         });
 
         it('should be shorter than or equal to 80 characters', async () => {
 
             const model = new AccountModel({ [oauthProviderField]: 'x'.repeat(81) });
 
-            const error = await getValidationError(model, oauthProviderField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, oauthProviderField, 'maxlength');
         });
     });
 
@@ -231,20 +183,14 @@ context('Account model unit test', () => {
 
             const model = new AccountModel({ [oauthIdentifierField]: {} });
 
-            const error = await getValidationError(model, oauthIdentifierField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, oauthIdentifierField);
         });
 
         it('should be shorter than or equal to 255 characters', async () => {
 
             const model = new AccountModel({ [oauthIdentifierField]: 'x'.repeat(256) });
 
-            const error = await getValidationError(model, oauthIdentifierField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, oauthIdentifierField, 'maxlength');
         });
     });
 });

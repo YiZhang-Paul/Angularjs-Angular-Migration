@@ -1,7 +1,5 @@
-import { expect } from 'chai';
-
 import ChannelModel from '../../../../shared/models/channel';
-import { getValidationError } from '../../../mongooseTestUtilities';
+import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';
 const providerIdField = 'provider_id';
@@ -15,40 +13,29 @@ context('Channel model unit test', () => {
 
             const model = new ChannelModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ChannelModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ChannelModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ChannelModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -58,40 +45,29 @@ context('Channel model unit test', () => {
 
             const model = new ChannelModel();
 
-            const error = await getValidationError(model, providerIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, providerIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ChannelModel({ [providerIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, providerIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, providerIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ChannelModel({ [providerIdField]: '55.5' });
+            const errorMessage = `${providerIdField} must be an integer.`;
 
-            const error = await getValidationError(model, providerIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${providerIdField} must be an integer.`);
+            await verifyCustomError(model, providerIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ChannelModel({ [providerIdField]: '-1' });
 
-            const error = await getValidationError(model, providerIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, providerIdField, 'min');
         });
     });
 
@@ -101,40 +77,29 @@ context('Channel model unit test', () => {
 
             const model = new ChannelModel();
 
-            const error = await getValidationError(model, providerChannelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, providerChannelIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ChannelModel({ [providerChannelIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, providerChannelIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, providerChannelIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ChannelModel({ [providerChannelIdField]: '55.5' });
+            const errorMessage = `${providerChannelIdField} must be an integer.`;
 
-            const error = await getValidationError(model, providerChannelIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${providerChannelIdField} must be an integer.`);
+            await verifyCustomError(model, providerChannelIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ChannelModel({ [providerChannelIdField]: '-1' });
 
-            const error = await getValidationError(model, providerChannelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, providerChannelIdField, 'min');
         });
     });
 });

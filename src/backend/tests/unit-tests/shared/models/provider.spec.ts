@@ -1,6 +1,4 @@
-import { expect } from 'chai';
-
-import { getValidationError } from '../../../mongooseTestUtilities';
+import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 import ProviderModel from '../../../../shared/models/provider';
 
 const idField = 'id';
@@ -18,40 +16,29 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ProviderModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ProviderModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ProviderModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -61,40 +48,28 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel();
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, nameField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ProviderModel({ [nameField]: {} });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, nameField);
         });
 
         it('should be longer than or equal to 3 characters', async () => {
 
             const model = new ProviderModel({ [nameField]: 'x'.repeat(2) });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('minlength');
+            await verifyValidationError(model, nameField, 'minlength');
         });
 
         it('should be shorter than or equal to 50 characters', async () => {
 
             const model = new ProviderModel({ [nameField]: 'x'.repeat(51) });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, nameField, 'maxlength');
         });
     });
 
@@ -104,10 +79,7 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel();
 
-            const error = await getValidationError(model, urlsField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, urlsField, 'required');
         });
     });
 
@@ -119,30 +91,22 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel(setUrls());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ProviderModel(setUrls(siteUrlField, {}));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new ProviderModel(setUrls(siteUrlField, 'not_a_url'));
+            const errorMessage = `${siteUrlField} must be a valid URI.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${siteUrlField} must be a valid URI.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
     });
 
@@ -154,30 +118,22 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel(setUrls());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ProviderModel(setUrls(searchGameUrl, {}));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new ProviderModel(setUrls(searchGameUrl, 'not_a_url'));
+            const errorMessage = `${searchGameUrl} must be a valid URI.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${searchGameUrl} must be a valid URI.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
     });
 
@@ -189,30 +145,22 @@ context('Provider model unit test', () => {
 
             const model = new ProviderModel(setUrls());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ProviderModel(setUrls(searchChannelUrl, {}));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new ProviderModel(setUrls(searchChannelUrl, 'not_a_url'));
+            const errorMessage = `${searchChannelUrl} must be a valid URI.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${searchChannelUrl} must be a valid URI.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
     });
 });

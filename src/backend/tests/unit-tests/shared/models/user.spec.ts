@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { getField, getValidationError } from '../../../mongooseTestUtilities';
+import { getField, verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 import UserModel from '../../../../shared/models/user';
 
 const userIdField = 'id';
@@ -21,40 +21,29 @@ context('User model unit test', () => {
 
             const model = new UserModel();
 
-            const error = await getValidationError(model, userIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, userIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new UserModel({ [userIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, userIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, userIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new UserModel({ [userIdField]: '55.5' });
+            const errorMessage = `${userIdField} must be an integer.`;
 
-            const error = await getValidationError(model, userIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${userIdField} must be an integer.`);
+            await verifyCustomError(model, userIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new UserModel({ [userIdField]: '-1' });
 
-            const error = await getValidationError(model, userIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, userIdField, 'min');
         });
     });
 
@@ -64,40 +53,28 @@ context('User model unit test', () => {
 
             const model = new UserModel();
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, nameField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new UserModel({ [nameField]: {} });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, nameField);
         });
 
         it('should be longer than or equal to 4 characters', async () => {
 
             const model = new UserModel({ [nameField]: 'x'.repeat(3) });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('minlength');
+            await verifyValidationError(model, nameField, 'minlength');
         });
 
         it('should be shorter than or equal to 40 characters', async () => {
 
             const model = new UserModel({ [nameField]: 'x'.repeat(41) });
 
-            const error = await getValidationError(model, nameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, nameField, 'maxlength');
         });
     });
 
@@ -107,30 +84,22 @@ context('User model unit test', () => {
 
             const model = new UserModel();
 
-            const error = await getValidationError(model, viewHistoriesField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, viewHistoriesField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new UserModel({ [viewHistoriesField]: {} });
 
-            const error = await getValidationError(model, viewHistoriesField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, viewHistoriesField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new UserModel({ [viewHistoriesField]: 'not_a_url' });
+            const errorMessage = `${viewHistoriesField} must be a valid URI.`;
 
-            const error = await getValidationError(model, viewHistoriesField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${viewHistoriesField} must be a valid URI.`);
+            await verifyCustomError(model, viewHistoriesField, errorMessage);
         });
     });
 
@@ -140,30 +109,22 @@ context('User model unit test', () => {
 
             const model = new UserModel();
 
-            const error = await getValidationError(model, bookmarksField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, bookmarksField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new UserModel({ [bookmarksField]: {} });
 
-            const error = await getValidationError(model, bookmarksField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, bookmarksField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new UserModel({ [bookmarksField]: 'not_a_url' });
+            const errorMessage = `${bookmarksField} must be a valid URI.`;
 
-            const error = await getValidationError(model, bookmarksField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${bookmarksField} must be a valid URI.`);
+            await verifyCustomError(model, bookmarksField, errorMessage);
         });
     });
 
@@ -189,11 +150,9 @@ context('User model unit test', () => {
         it('should be non-empty', async () => {
 
             const model = new UserModel(setKeyword());
+            const errorMessage = `${gameSearchField} must be non-empty.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${gameSearchField} must be non-empty.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
     });
 
@@ -205,40 +164,29 @@ context('User model unit test', () => {
 
             const model = new UserModel(setGameSearch());
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, targetField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new UserModel(setGameSearch(gameIdField, 'not_a_number'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be an integer', async () => {
 
             const model = new UserModel(setGameSearch(gameIdField, '55.5'));
+            const errorMessage = `${gameIdField} must be an integer.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${gameIdField} must be an integer.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new UserModel(setGameSearch(gameIdField, '-1'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, targetField, 'min');
         });
     });
 
@@ -262,30 +210,22 @@ context('User model unit test', () => {
 
             const model = new UserModel(setGameSearch(countField, 'not_a_number'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, targetField);
         });
 
         it('should be an integer', async () => {
 
             const model = new UserModel(setGameSearch(countField, '55.5'));
+            const errorMessage = `${countField} must be an integer.`;
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${countField} must be an integer.`);
+            await verifyCustomError(model, targetField, errorMessage);
         });
 
         it('should be larger than or equal to 1', async () => {
 
             const model = new UserModel(setGameSearch(countField, '0'));
 
-            const error = await getValidationError(model, targetField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, targetField, 'min');
         });
     });
 });

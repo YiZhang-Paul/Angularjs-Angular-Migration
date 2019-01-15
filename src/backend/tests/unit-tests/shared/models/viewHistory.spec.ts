@@ -1,6 +1,4 @@
-import { expect } from 'chai';
-
-import { getValidationError } from '../../../mongooseTestUtilities';
+import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 import ViewHistoryModel from '../../../../shared/models/viewHistory';
 
 const idField = 'id';
@@ -19,40 +17,29 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel();
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, idField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ViewHistoryModel({ [idField]: 'not_a_number' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, idField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ViewHistoryModel({ [idField]: '55.5' });
+            const errorMessage = `${idField} must be an integer.`;
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${idField} must be an integer.`);
+            await verifyCustomError(model, idField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ViewHistoryModel({ [idField]: '-1' });
 
-            const error = await getValidationError(model, idField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, idField, 'min');
         });
     });
 
@@ -62,40 +49,29 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel();
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, channelIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ViewHistoryModel({ [channelIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, channelIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ViewHistoryModel({ [channelIdField]: '55.5' });
+            const errorMessage = `${channelIdField} must be an integer.`;
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${channelIdField} must be an integer.`);
+            await verifyCustomError(model, channelIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ViewHistoryModel({ [channelIdField]: '-1' });
 
-            const error = await getValidationError(model, channelIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, channelIdField, 'min');
         });
     });
 
@@ -105,20 +81,14 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel({ [titleField]: {} });
 
-            const error = await getValidationError(model, titleField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, titleField);
         });
 
         it('should be shorter than or equal to 150 characters', async () => {
 
             const model = new ViewHistoryModel({ [titleField]: 'x'.repeat(151) });
 
-            const error = await getValidationError(model, titleField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, titleField, 'maxlength');
         });
     });
 
@@ -128,20 +98,14 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel({ [streamerNameField]: {} });
 
-            const error = await getValidationError(model, streamerNameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, streamerNameField);
         });
 
         it('should be shorter than or equal to 50 characters', async () => {
 
             const model = new ViewHistoryModel({ [streamerNameField]: 'x'.repeat(51) });
 
-            const error = await getValidationError(model, streamerNameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, streamerNameField, 'maxlength');
         });
     });
 
@@ -151,40 +115,29 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel();
 
-            const error = await getValidationError(model, gameIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, gameIdField, 'required');
         });
 
         it('should be a number', async () => {
 
             const model = new ViewHistoryModel({ [gameIdField]: 'not_a_number' });
 
-            const error = await getValidationError(model, gameIdField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, gameIdField);
         });
 
         it('should be an integer', async () => {
 
             const model = new ViewHistoryModel({ [gameIdField]: '55.5' });
+            const errorMessage = `${gameIdField} must be an integer.`;
 
-            const error = await getValidationError(model, gameIdField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${gameIdField} must be an integer.`);
+            await verifyCustomError(model, gameIdField, errorMessage);
         });
 
         it('should be larger than or equal to 0', async () => {
 
             const model = new ViewHistoryModel({ [gameIdField]: '-1' });
 
-            const error = await getValidationError(model, gameIdField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('min');
+            await verifyValidationError(model, gameIdField, 'min');
         });
     });
 
@@ -194,30 +147,21 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel();
 
-            const error = await getValidationError(model, gameNameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, gameNameField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ViewHistoryModel({ [gameNameField]: {} });
 
-            const error = await getValidationError(model, gameNameField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, gameNameField);
         });
 
         it('should be shorter than or equal to 100 characters', async () => {
 
             const model = new ViewHistoryModel({ [gameNameField]: 'x'.repeat(101) });
 
-            const error = await getValidationError(model, gameNameField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('maxlength');
+            await verifyValidationError(model, gameNameField, 'maxlength');
         });
     });
 
@@ -227,30 +171,22 @@ context('View History model unit test', () => {
 
             const model = new ViewHistoryModel();
 
-            const error = await getValidationError(model, imageField);
-
-            expect(error).is.not.null;
-            expect(error.kind).to.equal('required');
+            await verifyValidationError(model, imageField, 'required');
         });
 
         it('should be a string', async () => {
 
             const model = new ViewHistoryModel({ [imageField]: {} });
 
-            const error = await getValidationError(model, imageField);
-
-            expect(error).is.not.null;
-            expect(error.name).to.equal('CastError');
+            await verifyCastError(model, imageField);
         });
 
         it('should be a valid url', async () => {
 
             const model = new ViewHistoryModel({ [imageField]: 'not_a_url' });
+            const errorMessage = `${imageField} must be a valid URI.`;
 
-            const error = await getValidationError(model, imageField);
-
-            expect(error).is.not.null;
-            expect(error.message).to.equal(`${imageField} must be a valid URI.`);
+            await verifyCustomError(model, imageField, errorMessage);
         });
     });
 });
