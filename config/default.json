@@ -7,5 +7,23 @@
     "database": {
         "host": "ds231719.mlab.com:31719",
         "name": "angular-migration-development"
+    },
+    "third_party_apis": {
+        "twitch": {
+            "name": "twitch",
+            "urls": {
+                "site_url": "https://www.twitch.tv/",
+                "search_game_url": "https://api.twitch.tv/helix/games",
+                "search_channel_url": "https://api.twitch.tv/helix/streams"
+            }
+        },
+        "mixer": {
+            "name": "mixer",
+            "urls": {
+                "site_url": "https://mixer.com/",
+                "search_game_url": "https://mixer.com/api/v1/types",
+                "search_channel_url": "https://mixer.com/api/v1/channels"
+            }
+        }
     }
 }

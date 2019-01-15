@@ -1,6 +1,8 @@
 // global test setup/teardown
 import mongoose = require('mongoose');
 
+import TestModel from '../testModel';
+
 before('global test setup', done => {
     // ensure database is connected before all tests run
     mongoose.connection.once('open', () => {
@@ -10,7 +12,8 @@ before('global test setup', done => {
     });
 });
 
-after('global test teardown', () => {
+after('global test teardown', async () => {
 
+    await TestModel.deleteMany({});
     mongoose.disconnect();
 });
