@@ -3,32 +3,18 @@ import IChannelFetcher from './IChannelFetcher.interface';
 
 export default class MixerChannelFetcher extends Fetcher implements IChannelFetcher {
 
-    protected async getApi(): Promise<string | null> {
-
-        return await super.getApi('mixer', 'search_channel_url');
-    }
+    protected _provider = 'mixer';
+    protected _apiType = 'search_channel_url';
 
     public async fetch(): Promise<any[]> {
 
-        const api = await this.getApi();
-
-        if (!api) {
-
-            return new Array<any>();
-        }
-
-        return this.fetchData(`${api}?order=viewersCurrent:DESC&limit=50`);
+        return this.fetchData('?order=viewersCurrent:DESC&limit=50');
     }
 
     public async fetchByGameId(id: string): Promise<any> {
 
-        const api = await this.getApi();
+        const query = `?where=typeId:eq:${id}&order=viewersCurrent:DESC`;
 
-        if (!api) {
-
-            return new Array<any>();
-        }
-
-        return this.fetchData(`${api}?where=typeId:eq:${id}&order=viewersCurrent:DESC`);
+        return this.fetchData(query);
     }
 }

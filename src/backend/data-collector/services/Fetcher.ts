@@ -6,6 +6,8 @@ import IFetcher from './IFetcher.interface';
 
 export default abstract class Fetcher implements IFetcher {
 
+    protected _provider = '';
+    protected _apiType = '';
     protected _repository: IProviderRepository;
 
     constructor(repository: IProviderRepository) {
@@ -13,12 +15,15 @@ export default abstract class Fetcher implements IFetcher {
         this._repository = repository;
     }
 
-    protected async getApi(name: string, type: string): Promise<string | null> {
+    protected async getApi(): Promise<string | null> {
 
-        return await this._repository.findApi(name, type);
+        const provider = this._provider.trim();
+        const apiType = this._apiType.trim();
+
+        return this._repository.findApi(provider, apiType);
     }
 
-    protected async fetchData(url: string): Promise<any[]> {
+    protected async tryFetchData(url: string): Promise<any[]> {
 
         try {
 
@@ -30,6 +35,18 @@ export default abstract class Fetcher implements IFetcher {
 
             return new Array<any>();
         }
+    }
+
+    protected async fetchData(query: string): Promise<any[]> {
+
+        const api = await this.getApi();
+
+        if (!api) {
+
+            return new Array<any>();
+        }
+
+        return this.tryFetchData(`${api}${query}`);
     }
 
     public abstract fetch(): Promise<any[]>;
