@@ -1,4 +1,3 @@
-export default interface IGameFetcher {
+import IFetcher from './IFetcher.interface';
 
-    fetch(): Promise<any[]>;
-}
+export default interface IGameFetcher extends IFetcher { }
