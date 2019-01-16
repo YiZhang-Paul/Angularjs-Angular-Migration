@@ -1,8 +1,9 @@
 {
     "root_url": "/api/v1",
     "port": {
-        "server": "3050",
-        "api": "4050"
+        "collector": "5050",
+        "api": "4050",
+        "server": "3050"
     },
     "database": {
         "host": "ds231719.mlab.com:31719",

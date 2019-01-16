@@ -1,7 +1,7 @@
 import config = require('config');
 import Express = require('express');
 import { Request, Response } from 'express';
-
+// TODO: file renaming?
 const app = Express();
 const port = config.get<{ server: string }>('port').server;
 

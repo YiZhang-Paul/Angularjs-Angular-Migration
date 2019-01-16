@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 
 import '../../database';
 
-import './initialize';
 import routes from './routes';
 
 const app = Express();
