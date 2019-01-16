@@ -1,29 +1,21 @@
 import http from 'axios';
-import { Document } from 'mongoose';
 
-import models from '../../shared/models';
+import IProviderRepository from '../../shared/repositories/IProviderRepository.interface';
 
 import IFetcher from './IFetcher.interface';
 
 export default abstract class Fetcher implements IFetcher {
 
-    protected _provider: Promise<Document | null>;
+    protected _repository: IProviderRepository;
 
-    constructor() {
-        // TODO: create repository
-        this._provider = models.Provider.findOne({ name: 'mixer' }).then();
+    constructor(repository: IProviderRepository) {
+
+        this._repository = repository;
     }
-    // TODO: this should be a repository method
-    protected async getApi(name: string): Promise<string | null> {
 
-        const provider = await this._provider;
+    protected async getApi(name: string, type: string): Promise<string | null> {
 
-        if (!provider) {
-
-            return null;
-        }
-
-        return provider.toObject()['urls'][name];
+        return await this._repository.findApi(name, type);
     }
 
     protected async fetchData(url: string): Promise<any[]> {

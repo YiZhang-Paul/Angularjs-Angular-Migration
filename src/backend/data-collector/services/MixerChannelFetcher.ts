@@ -5,7 +5,7 @@ export default class MixerChannelFetcher extends Fetcher implements IChannelFetc
 
     protected async getApi(): Promise<string | null> {
 
-        return await super.getApi('search_channel_url');
+        return await super.getApi('mixer', 'search_channel_url');
     }
 
     public async fetch(): Promise<any[]> {
