@@ -1,20 +1,22 @@
 import config = require('config');
 import mongoose = require('mongoose');
 
-// TODO: refactor this
-import AllPrivilegeMongoDbRepository from '../shared/repositories/AllPrivilegeMongoDbRepository';
 import IRepository from '../shared/repositories/IRepository.interface';
-import models from '../shared/models';
-import SequentialIdGenerator from '../shared/repositories/SequentialIdGenerator';
-import UniqueIdDocumentFactory from '../shared/repositories/UniqueIdDocumentFactory';
+import ProviderRepositoryFactory from '../shared/repositories/ProviderRepositoryFactory';
 
 if (!process.env.INITIALIZED) {
 
-    const generator = new SequentialIdGenerator(models.Provider);
-    const documentFactory = new UniqueIdDocumentFactory(generator);
-    const repository = new AllPrivilegeMongoDbRepository(documentFactory);
+    const factory = new ProviderRepositoryFactory();
+    const repository = factory.createRepository();
 
     initialize(repository, ['twitch', 'mixer']);
+}
+
+function getProviderData(name: string): any {
+
+    const data = config.get<any>('third_party_apis')[name];
+
+    return JSON.parse(JSON.stringify(data));
 }
 
 async function initialize(repository: IRepository, providers: string[]): Promise<void> {
@@ -28,11 +30,4 @@ async function initialize(repository: IRepository, providers: string[]): Promise
     console.log('Data collector initialized.');
 
     await mongoose.disconnect();
-}
-
-function getProviderData(name: string): any {
-
-    const data = config.get<any>('third_party_apis')[name];
-
-    return JSON.parse(JSON.stringify(data));
 }
