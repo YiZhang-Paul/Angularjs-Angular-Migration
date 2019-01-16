@@ -11,7 +11,7 @@ export default class MixerChannelFetcher extends Fetcher implements IChannelFetc
         return this.fetchData('?order=viewersCurrent:DESC&limit=50');
     }
 
-    public async fetchByGameId(id: string): Promise<any> {
+    public async fetchByGameId(id: string): Promise<any[]> {
 
         const query = `?where=typeId:eq:${id}&order=viewersCurrent:DESC`;
 

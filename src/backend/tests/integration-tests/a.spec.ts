@@ -1,6 +1,7 @@
 // global test setup/teardown
 import mongoose = require('mongoose');
 
+import '../../database';
 import TestModel from '../testModel';
 
 before('global test setup', done => {

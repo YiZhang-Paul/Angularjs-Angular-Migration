@@ -69,6 +69,32 @@ export function isSubArray<T>(subArray: T[], array: T[]): boolean {
     return subArray.every(_ => lookup.has(_));
 }
 
+function isOrdered(array: any[], key: string, order: -1 | 1): boolean {
+
+    return array.every((_, index, all) => {
+
+        if (index === 0) {
+
+            return true;
+        }
+
+        const previous = key ? all[index - 1][key] : all[index - 1];
+        const current = key ? _[key] : _;
+
+        return order > 0 ? previous <= current : previous >= current;
+    });
+}
+
+export function isAscendingOrder(array: any[], key: string): boolean {
+
+    return isOrdered(array, key, 1);
+}
+
+export function isDescendingOrder(array: any[], key: string): boolean {
+
+    return isOrdered(array, key, -1);
+}
+
 export function getRandomString(): string {
 
     return `${Math.random()}.${Math.random()}.${Math.random()}`;
