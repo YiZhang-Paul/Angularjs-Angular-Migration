@@ -4,10 +4,12 @@ import IProviderRepository from '../../shared/repositories/IProviderRepository.i
 
 import IFetcher from './IFetcher.interface';
 
+type ProviderDetail = { id: string; api: string };
+
 export default abstract class Fetcher implements IFetcher {
 
-    protected _provider = '';
-    protected _apiType = '';
+    protected _providerName = '';
+    protected _apiName = '';
     protected _repository: IProviderRepository;
 
     constructor(repository: IProviderRepository) {
@@ -15,12 +17,30 @@ export default abstract class Fetcher implements IFetcher {
         this._repository = repository;
     }
 
-    protected async getApi(): Promise<string | null> {
+    protected async getProvider(): Promise<ProviderDetail | null> {
 
-        const provider = this._provider.trim();
-        const apiType = this._apiType.trim();
+        const provider = await this._repository.findByName(this._providerName);
 
-        return this._repository.findApi(provider, apiType);
+        if (!provider) {
+
+            return null;
+        }
+
+        return {
+
+            id: provider.toObject()['id'],
+            api: provider.toObject()['urls'][this._apiName]
+        };
+    }
+
+    protected attachId(data: any[], id: string): any[] {
+
+        return data.map(_ => {
+
+            _.provider_id = id;
+
+            return _;
+        });
     }
 
     protected async tryFetchData(url: string): Promise<any[]> {
@@ -39,14 +59,16 @@ export default abstract class Fetcher implements IFetcher {
 
     protected async fetchData(query: string): Promise<any[]> {
 
-        const api = await this.getApi();
+        const provider = await this.getProvider();
 
-        if (!api) {
+        if (!provider) {
 
             return new Array<any>();
         }
 
-        return this.tryFetchData(`${api}${query}`);
+        const data = await this.tryFetchData(`${provider.api}${query}`);
+
+        return this.attachId(data, provider.id);
     }
 
     public abstract fetch(): Promise<any[]>;

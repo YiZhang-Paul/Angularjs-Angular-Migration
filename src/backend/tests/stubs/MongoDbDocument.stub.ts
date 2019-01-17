@@ -3,9 +3,12 @@ import { SinonStubbedInstance, stub } from 'sinon';
 
 type Stubbed = SinonStubbedInstance<Document>;
 
-export function createDocumentStub(resolve = true): Stubbed {
+export function createDocumentStub(object = {}, resolve = true): Stubbed {
 
     const stubbed = stub({} as Document);
+
+    stubbed.toObject = stub();
+    stubbed.toObject.returns(object);
 
     stubbed.save = stub();
     stubbed.save.rejects(new Error());
@@ -22,7 +25,14 @@ export function createDocumentStub(resolve = true): Stubbed {
     return stubbed;
 }
 
-export function createDocumentStubs(total: number, resolve = true): Stubbed[] {
+export function createDocumentStubs(objects = [{}], resolve = true): Stubbed[] {
 
-    return new Array(total).fill(0).map(_ => createDocumentStub(resolve));
+    const stubs: Stubbed[] = [];
+
+    for (const object of objects) {
+
+        stubs.push(createDocumentStub(object, resolve));
+    }
+
+    return stubs;
 }

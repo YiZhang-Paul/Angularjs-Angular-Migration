@@ -3,8 +3,8 @@ import IChannelFetcher from './IChannelFetcher.interface';
 
 export default class MixerChannelFetcher extends Fetcher implements IChannelFetcher {
 
-    protected _provider = 'mixer';
-    protected _apiType = 'search_channel_url';
+    protected _providerName = 'mixer';
+    protected _apiName = 'search_channel_url';
 
     public async fetch(): Promise<any[]> {
 

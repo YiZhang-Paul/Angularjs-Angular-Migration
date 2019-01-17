@@ -3,8 +3,8 @@ import IGameFetcher from './IGameFetcher.interface';
 
 export default class MixerGameFetcher extends Fetcher implements IGameFetcher {
 
-    protected _provider = 'mixer';
-    protected _apiType = 'search_game_url';
+    protected _providerName = 'mixer';
+    protected _apiName = 'search_game_url';
 
     public async fetch(): Promise<any[]> {
 

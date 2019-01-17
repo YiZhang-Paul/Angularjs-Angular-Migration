@@ -45,7 +45,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
         beforeEach('insert() setup', () => {
 
             data = createEmptyObjects(4);
-            documents = createDocumentStubs(data.length);
+            documents = createDocumentStubs(data);
             documentFactory.createDocuments.resolves(documents);
         });
 
@@ -71,7 +71,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should only return documents that were successfully inserted', async () => {
             // last document will fail to save
-            documents[documents.length - 1] = createDocumentStub(false);
+            documents[documents.length - 1] = createDocumentStub({}, false);
 
             const result = await repository.insert(data);
 
@@ -85,7 +85,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should return empty collection when no documents were inserted', async () => {
 
-            documents = createDocumentStubs(data.length, false);
+            documents = createDocumentStubs(data, false);
             documentFactory.createDocuments.resolves(documents);
 
             const result = await repository.insert(data);
@@ -124,7 +124,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should return null when failed to insert document', async () => {
 
-            document = createDocumentStub(false);
+            document = createDocumentStub({}, false);
             documentFactory.createDocuments.resolves([document]);
 
             const result = await repository.insertOne(data);
@@ -217,7 +217,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
             data = {};
             filter = {};
-            documents = createDocumentStubs(5);
+            documents = createDocumentStubs(new Array<{}>(5));
             findStub.resolves(documents);
 
             documents.forEach((_, index) => {
@@ -332,7 +332,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
         beforeEach('delete() setup', () => {
 
             filter = {};
-            documents = createDocumentStubs(5);
+            documents = createDocumentStubs(new Array<{}>(5));
             findStub.resolves(documents);
         });
 
@@ -362,7 +362,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should only return number of documents that were successfully deleted', async () => {
             // last document will fail to delete
-            documents[documents.length - 1] = createDocumentStub(false);
+            documents[documents.length - 1] = createDocumentStub({}, false);
 
             const result = await repository.delete(filter);
 
@@ -423,7 +423,7 @@ context('AllPrivilegeMongoDbRepository unit test', () => {
 
         it('should return false when failed to delete the document', async () => {
 
-            document = createDocumentStub(false);
+            document = createDocumentStub({}, false);
             findOneStub.resolves(document);
 
             const result = await repository.deleteOne(filter);

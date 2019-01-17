@@ -1,15 +1,19 @@
 import axios from 'axios';
 import { expect } from 'chai';
+import { Document } from 'mongoose';
 import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
 
 import { createEmptyObjects } from '../../../genericTestUtilities';
 import IProviderRepository from '../../../../shared/repositories/IProviderRepository.interface';
 import { createProviderRepositoryStub } from '../../../stubs/IProviderRepository.stub';
 import MixerGameFetcher from '../../../../data-collector/services/MixerGameFetcher';
+import { createDocumentStub } from '../../../stubs/MongoDbDocument.stub';
 
 context('MixerGameFetcher unit test', () => {
 
-    const api = 'https://some/valid/api';
+    const providerId = '3';
+    const searchApi = 'https://some/valid/api';
+    let document: SinonStubbedInstance<Document>;
     let data: any[];
     let getStub: SinonStub;
     let repository: SinonStubbedInstance<IProviderRepository>;
@@ -17,10 +21,13 @@ context('MixerGameFetcher unit test', () => {
 
     beforeEach('test setup', () => {
 
+        const urls = { search_game_url: searchApi };
+        document = createDocumentStub({ id: providerId, urls });
         data = createEmptyObjects(5);
+        data.forEach(_ => _.provider_id = providerId);
         getStub = stub(axios, 'get');
         getStub.resolves({ data });
-        repository = createProviderRepositoryStub(api);
+        repository = createProviderRepositoryStub(document);
         fetcher = new MixerGameFetcher(repository);
     });
 
@@ -31,16 +38,16 @@ context('MixerGameFetcher unit test', () => {
 
     describe('fetch()', () => {
 
-        it('should retrieve API url', async () => {
+        it('should retrieve provider', async () => {
 
             await fetcher.fetch();
 
-            sinonExpect.calledOnce(repository.findApi);
+            sinonExpect.calledOnce(repository.findByName);
         });
 
-        it('should return empty collection when API url is not found', async () => {
+        it('should return empty collection when provider is not found', async () => {
 
-            repository.findApi.resolves(null);
+            repository.findByName.resolves(null);
 
             const result = await fetcher.fetch();
 
@@ -49,7 +56,7 @@ context('MixerGameFetcher unit test', () => {
 
         it('should fetch data from correct url', async () => {
 
-            const expected = `${api}?order=viewersCurrent:DESC&limit=50`;
+            const expected = `${searchApi}?order=viewersCurrent:DESC&limit=50`;
 
             await fetcher.fetch();
 

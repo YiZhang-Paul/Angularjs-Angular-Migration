@@ -1,17 +1,12 @@
+import { Document } from 'mongoose';
+
 import AllPrivilegeMongoDbRepository from './AllPrivilegeMongoDbRepository';
 import IProviderRepository from './IProviderRepository.interface';
 
 export default class ProviderRepository extends AllPrivilegeMongoDbRepository implements IProviderRepository {
 
-    public async findApi(name: string, type: string): Promise<string | null> {
+    public async findByName(name: string): Promise<Document | null> {
 
-        const provider = await this.findOne({ name });
-
-        if (!provider) {
-
-            return null;
-        }
-
-        return provider.toObject()['urls'][type];
+        return this.findOne({ name });
     }
 }
