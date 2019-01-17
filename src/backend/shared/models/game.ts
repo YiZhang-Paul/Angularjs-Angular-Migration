@@ -16,8 +16,7 @@ const GameSchema = new Schema({
 
     id: { type: Number, required: true, min: 0, validate: integerValidator },
     name: { type: String, required: true, maxlength: 100 },
-    search_api_keys: { type: [ SearchApiKeysSchema ], validate: nonEmptyArrayValidator },
-    genre: { type: String, required: true, maxlength: 40 }
+    search_api_keys: { type: [ SearchApiKeysSchema ], validate: nonEmptyArrayValidator }
 });
 
 export default model('Game', GameSchema);

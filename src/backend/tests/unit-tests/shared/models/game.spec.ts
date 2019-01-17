@@ -4,7 +4,6 @@ import { verifyCastError, verifyCustomError, verifyValidationError } from '../..
 const idField = 'id';
 const nameField = 'name';
 const searchApiKeysField = 'search_api_keys';
-const genreField = 'genre';
 const providerIdField = 'provider_id';
 const providerGameIdField = 'provider_game_id';
 const providerGameNameField = 'provider_game_name';
@@ -64,30 +63,6 @@ context('Game model unit test', () => {
             const model = new GameModel({ [nameField]: 'x'.repeat(101) });
 
             await verifyValidationError(model, nameField, 'maxlength');
-        });
-    });
-
-    describe(`${genreField}`, () => {
-
-        it('should be required', async () => {
-
-            const model = new GameModel();
-
-            await verifyValidationError(model, genreField, 'required');
-        });
-
-        it('should be a string', async () => {
-
-            const model = new GameModel({ [genreField]: {} });
-
-            await verifyCastError(model, genreField);
-        });
-
-        it('should be shorter than or equal to 40 characters', async () => {
-
-            const model = new GameModel({ [genreField]: 'x'.repeat(41) });
-
-            await verifyValidationError(model, genreField, 'maxlength');
         });
     });
 

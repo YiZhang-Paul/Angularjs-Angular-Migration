@@ -38,7 +38,7 @@ Other notes:
 
     user hits landing page
         fetch game lists and view count
-        dispaly games
+        display games
 
     user clicks login
         show login page with options to login through Google/Twitch/Mixer or username/password
@@ -74,7 +74,7 @@ Other notes:
 
 3. entities/models - format: name (fields in models) & (fields added on the fly)
 
-game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }], genre) & (image, view count)
+game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }]) & (image, view count)
 channel (id, provider_id, provider_channel_id) & (title, streamer_name, game_id, game_name, image, view count)
 user (id, name, view_histories : url, bookmarks : url, keywords : [{ date, game_searches : [{ game_id, count }] }])
 view_history (id, channel_id, title, streamer_name, game_id, game_name, image) & (is_live)
