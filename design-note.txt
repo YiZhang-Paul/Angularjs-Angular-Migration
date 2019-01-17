@@ -2,37 +2,31 @@ Q: what does the application do?
 A: provide one single place to view, search and manage live stream channels from two major game streaming sites: Twitch and Mixer (and maybe more).
 
 Q: what are the main features of the application?
-A: there are six main features:
-    1. user authentication
-        (1). users can register accounts using username/password
+A: there are five main features:
+    1. user authentication (no sign up)
+        (1). users can login using username/password
         (2). users can login through Google/Twitch/Mixer (OAuth 2.0)
     2. display available live streams
         (1). display available games
         (2). display available channels for each game
     3. search live streams
         (1). search by game
-        (2). search by channel
-        (3). search items affect content suggestions
     4. view history
         (1). list view histories of users
         (2). users can delete histories
-        (3). users can bookmark/follow channels through view history
-        (4). view histories affect content suggestions
+        (3). users can bookmark/follow channels through view histories
     5. bookmark/follow channels
         (1). users can bookmark/follow channels
         (2). users can remove bookmarked/followed channels
-        (3). users get notification when bookmarked/followed channels go live
-    6. Content suggestion
-        (1). users will get content suggestions when they login
 
 Q: which portion will be written in AngularJs?
-A: anything other than notification for bookmarked/followed channels and content suggestions will be written in AngularJs.
+A: anything other than user login will be written in AngularJs.
 
 Q: which portion will be written in Angular 2+?
 A: anything that is not written with AngularJs.
 
 Q: what runs on the back-end?
-A: express.js backed with MongoDB (using mongoose).
+A: express.js backed with Redis and MongoDB (using mongoose).
 
 Q: which third-party apis are used by the application?
 A: (1). Twitch API: https://dev.twitch.tv/docs/api/reference/
@@ -43,27 +37,18 @@ Other notes:
 1. data flow:
 
     user hits landing page
-        if authenticated
-            check user preference (base on search and view history) and create suggestions
-            show content suggestions and a link to browse games page
-        else
-            fetch game lists and view count from third-party apis
-            combine fetched lists into a single list with view count
-            show combined (with duplicate removed) list in browse games page
+        fetch game lists and view count
+        dispaly games
 
-    user clicks login/sign up
+    user clicks login
         show login page with options to login through Google/Twitch/Mixer or username/password
-        show link to sign up page if user does not have means to login
 
-    user searches a game or channel in search box
-        suggested games/channels appear as user types
+    user searches a game in search box
+        suggested games appear as user types
 
-    user clicks a game or channel through browse games page or search box
-        if user clicks a game
-            fetch channels and view count from third-party apis
-            show channels
-        if user clicks a channel
-            show channel
+    user clicks a game through browse games page or search box
+        fetch channels and view count
+        show channels
 
     user clicks on view history tab
         show view histories with options to follow channel and remove history
@@ -79,8 +64,8 @@ Other notes:
         create a JWT and send it back to client side with response
     else
         redirect to login and display error message
-(3). client side receives JWT and store it in local storage
-(4). client side send JWT with every request to server
+(3). client side receives JWT and stores it in local storage
+(4). client side sends JWT with every request to server
 (5). server verifies JWT
     if JWT is valid
         process request
@@ -106,27 +91,16 @@ api/v1/authenticate
 
 api/v1/games
     (1). GET - retrieve list of all games (200 OK)
-    (2). GET ?name=[string] - partial or full game name, letter casing ignored (200 OK)
-    (3). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
-    (4). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
-    (5). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
-    (6). GET ?orderByViewCount=[boolean] - order by view counts in descending order (200 OK)
-    (7). otherwise - 405 Method Not Allowed
+    (2). otherwise - 405 Method Not Allowed
 
 api/v1/games/:id
     (1). GET - retrieve details of particular game (name, view count, genre, channels, etc) (200 OK/404 Not Found)
-    (2). GET ?fields=[string] - comma separated fields to be included in response (200 OK/404 Not Found)
-    (3). otherwise - 405 Method Not Allowed
+    (2). otherwise - 405 Method Not Allowed
 
 api/v1/channels
     (1). GET - retrieve list of live channels (200 OK)
     (2). GET ?gameId=[integer] - id to retrieve live channels relate to a particular game
-    (3). GET ?gameName=[string] (ignored when gameId is specified) - partial/full game name, letter casing ignored (200 OK)
-    (4). GET ?fields=[string] - comma separated fields to be included in response (200 OK)
-    (5). GET ?limit=[10<=integer<=100] - total results in the list (200 OK)
-    (6). GET ?page=[0<=integer] - result pagination, default value is 0 (200 OK)
-    (7). GET ?orderByViewCount=[boolean] - order by view counts in descending order
-    (8). otherwise - 405 Method Not Allowed
+    (3). otherwise - 405 Method Not Allowed
 
 api/v1/user - needs authentication (except for POST)
     (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
