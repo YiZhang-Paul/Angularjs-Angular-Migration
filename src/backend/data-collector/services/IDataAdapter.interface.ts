@@ -1,4 +1,4 @@
-export default interface IDataAdapter {
+export default interface IDataAdapter<T = any> {
 
-    convert(data: any): any;
+    convert(data: any): T;
 }
