@@ -15,7 +15,9 @@ export default class GameDataReducer implements IDataReducer {
         return name.trim()
                    .toLowerCase()
                    .replace(/[^\s\w]/g, '')
-                   .replace(/\s{2,}/g, ' ');
+                   .replace(/\s{2,}/g, ' ')
+                   .replace(/^the\s|\sthe$/g, '')
+                   .replace(/\sthe\s/g, ' ');
     }
 
     public reduce(data: any[]): any[] {
