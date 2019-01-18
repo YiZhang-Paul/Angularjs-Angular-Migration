@@ -4,9 +4,10 @@ import { redis } from '../../database';
 import IGameRepository from '../../shared/repositories/IGameRepository.interface';
 
 import IDataStorageManager from './IDataStorageManager.interface';
-
+// TODO: extract to memory/persistent manager?
 export default class GameDataStorageManager implements IDataStorageManager {
 
+    private readonly _cacheKey = 'games';
     private _repository: IGameRepository;
 
     constructor(repository: IGameRepository) {
@@ -76,11 +77,35 @@ export default class GameDataStorageManager implements IDataStorageManager {
 
     public async addToMemory(data: any[]): Promise<any[]> {
 
-        redis.add('games', JSON.stringify(data), error => {
+        redis.add(this._cacheKey, JSON.stringify(data), error => {
 
-            if (error) { console.log(error); }
+            if (error) {
+
+                console.log(error);
+            }
         });
 
         return data;
+    }
+
+    public async getFromPersistent(): Promise<any[]> {
+
+        return this._repository.find();
+    }
+
+    public async getFromMemory(): Promise<any[]> {
+
+        return new Promise<any>((resolve, reject) => {
+
+            redis.get(this._cacheKey, (error, data) => {
+
+                if (error) {
+
+                    reject(error);
+                }
+
+                resolve(JSON.parse(data[0].body));
+            });
+        });
     }
 }
