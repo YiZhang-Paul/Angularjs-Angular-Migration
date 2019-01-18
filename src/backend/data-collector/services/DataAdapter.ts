@@ -7,9 +7,11 @@ export default abstract class DataAdapter implements IDataAdapter {
 
     protected applyMapping(source: any, target: any, mapping: KeyMapping): any {
 
-        if (source.hasOwnProperty(mapping.from)) {
+        const { from, to } = mapping;
 
-            target[mapping.to] = source[mapping.from];
+        if (source.hasOwnProperty(from) && !target.hasOwnProperty(to)) {
+
+            target[to] = source[from];
         }
 
         return target;
