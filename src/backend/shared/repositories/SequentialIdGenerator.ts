@@ -11,6 +11,6 @@ export default class SequentialIdGenerator extends IdGenerator {
 
         const latestId = await this.getLatestId();
 
-        return latestId ? this.showNext(latestId) : '0';
+        return /^\d+$/.test(latestId) ? this.showNext(latestId) : '0';
     }
 }

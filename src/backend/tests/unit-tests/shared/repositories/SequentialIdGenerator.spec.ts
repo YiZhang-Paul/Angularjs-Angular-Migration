@@ -49,7 +49,7 @@ context('SequentialIdGenerator unit test', () => {
         it('should generate next id when collection is not empty', async () => {
 
             const key = generator.key;
-            const id = '1';
+            const id = '0';
             const document = new TestModel({ [key]: id });
             const query = createDocumentQueryStub([document]);
             findStub.returns(query);
