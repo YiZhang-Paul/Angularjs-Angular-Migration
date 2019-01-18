@@ -1,4 +1,5 @@
 import IDataReducer from './IDataReducer.interface';
+import IReducedGameData from './IReducedGameData.interface';
 import IReducibleGameDataAdapter from './IReducibleGameDataAdapter.interface';
 
 export default class GameDataReducer implements IDataReducer {
@@ -10,14 +11,48 @@ export default class GameDataReducer implements IDataReducer {
         this._adapter = adapter;
     }
 
-    private formatName(name: string): string {
+    private reduceName(name: string): string {
 
         return name.trim()
-                   .toLowerCase()
-                   .replace(/[^\s\w]/g, '')
-                   .replace(/\s{2,}/g, ' ')
-                   .replace(/^the\s|\sthe$/g, '')
-                   .replace(/\sthe\s/g, ' ');
+            .toLowerCase()
+            .replace(/[^\s\w]/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .replace(/^the\s|\sthe$/g, '')
+            .replace(/\sthe\s/g, ' ');
+    }
+
+    private getProviderDetail(data: IReducedGameData): any {
+
+        return {
+
+            provider_id: data.provider_id,
+            provider_game_id: data.provider_game_id,
+            provider_game_name: data.provider_game_name
+        };
+    }
+
+    private setNewData(map: Map<string, any>, key: string, data: IReducedGameData): void {
+
+        map.set(key, {
+
+            name: key,
+            image: data.image,
+            view_count: data.view_count,
+            search_api_keys: [this.getProviderDetail(data)]
+        });
+    }
+
+    private mergeData(map: Map<string, any>, key: string, data: IReducedGameData): void {
+
+        const oldData = map.get(key);
+
+        oldData.view_count = `${+oldData.view_count + +data.view_count}`;
+        oldData.search_api_keys.push(this.getProviderDetail(data));
+    }
+
+    private toArray(map: Map<string, any>): any[] {
+
+        return Array.from(map).map(_ => _[1]);
     }
 
     public reduce(data: any[]): any[] {
@@ -27,33 +62,18 @@ export default class GameDataReducer implements IDataReducer {
 
         for (const _ of converted) {
 
-            const name = this.formatName(_.name);
-
-            const providerDetail = {
-
-                provider_id: _.provider_id,
-                provider_game_id: _.provider_game_id,
-                provider_game_name: _.provider_game_name
-            };
+            const name = this.reduceName(_.name);
 
             if (!reduced.has(name)) {
 
-                reduced.set(name, {
-
-                    name,
-                    image: _.image,
-                    view_count: _.view_count,
-                    search_api_keys: [providerDetail]
-                });
+                this.setNewData(reduced, name, _);
 
                 continue;
             }
 
-            const game = reduced.get(name);
-            game.view_count = `${+game.view_count + +_.view_count}`;
-            game.search_api_keys.push(providerDetail);
+            this.mergeData(reduced, name, _);
         }
 
-        return Array.from(reduced).map(pair => pair[1]);
+        return this.toArray(reduced);
     }
 }

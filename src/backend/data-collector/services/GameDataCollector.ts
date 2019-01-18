@@ -37,6 +37,8 @@ export class GameDataCollector implements ICollector {
 
         console.log(games[0]);
         console.log(reducedGames[0]);
+        console.log(games.length);
+        console.log(reducedGames.length);
     }
 }
 // TODO: wrap in factory class
