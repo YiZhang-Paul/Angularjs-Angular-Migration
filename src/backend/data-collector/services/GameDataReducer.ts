@@ -21,7 +21,7 @@ export default class GameDataReducer implements IDataReducer {
             .replace(/\sthe\s/g, ' ');
     }
 
-    private getProviderDetail(data: IReducedGameData): any {
+    private getProviderData(data: IReducedGameData): any {
 
         return {
 
@@ -31,23 +31,37 @@ export default class GameDataReducer implements IDataReducer {
         };
     }
 
-    private setNewData(map: Map<string, any>, key: string, data: IReducedGameData): void {
+    private addData(map: Map<string, any>, key: string, data: IReducedGameData): void {
 
         map.set(key, {
 
             name: key,
             image: data.image,
             view_count: data.view_count,
-            search_api_keys: [this.getProviderDetail(data)]
+            search_api_keys: [this.getProviderData(data)]
         });
     }
 
     private mergeData(map: Map<string, any>, key: string, data: IReducedGameData): void {
 
-        const oldData = map.get(key);
+        const target = map.get(key);
 
-        oldData.view_count = `${+oldData.view_count + +data.view_count}`;
-        oldData.search_api_keys.push(this.getProviderDetail(data));
+        target['view_count'] = `${+target['view_count'] + +data.view_count}`;
+        target['search_api_keys'].push(this.getProviderData(data));
+    }
+
+    private reduceData(map: Map<string, any>, data: IReducedGameData): void {
+
+        const key = this.reduceName(data.name);
+
+        if (!map.has(key)) {
+
+            this.addData(map, key, data);
+
+            return;
+        }
+
+        this.mergeData(map, key, data);
     }
 
     private toArray(map: Map<string, any>): any[] {
@@ -62,16 +76,7 @@ export default class GameDataReducer implements IDataReducer {
 
         for (const _ of converted) {
 
-            const name = this.reduceName(_.name);
-
-            if (!reduced.has(name)) {
-
-                this.setNewData(reduced, name, _);
-
-                continue;
-            }
-
-            this.mergeData(reduced, name, _);
+            this.reduceData(reduced, _);
         }
 
         return this.toArray(reduced);
