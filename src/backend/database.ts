@@ -1,4 +1,5 @@
 import config = require('config');
+import redisCache = require('express-redis-cache');
 import mongoose = require('mongoose');
 
 const useNewUrlParser = true;
@@ -6,6 +7,11 @@ mongoose.Promise = global.Promise;
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 connectMongoose();
+// TODO: separate database files?
+export const redis = redisCache();
+redis.on('connected', () => console.log('Redis connected.'));
+redis.on('disconnected', () => console.log('Redis disconnected.'));
+redis.on('error', error => console.log(error));
 
 function createConnectionString(): string {
 

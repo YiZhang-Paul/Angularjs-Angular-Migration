@@ -75,7 +75,8 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
             return await this._model.findOneAndUpdate(filter, data, option);
 
-        } catch (error) {
+        }
+        catch (error) {
 
             return null;
         }
@@ -121,7 +122,8 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
             return true;
 
-        } catch (error) {
+        }
+        catch (error) {
 
             return false;
         }

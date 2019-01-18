@@ -101,9 +101,6 @@
         "one-line": [
             true,
             "check-open-brace",
-            "check-catch",
-            "check-finally",
-            "check-else",
             "check-whitespace"
         ],
         "quotemark": [

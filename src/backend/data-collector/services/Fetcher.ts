@@ -51,7 +51,8 @@ export default abstract class Fetcher implements IFetcher {
 
             return response.data;
 
-        } catch (error) {
+        }
+        catch (error) {
 
             return new Array<any>();
         }
