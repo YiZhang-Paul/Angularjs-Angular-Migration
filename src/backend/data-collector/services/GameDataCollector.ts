@@ -30,15 +30,21 @@ export class GameDataCollector implements ICollector {
         return games;
     }
 
+    private sortByViewCount(data: any[]): any[] {
+
+        const key = 'view_count';
+
+        return data.slice().sort((a, b) => +b[key] - +a[key]);
+    }
+
     public async collect(): Promise<void> {
 
         const games = await this.fetchGames();
-        const reducedGames = this._reducer.reduce(games);
+        const reducedGames = this._reducer.reduce(games).slice(0, 50);
+        const toCollect = this.sortByViewCount(reducedGames);
 
-        console.log(games[0]);
-        console.log(reducedGames[0]);
-        console.log(games.length);
-        console.log(reducedGames.length);
+        console.log(toCollect.length);
+        console.log(toCollect);
     }
 }
 // TODO: wrap in factory class
