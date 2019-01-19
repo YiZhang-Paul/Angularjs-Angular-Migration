@@ -10,6 +10,8 @@ const app = Express();
 const port = config.get<{ api: string }>('port').api;
 const rootUrl = config.get<string>('root_url');
 
+app.disable('x-powered-by');
+
 app.get('/', (_: Request, res: Response) => res.redirect(rootUrl));
 
 app.use(rootUrl, routes.index);
