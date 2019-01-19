@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { redis } from '../../database';
+import { cache } from '../../database';
 import IGameRepository from '../../shared/repositories/IGameRepository.interface';
 
 import IDataStorageManager from './IDataStorageManager.interface';
@@ -20,15 +20,23 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return objects.some(_ => _[key] === object[key]);
     }
 
-    private async updatePersistent(document: Document, data: any): Promise<Document | null> {
+    private addUpdatedData(data: any, updated: any): any {
 
-        const toUpdate = document.toObject();
+        data['id'] = updated['id'];
+        data['search_api_keys'] = updated['search_api_keys'].slice();
+
+        return data;
+    }
+
+    private async updatePersistent(document: Document, data: any): Promise<any> {
+
+        const newData = document.toObject();
         const keyField = 'search_api_keys';
-        const name = toUpdate['name'];
+        const name = newData['name'];
 
         for (const key of data[keyField]) {
 
-            const keys = toUpdate[keyField];
+            const keys = newData[keyField];
 
             if (!this.isDuplicate(key, keys, 'provider_id')) {
 
@@ -36,7 +44,21 @@ export default class GameDataStorageManager implements IDataStorageManager {
             }
         }
 
-        return this._repository.updateOne(toUpdate, { name });
+        await this._repository.updateOne(newData, { name });
+
+        return this.addUpdatedData(data, newData);
+    }
+
+    private async insertPersistent(data: any): Promise<any> {
+
+        const result = await this._repository.insertOne(data);
+
+        if (result) {
+
+            data['id'] = result.toObject()['id'];
+        }
+
+        return data;
     }
 
     private toObjects(documents: Document[], excludes: string[] = []): any[] {
@@ -64,7 +86,7 @@ export default class GameDataStorageManager implements IDataStorageManager {
 
             const result = game ?
                 await this.updatePersistent(game, _) :
-                await this._repository.insertOne(_);
+                await this.insertPersistent(_);
 
             if (result) {
 
@@ -72,16 +94,18 @@ export default class GameDataStorageManager implements IDataStorageManager {
             }
         }
 
-        return this.toObjects(added, ['_id', '__v']);
+        return added;
     }
 
     public async addToMemory(data: any[]): Promise<any[]> {
 
-        redis.add(this._cacheKey, JSON.stringify(data), error => {
+        const jsonData = JSON.stringify(data);
+
+        cache.set(this._cacheKey, jsonData, error => {
 
             if (error) {
 
-                console.log(error);
+                throw error;
             }
         });
 
@@ -90,21 +114,23 @@ export default class GameDataStorageManager implements IDataStorageManager {
 
     public async getFromPersistent(): Promise<any[]> {
 
-        return this._repository.find();
+        const documents = await this._repository.find();
+
+        return this.toObjects(documents, ['_id', '__v']);
     }
 
     public async getFromMemory(): Promise<any[]> {
 
         return new Promise<any>((resolve, reject) => {
 
-            redis.get(this._cacheKey, (error, data) => {
+            cache.get(this._cacheKey, (error, data) => {
 
                 if (error) {
 
                     reject(error);
                 }
 
-                resolve(JSON.parse(data[0].body));
+                resolve(JSON.parse(data));
             });
         });
     }

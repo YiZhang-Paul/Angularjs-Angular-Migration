@@ -56,9 +56,6 @@ export class GameDataCollector implements ICollector {
 
         const collected = await this._storageManager.addToPersistent(toCollect);
         await this._storageManager.addToMemory(collected);
-
-        const result = await this._storageManager.getFromMemory();
-        console.log(result);
     }
 }
 // TODO: wrap in factory class

@@ -1,7 +1,7 @@
 // global integration test setup/teardown
 import mongoose = require('mongoose');
 
-import '../../database';
+import { cache } from '../../database';
 import TestModel from '../testModel';
 
 before('global integration test setup', done => {
@@ -17,4 +17,5 @@ after('global integration test teardown', async () => {
 
     await TestModel.deleteMany({});
     mongoose.disconnect();
+    cache.quit();
 });
