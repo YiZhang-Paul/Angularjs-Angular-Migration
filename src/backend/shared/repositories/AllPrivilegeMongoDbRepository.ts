@@ -66,6 +66,11 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
         return query;
     }
 
+    public async findById(id: string): Promise<Document | null> {
+
+        return this.findOne({ id });
+    }
+
     protected async updateWithResult(id: string, data: any): Promise<Document | null> {
 
         try {

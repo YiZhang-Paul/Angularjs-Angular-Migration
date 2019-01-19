@@ -4,43 +4,40 @@ import IProviderRepository from '../../shared/repositories/IProviderRepository.i
 
 import IFetcher from './IFetcher.interface';
 
-type ProviderDetail = { id: string; api: string };
+type ProviderDetail = { id: number; urls: any };
 
 export default abstract class Fetcher implements IFetcher {
 
-    protected _providerName = '';
-    protected _apiName = '';
-    protected _repository: IProviderRepository;
+    protected readonly _providerName: string;
+    protected readonly _apiName: string;
+    protected readonly _repository: IProviderRepository;
 
-    constructor(repository: IProviderRepository) {
+    protected _provider: ProviderDetail | null = null;
 
+    constructor(providerName: string, apiName: string, repository: IProviderRepository) {
+
+        this._providerName = providerName;
+        this._apiName = apiName;
         this._repository = repository;
+        this.setProvider(providerName, repository);
     }
 
-    protected async getProvider(): Promise<ProviderDetail | null> {
+    protected async setProvider(name: string, repository: IProviderRepository): Promise<void> {
 
-        const provider = await this._repository.findByName(this._providerName);
+        const provider = await repository.findByName(name);
 
         if (!provider) {
 
-            return null;
+            return;
         }
 
-        return {
+        const details = provider.toObject();
 
-            id: provider.toObject()['id'],
-            api: provider.toObject()['urls'][this._apiName]
+        this._provider = {
+
+            id: +details['id'],
+            urls: details['urls']
         };
-    }
-
-    protected attachId(data: any[], id: string): any[] {
-
-        return data.map(_ => {
-
-            _.provider_id = id;
-
-            return _;
-        });
     }
 
     protected async tryFetchData(url: string): Promise<any[]> {
@@ -50,7 +47,6 @@ export default abstract class Fetcher implements IFetcher {
             const response = await http.get(url);
 
             return response.data;
-
         }
         catch (error) {
 
@@ -58,18 +54,32 @@ export default abstract class Fetcher implements IFetcher {
         }
     }
 
+    protected attachProviderId(data: any[], id: number): any[] {
+
+        return data.map(_ => {
+
+            _['provider_id'] = id;
+
+            return _;
+        });
+    }
+
     protected async fetchData(query: string): Promise<any[]> {
 
-        const provider = await this.getProvider();
+        if (!this._provider) {
 
-        if (!provider) {
+            await this.setProvider(this._providerName, this._repository);
+        }
+
+        if (!this._provider || !this._provider.urls[this._apiName]) {
 
             return new Array<any>();
         }
 
-        const data = await this.tryFetchData(`${provider.api}${query}`);
+        const api = this._provider.urls[this._apiName];
+        const data = await this.tryFetchData(`${api}${query}`);
 
-        return this.attachId(data, provider.id);
+        return this.attachProviderId(data, this._provider.id);
     }
 
     public abstract fetch(): Promise<any[]>;

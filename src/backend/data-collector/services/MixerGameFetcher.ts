@@ -1,10 +1,13 @@
-import Fetcher from './Fetcher';
-import IGameFetcher from './IGameFetcher.interface';
+import IProviderRepository from '../../shared/repositories/IProviderRepository.interface';
 
-export default class MixerGameFetcher extends Fetcher implements IGameFetcher {
+import GameFetcher from './GameFetcher';
 
-    protected _providerName = 'mixer';
-    protected _apiName = 'search_game_url';
+export default class MixerGameFetcher extends GameFetcher {
+
+    constructor(repository: IProviderRepository) {
+
+        super('mixer', repository);
+    }
 
     public async fetch(): Promise<any[]> {
 

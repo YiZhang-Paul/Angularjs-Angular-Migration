@@ -8,6 +8,7 @@ export default interface IRepository {
     insertOne(data: any): Promise<Document | null>;
     find(filter?: any, option?: IQueryOption): Promise<Document[]>;
     findOne(filter: any, option?: IQueryOption): Promise<Document | null>;
+    findById(id: string): Promise<Document | null>;
     update(data: any, filter?: any): Promise<Document[]>;
     updateOne(data: any, filter: any): Promise<Document | null>;
     delete(filter: any): Promise<number>;

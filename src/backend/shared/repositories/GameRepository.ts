@@ -9,4 +9,16 @@ export default class GameRepository extends AllPrivilegeMongoDbRepository implem
 
         return this.findOne({ name });
     }
+
+    public async findProvidersById(id: number): Promise<any[]> {
+
+        const document = await this.findOne({ id });
+
+        if (!document) {
+
+            return new Array<any>();
+        }
+
+        return document.toObject()['search_api_keys'];
+    }
 }
