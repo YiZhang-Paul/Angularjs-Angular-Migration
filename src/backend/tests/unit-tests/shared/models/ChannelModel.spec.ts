@@ -1,4 +1,4 @@
-import ChannelModel from '../../../../shared/models/channel';
+import ChannelModel from '../../../../shared/models/ChannelModel';
 import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';

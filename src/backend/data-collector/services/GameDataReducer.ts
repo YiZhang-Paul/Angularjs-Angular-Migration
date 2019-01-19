@@ -25,8 +25,8 @@ export default class GameDataReducer implements IDataReducer {
 
         return {
 
-            provider_id: data.provider_id,
-            provider_game_id: data.provider_game_id,
+            provider_id: +data.provider_id,
+            provider_game_id: +data.provider_game_id,
             provider_game_name: data.provider_game_name
         };
     }

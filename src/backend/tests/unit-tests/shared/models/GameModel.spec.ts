@@ -1,4 +1,4 @@
-import GameModel from '../../../../shared/models/game';
+import GameModel from '../../../../shared/models/GameModel';
 import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';

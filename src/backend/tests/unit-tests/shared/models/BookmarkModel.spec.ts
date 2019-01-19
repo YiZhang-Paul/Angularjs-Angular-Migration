@@ -1,4 +1,4 @@
-import BookmarkModel from '../../../../shared/models/bookmark';
+import BookmarkModel from '../../../../shared/models/BookmarkModel';
 import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';

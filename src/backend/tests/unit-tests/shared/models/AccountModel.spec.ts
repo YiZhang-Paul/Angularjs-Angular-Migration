@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import AccountModel from '../../../../shared/models/account';
+import AccountModel from '../../../../shared/models/AccountModel';
 import { getFieldString, verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
 
 const idField = 'id';

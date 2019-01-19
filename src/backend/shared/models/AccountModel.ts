@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 
-import sanitizer from '../../shared/models/sanitizers';
-import validator from '../../shared/models/validators';
+import sanitizer from './sanitizers';
+import validator from './validators';
 
 const integerValidator = validator.integerValidator;
 const emailValidator = validator.emailValidator;

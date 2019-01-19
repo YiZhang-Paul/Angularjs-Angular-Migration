@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { getField, verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
-import UserModel from '../../../../shared/models/user';
+import UserModel from '../../../../shared/models/UserModel';
 
 const userIdField = 'id';
 const nameField = 'name';

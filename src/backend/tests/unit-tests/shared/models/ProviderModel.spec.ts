@@ -1,5 +1,5 @@
 import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
-import ProviderModel from '../../../../shared/models/provider';
+import ProviderModel from '../../../../shared/models/ProviderModel';
 
 const idField = 'id';
 const nameField = 'name';

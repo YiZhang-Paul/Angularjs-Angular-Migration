@@ -1,5 +1,5 @@
 import { verifyCastError, verifyCustomError, verifyValidationError } from '../../../mongooseTestUtilities';
-import ViewHistoryModel from '../../../../shared/models/viewHistory';
+import ViewHistoryModel from '../../../../shared/models/ViewHistoryModel';
 
 const idField = 'id';
 const channelIdField = 'channel_id';
