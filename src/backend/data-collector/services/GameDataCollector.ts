@@ -1,3 +1,4 @@
+import GameDataCollectorFactory from '../factories/GameDataCollectorFactory';
 import GameRepositoryFactory from '../../shared/repositories/GameRepositoryFactory';
 import IProviderResolver from '../../shared/services/IProviderResolver.interface';
 import ProviderResolverFactory from '../../shared/services/ProviderResolverFactory';
@@ -91,12 +92,5 @@ export class GameDataCollector implements IGameDataCollector {
     //     await this._storageManager.addToMemory(collected);
     // }
 }
-// TODO: wrap in factory class
-const providerRepository = new ProviderRepositoryFactory().createRepository();
-const mixerFetcher = new MixerGameFetcher(providerRepository);
-const adapter = new GameDataAdapter();
-const reducer = new GameDataReducer(adapter);
-const gameRepository = new GameRepositoryFactory().createRepository();
-const storageManager = new GameDataStorageManager(gameRepository);
 
-export default new GameDataCollector([mixerFetcher], reducer, storageManager);
+export default new GameDataCollectorFactory().createGameCollector();
