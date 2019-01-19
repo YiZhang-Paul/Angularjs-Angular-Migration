@@ -61,21 +61,6 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return data;
     }
 
-    private toObjects(documents: Document[], excludes: string[] = []): any[] {
-
-        return documents.map(document => {
-
-            const data = document.toObject();
-
-            const object = JSON.stringify(data, (key, value) => {
-
-                return excludes.includes(key) ? undefined : value;
-            });
-
-            return JSON.parse(object);
-        });
-    }
-
     public async addToPersistent(data: any[]): Promise<any[]> {
 
         const added: any[] = [];
@@ -97,8 +82,22 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return added;
     }
 
+    private excludeKeys(data: any[], excludes: string[]): any[] {
+
+        return data.map(_ => {
+
+            const json = JSON.stringify(_, (key, value) => {
+
+                return excludes.includes(key) ? undefined : value;
+            });
+
+            return JSON.parse(json);
+        });
+    }
+
     public async addToMemory(data: any[]): Promise<any[]> {
 
+        data = this.excludeKeys(data, ['_id', '__v']);
         const jsonData = JSON.stringify(data);
 
         cache.set(this._cacheKey, jsonData, error => {
@@ -112,11 +111,18 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return data;
     }
 
+    private toObjects(documents: Document[]): any[] {
+
+        const objects = documents.map(_ => _.toObject());
+
+        return this.excludeKeys(objects, ['_id', '__v']);
+    }
+
     public async getFromPersistent(): Promise<any[]> {
 
         const documents = await this._repository.find();
 
-        return this.toObjects(documents, ['_id', '__v']);
+        return this.toObjects(documents);
     }
 
     public async getFromMemory(): Promise<any[]> {
