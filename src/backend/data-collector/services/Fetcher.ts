@@ -6,15 +6,15 @@ type ProviderDetail = { id: number; name: string; api: string };
 
 export default abstract class Fetcher implements IFetcher {
 
-    public readonly _id: number;
-    public readonly _name: string;
-    public readonly _api: string;
+    public readonly id: number;
+    public readonly name: string;
+    public readonly api: string;
 
     constructor(providerDetail: ProviderDetail) {
 
-        this._id = providerDetail.id;
-        this._name = providerDetail.name;
-        this._api = providerDetail.api;
+        this.id = providerDetail.id;
+        this.name = providerDetail.name;
+        this.api = providerDetail.api;
     }
 
     protected async tryFetch(url: string): Promise<any[]> {
@@ -36,7 +36,7 @@ export default abstract class Fetcher implements IFetcher {
 
         return data.map(_ => {
 
-            _['provider_id'] = this._id;
+            _['provider_id'] = this.id;
 
             return _;
         });
@@ -44,7 +44,7 @@ export default abstract class Fetcher implements IFetcher {
 
     protected async fetchData(query: string): Promise<any[]> {
 
-        const data = await this.tryFetch(`${this._api}${query}`);
+        const data = await this.tryFetch(`${this.api}${query}`);
 
         return this.attachProviderId(data);
     }

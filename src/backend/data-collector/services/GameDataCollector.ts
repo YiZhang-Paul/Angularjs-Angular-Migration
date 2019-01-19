@@ -1,62 +1,95 @@
 import GameRepositoryFactory from '../../shared/repositories/GameRepositoryFactory';
+import IProviderResolver from '../../shared/services/IProviderResolver.interface';
+import ProviderResolverFactory from '../../shared/services/ProviderResolverFactory';
 import ProviderRepositoryFactory from '../../shared/repositories/ProviderRepositoryFactory';
 
 import GameDataAdapter from './GameDataAdapter';
 import GameDataReducer from './GameDataReducer';
 import GameDataStorageManager from './GameDataStorageManager';
-import ICollector from './ICollector.interface';
 import IDataReducer from './IDataReducer.interface';
 import IDataStorageManager from './IDataStorageManager.interface';
+import IGameDataCollector from './IGameDataCollector.interface';
 import IGameFetcher from './IGameFetcher.interface';
 import MixerGameFetcher from './MixerGameFetcher';
 
-export class GameDataCollector implements ICollector {
+export class GameDataCollector implements IGameDataCollector {
 
     private _fetchers: IGameFetcher[];
+    private _resolver: IProviderResolver;
     private _reducer: IDataReducer;
     private _storageManager: IDataStorageManager;
 
     constructor(
 
         fetchers: IGameFetcher[],
+        resolver: IProviderResolver,
         reducer: IDataReducer,
         storageManager: IDataStorageManager
 
     ) {
-
+        // TODO: fetch in batch?
         this._fetchers = fetchers;
+        this._resolver = resolver;
         this._reducer = reducer;
         this._storageManager = storageManager;
     }
 
-    protected async fetchGames(): Promise<any[]> {
+    private async fetchData(): Promise<any[]> {
 
-        const games: any[] = [];
+        const data: any[] = [];
 
         for (const fetcher of this._fetchers) {
 
-            games.push(...await fetcher.fetch());
+            data.push(...await fetcher.fetch());
         }
 
-        return games;
+        return data;
     }
 
-    private sortByViewCount(data: any[]): any[] {
+    private async fetchDataById(id: number): Promise<any[]> {
 
-        const key = 'view_count';
+        const data: any[] = [];
 
-        return data.slice().sort((a, b) => +b[key] - +a[key]);
+        for (const fetcher of this._fetchers) {
+
+            const provider = fetcher.name;
+            const gameId = await this._resolver.resolveGameId(provider, id);
+
+            data.push(...await fetcher.fetchById(gameId));
+        }
+
+        return data;
     }
+
+    // private sortByViews(data: any[]): any[] {
+
+    //     const key = 'view_count';
+
+    //     return data.slice().sort((a, b) => +b[key] - +a[key]);
+    // }
 
     public async collect(): Promise<void> {
 
-        const data = await this.fetchGames();
-        const reducedData = this._reducer.reduce(data);
-        const toCollect = this.sortByViewCount(reducedData).slice(0, 50);
+        const data = await this.fetchData();
 
-        const collected = await this._storageManager.addToPersistent(toCollect);
-        await this._storageManager.addToMemory(collected);
+        console.log(data);
     }
+
+    public async collectById(id: number): Promise<void> {
+
+        const data = await this.fetchDataById(id);
+
+        console.log(data);
+    }
+
+    // public async collect(): Promise<void> {
+
+    //     const reducedData = this._reducer.reduce(data);
+    //     const toCollect = this.sortByViews(reducedData).slice(0, 50);
+
+    //     const collected = await this._storageManager.addToPersistent(toCollect);
+    //     await this._storageManager.addToMemory(collected);
+    // }
 }
 // TODO: wrap in factory class
 const providerRepository = new ProviderRepositoryFactory().createRepository();
