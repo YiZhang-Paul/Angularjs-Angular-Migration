@@ -1,122 +1,37 @@
-import { Document } from 'mongoose';
-
-import { cache } from '../../database';
-import IGameRepository from '../../shared/repositories/IGameRepository.interface';
-
 import IDataStorageManager from './IDataStorageManager.interface';
 import IMemoryDataStore from './IMemoryDataStore.interface';
-// TODO: extract to memory/persistent manager?
+import IPersistentDataStore from './IPersistentDataStore.interface';
+
 export default class GameDataStorageManager implements IDataStorageManager {
 
     private readonly _cacheKey = 'games';
+    private _persistentStore: IPersistentDataStore;
     private _memoryStore: IMemoryDataStore;
-    private _repository: IGameRepository;
 
-    constructor(memoryStore: IMemoryDataStore, repository: IGameRepository) {
+    constructor(
+
+        memoryStore: IMemoryDataStore,
+        persistentStore: IPersistentDataStore
+
+    ) {
 
         this._memoryStore = memoryStore;
-        this._repository = repository;
-    }
-
-    private excludeKeys(data: any[], excludes: string[]): any[] {
-
-        return data.map(_ => {
-
-            const json = JSON.stringify(_, (key, value) => {
-
-                return excludes.includes(key) ? undefined : value;
-            });
-
-            return JSON.parse(json);
-        });
-    }
-
-    private toObjects(documents: Document[]): any[] {
-
-        const objects = documents.map(_ => _.toObject());
-
-        return this.excludeKeys(objects, ['_id', '__v']);
-    }
-
-    private isDuplicate(object: any, objects: any[], key: string): boolean {
-
-        return objects.some(_ => _[key] === object[key]);
-    }
-
-    private addUpdatedData(data: any, updated: any): any {
-
-        data['id'] = updated['id'];
-        data['search_api_keys'] = updated['search_api_keys'].slice();
-
-        return data;
-    }
-
-    private async updatePersistent(document: Document, data: any): Promise<any> {
-
-        const newData = document.toObject();
-        const keyField = 'search_api_keys';
-        const name = newData['name'];
-
-        for (const key of data[keyField]) {
-
-            const keys = newData[keyField];
-
-            if (!this.isDuplicate(key, keys, 'provider_id')) {
-
-                keys.push(key);
-            }
-        }
-
-        await this._repository.updateOne(newData, { name });
-
-        return this.addUpdatedData(data, newData);
-    }
-
-    private async insertPersistent(data: any): Promise<any> {
-
-        const result = await this._repository.insertOne(data);
-
-        if (result) {
-
-            data['id'] = result.toObject()['id'];
-        }
-
-        return data;
+        this._persistentStore = persistentStore;
     }
 
     public async addToPersistent(data: any[]): Promise<any[]> {
 
-        const added: any[] = [];
-
-        for (const _ of data) {
-
-            const game = await this._repository.findByName(_['name']);
-
-            const result = game ?
-                await this.updatePersistent(game, _) :
-                await this.insertPersistent(_);
-
-            if (result) {
-
-                added.push(result);
-            }
-        }
-
-        return added;
+        return this._persistentStore.set(data);
     }
 
     public async addToMemory(data: any[]): Promise<any[]> {
 
-        const excluded = this.excludeKeys(data, ['_id', '__v']);
-
-        return this._memoryStore.set(this._cacheKey, excluded);
+        return this._memoryStore.set(data, this._cacheKey);
     }
 
     public async getFromPersistent(): Promise<any[]> {
 
-        const documents = await this._repository.find();
-
-        return this.toObjects(documents);
+        return this._persistentStore.get();
     }
 
     public async getFromMemory(): Promise<any[]> {

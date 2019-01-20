@@ -6,6 +6,8 @@ import GameFetcherFactory from '../services/GameFetcherFactory';
 import GameRepositoryFactory from '../../shared/repositories/GameRepositoryFactory';
 import IGameDataCollector from '../services/IGameDataCollector.interface';
 import IGameFetcher from '../services/IGameFetcher.interface';
+import MemoryDataStore from '../services/MemoryDataStore';
+import MongoDbGameDataStore from '../services/MongoDbGameDataStore';
 import ProviderResolverFactory from '../../shared/services/ProviderResolverFactory';
 
 import DataCollectorFactory from './DataCollectorFactory';
@@ -16,14 +18,16 @@ export class GameDataCollectorFactory extends DataCollectorFactory<IGameFetcher>
     constructor() {
 
         const adapter = new GameDataAdapter();
+        const memoryStore = new MemoryDataStore();
         const repository = new GameRepositoryFactory().createRepository();
+        const persistentStore = new MongoDbGameDataStore(repository);
 
         super(
 
             new GameFetcherFactory(),
             new ProviderResolverFactory().createResolver(),
             new GameDataReducer(adapter),
-            new GameDataStorageManager(repository)
+            new GameDataStorageManager(memoryStore, persistentStore)
         );
     }
 

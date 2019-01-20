@@ -5,12 +5,16 @@ import GameDataAdapter from '../../../data-collector/services/GameDataAdapter';
 import GameDataReducer from '../../../data-collector/services/GameDataReducer';
 import GameDataStorageManager from '../../../data-collector/services/GameDataStorageManager';
 import GameRepositoryFactory from '../../../shared/repositories/GameRepositoryFactory';
+import MemoryDataStore from '../../../data-collector/services/MemoryDataStore';
+import MongoDbGameDataStore from '../../../data-collector/services/MongoDbGameDataStore';
 import ProviderRepositoryFactory from '../../../shared/repositories/ProviderRepositoryFactory';
 
 const router = Router();
 const gameRepository = new GameRepositoryFactory().createRepository();
 const providerRepository = new ProviderRepositoryFactory().createRepository();
-const storageManager = new GameDataStorageManager(gameRepository);
+const memoryStore = new MemoryDataStore();
+const persistentStore = new MongoDbGameDataStore(gameRepository);
+const storageManager = new GameDataStorageManager(memoryStore, persistentStore);
 const adapter = new GameDataAdapter();
 const reducer = new GameDataReducer(adapter);
 

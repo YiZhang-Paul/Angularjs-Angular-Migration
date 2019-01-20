@@ -4,7 +4,7 @@ import IMemoryDataStore from './IMemoryDataStore.interface';
 
 export default class MemoryDataStore implements IMemoryDataStore {
 
-    public async set(key: string, data: any[]): Promise<any[]> {
+    public async set(data: any[], key: string): Promise<any[]> {
 
         const json = JSON.stringify(data);
 
