@@ -8,7 +8,8 @@
         ],
         "exclude": [
             "src/**/*.interface.ts",
-            "src/**/tests"
+            "src/**/test-utilities/**/*.ts",
+            "src/**/*.spec.ts"
         ],
         "extension": [
             ".ts"
@@ -36,7 +37,7 @@
         "start": "npm run build && concurrently \"npm run collector\" \"npm run api\" \"npm run server\"",
         "test": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha --opts \"mocha.opts\" \"src/**/*.spec.ts\"",
         "test-int": "npm run build && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha --opts \"mocha.opts\" \"src/**/integration-tests/**/*.spec.ts\"",
-        "test-unit": "npm run build && nyc mocha --opts \"mocha.opts\" \"src/**/unit-tests/**/*.spec.ts\""
+        "test-unit": "npm run build && nyc mocha --opts \"mocha.opts\" --exclude \"src/**/integration-tests/**/*.spec.ts\" \"src/**/*.spec.ts\""
     },
     "repository": {
         "type": "git",
@@ -67,7 +68,7 @@
         "@types/express": "^4.16.0",
         "@types/mocha": "^5.2.5",
         "@types/mongodb": "^3.1.19",
-        "@types/mongoose": "^5.3.7",
+        "@types/mongoose": "^5.3.8",
         "@types/node": "^10.12.18",
         "@types/redis": "^2.8.10",
         "@types/sinon": "^7.0.4",
@@ -78,7 +79,7 @@
         "mocha": "^5.2.0",
         "nodemon": "^1.18.9",
         "nyc": "^13.1.0",
-        "sinon": "^7.2.2",
+        "sinon": "^7.2.3",
         "source-map-support": "^0.5.10",
         "ts-node": "^7.0.1",
         "tslint": "^5.12.1",

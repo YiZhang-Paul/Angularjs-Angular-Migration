@@ -1,4 +1,4 @@
-import AllPrivilegeMongoDbRepository from '../mongodb-repository/all-privilege-mongodb-repository';
+import AllPrivilegeMongoDbRepository from '../all-privilege-mongodb-repository/all-privilege-mongodb-repository';
 
 import IProviderRepository from './provider-repository.interface';
 

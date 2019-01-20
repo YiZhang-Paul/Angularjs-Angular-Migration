@@ -1,8 +1,8 @@
 import { Document, Model } from 'mongoose';
 
 import IDocumentGenerator from '../generators/document-generator/document-generator.interface';
-import SequentialIdGenerator from '../generators/id-generator/sequential-id-generator';
-import UniqueIdDocumentGenerator from '../generators/document-generator/unique-id-document-generator';
+import SequentialIdGenerator from '../generators/id-generator/sequential-id-generator/sequential-id-generator';
+import UniqueIdDocumentGenerator from '../generators/document-generator/unique-id-document-generator/unique-id-document-generator';
 
 import IRepositoryFactory from './repository.factory.interface';
 import IRepository from './repository.interface';

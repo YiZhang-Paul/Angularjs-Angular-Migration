@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import AllPrivilegeMongoDbRepository from '../mongodb-repository/all-privilege-mongodb-repository';
+import AllPrivilegeMongoDbRepository from '../all-privilege-mongodb-repository/all-privilege-mongodb-repository';
 
 import IGameRepository from './game-repository.interface';
 
