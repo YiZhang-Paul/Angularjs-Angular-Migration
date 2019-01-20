@@ -3,7 +3,8 @@ import Express = require('express');
 import { Request, Response } from 'Express';
 import mongoose = require('mongoose');
 
-import { connectMongoose } from '../database';
+import { connectMongoose } from '../mongo-database';
+import '../redis-database';
 
 import gameDataCollectorPromise from './factories/GameDataCollectorFactory';
 import './initializer';

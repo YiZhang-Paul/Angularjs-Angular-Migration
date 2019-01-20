@@ -2,7 +2,8 @@ import config = require('config');
 import Express = require('express');
 import { Request, Response } from 'express';
 
-import '../../database';
+import '../../mongo-database';
+import '../../redis-database';
 
 import routes from './routes';
 

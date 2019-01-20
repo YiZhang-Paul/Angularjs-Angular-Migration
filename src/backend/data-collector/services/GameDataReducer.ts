@@ -1,3 +1,4 @@
+// TODO: have a core folder
 // TODO: some of these services should be shared
 import IDataReducer from './IDataReducer.interface';
 import IReducibleGameData from './IReducibleGameData.interface';

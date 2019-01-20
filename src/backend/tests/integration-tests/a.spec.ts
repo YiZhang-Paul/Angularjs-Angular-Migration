@@ -1,7 +1,8 @@
 // global integration test setup/teardown
 import mongoose = require('mongoose');
 
-import { cache } from '../../database';
+import '../../mongo-database';
+import { cache } from '../../redis-database';
 import TestModel from '../testModel';
 
 before('global integration test setup', done => {
