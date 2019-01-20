@@ -1,6 +1,6 @@
 // TODO: some of these services should be shared
 import IDataReducer from './IDataReducer.interface';
-import IReducedGameData from './IReducibleGameData.interface';
+import IReducibleGameData from './IReducibleGameData.interface';
 import IReducibleGameDataAdapter from './IReducibleGameDataAdapter.interface';
 
 export default class GameDataReducer implements IDataReducer {
@@ -22,36 +22,39 @@ export default class GameDataReducer implements IDataReducer {
             .replace(/\sthe\s/g, ' ');
     }
 
-    private getProviderData(data: IReducedGameData): any {
+    private getProvider(data: IReducibleGameData): any {
 
         return {
 
-            provider_id: +data.provider_id,
-            provider_game_id: +data.provider_game_id,
+            provider_id: data.provider_id,
+            provider_game_id: data.provider_game_id,
             provider_game_name: data.provider_game_name
         };
     }
 
-    private addData(map: Map<string, any>, key: string, data: IReducedGameData): void {
+    private addData(map: Map<string, any>, key: string, data: IReducibleGameData): void {
 
         map.set(key, {
 
             name: key,
             image: data.image,
             view_count: data.view_count,
-            search_api_keys: [this.getProviderData(data)]
+            search_api_keys: [this.getProvider(data)]
         });
     }
 
-    private mergeData(map: Map<string, any>, key: string, data: IReducedGameData): void {
+    private mergeData(map: Map<string, any>, key: string, data: IReducibleGameData): void {
 
         const target = map.get(key);
 
-        target['view_count'] = `${+target['view_count'] + +data.view_count}`;
-        target['search_api_keys'].push(this.getProviderData(data));
+        if (target) {
+
+            target['view_count'] += data.view_count;
+            target['search_api_keys'].push(this.getProvider(data));
+        }
     }
 
-    private reduceData(map: Map<string, any>, data: IReducedGameData): void {
+    private reduceData(map: Map<string, any>, data: IReducibleGameData): void {
 
         const key = this.reduceName(data.name);
 
@@ -65,7 +68,7 @@ export default class GameDataReducer implements IDataReducer {
         this.mergeData(map, key, data);
     }
 
-    private toArray(map: Map<string, any>): any[] {
+    private mapToArray(map: Map<string, any>): any[] {
 
         return Array.from(map).map(_ => _[1]);
     }
@@ -73,13 +76,13 @@ export default class GameDataReducer implements IDataReducer {
     public reduce(data: any[]): any[] {
 
         const reduced = new Map<string, any>();
-        const converted = data.map(_ => this._adapter.convert(_));
+        const reducible = data.map(_ => this._adapter.convert(_));
 
-        for (const _ of converted) {
+        for (const _ of reducible) {
 
             this.reduceData(reduced, _);
         }
 
-        return this.toArray(reduced);
+        return this.mapToArray(reduced);
     }
 }

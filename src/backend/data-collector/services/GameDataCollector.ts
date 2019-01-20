@@ -72,20 +72,21 @@ export default class GameDataCollector implements IGameDataCollector {
     public async collect(): Promise<void> {
 
         const data = await this.fetchData();
+        const reduced = this._reducer.reduce(data);
 
-        console.log(data);
+        console.log(reduced);
     }
 
     public async collectById(id: number): Promise<void> {
 
         const data = await this.fetchDataById(id);
+        const reduced = this._reducer.reduce(data);
 
-        console.log(data);
+        console.log(reduced);
     }
 
     // public async collect(): Promise<void> {
 
-    //     const reducedData = this._reducer.reduce(data);
     //     const toCollect = this.sortByViews(reducedData).slice(0, 50);
 
     //     const collected = await this._storageManager.addToPersistent(toCollect);
