@@ -1,31 +1,30 @@
+import config = require('config');
+
 import DataAdapter from './DataAdapter';
-import IReducedGameData from './IReducedGameData.interface';
+import IReducibleGameData from './IReducibleGameData.interface';
 import IReducibleGameDataAdapter from './IReducibleGameDataAdapter.interface';
+
+type KeyMapping = { source: string; target: string };
 
 export default class GameDataAdapter extends DataAdapter implements IReducibleGameDataAdapter {
 
-    private _generalMappings = [
+    private getMappings(groups: string[]): KeyMapping[] {
 
-        { from: 'provider_id', to: 'provider_id' }
-    ];
+        const mappings: KeyMapping[] = [];
+        const rules = config.get<any>('data_mappings');
 
-    private _mixerMappings = [
+        for (const group of groups) {
 
-        { from: 'name', to: 'name' },
-        { from: 'id', to: 'provider_game_id' },
-        { from: 'name', to: 'provider_game_name' },
-        { from: 'coverUrl', to: 'image' },
-        { from: 'viewersCurrent', to: 'view_count' }
-    ];
+            mappings.push(...rules[group]);
+        }
 
-    private _mappings = [
+        return mappings;
+    }
 
-        ...this._generalMappings,
-        ...this._mixerMappings
-    ];
+    public convert(data: any): IReducibleGameData {
 
-    public convert(data: any): IReducedGameData {
+        const mappings = this.getMappings(['general', 'mixer']);
 
-        return this.applyMappings(data, {}, this._mappings) as IReducedGameData;
+        return this.applyMappings(data, {}, mappings) as IReducibleGameData;
     }
 }

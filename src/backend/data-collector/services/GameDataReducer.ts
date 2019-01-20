@@ -1,5 +1,6 @@
+// TODO: some of these services should be shared
 import IDataReducer from './IDataReducer.interface';
-import IReducedGameData from './IReducedGameData.interface';
+import IReducedGameData from './IReducibleGameData.interface';
 import IReducibleGameDataAdapter from './IReducibleGameDataAdapter.interface';
 
 export default class GameDataReducer implements IDataReducer {

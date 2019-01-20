@@ -13,7 +13,7 @@ import IGameDataCollector from './IGameDataCollector.interface';
 import IGameFetcher from './IGameFetcher.interface';
 import MixerGameFetcher from './MixerGameFetcher';
 
-export class GameDataCollector implements IGameDataCollector {
+export default class GameDataCollector implements IGameDataCollector {
 
     private _fetchers: IGameFetcher[];
     private _resolver: IProviderResolver;
@@ -92,5 +92,3 @@ export class GameDataCollector implements IGameDataCollector {
     //     await this._storageManager.addToMemory(collected);
     // }
 }
-
-export default new GameDataCollectorFactory().createGameCollector();

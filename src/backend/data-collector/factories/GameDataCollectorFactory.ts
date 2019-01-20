@@ -13,7 +13,7 @@ import ProviderResolverFactory from '../../shared/services/ProviderResolverFacto
 
 import IGameDataCollectorFactory from './IGameDataCollectorFactory.interface';
 
-export default class GameDataCollectorFactory implements IGameDataCollectorFactory {
+export class GameDataCollectorFactory implements IGameDataCollectorFactory {
     // TODO: need refactor
     private _fetcherFactory: IGameFetcherFactory;
     private _resolver: IProviderResolver;
@@ -36,3 +36,5 @@ export default class GameDataCollectorFactory implements IGameDataCollectorFacto
         return new GameDataCollector(fetchers, this._resolver, this._reducer, this._storageManager);
     }
 }
+
+export default new GameDataCollectorFactory().createGameCollector();

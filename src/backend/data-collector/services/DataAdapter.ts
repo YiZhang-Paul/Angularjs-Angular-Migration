@@ -1,30 +1,29 @@
-// TODO: some of these services should be shared
 import IDataAdapter from './IDataAdapter.interface';
 
-type KeyMapping = { from: string; to: string };
+type KeyMapping = { source: string; target: string };
 
 export default abstract class DataAdapter implements IDataAdapter {
 
-    protected applyMapping(source: any, target: any, mapping: KeyMapping): any {
+    protected applyMapping(from: any, to: any, mapping: KeyMapping): any {
 
-        const { from, to } = mapping;
+        const { source, target } = mapping;
 
-        if (source.hasOwnProperty(from) && !target.hasOwnProperty(to)) {
+        if (!to.hasOwnProperty(target) && from.hasOwnProperty(source)) {
 
-            target[to] = source[from];
+            to[target] = from[source];
         }
 
-        return target;
+        return to;
     }
 
-    protected applyMappings(source: any, target: any, mappings: KeyMapping[]): any {
+    protected applyMappings(from: any, to: any, mappings: KeyMapping[]): any {
 
         for (const mapping of mappings) {
 
-            target = this.applyMapping(source, target, mapping);
+            to = this.applyMapping(from, to, mapping);
         }
 
-        return target;
+        return to;
     }
 
     public abstract convert(data: any): any;

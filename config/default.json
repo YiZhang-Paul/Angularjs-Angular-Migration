@@ -26,5 +26,17 @@
                 "search_channel_url": "https://mixer.com/api/v1/channels"
             }
         }
+    },
+    "data_mappings": {
+        "general": [
+            { "source": "provider_id", "target": "provider_id" }
+        ],
+        "mixer": [
+            { "source": "name", "target": "name" },
+            { "source": "id", "target": "provider_game_id" },
+            { "source": "name", "target": "provider_game_name" },
+            { "source": "coverUrl", "target": "image" },
+            { "source": "viewersCurrent", "target": "view_count" }
+        ]
     }
 }
