@@ -4,36 +4,38 @@ import GameDataReducer from '../services/GameDataReducer';
 import GameDataStorageManager from '../services/GameDataStorageManager';
 import GameFetcherFactory from '../services/GameFetcherFactory';
 import GameRepositoryFactory from '../../shared/repositories/GameRepositoryFactory';
-import IDataReducer from '../services/IDataReducer.interface';
-import IDataStorageManager from '../services/IDataStorageManager.interface';
 import IGameDataCollector from '../services/IGameDataCollector.interface';
-import IGameFetcherFactory from '../services/IGameFetcherFactory.interface';
-import IProviderResolver from '../../shared/services/IProviderResolver.interface';
+import IGameFetcher from '../services/IGameFetcher.interface';
 import ProviderResolverFactory from '../../shared/services/ProviderResolverFactory';
 
+import DataCollectorFactory from './DataCollectorFactory';
 import IGameDataCollectorFactory from './IGameDataCollectorFactory.interface';
 
-export class GameDataCollectorFactory implements IGameDataCollectorFactory {
-    // TODO: need refactor
-    private _fetcherFactory: IGameFetcherFactory;
-    private _resolver: IProviderResolver;
-    private _reducer: IDataReducer;
-    private _storageManager: IDataStorageManager;
+export class GameDataCollectorFactory extends DataCollectorFactory<IGameFetcher> implements IGameDataCollectorFactory {
 
     constructor() {
 
-        this._fetcherFactory = new GameFetcherFactory();
-        this._resolver = new ProviderResolverFactory().createResolver();
-        this._reducer = new GameDataReducer(new GameDataAdapter());
-        this._storageManager = new GameDataStorageManager(new GameRepositoryFactory().createRepository());
+        const adapter = new GameDataAdapter();
+        const repository = new GameRepositoryFactory().createRepository();
+
+        super(
+
+            new GameFetcherFactory(),
+            new ProviderResolverFactory().createResolver(),
+            new GameDataReducer(adapter),
+            new GameDataStorageManager(repository)
+        );
     }
 
     public async createGameCollector(): Promise<IGameDataCollector> {
 
-        const providers = ['mixer'];
-        const fetchers = await Promise.all(providers.map(_ => this._fetcherFactory.createFetcher(_)));
+        return new GameDataCollector(
 
-        return new GameDataCollector(fetchers, this._resolver, this._reducer, this._storageManager);
+            await this.createFetchers(),
+            this._resolver,
+            this._reducer,
+            this._storageManager
+        );
     }
 }
 
