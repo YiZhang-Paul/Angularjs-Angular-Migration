@@ -6,7 +6,7 @@ import mongoose = require('mongoose');
 import { connectMongoose } from '../mongo-database';
 import '../redis-database';
 
-import gameDataCollectorPromise from './factories/GameDataCollectorFactory';
+import gameDataCollectorPromise from './factories/game-data-collector-factory';
 import './initializer';
 
 const app = Express();

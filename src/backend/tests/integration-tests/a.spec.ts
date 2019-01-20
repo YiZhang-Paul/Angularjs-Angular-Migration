@@ -3,7 +3,7 @@ import mongoose = require('mongoose');
 
 import '../../mongo-database';
 import { cache } from '../../redis-database';
-import TestModel from '../testModel';
+import TestModel from '../test-model';
 
 before('global integration test setup', done => {
     // ensure database is connected before all tests run

@@ -1,6 +1,6 @@
 import http from 'axios';
 
-import IFetcher from './IFetcher.interface';
+import IFetcher from './fetcher.interface';
 
 type ProviderDetail = { id: number; name: string; api: string };
 

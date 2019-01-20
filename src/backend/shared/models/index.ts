@@ -1,10 +1,10 @@
-import Account from './AccountModel';
-import Bookmark from './BookmarkModel';
-import Channel from './ChannelModel';
-import Game from './GameModel';
-import Provider from './ProviderModel';
-import User from './UserModel';
-import ViewHistory from './ViewHistoryModel';
+import Account from './account-model';
+import Bookmark from './bookmark-model';
+import Channel from './channel-model';
+import Game from './game-model';
+import Provider from './provider-model';
+import User from './user-model';
+import ViewHistory from './view-history-model';
 
 export default {
 

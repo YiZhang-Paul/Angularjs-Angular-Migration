@@ -1,10 +1,10 @@
 import config = require('config');
 import mongoose = require('mongoose');
 
-import IRepository from '../shared/repositories/IRepository.interface';
-import ProviderRepositoryFactory from '../shared/repositories/ProviderRepositoryFactory';
+import ProviderRepositoryFactory from '../shared/repositories/provider-repository-factory';
+import IRepository from '../shared/repositories/repository.interface';
 
-import gameDataCollectorPromise from './factories/GameDataCollectorFactory';
+import gameDataCollectorPromise from './factories/game-data-collector-factory';
 
 if (!process.env.INITIALIZED) {
 
