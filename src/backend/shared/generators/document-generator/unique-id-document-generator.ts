@@ -1,7 +1,8 @@
 import { Document, Model } from 'mongoose';
 
+import IIdGenerator from '../id-generator/id-generator.interface';
+
 import IDocumentGenerator from './document-generator.interface';
-import IIdGenerator from './id-generator.interface';
 
 export default class UniqueIdDocumentGenerator implements IDocumentGenerator {
 

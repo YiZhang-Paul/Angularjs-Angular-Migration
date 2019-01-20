@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import IGameRepository from '../../shared/repositories/game-repository.interface';
+import IGameRepository from '../../shared/repositories/game-repository/game-repository.interface';
 
 import IPersistentDataStore from './persistent-data-store.interface';
 

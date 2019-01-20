@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import sanitizer from '../../../../shared/models/sanitizers';
+import sanitizer from '../../../../shared/models/model-utilities/sanitizers';
 
 context('sanitizer unit test', () => {
 

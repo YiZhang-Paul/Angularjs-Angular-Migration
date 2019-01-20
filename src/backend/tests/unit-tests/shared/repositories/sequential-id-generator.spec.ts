@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
 import { createDocumentQueryStub } from '../../../stubs/mongodb-document-query.stub';
-import SequentialIdGenerator from '../../../../shared/repositories/sequential-id-generator';
+import SequentialIdGenerator from '../../../../shared/generators/id-generator/sequential-id-generator';
 import TestModel from '../../../test-model';
 
 context('SequentialIdGenerator unit test', () => {

@@ -2,9 +2,9 @@ import { expect } from 'chai';
 import { Document, DocumentQuery } from 'mongoose';
 import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
 
-import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/all-privilege-mongodb-repository';
+import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/mongodb-repository/all-privilege-mongodb-repository';
 import { createDocumentGeneratorStub } from '../../../stubs/document-factory.stub';
-import IDocumentGenerator from '../../../../shared/repositories/document-generator.interface';
+import IDocumentGenerator from '../../../../shared/generators/document-generator/document-generator.interface';
 import { createEmptyObjects } from '../../../generic-test-utilities';
 import { createDocumentQueryStub } from '../../../stubs/mongodb-document-query.stub';
 import { createDocumentStub, createDocumentStubs } from '../../../stubs/mongodb-document.stub';

@@ -1,7 +1,7 @@
 import { Document, Model } from 'mongoose';
 import { SinonStubbedInstance, stub } from 'sinon';
 
-import IIdGenerator from '../../shared/repositories/id-generator.interface';
+import IIdGenerator from '../../shared/generators/id-generator/id-generator.interface';
 
 type Stubbed = SinonStubbedInstance<IIdGenerator>;
 

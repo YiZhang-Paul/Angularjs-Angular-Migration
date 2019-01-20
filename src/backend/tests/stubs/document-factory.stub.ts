@@ -1,7 +1,7 @@
 import { Document, Model } from 'mongoose';
 import { SinonStubbedInstance, stub } from 'sinon';
 
-import IDocumentGenerator from '../../shared/repositories/document-generator.interface';
+import IDocumentGenerator from '../../shared/generators/document-generator/document-generator.interface';
 
 type Stubbed = SinonStubbedInstance<IDocumentGenerator>;
 

@@ -1,4 +1,4 @@
-import ProviderResolverFactory from '../../shared/services/provider-resolver-factory';
+import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
 
 import FetcherFactory from './fetcher-factory';
 import IGameFetcherFactory from './game-fetcher-factory.interface';

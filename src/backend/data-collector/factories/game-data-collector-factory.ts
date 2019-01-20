@@ -6,10 +6,10 @@ import GameDataReducer from '../services/game-data-reducer';
 import GameDataStorageManager from '../services/game-data-storage-manager';
 import GameFetcherFactory from '../services/game-fetcher-factory';
 import IGameFetcher from '../services/game-fetcher.interface';
-import GameRepositoryFactory from '../../shared/repositories/game-repository-factory';
+import GameRepositoryFactory from '../../shared/repositories/game-repository/game-repository.factory';
 import MemoryDataStore from '../services/memory-data-store';
 import MongoDbGameDataStore from '../services/mongodb-game-data-store';
-import ProviderResolverFactory from '../../shared/services/provider-resolver-factory';
+import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
 
 import DataCollectorFactory from './data-collector-factory';
 import IGameDataCollectorFactory from './game-data-collector-factory.interface';

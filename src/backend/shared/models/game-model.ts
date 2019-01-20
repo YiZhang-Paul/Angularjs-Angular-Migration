@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-import validator from './validators';
+import validator from './model-utilities/validators';
 
 const integerValidator = validator.integerValidator;
 const nonEmptyArrayValidator = validator.nonEmptyArrayValidator;

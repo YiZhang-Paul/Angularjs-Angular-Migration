@@ -1,4 +1,4 @@
-import ProviderResolverFactory from '../../shared/services/provider-resolver-factory';
+import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
 
 import IChannelFetcherFactory from './channel-fetcher-factory.interface';
 import IChannelFetcher from './channel-fetcher.interface';

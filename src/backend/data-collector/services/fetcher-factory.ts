@@ -1,4 +1,4 @@
-import IProviderResolver from '../../shared/services/provider-resolver.interface';
+import IProviderResolver from '../../shared/services/provider-resolver/provider-resolver.interface';
 
 import IFetcherFactory from './fetcher-factory.interface';
 import IFetcher from './fetcher.interface';

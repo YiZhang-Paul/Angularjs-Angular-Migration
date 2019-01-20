@@ -1,8 +1,8 @@
 import { Document, Model } from 'mongoose';
 
-import IDocumentGenerator from './document-generator.interface';
-import IQueryOption from './query-option.interface';
-import IRepository from './repository.interface';
+import IDocumentGenerator from '../../generators/document-generator/document-generator.interface';
+import IQueryOption from '../query-option.interface';
+import IRepository from '../repository.interface';
 
 export default abstract class MongoDbRepository implements IRepository {
 

@@ -1,6 +1,6 @@
-import IChannelRepository from '../repositories/channel-repository.interface';
-import IGameRepository from '../repositories/game-repository.interface';
-import IProviderRepository from '../repositories/provider-repository.interface';
+import IChannelRepository from '../../repositories/channel-repository/channel-repository.interface';
+import IGameRepository from '../../repositories/game-repository/game-repository.interface';
+import IProviderRepository from '../../repositories/provider-repository/provider-repository.interface';
 
 import IProviderResolver from './provider-resolver.interface';
 

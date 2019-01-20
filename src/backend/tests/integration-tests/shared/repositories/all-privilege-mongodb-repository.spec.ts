@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 
-import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/all-privilege-mongodb-repository';
+import AllPrivilegeMongoDbRepository from '../../../../shared/repositories/mongodb-repository/all-privilege-mongodb-repository';
 import { areSubObjects, createDataObjects, isSameArray, isSubArray, isSubObject } from '../../../generic-test-utilities';
 import { getFieldNames, getFieldString } from '../../../mongoose-test-utilities';
 import IProjection from '../../../../shared/repositories/projection.interface';
 import IQueryOption from '../../../../shared/repositories/query-option.interface';
-import SequentialIdGenerator from '../../../../shared/repositories/sequential-id-generator';
+import SequentialIdGenerator from '../../../../shared/generators/id-generator/sequential-id-generator';
 import TestModel from '../../../test-model';
-import UniqueIdDocumentGenerator from '../../../../shared/repositories/unique-id-document-factory';
+import UniqueIdDocumentGenerator from '../../../../shared/generators/document-generator/unique-id-document-generator';
 
 context('AllPrivilegeMongoDbRepository integration test', () => {
 

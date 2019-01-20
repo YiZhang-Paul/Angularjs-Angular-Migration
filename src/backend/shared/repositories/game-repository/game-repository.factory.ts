@@ -1,8 +1,8 @@
-import models from '../models';
+import models from '../../models';
+import SequentialIdRepositoryFactory from '../sequential-id-repository.factory';
 
 import GameRepository from './game-repository';
 import IGameRepository from './game-repository.interface';
-import SequentialIdRepositoryFactory from './sequential-id-repository-factory';
 
 export default class GameRepositoryFactory extends SequentialIdRepositoryFactory<IGameRepository> {
 

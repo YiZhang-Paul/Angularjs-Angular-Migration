@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import validator from '../../../../shared/models/validators';
+import validator from '../../../../shared/models/model-utilities/validators';
 
 context('validators unit test', () => {
 

@@ -1,4 +1,3 @@
-// TODO: single test folder vs. separate test folders?
 export function createEmptyObjects(total: number): any[] {
 
     return new Array(total).fill(0).map(_ => ({}));

@@ -1,7 +1,7 @@
 import config = require('config');
 import mongoose = require('mongoose');
 
-import ProviderRepositoryFactory from '../shared/repositories/provider-repository-factory';
+import ProviderRepositoryFactory from '../shared/repositories/provider-repository/provider-repository.factory';
 import IRepository from '../shared/repositories/repository.interface';
 
 import gameDataCollectorPromise from './factories/game-data-collector-factory';

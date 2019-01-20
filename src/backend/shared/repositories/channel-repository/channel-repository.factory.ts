@@ -1,8 +1,8 @@
-import models from '../models';
+import models from '../../models';
+import SequentialIdRepositoryFactory from '../sequential-id-repository.factory';
 
 import ChannelRepository from './channel-repository';
 import IChannelRepository from './channel-repository.interface';
-import SequentialIdRepositoryFactory from './sequential-id-repository-factory';
 
 export default class ChannelRepositoryFactory extends SequentialIdRepositoryFactory<IChannelRepository> {
 

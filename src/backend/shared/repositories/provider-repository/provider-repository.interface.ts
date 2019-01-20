@@ -1,4 +1,4 @@
-import IRepository from './repository.interface';
+import IRepository from '../repository.interface';
 
 export default interface IProviderRepository extends IRepository {
 

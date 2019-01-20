@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import { assert as sinonExpect, SinonStubbedInstance } from 'sinon';
 
 import { createEmptyObjects } from '../../../generic-test-utilities';
-import IIdGenerator from '../../../../shared/repositories/id-generator.interface';
+import IIdGenerator from '../../../../shared/generators/id-generator/id-generator.interface';
 import { createIdGeneratorStub } from '../../../stubs/id-generator.stub';
 import { getFieldString } from '../../../mongoose-test-utilities';
 import TestModel from '../../../test-model';
-import UniqueIdDocumentGenerator from '../../../../shared/repositories/unique-id-document-factory';
+import UniqueIdDocumentGenerator from '../../../../shared/generators/document-generator/unique-id-document-generator';
 
 context('UniqueIdDocumentGenerator unit test', () => {
 

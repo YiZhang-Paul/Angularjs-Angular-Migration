@@ -1,7 +1,8 @@
 import { Document, DocumentQuery } from 'mongoose';
 
+import IQueryOption from '../query-option.interface';
+
 import MongoDbRepository from './mongodb-repository';
-import IQueryOption from './query-option.interface';
 
 type Query<T> = DocumentQuery<T, Document, {}>;
 

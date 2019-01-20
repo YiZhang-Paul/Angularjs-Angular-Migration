@@ -1,8 +1,8 @@
-import models from '../models';
+import models from '../../models';
+import SequentialIdRepositoryFactory from '../sequential-id-repository.factory';
 
 import ProviderRepository from './provider-repository';
 import IProviderRepository from './provider-repository.interface';
-import SequentialIdRepositoryFactory from './sequential-id-repository-factory';
 
 export default class ProviderRepositoryFactory extends SequentialIdRepositoryFactory<IProviderRepository> {
 

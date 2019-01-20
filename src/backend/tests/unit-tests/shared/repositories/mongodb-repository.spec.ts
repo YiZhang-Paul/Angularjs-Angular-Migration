@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { SinonStubbedInstance } from 'sinon';
 
 import { createDocumentGeneratorStub } from '../../../stubs/document-factory.stub';
-import IDocumentGenerator from '../../../../shared/repositories/document-generator.interface';
+import IDocumentGenerator from '../../../../shared/generators/document-generator/document-generator.interface';
 import MongoDbRepository from '../../../test-classes/mongodb-repository.test-class';
 import IQueryOption from '../../../../shared/repositories/query-option.interface';
 import TestModel from '../../../test-model';

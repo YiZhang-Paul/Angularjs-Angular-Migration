@@ -1,4 +1,4 @@
-import IdGenerator from '../../shared/repositories/id-generator';
+import IdGenerator from '../../shared/generators/id-generator/id-generator';
 
 export default class IdGeneratorForTest extends IdGenerator {
 

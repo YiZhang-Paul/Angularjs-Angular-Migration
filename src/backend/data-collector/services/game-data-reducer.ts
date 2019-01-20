@@ -1,4 +1,3 @@
-// TODO: have a core or component based folder structure
 // TODO: some of these services should be shared
 import IDataReducer from './data-reducer.interface';
 import IReducibleGameDataAdapter from './reducible-game-data-adapter.interface';
