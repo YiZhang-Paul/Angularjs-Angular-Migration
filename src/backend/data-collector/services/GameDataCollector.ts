@@ -1,57 +1,24 @@
-import IProviderResolver from '../../shared/services/IProviderResolver.interface';
-
+import IBatchFetcher from './IBatchFetcher.interface';
 import IDataReducer from './IDataReducer.interface';
 import IDataStorageManager from './IDataStorageManager.interface';
 import IGameDataCollector from './IGameDataCollector.interface';
-import IGameFetcher from './IGameFetcher.interface';
 
 export default class GameDataCollector implements IGameDataCollector {
 
-    private _fetchers: IGameFetcher[];
-    private _resolver: IProviderResolver;
+    private _fetcher: IBatchFetcher;
     private _reducer: IDataReducer;
     private _storageManager: IDataStorageManager;
 
     constructor(
 
-        fetchers: IGameFetcher[],
-        resolver: IProviderResolver,
+        batchFetcher: IBatchFetcher,
         reducer: IDataReducer,
         storageManager: IDataStorageManager
 
     ) {
-        // TODO: fetch in batch?
-        this._fetchers = fetchers;
-        this._resolver = resolver;
+        this._fetcher = batchFetcher;
         this._reducer = reducer;
         this._storageManager = storageManager;
-    }
-
-    private async fetchData(): Promise<any[]> {
-
-        const data: any[] = [];
-
-        for (const fetcher of this._fetchers) {
-
-            data.push(...await fetcher.fetch());
-        }
-
-        return data;
-    }
-
-    private async fetchDataById(id: number): Promise<any[]> {
-
-        const data: any[] = [];
-
-        for (const fetcher of this._fetchers) {
-
-            const provider = fetcher.name;
-            const gameId = await this._resolver.resolveGameId(provider, id);
-
-            data.push(...await fetcher.fetchById(gameId));
-        }
-
-        return data;
     }
 
     private sortByViews(data: any[]): any[] {
@@ -72,7 +39,7 @@ export default class GameDataCollector implements IGameDataCollector {
 
     public async collect(): Promise<void> {
 
-        const data = await this.fetchData();
+        const data = await this._fetcher.batchFetch();
         const reduced = this._reducer.reduce(data);
 
         await this.addToStorage(this.sortByViews(reduced));
@@ -80,7 +47,7 @@ export default class GameDataCollector implements IGameDataCollector {
 
     public async collectById(id: number): Promise<void> {
 
-        const data = await this.fetchDataById(id);
+        const data = await this._fetcher.batchFetchById(id);
         const reduced = this._reducer.reduce(data);
 
         await this.addToStorage(reduced.slice(0, 1), `games/${id}`);

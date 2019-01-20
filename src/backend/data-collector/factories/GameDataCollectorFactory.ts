@@ -1,3 +1,4 @@
+import BatchFetcher from '../services/BatchFetcher';
 import GameDataAdapter from '../services/GameDataAdapter';
 import GameDataCollector from '../services/GameDataCollector';
 import GameDataReducer from '../services/GameDataReducer';
@@ -33,10 +34,12 @@ export class GameDataCollectorFactory extends DataCollectorFactory<IGameFetcher>
 
     public async createGameCollector(): Promise<IGameDataCollector> {
 
+        const fetchers = await this.createFetchers();
+        const batchFetcher = new BatchFetcher(fetchers, this._resolver);
+
         return new GameDataCollector(
 
-            await this.createFetchers(),
-            this._resolver,
+            batchFetcher,
             this._reducer,
             this._storageManager
         );
