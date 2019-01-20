@@ -61,10 +61,10 @@ export default class GameDataCollector implements IGameDataCollector {
         return data.slice().sort((a, b) => +b[key] - +a[key]);
     }
 
-    private async addToStorage(data: any[]): Promise<void> {
+    private async addToStorage(data: any[], key?: string): Promise<void> {
 
         const saved = await this._storageManager.addToPersistent(data);
-        await this._storageManager.addToMemory(saved);
+        await this._storageManager.addToMemory(saved, key);
 
         console.log(saved);
         console.log(saved.length);
@@ -83,6 +83,6 @@ export default class GameDataCollector implements IGameDataCollector {
         const data = await this.fetchDataById(id);
         const reduced = this._reducer.reduce(data);
 
-        await this.addToStorage(reduced.slice(0, 1));
+        await this.addToStorage(reduced.slice(0, 1), `games/${id}`);
     }
 }

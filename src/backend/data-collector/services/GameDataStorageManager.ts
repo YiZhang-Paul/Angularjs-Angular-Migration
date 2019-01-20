@@ -24,9 +24,9 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return this._persistentStore.set(data);
     }
 
-    public async addToMemory(data: any[]): Promise<any[]> {
+    public async addToMemory(data: any[], key?: string): Promise<any[]> {
 
-        return this._memoryStore.set(data, this._cacheKey);
+        return this._memoryStore.set(data, key ? key : this._cacheKey);
     }
 
     public async getFromPersistent(): Promise<any[]> {
@@ -34,8 +34,8 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return this._persistentStore.get();
     }
 
-    public async getFromMemory(): Promise<any[]> {
+    public async getFromMemory(key?: string): Promise<any[]> {
 
-        return this._memoryStore.get(this._cacheKey);
+        return this._memoryStore.get(key ? key : this._cacheKey);
     }
 }
