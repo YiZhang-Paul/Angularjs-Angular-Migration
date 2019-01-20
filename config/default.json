@@ -1,0 +1,42 @@
+{
+    "root_url": "/api/v1",
+    "port": {
+        "collector": "5050",
+        "api": "4050",
+        "server": "3050"
+    },
+    "database": {
+        "host": "ds231719.mlab.com:31719",
+        "name": "angular-migration-development"
+    },
+    "third_party_apis": {
+        "twitch": {
+            "name": "twitch",
+            "urls": {
+                "site_url": "https://www.twitch.tv/",
+                "search_game_url": "https://api.twitch.tv/helix/games",
+                "search_channel_url": "https://api.twitch.tv/helix/streams"
+            }
+        },
+        "mixer": {
+            "name": "mixer",
+            "urls": {
+                "site_url": "https://mixer.com/",
+                "search_game_url": "https://mixer.com/api/v1/types",
+                "search_channel_url": "https://mixer.com/api/v1/channels"
+            }
+        }
+    },
+    "data_mappings": {
+        "general": [
+            { "source": "provider_id", "target": "provider_id" }
+        ],
+        "mixer": [
+            { "source": "name", "target": "name" },
+            { "source": "id", "target": "provider_game_id" },
+            { "source": "name", "target": "provider_game_name" },
+            { "source": "coverUrl", "target": "image" },
+            { "source": "viewersCurrent", "target": "view_count" }
+        ]
+    }
+}
