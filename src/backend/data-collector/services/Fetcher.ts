@@ -51,5 +51,5 @@ export default abstract class Fetcher implements IFetcher {
 
     public abstract fetch(): Promise<any[]>;
 
-    public abstract fetchById(id: number): Promise<any>;
+    public abstract fetchById(id: number): Promise<any[]>;
 }

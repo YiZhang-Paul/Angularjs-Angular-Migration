@@ -8,7 +8,7 @@ export default class MixerChannelFetcher extends Fetcher implements IChannelFetc
         return this.fetchData('?order=viewersCurrent:DESC&limit=50');
     }
 
-    public async fetchById(id: number): Promise<any> {
+    public async fetchById(id: number): Promise<any[]> {
 
         return this.fetchData(`/${id}`);
     }

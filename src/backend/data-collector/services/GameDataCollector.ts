@@ -1,17 +1,9 @@
-import GameDataCollectorFactory from '../factories/GameDataCollectorFactory';
-import GameRepositoryFactory from '../../shared/repositories/GameRepositoryFactory';
 import IProviderResolver from '../../shared/services/IProviderResolver.interface';
-import ProviderResolverFactory from '../../shared/services/ProviderResolverFactory';
-import ProviderRepositoryFactory from '../../shared/repositories/ProviderRepositoryFactory';
 
-import GameDataAdapter from './GameDataAdapter';
-import GameDataReducer from './GameDataReducer';
-import GameDataStorageManager from './GameDataStorageManager';
 import IDataReducer from './IDataReducer.interface';
 import IDataStorageManager from './IDataStorageManager.interface';
 import IGameDataCollector from './IGameDataCollector.interface';
 import IGameFetcher from './IGameFetcher.interface';
-import MixerGameFetcher from './MixerGameFetcher';
 
 export default class GameDataCollector implements IGameDataCollector {
 
@@ -62,34 +54,34 @@ export default class GameDataCollector implements IGameDataCollector {
         return data;
     }
 
-    // private sortByViews(data: any[]): any[] {
+    private sortByViews(data: any[]): any[] {
 
-    //     const key = 'view_count';
+        const key = 'view_count';
 
-    //     return data.slice().sort((a, b) => +b[key] - +a[key]);
-    // }
+        return data.slice().sort((a, b) => +b[key] - +a[key]);
+    }
 
     public async collect(): Promise<void> {
 
         const data = await this.fetchData();
         const reduced = this._reducer.reduce(data);
+        const collectable = this.sortByViews(reduced);
 
-        console.log(reduced);
+        const collected = await this._storageManager.addToPersistent(collectable);
+        await this._storageManager.addToMemory(collected);
+
+        console.log(collected);
     }
 
     public async collectById(id: number): Promise<void> {
 
         const data = await this.fetchDataById(id);
         const reduced = this._reducer.reduce(data);
+        const collectable = reduced.slice(0, 1);
 
-        console.log(reduced);
+        const collected = await this._storageManager.addToPersistent(collectable);
+        await this._storageManager.addToMemory(collected);
+
+        console.log(collected);
     }
-
-    // public async collect(): Promise<void> {
-
-    //     const toCollect = this.sortByViews(reducedData).slice(0, 50);
-
-    //     const collected = await this._storageManager.addToPersistent(toCollect);
-    //     await this._storageManager.addToMemory(collected);
-    // }
 }

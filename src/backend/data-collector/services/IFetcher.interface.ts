@@ -5,5 +5,5 @@ export default interface IFetcher {
     readonly api: string;
 
     fetch(): Promise<any[]>;
-    fetchById(id: number): Promise<any>;
+    fetchById(id: number): Promise<any[]>;
 }

@@ -4,7 +4,7 @@ import mongoose = require('mongoose');
 import IRepository from '../shared/repositories/IRepository.interface';
 import ProviderRepositoryFactory from '../shared/repositories/ProviderRepositoryFactory';
 
-import gameDataCollector from './services/GameDataCollector';
+import gameDataCollectorPromise from './factories/GameDataCollectorFactory';
 
 if (!process.env.INITIALIZED) {
 
@@ -27,8 +27,13 @@ function getProviderData(name: string): any {
 
 async function initialize(repository: IRepository, providers: string[]): Promise<void> {
 
+    const gameDataCollector = await gameDataCollectorPromise;
+
     await repository.delete({});
     await repository.insert(providers.map(getProviderData));
+
     await gameDataCollector.collect();
+    await gameDataCollector.collectById(80);
+
     await mongoose.disconnect();
 }

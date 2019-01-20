@@ -5,7 +5,7 @@ import mongoose = require('mongoose');
 
 import { connectMongoose } from '../database';
 
-import gameDataCollector from './services/GameDataCollector';
+import gameDataCollectorPromise from './factories/GameDataCollectorFactory';
 import './initializer';
 
 const app = Express();
@@ -22,7 +22,10 @@ setInterval(async () => {
 
     connectMongoose();
 
+    const gameDataCollector = await gameDataCollectorPromise;
+
     await gameDataCollector.collect();
+    await gameDataCollector.collectById(80);
 
     await mongoose.disconnect();
 

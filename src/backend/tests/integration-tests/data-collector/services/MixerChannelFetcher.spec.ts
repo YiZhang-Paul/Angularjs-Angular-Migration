@@ -1,18 +1,33 @@
 import { expect } from 'chai';
 
+import ChannelFetcherFactory from '../../../../data-collector/services/ChannelFetcherFactory';
 import { isDescendingOrder } from '../../../genericTestUtilities';
+import IChannelFetcher from '../../../../data-collector/services/IChannelFetcher.interface';
 import MixerChannelFetcher from '../../../../data-collector/services/MixerChannelFetcher';
-import ProviderRepositoryFactory from '../../../../shared/repositories/ProviderRepositoryFactory';
 
 context('MixerChannelFetcher integration test', () => {
 
-    let factory: ProviderRepositoryFactory;
-    let fetcher: MixerChannelFetcher;
+    const provider = 'mixer';
+    let factory: ChannelFetcherFactory;
+    let fetcher: IChannelFetcher;
 
     beforeEach('test setup', async () => {
 
-        factory = new ProviderRepositoryFactory();
-        fetcher = new MixerChannelFetcher(factory.createRepository());
+        factory = new ChannelFetcherFactory();
+        fetcher = await factory.createFetcher(provider);
+    });
+
+    describe('class instantiation', () => {
+
+        it('should have default provider name', () => {
+
+            expect(fetcher.name).to.equal(provider);
+        });
+
+        it('should be an instance of MixerChannelFetcher', () => {
+
+            expect(fetcher instanceof MixerChannelFetcher).to.be.true;
+        });
     });
 
     describe('fetch()', () => {
@@ -26,11 +41,24 @@ context('MixerChannelFetcher integration test', () => {
         });
     });
 
+    describe('fetchById()', () => {
+
+        it('should fetch data of specified channel', async () => {
+
+            const expected = 19461551;
+
+            const result = await fetcher.fetchById(expected);
+
+            expect(result.length).to.equal(1);
+            expect(result[0]['id']).to.equal(expected);
+        });
+    });
+
     describe('fetchByGameId()', () => {
 
         it('should fetch data of specified game with current viewer count in descending order', async () => {
 
-            const expected = '70323'; // Fortnite Id
+            const expected = 70323; // Fortnite Id
 
             const result = await fetcher.fetchByGameId(expected);
 

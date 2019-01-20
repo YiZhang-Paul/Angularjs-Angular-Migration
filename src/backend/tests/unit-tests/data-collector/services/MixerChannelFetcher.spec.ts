@@ -1,35 +1,24 @@
 import axios from 'axios';
 import { expect } from 'chai';
-import { Document } from 'mongoose';
-import { assert as sinonExpect, SinonStub, SinonStubbedInstance, stub } from 'sinon';
+import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
 import { createEmptyObjects } from '../../../genericTestUtilities';
-import IProviderRepository from '../../../../shared/repositories/IProviderRepository.interface';
-import { createProviderRepositoryStub } from '../../../stubs/IProviderRepository.stub';
 import MixerChannelFetcher from '../../../../data-collector/services/MixerChannelFetcher';
-import { createDocumentStub } from '../../../stubs/MongoDbDocument.stub';
 
 context('MixerChannelFetcher unit test', () => {
 
-    const gameId = '25';
-    const providerId = '3';
-    const searchApi = 'https://some/valid/api';
-    let document: SinonStubbedInstance<Document>;
     let data: any[];
     let getStub: SinonStub;
-    let repository: SinonStubbedInstance<IProviderRepository>;
+    let provider: { id: number; name: string; api: string };
     let fetcher: MixerChannelFetcher;
 
     beforeEach('test setup', () => {
 
-        const urls = { search_channel_url: searchApi };
-        document = createDocumentStub({ id: providerId, urls });
         data = createEmptyObjects(5);
-        data.forEach(_ => _.provider_id = providerId);
         getStub = stub(axios, 'get');
         getStub.resolves({ data });
-        repository = createProviderRepositoryStub(document);
-        fetcher = new MixerChannelFetcher(repository);
+        provider = { id: 2, name: 'valid_provider', api: 'valid_api' };
+        fetcher = new MixerChannelFetcher(provider);
     });
 
     afterEach('test teardown', () => {
@@ -39,25 +28,10 @@ context('MixerChannelFetcher unit test', () => {
 
     describe('fetch()', () => {
 
-        it('should retrieve provider', async () => {
-
-            await fetcher.fetch();
-
-            sinonExpect.calledOnce(repository.findByName);
-        });
-
-        it('should return empty collection when provider is not found', async () => {
-
-            repository.findByName.resolves(null);
-
-            const result = await fetcher.fetch();
-
-            expect(result).to.be.empty;
-        });
-
         it('should fetch data from correct url', async () => {
 
-            const expected = `${searchApi}?order=viewersCurrent:DESC&limit=50`;
+            const api = provider.api;
+            const expected = `${api}?order=viewersCurrent:DESC&limit=50`;
 
             await fetcher.fetch();
 
@@ -69,7 +43,7 @@ context('MixerChannelFetcher unit test', () => {
 
             const result = await fetcher.fetch();
 
-            expect(result).is.not.null;
+            expect(result).is.not.empty;
             expect(result).to.deep.equal(data);
         });
 
@@ -80,31 +54,76 @@ context('MixerChannelFetcher unit test', () => {
             const result = await fetcher.fetch();
 
             expect(result).to.be.empty;
+        });
+
+        it('should attach provider id to all fetched data', async () => {
+
+            const expected = provider.id;
+
+            const result = await fetcher.fetch();
+
+            expect(result).is.not.empty;
+            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
+        });
+    });
+
+    describe('fetchById()', () => {
+
+        const channelId = 20123;
+
+        beforeEach('test setup', () => {
+
+            getStub.resolves({ data: data[0] });
+        });
+
+        it('should fetch data from correct url', async () => {
+
+            const api = provider.api;
+            const expected = `${api}/${channelId}`;
+
+            await fetcher.fetchById(channelId);
+
+            sinonExpect.calledOnce(getStub);
+            sinonExpect.calledWith(getStub, expected);
+        });
+
+        it('should return data fetched', async () => {
+
+            const result = await fetcher.fetchById(channelId);
+
+            expect(result.length).to.equal(1);
+            expect(result).to.deep.equal(data.slice(0, 1));
+        });
+
+        it('should return empty collection when data fetch failed', async () => {
+
+            getStub.rejects(new Error());
+
+            const result = await fetcher.fetchById(channelId);
+
+            expect(result).to.be.empty;
+        });
+
+        it('should attach provider id to all fetched data', async () => {
+
+            const expected = provider.id;
+
+            const result = await fetcher.fetchById(channelId);
+
+            expect(result.length).to.equal(1);
+            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
         });
     });
 
     describe('fetchByGameId()', () => {
 
-        it('should retrieve provider', async () => {
-
-            await fetcher.fetchByGameId(gameId);
-
-            sinonExpect.calledOnce(repository.findByName);
-        });
-
-        it('should return empty collection when provider is not found', async () => {
-
-            repository.findByName.resolves(null);
-
-            const result = await fetcher.fetchByGameId(gameId);
-
-            expect(result).to.be.empty;
-        });
+        const gameId = 89;
 
         it('should fetch data from correct url', async () => {
 
+            const api = provider.api;
             const query = `?where=typeId:eq:${gameId}&order=viewersCurrent:DESC`;
-            const expected = `${searchApi}${query}`;
+            const expected = `${api}${query}`;
 
             await fetcher.fetchByGameId(gameId);
 
@@ -116,7 +135,7 @@ context('MixerChannelFetcher unit test', () => {
 
             const result = await fetcher.fetchByGameId(gameId);
 
-            expect(result).is.not.null;
+            expect(result).is.not.empty;
             expect(result).to.deep.equal(data);
         });
 
@@ -127,6 +146,16 @@ context('MixerChannelFetcher unit test', () => {
             const result = await fetcher.fetchByGameId(gameId);
 
             expect(result).to.be.empty;
+        });
+
+        it('should attach provider id to all fetched data', async () => {
+
+            const expected = provider.id;
+
+            const result = await fetcher.fetchByGameId(gameId);
+
+            expect(result).is.not.empty;
+            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
         });
     });
 });

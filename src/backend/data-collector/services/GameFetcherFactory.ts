@@ -2,9 +2,10 @@ import ProviderResolverFactory from '../../shared/services/ProviderResolverFacto
 
 import FetcherFactory from './FetcherFactory';
 import IGameFetcher from './IGameFetcher.interface';
+import IGameFetcherFactory from './IGameFetcherFactory.interface';
 import MixerGameFetcher from './MixerGameFetcher';
 
-export default class GameFetcherFactory extends FetcherFactory<IGameFetcher> {
+export default class GameFetcherFactory extends FetcherFactory<IGameFetcher> implements IGameFetcherFactory {
 
     constructor() {
 
