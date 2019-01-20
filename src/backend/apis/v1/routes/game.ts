@@ -1,15 +1,15 @@
 import { Request, Response, Router } from 'express';
 
-import gameDataCollectorPromise from '../../../data-collector/factories/game-data-collector-factory';
-import GameDataStorageManager from '../../../data-collector/services/game-data-storage-manager';
+import gameDataCollectorPromise from '../../../shared/services/data-collector/game-data-collector/game-data-collector.factory';
+import GameDataStorageManager from '../../../shared/services/data-storage-manager/game-data-storage-manager/game-data-storage-manager';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
 import MemoryDataStore from '../../../shared/services/data-store/memory-data-store/memory-data-store';
-import MongoDbGameDataStore from '../../../data-collector/services/mongodb-game-data-store';
+import PersistentDataStore from '../../../shared/services/data-store/persistent-data-store/persistent-data-store';
 
 const router = Router();
 const gameRepository = new GameRepositoryFactory().createRepository();
 const memoryStore = new MemoryDataStore();
-const persistentStore = new MongoDbGameDataStore(gameRepository);
+const persistentStore = new PersistentDataStore(gameRepository);
 const storageManager = new GameDataStorageManager(memoryStore, persistentStore);
 
 router.get('/', async (_: Request, res: Response) => {

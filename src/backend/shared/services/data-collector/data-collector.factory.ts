@@ -1,8 +1,8 @@
-import IDataFetcherFactory from '../../shared/services/data-fetcher/data-fetcher.factory.interface';
-import IDataFetcher from '../../shared/services/data-fetcher/data-fetcher.interface';
-import IDataReducer from '../services/data-reducer.interface';
-import IDataStorageManager from '../services/data-storage-manager.interface';
-import IProviderResolver from '../../shared/services/provider-resolver/provider-resolver.interface';
+import IDataFetcherFactory from '../data-fetcher/data-fetcher.factory.interface';
+import IDataFetcher from '../data-fetcher/data-fetcher.interface';
+import IDataReducer from '../data-reducer/data-reducer.interface';
+import IDataStorageManager from '../data-storage-manager/data-storage-manager.interface';
+import IProviderResolver from '../provider-resolver/provider-resolver.interface';
 
 export default abstract class DataCollectorFactory<T extends IDataFetcher> {
 

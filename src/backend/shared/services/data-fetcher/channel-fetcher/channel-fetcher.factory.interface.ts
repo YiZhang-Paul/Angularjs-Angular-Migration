@@ -1,4 +1,4 @@
-import IDataFetcherFactory from '../../shared/services/data-fetcher/data-fetcher.factory.interface';
+import IDataFetcherFactory from '../data-fetcher.factory.interface';
 
 import IChannelFetcher from './channel-fetcher.interface';
 

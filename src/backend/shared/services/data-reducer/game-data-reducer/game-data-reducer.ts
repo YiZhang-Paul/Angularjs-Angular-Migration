@@ -1,13 +1,12 @@
-// TODO: restructure into component based
-import IDataReducer from './data-reducer.interface';
-import IReducibleGameDataAdapter from './reducible-game-data-adapter.interface';
-import IReducibleGameData from './reducible-game-data.interface';
+import IDataReducer from '../data-reducer.interface';
+import IGameDataAdapter from '../../data-adapter/game-data-adapter/game-data-adapter.interface';
+import IReducibleGameData from '../../data-adapter/game-data-adapter/reducible-game-data.interface';
 
 export default class GameDataReducer implements IDataReducer {
 
-    private _adapter: IReducibleGameDataAdapter;
+    private _adapter: IGameDataAdapter;
 
-    constructor(adapter: IReducibleGameDataAdapter) {
+    constructor(adapter: IGameDataAdapter) {
 
         this._adapter = adapter;
     }

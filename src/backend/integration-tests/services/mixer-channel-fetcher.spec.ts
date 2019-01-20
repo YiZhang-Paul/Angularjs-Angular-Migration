@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import ChannelFetcherFactory from '../../data-collector/services/channel-fetcher-factory';
-import IChannelFetcher from '../../data-collector/services/channel-fetcher.interface';
+import ChannelFetcherFactory from '../../shared/services/data-fetcher/channel-fetcher/channel-fetcher.factory';
+import IChannelFetcher from '../../shared/services/data-fetcher/channel-fetcher/channel-fetcher.interface';
 import { isDescendingOrder } from '../../shared/test-utilities/generic-test-utilities';
-import MixerChannelFetcher from '../../data-collector/services/mixer-channel-fetcher';
+import MixerChannelFetcher from '../../data-collector/services/mixer-channel-fetcher/mixer-channel-fetcher';
 
 context('MixerChannelFetcher integration test', () => {
 

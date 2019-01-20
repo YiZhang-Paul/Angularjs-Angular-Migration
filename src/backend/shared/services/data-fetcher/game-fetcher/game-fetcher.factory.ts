@@ -1,9 +1,9 @@
-import DataFetcherFactory from '../../shared/services/data-fetcher/data-fetcher.factory';
-import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
+import DataFetcherFactory from '../data-fetcher.factory';
+import MixerGameFetcher from '../../../../data-collector/services/mixer-game-fetcher/mixer-game-fetcher';
+import ProviderResolverFactory from '../../provider-resolver/provider-resolver.factory';
 
-import IGameFetcherFactory from './game-fetcher-factory.interface';
+import IGameFetcherFactory from './game-fetcher.factory.interface';
 import IGameFetcher from './game-fetcher.interface';
-import MixerGameFetcher from './mixer-game-fetcher';
 
 export default class GameFetcherFactory extends DataFetcherFactory<IGameFetcher> implements IGameFetcherFactory {
 

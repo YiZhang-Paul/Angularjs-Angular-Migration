@@ -1,9 +1,9 @@
-import DataFetcherFactory from '../../shared/services/data-fetcher/data-fetcher.factory';
-import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
+import DataFetcherFactory from '../data-fetcher.factory';
+import MixerChannelFetcher from '../../../../data-collector/services/mixer-channel-fetcher/mixer-channel-fetcher';
+import ProviderResolverFactory from '../../provider-resolver/provider-resolver.factory';
 
-import IChannelFetcherFactory from './channel-fetcher-factory.interface';
+import IChannelFetcherFactory from './channel-fetcher.factory.interface';
 import IChannelFetcher from './channel-fetcher.interface';
-import MixerChannelFetcher from './mixer-channel-fetcher';
 
 export default class ChannelFetcherFactory extends DataFetcherFactory<IChannelFetcher> implements IChannelFetcherFactory {
 

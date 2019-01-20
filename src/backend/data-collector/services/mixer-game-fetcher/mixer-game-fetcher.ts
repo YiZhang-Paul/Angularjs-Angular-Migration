@@ -1,6 +1,5 @@
-import DataFetcher from '../../shared/services/data-fetcher/data-fetcher';
-
-import IGameFetcher from './game-fetcher.interface';
+import DataFetcher from '../../../shared/services/data-fetcher/data-fetcher';
+import IGameFetcher from '../../../shared/services/data-fetcher/game-fetcher/game-fetcher.interface';
 
 export default class MixerGameFetcher extends DataFetcher implements IGameFetcher {
 

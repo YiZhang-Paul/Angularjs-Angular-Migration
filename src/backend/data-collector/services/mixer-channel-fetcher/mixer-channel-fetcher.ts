@@ -1,6 +1,5 @@
-import DataFetcher from '../../shared/services/data-fetcher/data-fetcher';
-
-import IChannelFetcher from './channel-fetcher.interface';
+import IChannelFetcher from '../../../shared/services/data-fetcher/channel-fetcher/channel-fetcher.interface';
+import DataFetcher from '../../../shared/services/data-fetcher/data-fetcher';
 
 export default class MixerChannelFetcher extends DataFetcher implements IChannelFetcher {
 

@@ -3,10 +3,10 @@ import Express = require('express');
 import { Request, Response } from 'Express';
 import mongoose = require('mongoose');
 
+import gameDataCollectorPromise from '../shared/services/data-collector/game-data-collector/game-data-collector.factory';
 import { connectMongoose } from '../mongo-database';
 import '../redis-database';
 
-import gameDataCollectorPromise from './factories/game-data-collector-factory';
 import './initializer';
 
 const app = Express();

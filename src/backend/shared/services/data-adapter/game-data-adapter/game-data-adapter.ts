@@ -1,13 +1,13 @@
 import config = require('config');
 
-import DataAdapter from '../../shared/services/data-adapter/data-adapter';
+import DataAdapter from '../data-adapter';
 
-import IReducibleGameDataAdapter from './reducible-game-data-adapter.interface';
+import IGameDataAdapter from './game-data-adapter.interface';
 import IReducibleGameData from './reducible-game-data.interface';
 
 type KeyMapping = { source: string; target: string };
 
-export default class GameDataAdapter extends DataAdapter implements IReducibleGameDataAdapter {
+export default class GameDataAdapter extends DataAdapter implements IGameDataAdapter {
 
     private getMappings(groups: string[]): KeyMapping[] {
 

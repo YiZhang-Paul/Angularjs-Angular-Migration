@@ -12,23 +12,23 @@ import UniqueIdDocumentGenerator from './unique-id-document-generator';
 context('UniqueIdDocumentGenerator unit test', () => {
 
     const id = '29';
-    let generator: SinonStubbedInstance<IIdGenerator>;
-    let factory: UniqueIdDocumentGenerator;
+    let idGenerator: SinonStubbedInstance<IIdGenerator>;
+    let documentGenerator: UniqueIdDocumentGenerator;
 
     beforeEach('test setup', () => {
 
-        generator = createIdGeneratorStub(TestModel, id);
-        factory = new UniqueIdDocumentGenerator(generator);
+        idGenerator = createIdGeneratorStub(TestModel, id);
+        documentGenerator = new UniqueIdDocumentGenerator(idGenerator);
     });
 
     describe('createDocument()', () => {
 
         it('should create document with id', async () => {
 
-            const result = await factory.createDocument({});
+            const result = await documentGenerator.createDocument({});
 
-            expect(getFieldString(result, generator.key)).to.equal(id);
-            sinonExpect.calledOnce(generator.generate);
+            expect(getFieldString(result, idGenerator.key)).to.equal(id);
+            sinonExpect.calledOnce(idGenerator.generate);
         });
     });
 
@@ -38,17 +38,17 @@ context('UniqueIdDocumentGenerator unit test', () => {
 
             const data = createEmptyObjects(4);
 
-            const result = await factory.createDocuments(data);
+            const result = await documentGenerator.createDocuments(data);
 
             expect(result).is.not.empty;
             expect(result.length).to.equal(data.length);
-            sinonExpect.callCount(generator.showNext, data.length);
-            sinonExpect.calledOnce(generator.generate);
+            sinonExpect.callCount(idGenerator.showNext, data.length);
+            sinonExpect.calledOnce(idGenerator.generate);
 
             result.forEach((_, index) => {
 
                 const expectedId = `${+id + index}`;
-                expect(getFieldString(_, generator.key)).to.equal(expectedId);
+                expect(getFieldString(_, idGenerator.key)).to.equal(expectedId);
             });
         });
     });

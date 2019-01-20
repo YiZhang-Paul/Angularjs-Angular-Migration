@@ -1,7 +1,6 @@
-import IMemoryDataStore from '../../shared/services/data-store/memory-data-store/memory-data-store.interface';
-import IPersistentDataStore from '../../shared/services/data-store/persistent-data-store.interface';
-
-import IDataStorageManager from './data-storage-manager.interface';
+import IDataStorageManager from '../data-storage-manager.interface';
+import IMemoryDataStore from '../../data-store/memory-data-store/memory-data-store.interface';
+import IPersistentDataStore from '../../data-store/persistent-data-store/persistent-data-store.interface';
 
 export default class GameDataStorageManager implements IDataStorageManager {
 

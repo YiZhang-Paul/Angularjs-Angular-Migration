@@ -1,4 +1,4 @@
-import IGameDataCollector from '../services/game-data-collector.interface';
+import IGameDataCollector from './game-data-collector.interface';
 
 export default interface IGameDataCollectorFactory {
 

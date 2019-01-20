@@ -1,9 +1,10 @@
 import { Document } from 'mongoose';
 
-import IGameRepository from '../../shared/repositories/game-repository/game-repository.interface';
-import IPersistentDataStore from '../../shared/services/data-store/persistent-data-store.interface';
+import IGameRepository from '../../../repositories/game-repository/game-repository.interface';
 
-export default class MongoDbGameDataStore implements IPersistentDataStore {
+import IPersistentDataStore from './persistent-data-store.interface';
+
+export default class PersistentDataStore implements IPersistentDataStore {
 
     private readonly _keys = 'search_api_keys';
     private _repository: IGameRepository;

@@ -2,16 +2,16 @@ import axios from 'axios';
 import { expect } from 'chai';
 import { assert as sinonExpect, SinonStub, stub } from 'sinon';
 
-import { createEmptyObjects } from '../../shared/test-utilities/generic-test-utilities';
+import { createEmptyObjects } from '../../../shared/test-utilities/generic-test-utilities';
 
-import MixerChannelFetcher from './mixer-channel-fetcher';
+import MixerGameFetcher from './mixer-game-fetcher';
 
-context('MixerChannelFetcher unit test', () => {
+context('MixerGameFetcher unit test', () => {
 
     let data: any[];
     let getStub: SinonStub;
     let provider: { id: number; name: string; api: string };
-    let fetcher: MixerChannelFetcher;
+    let fetcher: MixerGameFetcher;
 
     beforeEach('test setup', () => {
 
@@ -19,7 +19,7 @@ context('MixerChannelFetcher unit test', () => {
         getStub = stub(axios, 'get');
         getStub.resolves({ data });
         provider = { id: 2, name: 'valid_provider', api: 'valid_api' };
-        fetcher = new MixerChannelFetcher(provider);
+        fetcher = new MixerGameFetcher(provider);
     });
 
     afterEach('test teardown', () => {
@@ -70,7 +70,7 @@ context('MixerChannelFetcher unit test', () => {
 
     describe('fetchById()', () => {
 
-        const channelId = 20123;
+        const gameId = 70;
 
         beforeEach('test setup', () => {
 
@@ -79,10 +79,9 @@ context('MixerChannelFetcher unit test', () => {
 
         it('should fetch data from correct url', async () => {
 
-            const api = provider.api;
-            const expected = `${api}/${channelId}`;
+            const expected = `${provider.api}/${gameId}`;
 
-            await fetcher.fetchById(channelId);
+            await fetcher.fetchById(gameId);
 
             sinonExpect.calledOnce(getStub);
             sinonExpect.calledWith(getStub, expected);
@@ -90,7 +89,7 @@ context('MixerChannelFetcher unit test', () => {
 
         it('should return data fetched', async () => {
 
-            const result = await fetcher.fetchById(channelId);
+            const result = await fetcher.fetchById(gameId);
 
             expect(result.length).to.equal(1);
             expect(result).to.deep.equal(data.slice(0, 1));
@@ -100,7 +99,7 @@ context('MixerChannelFetcher unit test', () => {
 
             getStub.rejects(new Error());
 
-            const result = await fetcher.fetchById(channelId);
+            const result = await fetcher.fetchById(gameId);
 
             expect(result).to.be.empty;
         });
@@ -109,53 +108,9 @@ context('MixerChannelFetcher unit test', () => {
 
             const expected = provider.id;
 
-            const result = await fetcher.fetchById(channelId);
+            const result = await fetcher.fetchById(gameId);
 
             expect(result.length).to.equal(1);
-            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
-        });
-    });
-
-    describe('fetchByGameId()', () => {
-
-        const gameId = 89;
-
-        it('should fetch data from correct url', async () => {
-
-            const api = provider.api;
-            const query = `?where=typeId:eq:${gameId}&order=viewersCurrent:DESC`;
-            const expected = `${api}${query}`;
-
-            await fetcher.fetchByGameId(gameId);
-
-            sinonExpect.calledOnce(getStub);
-            sinonExpect.calledWith(getStub, expected);
-        });
-
-        it('should return data fetched', async () => {
-
-            const result = await fetcher.fetchByGameId(gameId);
-
-            expect(result).is.not.empty;
-            expect(result).to.deep.equal(data);
-        });
-
-        it('should return empty collection when data fetch failed', async () => {
-
-            getStub.rejects(new Error());
-
-            const result = await fetcher.fetchByGameId(gameId);
-
-            expect(result).to.be.empty;
-        });
-
-        it('should attach provider id to all fetched data', async () => {
-
-            const expected = provider.id;
-
-            const result = await fetcher.fetchByGameId(gameId);
-
-            expect(result).is.not.empty;
             expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
         });
     });

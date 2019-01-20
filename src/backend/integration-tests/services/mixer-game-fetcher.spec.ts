@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import GameFetcherFactory from '../../data-collector/services/game-fetcher-factory';
-import IGameFetcher from '../../data-collector/services/game-fetcher.interface';
+import GameFetcherFactory from '../../shared/services/data-fetcher/game-fetcher/game-fetcher.factory';
+import IGameFetcher from '../../shared/services/data-fetcher/game-fetcher/game-fetcher.interface';
 import { isDescendingOrder } from '../../shared/test-utilities/generic-test-utilities';
-import MixerGameFetcher from '../../data-collector/services/mixer-game-fetcher';
+import MixerGameFetcher from '../../data-collector/services/mixer-game-fetcher/mixer-game-fetcher';
 
 context('MixerGameFetcher integration test', () => {
 
