@@ -1,4 +1,4 @@
-import BatchFetcher from '../services/batch-fetcher';
+import BatchFetcher from '../../shared/services/batch-fetcher/batch-fetcher';
 import GameDataAdapter from '../services/game-data-adapter';
 import GameDataCollector from '../services/game-data-collector';
 import IGameDataCollector from '../services/game-data-collector.interface';
@@ -7,7 +7,7 @@ import GameDataStorageManager from '../services/game-data-storage-manager';
 import GameFetcherFactory from '../services/game-fetcher-factory';
 import IGameFetcher from '../services/game-fetcher.interface';
 import GameRepositoryFactory from '../../shared/repositories/game-repository/game-repository.factory';
-import MemoryDataStore from '../services/memory-data-store';
+import MemoryDataStore from '../../shared/services/data-store/memory-data-store/memory-data-store';
 import MongoDbGameDataStore from '../services/mongodb-game-data-store';
 import ProviderResolverFactory from '../../shared/services/provider-resolver/provider-resolver.factory';
 

@@ -1,10 +1,10 @@
 import http from 'axios';
 
-import IFetcher from './fetcher.interface';
+import IDataFetcher from './data-fetcher.interface';
 
 type ProviderDetail = { id: number; name: string; api: string };
 
-export default abstract class Fetcher implements IFetcher {
+export default abstract class DataFetcher implements IDataFetcher {
 
     public readonly id: number;
     public readonly name: string;

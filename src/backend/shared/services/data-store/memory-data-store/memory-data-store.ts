@@ -1,4 +1,4 @@
-import { cache } from '../../redis-database';
+import { cache } from '../../../../redis-database';
 
 import IMemoryDataStore from './memory-data-store.interface';
 

@@ -1,4 +1,5 @@
-import IBatchFetcher from './batch-fetcher.interface';
+import IBatchFetcher from '../../shared/services/batch-fetcher/batch-fetcher.interface';
+
 import IDataReducer from './data-reducer.interface';
 import IDataStorageManager from './data-storage-manager.interface';
 import IGameDataCollector from './game-data-collector.interface';

@@ -1,6 +1,7 @@
 import config = require('config');
 
-import DataAdapter from './data-adapter';
+import DataAdapter from '../../shared/services/data-adapter/data-adapter';
+
 import IReducibleGameDataAdapter from './reducible-game-data-adapter.interface';
 import IReducibleGameData from './reducible-game-data.interface';
 

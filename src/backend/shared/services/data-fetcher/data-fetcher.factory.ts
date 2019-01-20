@@ -1,11 +1,11 @@
-import IProviderResolver from '../../shared/services/provider-resolver/provider-resolver.interface';
+import IProviderResolver from '../provider-resolver/provider-resolver.interface';
 
-import IFetcherFactory from './fetcher-factory.interface';
-import IFetcher from './fetcher.interface';
+import IDataFetcherFactory from './data-fetcher.factory.interface';
+import IDataFetcher from './data-fetcher.interface';
 
 type ProviderDetail = { id: number; name: string; api: string };
 
-export default abstract class FetcherFactory<T extends IFetcher> implements IFetcherFactory<T> {
+export default abstract class DataFetcherFactory<T extends IDataFetcher> implements IDataFetcherFactory<T> {
 
     protected _resolver: IProviderResolver;
 

@@ -1,9 +1,9 @@
-import IProviderResolver from '../../shared/services/provider-resolver/provider-resolver.interface';
+import IDataFetcher from '../data-fetcher/data-fetcher.interface';
+import IProviderResolver from '../provider-resolver/provider-resolver.interface';
 
 import IBatchFetcher from './batch-fetcher.interface';
-import IFetcher from './fetcher.interface';
 
-export default class BatchFetcher<T extends IFetcher> implements IBatchFetcher {
+export default class BatchFetcher<T extends IDataFetcher> implements IBatchFetcher {
 
     private _fetchers: T[];
     private _resolver: IProviderResolver;

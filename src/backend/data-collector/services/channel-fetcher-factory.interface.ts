@@ -1,4 +1,5 @@
-import IChannelFetcher from './channel-fetcher.interface';
-import IFetcherFactory from './fetcher-factory.interface';
+import IDataFetcherFactory from '../../shared/services/data-fetcher/data-fetcher.factory.interface';
 
-export default interface IChannelFetcherFactory extends IFetcherFactory<IChannelFetcher> { }
+import IChannelFetcher from './channel-fetcher.interface';
+
+export default interface IChannelFetcherFactory extends IDataFetcherFactory<IChannelFetcher> { }

@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import gameDataCollectorPromise from '../../../data-collector/factories/game-data-collector-factory';
 import GameDataStorageManager from '../../../data-collector/services/game-data-storage-manager';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
-import MemoryDataStore from '../../../data-collector/services/memory-data-store';
+import MemoryDataStore from '../../../shared/services/data-store/memory-data-store/memory-data-store';
 import MongoDbGameDataStore from '../../../data-collector/services/mongodb-game-data-store';
 
 const router = Router();

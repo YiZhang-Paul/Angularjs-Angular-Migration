@@ -1,6 +1,7 @@
+import IMemoryDataStore from '../../shared/services/data-store/memory-data-store/memory-data-store.interface';
+import IPersistentDataStore from '../../shared/services/data-store/persistent-data-store.interface';
+
 import IDataStorageManager from './data-storage-manager.interface';
-import IMemoryDataStore from './memory-data-store.interface';
-import IPersistentDataStore from './persistent-data-store.interface';
 
 export default class GameDataStorageManager implements IDataStorageManager {
 
@@ -8,12 +9,7 @@ export default class GameDataStorageManager implements IDataStorageManager {
     private _persistentStore: IPersistentDataStore;
     private _memoryStore: IMemoryDataStore;
 
-    constructor(
-
-        memoryStore: IMemoryDataStore,
-        persistentStore: IPersistentDataStore
-
-    ) {
+    constructor(memoryStore: IMemoryDataStore, persistentStore: IPersistentDataStore) {
 
         this._memoryStore = memoryStore;
         this._persistentStore = persistentStore;

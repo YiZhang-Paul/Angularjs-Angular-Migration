@@ -1,7 +1,8 @@
-import Fetcher from './fetcher';
+import DataFetcher from '../../shared/services/data-fetcher/data-fetcher';
+
 import IGameFetcher from './game-fetcher.interface';
 
-export default class MixerGameFetcher extends Fetcher implements IGameFetcher {
+export default class MixerGameFetcher extends DataFetcher implements IGameFetcher {
 
     public async fetch(): Promise<any[]> {
 

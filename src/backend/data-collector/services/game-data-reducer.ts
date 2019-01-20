@@ -1,4 +1,4 @@
-// TODO: some of these services should be shared
+// TODO: restructure into component based
 import IDataReducer from './data-reducer.interface';
 import IReducibleGameDataAdapter from './reducible-game-data-adapter.interface';
 import IReducibleGameData from './reducible-game-data.interface';

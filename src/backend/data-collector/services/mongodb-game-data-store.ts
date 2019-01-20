@@ -1,8 +1,7 @@
 import { Document } from 'mongoose';
 
 import IGameRepository from '../../shared/repositories/game-repository/game-repository.interface';
-
-import IPersistentDataStore from './persistent-data-store.interface';
+import IPersistentDataStore from '../../shared/services/data-store/persistent-data-store.interface';
 
 export default class MongoDbGameDataStore implements IPersistentDataStore {
 

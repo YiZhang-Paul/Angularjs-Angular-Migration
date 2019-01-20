@@ -1,7 +1,8 @@
-import IChannelFetcher from './channel-fetcher.interface';
-import Fetcher from './fetcher';
+import DataFetcher from '../../shared/services/data-fetcher/data-fetcher';
 
-export default class MixerChannelFetcher extends Fetcher implements IChannelFetcher {
+import IChannelFetcher from './channel-fetcher.interface';
+
+export default class MixerChannelFetcher extends DataFetcher implements IChannelFetcher {
 
     public async fetch(): Promise<any[]> {
 

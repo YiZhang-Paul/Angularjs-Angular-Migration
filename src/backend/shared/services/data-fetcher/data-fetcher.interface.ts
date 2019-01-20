@@ -1,4 +1,4 @@
-export default interface IFetcher {
+export default interface IDataFetcher {
 
     readonly id: number;
     readonly name: string;
