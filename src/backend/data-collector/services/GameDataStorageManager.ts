@@ -4,15 +4,38 @@ import { cache } from '../../database';
 import IGameRepository from '../../shared/repositories/IGameRepository.interface';
 
 import IDataStorageManager from './IDataStorageManager.interface';
+import IMemoryDataStore from './IMemoryDataStore.interface';
 // TODO: extract to memory/persistent manager?
 export default class GameDataStorageManager implements IDataStorageManager {
 
     private readonly _cacheKey = 'games';
+    private _memoryStore: IMemoryDataStore;
     private _repository: IGameRepository;
 
-    constructor(repository: IGameRepository) {
+    constructor(memoryStore: IMemoryDataStore, repository: IGameRepository) {
 
+        this._memoryStore = memoryStore;
         this._repository = repository;
+    }
+
+    private excludeKeys(data: any[], excludes: string[]): any[] {
+
+        return data.map(_ => {
+
+            const json = JSON.stringify(_, (key, value) => {
+
+                return excludes.includes(key) ? undefined : value;
+            });
+
+            return JSON.parse(json);
+        });
+    }
+
+    private toObjects(documents: Document[]): any[] {
+
+        const objects = documents.map(_ => _.toObject());
+
+        return this.excludeKeys(objects, ['_id', '__v']);
     }
 
     private isDuplicate(object: any, objects: any[], key: string): boolean {
@@ -82,40 +105,11 @@ export default class GameDataStorageManager implements IDataStorageManager {
         return added;
     }
 
-    private excludeKeys(data: any[], excludes: string[]): any[] {
-
-        return data.map(_ => {
-
-            const json = JSON.stringify(_, (key, value) => {
-
-                return excludes.includes(key) ? undefined : value;
-            });
-
-            return JSON.parse(json);
-        });
-    }
-
     public async addToMemory(data: any[]): Promise<any[]> {
 
-        data = this.excludeKeys(data, ['_id', '__v']);
-        const jsonData = JSON.stringify(data);
+        const excluded = this.excludeKeys(data, ['_id', '__v']);
 
-        cache.set(this._cacheKey, jsonData, error => {
-
-            if (error) {
-
-                throw error;
-            }
-        });
-
-        return data;
-    }
-
-    private toObjects(documents: Document[]): any[] {
-
-        const objects = documents.map(_ => _.toObject());
-
-        return this.excludeKeys(objects, ['_id', '__v']);
+        return this._memoryStore.set(this._cacheKey, excluded);
     }
 
     public async getFromPersistent(): Promise<any[]> {
@@ -127,17 +121,6 @@ export default class GameDataStorageManager implements IDataStorageManager {
 
     public async getFromMemory(): Promise<any[]> {
 
-        return new Promise<any>((resolve, reject) => {
-
-            cache.get(this._cacheKey, (error, data) => {
-
-                if (error) {
-
-                    reject(error);
-                }
-
-                resolve(JSON.parse(data));
-            });
-        });
+        return this._memoryStore.get(this._cacheKey);
     }
 }

@@ -50,7 +50,7 @@ context('MixerGameFetcher integration test', () => {
             const result = await fetcher.fetchById(expected);
 
             expect(result.length).to.equal(1);
-            expect(result[0]['id']).to.equal(expected);
+            expect(+result[0]['id']).to.equal(expected);
         });
     });
 });
