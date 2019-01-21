@@ -3,14 +3,26 @@ import IDataAdapter from './data-adapter.interface';
 type KeyMapping = { source: string; target: string; delimiter?: string };
 
 export default abstract class DataAdapter implements IDataAdapter {
-    // TODO: allow nested
+
+    protected readValue(object: any, keys: string[]): any {
+
+        if (object === undefined || !keys.length) {
+
+            return object;
+        }
+
+        return this.readValue(object[keys[0]], keys.slice(1));
+    }
+
     protected applyMapping(from: any, to: any, mapping: KeyMapping): any {
 
-        const { source, target } = mapping;
+        const { source, target, delimiter } = mapping;
+        const keys = delimiter ? source.split(delimiter) : [source];
+        const value = this.readValue(from, keys);
 
-        if (!to.hasOwnProperty(target) && from.hasOwnProperty(source)) {
+        if (!to.hasOwnProperty(target) && value !== undefined) {
 
-            to[target] = from[source];
+            to[target] = value;
         }
 
         return to;

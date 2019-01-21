@@ -39,3 +39,5 @@ export class ChannelDataCollectorFactory extends DataCollectorFactory<IChannelFe
         );
     }
 }
+
+export default new ChannelDataCollectorFactory().createChannelCollector();

@@ -33,7 +33,7 @@ export default class ChannelDataCollector implements IChannelDataCollector {
         await this._storageManager.addToMemory(data, key);
 
         console.log(data);
-        console.log(data.length);
+        console.log(`channels: ${data.length}`);
     }
 
     public async collectByGameId(id: number): Promise<void> {

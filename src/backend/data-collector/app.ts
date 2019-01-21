@@ -26,7 +26,6 @@ setInterval(async () => {
     const gameDataCollector = await gameDataCollectorPromise;
 
     await gameDataCollector.collect();
-    await gameDataCollector.collectById(80);
 
     await mongoose.disconnect();
 
