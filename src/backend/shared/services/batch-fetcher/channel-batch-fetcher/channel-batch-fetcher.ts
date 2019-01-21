@@ -4,15 +4,19 @@ import IChannelFetcher from '../../data-fetcher/channel-fetcher/channel-fetcher.
 export default class ChannelBatchFetcher extends BatchFetcher<IChannelFetcher> {
 
     public async batchFetchByGameId(id: number): Promise<any[]> {
-        // TODO: extract ids and names into table in base class?
+
+        await this.updateResolvedIds(id);
+
         const data: any[] = [];
 
         for (const fetcher of this._fetchers) {
 
-            const provider = fetcher.name;
-            const gameId = await this._resolver.resolveGameId(provider, id);
+            const resolved = this.getResolvedId(fetcher, id);
 
-            data.push(...await fetcher.fetchByGameId(gameId));
+            if (resolved) {
+
+                data.push(...await fetcher.fetchByGameId(resolved));
+            }
         }
 
         return data;
