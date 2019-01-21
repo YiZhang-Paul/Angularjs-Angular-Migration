@@ -15,27 +15,23 @@ export class GameDataCollectorFactory extends DataCollectorFactory<IGameFetcher>
 
     constructor() {
 
-        const adapter = new GameDataAdapter();
-
         super(
 
             new GameFetcherFactory(),
-            new ProviderResolverFactory().createResolver(),
-            new GameDataReducer(adapter),
-            new GameDataStorageManagerFactory().createStorageManager()
+            new ProviderResolverFactory().createResolver()
         );
     }
 
     public async createGameCollector(): Promise<IGameDataCollector> {
 
         const fetchers = await this.createFetchers();
-        const batchFetcher = new BatchFetcher(fetchers, this._resolver);
+        const adapter = new GameDataAdapter();
 
         return new GameDataCollector(
 
-            batchFetcher,
-            this._reducer,
-            this._storageManager
+            new BatchFetcher(fetchers, this._resolver),
+            new GameDataReducer(adapter),
+            new GameDataStorageManagerFactory().createStorageManager()
         );
     }
 }
