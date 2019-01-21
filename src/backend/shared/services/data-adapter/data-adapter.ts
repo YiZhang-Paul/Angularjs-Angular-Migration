@@ -1,8 +1,26 @@
 import IDataAdapter from './data-adapter.interface';
+import IDataKeyMapping from './data-key-mapping.interface';
 
-type KeyMapping = { source: string; target: string; delimiter?: string };
+export default abstract class DataAdapter<T> implements IDataAdapter {
 
-export default abstract class DataAdapter implements IDataAdapter {
+    protected _rules: any;
+
+    constructor(rules: any) {
+
+        this._rules = rules;
+    }
+
+    protected getMappings(groups: string[]): IDataKeyMapping[] {
+
+        const mappings: IDataKeyMapping[] = [];
+
+        for (const group of groups) {
+
+            mappings.push(...this._rules[group]);
+        }
+
+        return mappings;
+    }
 
     protected readValue(object: any, keys: string[]): any {
 
@@ -14,7 +32,7 @@ export default abstract class DataAdapter implements IDataAdapter {
         return this.readValue(object[keys[0]], keys.slice(1));
     }
 
-    protected applyMapping(from: any, to: any, mapping: KeyMapping): any {
+    protected applyMapping(from: any, to: any, mapping: IDataKeyMapping): any {
 
         const { source, target, delimiter } = mapping;
         const keys = delimiter ? source.split(delimiter) : [source];
@@ -28,7 +46,7 @@ export default abstract class DataAdapter implements IDataAdapter {
         return to;
     }
 
-    protected applyMappings(from: any, to: any, mappings: KeyMapping[]): any {
+    protected applyMappings(from: any, to: any, mappings: IDataKeyMapping[]): any {
 
         for (const mapping of mappings) {
 
@@ -38,5 +56,10 @@ export default abstract class DataAdapter implements IDataAdapter {
         return to;
     }
 
-    public abstract convert(data: any): any;
+    public convert(data: any): T {
+
+        const mappings = this.getMappings(['general', 'mixer']);
+
+        return this.applyMappings(data, {}, mappings) as T;
+    }
 }
