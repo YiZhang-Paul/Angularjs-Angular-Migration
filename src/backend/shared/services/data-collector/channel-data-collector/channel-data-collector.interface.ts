@@ -1,4 +1,4 @@
 export default interface IChannelDataCollector {
 
-    collectByGameId(id: number): Promise<void>;
+    collectByGameId(id: number): Promise<any[]>;
 }
