@@ -97,10 +97,9 @@ api/v1/games/:id
     (1). GET - retrieve details of particular game (name, view count, genre, channels, etc) (200 OK/404 Not Found)
     (2). otherwise - 405 Method Not Allowed
 
-api/v1/channels
-    (1). GET - retrieve list of live channels (200 OK)
-    (2). GET ?gameId=[integer] - id to retrieve live channels relate to a particular game
-    (3). otherwise - 405 Method Not Allowed
+api/v1/games/:id/channels
+    (1). GET - retrieve live channels for particular game (200 OK/404 Not Found)
+    (2). otherwise - 405 Method Not Allowed
 
 api/v1/user - needs authentication (except for POST)
     (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
