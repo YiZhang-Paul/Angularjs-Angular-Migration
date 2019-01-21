@@ -1,9 +1,9 @@
 import IDataAdapter from './data-adapter.interface';
 
-type KeyMapping = { source: string; target: string };
+type KeyMapping = { source: string; target: string; delimiter?: string };
 
 export default abstract class DataAdapter implements IDataAdapter {
-
+    // TODO: allow nested
     protected applyMapping(from: any, to: any, mapping: KeyMapping): any {
 
         const { source, target } = mapping;

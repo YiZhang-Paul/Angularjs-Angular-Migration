@@ -28,15 +28,31 @@
         }
     },
     "data_mappings": {
-        "general": [
-            { "source": "provider_id", "target": "provider_id" }
-        ],
-        "mixer": [
-            { "source": "name", "target": "name" },
-            { "source": "id", "target": "provider_game_id" },
-            { "source": "name", "target": "provider_game_name" },
-            { "source": "coverUrl", "target": "image" },
-            { "source": "viewersCurrent", "target": "view_count" }
-        ]
+        "games": {
+            "general": [
+                { "source": "provider_id", "target": "provider_id" }
+            ],
+            "mixer": [
+                { "source": "name", "target": "name" },
+                { "source": "id", "target": "provider_game_id" },
+                { "source": "name", "target": "provider_game_name" },
+                { "source": "coverUrl", "target": "image" },
+                { "source": "viewersCurrent", "target": "view_count" }
+            ]
+        },
+        "channels": {
+            "general": [
+                { "source": "provider_id", "target": "provider_id" }
+            ],
+            "mixer": [
+                { "source": "id", "target": "provider_channel_id" },
+                { "source": "name", "target": "title" },
+                { "source": "user.username", "target": "streamer_name", "delimiter": "." },
+                { "source": "type.id", "target": "game_id", "delimiter": "." },
+                { "source": "type.name", "target": "game_name", "delimiter": "." },
+                { "source": "user.avatarUrl", "target": "image", "delimiter": "." },
+                { "source": "viewersCurrent", "target": "view_count" }
+            ]
+        }
     }
 }
