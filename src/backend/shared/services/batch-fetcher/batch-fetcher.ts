@@ -5,8 +5,8 @@ import IBatchFetcher from './batch-fetcher.interface';
 
 export default class BatchFetcher<T extends IDataFetcher> implements IBatchFetcher {
 
-    private _fetchers: T[];
-    private _resolver: IProviderResolver;
+    protected _fetchers: T[];
+    protected _resolver: IProviderResolver;
 
     constructor(fetchers: T[], resolver: IProviderResolver) {
 
