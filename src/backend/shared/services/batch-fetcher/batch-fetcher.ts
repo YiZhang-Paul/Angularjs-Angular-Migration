@@ -26,7 +26,7 @@ export default class BatchFetcher<T extends IDataFetcher> implements IBatchFetch
         return data;
     }
 
-    public async batchFetchById(id: number): Promise<any[]> {
+    public async batchFetchByGameId(id: number): Promise<any[]> {
 
         const data: any[] = [];
 
