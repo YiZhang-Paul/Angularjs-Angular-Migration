@@ -10,7 +10,7 @@ export default class ChannelDataStorageManager implements IDataStorageManager {
 
         this._memoryStore = memoryStore;
     }
-
+    // TODO: redesign data store manager or break down interfaces
     public async addToPersistent(data: any[]): Promise<any[]> {
 
         return this.addToMemory(data);

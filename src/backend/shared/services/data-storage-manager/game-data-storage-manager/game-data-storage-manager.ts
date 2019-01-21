@@ -13,7 +13,7 @@ export default class GameDataStorageManager implements IDataStorageManager {
         this._memoryStore = memoryStore;
         this._persistentStore = persistentStore;
     }
-
+    // TODO: extract to base class?
     public async addToPersistent(data: any[]): Promise<any[]> {
 
         return this._persistentStore.set(data);

@@ -5,7 +5,7 @@ import IDataStorageManager from '../../data-storage-manager/data-storage-manager
 import IGameDataCollector from './game-data-collector.interface';
 
 export default class GameDataCollector implements IGameDataCollector {
-
+    // TODO: extract out a base class?
     private _fetcher: IBatchFetcher;
     private _reducer: IDataReducer;
     private _storageManager: IDataStorageManager;
