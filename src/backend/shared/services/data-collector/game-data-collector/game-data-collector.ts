@@ -32,9 +32,6 @@ export default class GameDataCollector implements IGameDataCollector {
 
         const saved = await this._storageManager.addToPersistent(data);
         await this._storageManager.addToMemory(saved, key);
-
-        //console.log(saved);
-        console.log(saved.length);
     }
 
     public async collect(): Promise<void> {

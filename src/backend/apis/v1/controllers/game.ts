@@ -60,6 +60,35 @@ export class GameController {
         return result && result.length ? result[0] : null;
     }
 
+    private attachGameId(data: any[], id: number): any[] {
+
+        return data.map(_ => {
+
+            _['game_id'] = id;
+
+            return _;
+        });
+    }
+
+    private async getCachedChannels(key: string): Promise<any[]> {
+
+        const result = await this._storage.getFromMemory(key);
+
+        return result && result.length ? result : [];
+    }
+
+    private async getCollectedChannels(id: number, key: string): Promise<any[]> {
+
+        await this.loadChannelCollector(this._channelCollectorPromise);
+
+        if (this._channelCollector) {
+
+            await this._channelCollector.collectByGameId(id);
+        }
+
+        return this.getCachedChannels(key);
+    }
+
     public async getGames(): Promise<any[]> {
 
         return this._storage.getFromMemory();
@@ -75,42 +104,18 @@ export class GameController {
     public async getChannelsByGameId(id: number): Promise<any[]> {
 
         const key = `games/${id}/channels`;
-        const cached = await this._storage.getFromMemory(key);
+        const cached = await this.getCachedChannels(key);
 
-        if (cached && cached.length) {
+        const result = cached && cached.length ?
+            cached : await this.getCollectedChannels(id, key);
 
-            return cached.map(_ => {
-
-                _['game_id'] = id;
-
-                return _;
-            });
-        }
-
-        await this.loadChannelCollector(this._channelCollectorPromise);
-
-        if (this._channelCollector) {
-
-            await this._channelCollector.collectByGameId(id);
-        }
-
-        const result = await this._storage.getFromMemory(key);
-
-        return result && result.length ? result.map(_ => {
-
-            _['game_id'] = id;
-
-            return _;
-
-        }) : [];
+        return this.attachGameId(result, id);
     }
 }
 
-const storageManager = new GameDataStorageManagerFactory().createStorageManager();
-
 export default new GameController(
 
-    storageManager,
+    new GameDataStorageManagerFactory().createStorageManager(),
     gameDataCollectorPromise,
     channelDataCollectorPromise
 );
