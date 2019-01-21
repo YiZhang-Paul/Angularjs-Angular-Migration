@@ -38,6 +38,28 @@ export class GameController {
         this._channelCollector = await collectorPromise;
     }
 
+    private attachChannelUrl(data: any): any {
+
+        const key = 'id';
+
+        if (data.hasOwnProperty(key)) {
+
+            data['channels'] = `api/v1/games/${data[key]}/channels`;
+        }
+
+        return data;
+    }
+
+    private attachGameId(data: any[], id: number): any[] {
+
+        return data.map(_ => {
+
+            _['game_id'] = id;
+
+            return _;
+        });
+    }
+
     private async getCachedGame(id: number): Promise<any | null> {
 
         const cached = await this.getGames();
@@ -58,16 +80,6 @@ export class GameController {
         const result = await this._storage.getFromMemory(`games/${id}`);
 
         return result && result.length ? result[0] : null;
-    }
-
-    private attachGameId(data: any[], id: number): any[] {
-
-        return data.map(_ => {
-
-            _['game_id'] = id;
-
-            return _;
-        });
     }
 
     private async getCachedChannels(key: string): Promise<any[]> {
@@ -91,14 +103,22 @@ export class GameController {
 
     public async getGames(): Promise<any[]> {
 
-        return this._storage.getFromMemory();
+        const games = await this._storage.getFromMemory();
+
+        if (Array.isArray(games)) {
+
+            return games.map(_ => this.attachChannelUrl(_));
+        }
+
+        return games;
     }
 
     public async getGameById(id: number): Promise<any | null> {
 
         const cached = await this.getCachedGame(id);
+        const result = cached ? cached : await this.getCollectedGame(id);
 
-        return cached ? cached : this.getCollectedGame(id);
+        return result ? this.attachChannelUrl(result) : null;
     }
 
     public async getChannelsByGameId(id: number): Promise<any[]> {
