@@ -32,7 +32,7 @@ context('MixerChannelFetcher unit test', () => {
         it('should fetch data from correct url', async () => {
 
             const api = provider.api;
-            const expected = `${api}?order=viewersCurrent:DESC&limit=50`;
+            const expected = `${api}?order=viewersCurrent:DESC&limit=80`;
 
             await fetcher.fetch();
 

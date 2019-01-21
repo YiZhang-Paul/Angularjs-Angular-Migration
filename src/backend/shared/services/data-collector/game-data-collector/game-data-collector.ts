@@ -12,19 +12,18 @@ export default class GameDataCollector implements IGameDataCollector {
 
     constructor(
 
-        batchFetcher: IBatchFetcher,
+        fetcher: IBatchFetcher,
         reducer: IDataReducer,
         storageManager: IDataStorageManager
 
     ) {
-        this._fetcher = batchFetcher;
+
+        this._fetcher = fetcher;
         this._reducer = reducer;
         this._storageManager = storageManager;
     }
 
-    private sortByViews(data: any[]): any[] {
-
-        const key = 'view_count';
+    private sortByViews(data: any[], key: string): any[] {
 
         return data.slice().sort((a, b) => +b[key] - +a[key]);
     }
@@ -33,9 +32,6 @@ export default class GameDataCollector implements IGameDataCollector {
 
         const saved = await this._storageManager.addToPersistent(data);
         await this._storageManager.addToMemory(saved, key);
-
-        console.log(saved);
-        console.log(saved.length);
     }
 
     public async collect(): Promise<void> {
@@ -43,12 +39,12 @@ export default class GameDataCollector implements IGameDataCollector {
         const data = await this._fetcher.batchFetch();
         const reduced = this._reducer.reduce(data);
 
-        await this.addToStorage(this.sortByViews(reduced));
+        await this.addToStorage(this.sortByViews(reduced, 'view_count'));
     }
 
     public async collectById(id: number): Promise<void> {
 
-        const data = await this._fetcher.batchFetchById(id);
+        const data = await this._fetcher.batchFetchByGameId(id);
         const reduced = this._reducer.reduce(data);
 
         await this.addToStorage(reduced.slice(0, 1), `games/${id}`);

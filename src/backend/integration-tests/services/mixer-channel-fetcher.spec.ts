@@ -36,7 +36,7 @@ context('MixerChannelFetcher integration test', () => {
 
             const result = await fetcher.fetch();
 
-            expect(result.length).to.equal(50);
+            expect(result.length).to.equal(80);
             expect(isDescendingOrder(result, 'viewersCurrent')).to.be.true;
         });
     });

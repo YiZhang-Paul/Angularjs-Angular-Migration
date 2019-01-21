@@ -4,7 +4,7 @@ import IMemoryDataStore from './memory-data-store.interface';
 
 export default class MemoryDataStore implements IMemoryDataStore {
 
-    public async set(data: any[], key: string): Promise<any[]> {
+    public async set(data: any[], key: string, expire?: number): Promise<any[]> {
 
         const json = JSON.stringify(data);
 
@@ -15,6 +15,11 @@ export default class MemoryDataStore implements IMemoryDataStore {
                 throw error;
             }
         });
+
+        if (expire) {
+
+            cache.expire(key, expire);
+        }
 
         return data;
     }
