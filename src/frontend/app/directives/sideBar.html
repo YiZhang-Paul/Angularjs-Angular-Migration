@@ -1,0 +1,32 @@
+<style>
+    #wrapper {
+        color: white;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #wrapper ul {
+
+        margin: 0;
+        padding: 0;
+    }
+
+    #wrapper ul > li {
+
+        color: rgb(180, 180, 180);
+        text-align: left;
+        font-size: 0.88em;
+    }
+</style>
+
+<div id="wrapper">
+    <ul>
+        <li class="side-bar-option" ng-repeat="option in options">
+            {{ option }}
+        </li>
+    </ul>
+</div>

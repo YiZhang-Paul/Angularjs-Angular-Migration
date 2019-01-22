@@ -1,15 +1,35 @@
 var app = angular.module('migration-sample-app', ['ui.router'])
-    .config(['$stateProvider', '$locationProvider',
-    function($stateProvider, $locationProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
+    function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider
             .state('index', {
                 url: '/',
-                template: '<h3>Index Page</h3> <a ui-sref="games">Games</a>'
+                redirectTo: 'games'
             })
             .state('games', {
                 url: '/games',
-                template: '<h3>Games Page</h3> <a ui-sref="index">index</a>'
+                templateUrl: './views/main.html'
+            })
+            .state('error', {
+                url: '/error',
+                templateUrl: './views/error.html'
             })
 
+        $urlRouterProvider.otherwise('/error');
         $locationProvider.html5Mode(true);
+    }]);
+
+app.controller('GameListController', ['$scope', 'gameService',
+    function ($scope, gameService) {
+
+        $scope.games = [];
+
+        var interval = setInterval(function() {
+            gameService.getGameList().then(function(data) {
+                $scope.games = data;
+                },
+                function(err) {
+                    console.log(err);
+                });
+        }, 10000);
     }]);

@@ -17,8 +17,6 @@ app.get('/*', (_: Request, res: Response) => {
     res.sendFile(index);
 });
 
-app.get('*', (_: Request, res: Response) => res.sendStatus(404));
-
 app.listen(port, () => {
 
     console.log(`Server started listening on port ${port}.`);
