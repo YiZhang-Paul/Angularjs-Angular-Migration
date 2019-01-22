@@ -3,83 +3,105 @@ A: provide one single place to view, search and manage live stream channels from
 
 Q: what are the main features of the application?
 A: there are five main features:
-    1. user authentication (no sign up)
-        (1). users can login using username/password
+
+    1. user authentication (no sign-up)
+
+        (1). users can login through Okta Hosted Authentication
         (2). users can login through Google/Twitch/Mixer (OAuth 2.0)
+
     2. display available live streams
+
         (1). display available games
         (2). display available channels for each game
+        (3). users can bookmark/follow channels through channels view
+
     3. search live streams
+
         (1). search by game
+
     4. view history
+
         (1). list view histories of users
         (2). users can delete histories
         (3). users can bookmark/follow channels through view histories
+
     5. bookmark/follow channels
-        (1). users can bookmark/follow channels
-        (2). users can remove bookmarked/followed channels
+
+        (1). users can remove bookmarked/followed channels
+
+Q: which portion will be written in Angular 2+ (hybrid)?
+A: user authentication (login page, user widget and token handling) and search box will be written in Angular 2+.
 
 Q: which portion will be written in AngularJs?
-A: anything other than user login will be written in AngularJs.
+A: anything that is not written in Angular 2+.
 
-Q: which portion will be written in Angular 2+?
-A: anything that is not written with AngularJs.
-
-Q: what runs on the back-end?
+Q: what runs on the backend?
 A: express.js backed with Redis and MongoDB (using mongoose).
 
 Q: which third-party apis are used by the application?
-A: (1). Twitch API: https://dev.twitch.tv/docs/api/reference/
-   (2). Mixer API: https://dev.mixer.com/rest/index.html
+A: (1). Mixer: https://dev.mixer.com/rest/index.html
+   (2). Twitch: https://dev.twitch.tv/docs/api/reference/
 
-Other notes:
+Design notes:
 
 1. data flow:
 
     user hits landing page
-        fetch game lists and view count
+        fetch games and view count
         display games
 
     user clicks login
-        show login page with options to login through Google/Twitch/Mixer or username/password
+        redirect to login page
+            if login success
+                redirect to previous page
+            otherwise
+                redirect back to login page and display error message
 
     user searches a game in search box
         suggested games appear as user types
 
-    user clicks a game through browse games page or search box
+    user clicks a game through main page or result drop-down on search box
         fetch channels and view count
-        show channels
+        display channels
 
     user clicks on view history tab
-        show view histories with options to follow channel and remove history
+        display view histories with options to follow channel and remove history
 
     user clicks on bookmark tab
-        show bookmarked/followed channels with their status (live/offline)
+        display bookmarked/followed channels with status (live/offline)
 
-2. authentication
+2. authentication:
 
-(1). on first request - client side must send login credentials (username/password; oauth-2 credentials)
-(2). server receives credentials and authenticate
-    if succeed
-        create a JWT and send it back to client side with response
-    else
-        redirect to login and display error message
-(3). client side receives JWT and stores it in local storage
-(4). client side sends JWT with every request to server
-(5). server verifies JWT
-    if JWT is valid
-        process request
-    else
-        return error
+    client side must send login credentials on first request
 
-3. entities/models - format: name (fields in models) & (fields added on the fly)
+    server receives credentials and authenticate
+        if authenticate success
+            issue a JWT access token and send it back to client side in response
+        otherwise
+            include error in response
 
-game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }]) & (image, view count)
-channel (id, provider_id, provider_channel_id) & (title, streamer_name, game_id, game_name, image, view count)
-user (id, name, view_histories : url, bookmarks : url, keywords : [{ date, game_searches : [{ game_id, count }] }])
-view_history (id, channel_id, title, streamer_name, game_id, game_name, image) & (is_live)
-bookmark (id, channel_id, title, streamer_name) & (is_live)
-------- (hidden below)
+    client side receives JWT and stores it in local storage/cookie
+
+    client side must include JWT with every request to server
+
+    server receives and verifies JWT
+        if verification success
+            authorize user
+                if authorization success
+                    process request
+                otherwise
+                    return error
+        otherwise
+            return error
+
+3. models: model_name (model fields) + (fields added on the fly)
+
+bookmark (id, channel_id, title, streamer_name) + (is_live)
+channel (id, provider_id, provider_channel_id) + (title, streamer_name, provider_game_id, provider_game_name, image, view_count)
+game (id, name, search_api_keys : [{ provider_id, provider_game_id, provider_game_name }]) + (image, view_count, channels : url)
+user (id, name, view_histories : url, bookmarks : url)
+view_history (id, channel_id, title, streamer_name, game_id, game_name, image) + (is_live)
+------- (visible to admin only)
 account (id, role, username, password, email, oauth_provider, oauth_identifier)
 provider (id, name, urls : { site_url, search_game_url, search_channel_url })
 
@@ -90,15 +112,15 @@ api/v1/authenticate
     (2). otherwise - 405 Method Not Allowed
 
 api/v1/games
-    (1). GET - retrieve list of all games (200 OK)
+    (1). GET - retrieve top 50 games with highest view count (200 OK)
     (2). otherwise - 405 Method Not Allowed
 
 api/v1/games/:id
-    (1). GET - retrieve details of particular game (name, view count, genre, channels, etc) (200 OK/404 Not Found)
+    (1). GET - retrieve details of specified game (200 OK/404 Not Found)
     (2). otherwise - 405 Method Not Allowed
 
 api/v1/games/:id/channels
-    (1). GET - retrieve live channels for particular game (200 OK/404 Not Found)
+    (1). GET - retrieve live channels for specified game (200 OK/404 Not Found)
     (2). otherwise - 405 Method Not Allowed
 
 api/v1/user - needs authentication (except for POST)
