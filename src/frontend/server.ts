@@ -10,6 +10,13 @@ app.disable('x-powered-by');
 
 app.use(Express.static(path.join(__dirname, 'app')));
 
+app.get('/*', (_: Request, res: Response) => {
+
+    const index = path.join(__dirname, 'app', 'index.html');
+
+    res.sendFile(index);
+});
+
 app.get('*', (_: Request, res: Response) => res.sendStatus(404));
 
 app.listen(port, () => {
