@@ -29,4 +29,4 @@ setInterval(async () => {
 
     await mongoose.disconnect();
 
-}, 3 * 60 * 1000);
+}, 1.5 * 60 * 1000);
