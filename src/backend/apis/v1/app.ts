@@ -1,4 +1,5 @@
 import config = require('config');
+import cors = require('cors');
 import Express = require('express');
 import { Request, Response } from 'express';
 
@@ -13,15 +14,9 @@ const rootUrl = config.get<string>('root_url');
 
 app.disable('x-powered-by');
 
+app.use(cors());
+
 app.get('/', (_: Request, res: Response) => res.redirect(rootUrl));
-
-app.use((_: Request, res: Response, next) => {
-    // TODO: use cors
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
-    next();
-});
 
 app.use(rootUrl, routes.index);
 app.use(`${rootUrl}/games`, routes.game);
