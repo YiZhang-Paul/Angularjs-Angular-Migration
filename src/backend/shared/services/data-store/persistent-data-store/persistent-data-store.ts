@@ -98,7 +98,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
             }
         }
 
-        return results;
+        return this.excludeKeys(results, ['_id', '__v']);
     }
 
     public async get(): Promise<any[]> {

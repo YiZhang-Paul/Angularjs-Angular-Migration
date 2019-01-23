@@ -79,8 +79,9 @@ html, body {
 
 .channel-card {
 
-    margin-left: 0.1vw;
-    margin-right: 0.75vw;
+    margin-left: 0;
+    margin-right: 1vw;
+    margin-top: 0.5vh;
     width: 16vw;
     height: 24vh;
 }
