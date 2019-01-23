@@ -60,17 +60,29 @@ html, body {
     font-weight: 500;
     font-size: 0.9em;
     position: relative;
-    width: 8vw;
-    height: 22vh;
     margin: 1.5vw;
-    margin-left: 0.6vw;
-    margin-right: 0.7vw;
     border-radius: 6px;
     overflow: hidden;
-    background-color: rgb(92, 68, 133);
+    background-color: rgb(68, 68, 68);
     -webkit-box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
     box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
+}
+
+.game-card {
+
+    margin-left: 0.6vw;
+    margin-right: 0.7vw;
+    width: 8vw;
+    height: 21.5vh;
+}
+
+.channel-card {
+
+    margin-left: 0.1vw;
+    margin-right: 0.75vw;
+    width: 16vw;
+    height: 24vh;
 }
 
 .game-card:hover, .channel-card:hover {
@@ -79,11 +91,6 @@ html, body {
     -webkit-box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
     -moz-box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
     box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
-}
-
-.game-card:hover .name-tag a, .channel-card:hover .name-tag a {
-
-    color: rgb(180, 180, 180);
 }
 
 .game-card .game-image, .channel-card .channel-image {
@@ -100,34 +107,78 @@ html, body {
 
     position: absolute;
     width: 100%;
-    height: 20%;
+    height: 22%;
     bottom: 0;
 }
 
-.name-tag > a {
+.channel-card .stream-thumbnail {
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: white;
-    white-space: nowrap;
-    text-decoration: none;
-    width: calc(100% - 8px);
-    display: block;
     position: absolute;
-    bottom: 75%;
-    left: 8px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+}
+
+.channel-card .stream-thumbnail:hover {
+
+    cursor: pointer;
+}
+
+.channel-card .channel-image {
+
+    background-color: aliceblue;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
+    width: 2.5vw;
+    height: 2.5vw;
+    left: 6px;
+    bottom: 6px;
+}
+
+.channel-card .name-tag {
+
+    font-size: 0.85em;
+    left: 2.8vw;
+    width: 13vw;
+    height: 24%;
 }
 
 .name-tag > span {
 
-    font-weight: 600;
+    font-size: 1.1em;
+    font-weight: 500;
     display: block;
     position: absolute;
-    bottom: 20%;
     left: 11px;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.name-tag > span:before {
+.game-card .view-count {
+
+    font-size: 0.85em;
+    left: 10px;
+    bottom: 5px;
+}
+
+.channel-card .view-count {
+
+    color: tomato;
+    display: block;
+    position: absolute;
+    font-size: 1.2em;
+    font-weight: 600;
+    left: 10px;
+    top: 5px;
+    z-index: 1;
+}
+
+.view-count:before {
 
     content: "";
     display: block;

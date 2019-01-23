@@ -14,8 +14,17 @@ angular.module('migration-sample-app')
                 $scope.channels = $stateParams.channels;
             }
 
+            $scope.playThumbnail = function (video) {
+                video.srcElement.play();
+            }
+
+            $scope.stopThumbnail = function(video) {
+                video.srcElement.pause();
+                video.srcElement.currentTime = 0;
+            }
+
             var refreshChannels = function() {
-                $http.get('http://127.0.0.1:4150/api/v1/games/' + $stateParams.gameId + "/channels")
+                $http.get('http://127.0.0.1:4150/api/v1/games/' + $scope.game.id + "/channels")
                     .then(function(data) {
                         var length = Math.min($scope.channels.length, data.data.length);
                         for (var i = 0; i < length; i++) {
