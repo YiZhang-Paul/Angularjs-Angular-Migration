@@ -7,21 +7,22 @@ html, body {
 
 .top-nav {
 
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 8%;
+    height: 5%;
 }
 
 .side-bar {
 
+    position: absolute;
     background-color: rgb(17, 17, 17);
-    color: white;
-    position: relative;
     left: 0;
+    top: 5%;
+    color: white;
     width: 12.5%;
-    height: 100%;
+    height: 95%;
 }
 
 .side-bar-option {
@@ -37,9 +38,103 @@ html, body {
 
 .main-content {
 
+    padding-left: 1.5%;
+    padding-top: 5%;
+    position: absolute;
+    left: 12.5%;
+    top: 5%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 86%;
+    height: 85%;
+    overflow-y: auto;
+}
+
+.game-card {
+
+    color: white;
+    font-weight: 500;
+    font-size: 0.9em;
     position: relative;
+    width: 10%;
+    height: 27%;
+    margin: 1.5% auto;
+    margin-right: 1%;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: rgb(72, 63, 88);
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
+    box-shadow: 2px 3px 12px 1px rgba(0,0,0,0.75);
+}
+
+.game-card:hover {
+
+    color: rgb(180, 180, 180);
+    -webkit-box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
+    -moz-box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
+    box-shadow: 2px 3px 12px 2px rgba(0,0,0,0.85);
+}
+
+.game-card:hover .name-tag a {
+
+    color: rgb(180, 180, 180);
+}
+
+.game-card .game-image {
+
+    background-position: center top;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 80%;
+}
+
+.game-card .name-tag {
+
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    bottom: 0;
+}
+
+.name-tag > a {
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+    white-space: nowrap;
+    text-decoration: none;
+    width: calc(100% - 8px);
+    display: block;
+    position: absolute;
+    bottom: 75%;
+    left: 8px;
+}
+
+.name-tag > span {
+
+    font-weight: 600;
+    display: block;
+    position: absolute;
+    bottom: 20%;
+    left: 11px;
+}
+
+.name-tag > span:before {
+
+    content: "";
+    display: block;
+    background: url(https://au.kg/images/eye.png) no-repeat;
+    width: 17px;
+    height: 16px;
+    margin-top: 1px;
+    margin-right: 3px;
+    float: left;
+    background-size: cover;
+    background-position: center;
 }
 
 .page-not-found {

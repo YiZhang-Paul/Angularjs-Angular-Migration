@@ -24,12 +24,13 @@ app.controller('GameListController', ['$scope', 'gameService',
 
         $scope.games = [];
 
-        var interval = setInterval(function() {
+        var interval = setInterval(function loadGames() {
             gameService.getGameList().then(function(data) {
                 $scope.games = data;
                 },
                 function(err) {
                     console.log(err);
                 });
-        }, 10000);
+                return loadGames;
+        }(), 10000);
     }]);
