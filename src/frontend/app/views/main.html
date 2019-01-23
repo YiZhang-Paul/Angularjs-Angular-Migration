@@ -7,7 +7,7 @@
             <side-bar></side-bar>
         </div>
         <div class="main-content" ng-controller="GameListController">
-            <div class="game-card" ng-repeat="game in games">
+            <div class="game-card" ng-repeat="game in games" ng-click="getChannels(game)">
                 <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
                 <div class="name-tag">
                     <a href="#">{{ game.name | capitalize: ['the', 'of'] }}</a>

@@ -1,0 +1,34 @@
+<style>
+    .view-updated {
+        color: tomato;
+    }
+</style>
+
+<div class="container" position="relative" width="100%" height="100%">
+    <div class="top-nav">
+        <div top-nav-bar></div>
+    </div>
+    <div position="relative" width="100%" height="100%">
+        <div class="side-bar" ng-controller="SideBarController">
+            <side-bar></side-bar>
+        </div>
+    </div>
+    <div class="main-content channel-display" ng-controller="ChannelController">
+        <div class="game-cover-wrapper">
+            <div ng-show="game" class="game-card">
+                <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
+            </div>
+            <div class="game-info">
+                <span class="title">{{ game.name | capitalize: ['the', 'of'] }}</span></br></br>
+                <div class="views">{{ game.view_count + ' watching' }}</div>
+            </div>
+        </div>
+        <div class="channel-card" ng-repeat="channel in channels">
+            <div class="channel-image" ng-style="channel.image && { 'background-image': 'url(' + channel.image + ')' }"></div>
+            <div class="name-tag">
+                <span>{{ channel.name }}</span>
+                <span ng-class="{ 'view-updated': channel.updated }">{{ channel.view_count }}</span>
+            </div>
+        </div>
+    </div>
+</div>
