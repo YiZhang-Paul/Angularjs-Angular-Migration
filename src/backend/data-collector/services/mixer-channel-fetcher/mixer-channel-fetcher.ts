@@ -16,7 +16,13 @@ export default class MixerChannelFetcher extends DataFetcher implements IChannel
     public async fetchByGameId(id: number): Promise<any[]> {
 
         const filter = `?where=typeId:eq:${id}`;
+        const data = await this.fetchData(`${filter}&order=viewersCurrent:DESC`);
 
-        return this.fetchData(`${filter}&order=viewersCurrent:DESC`);
+        for (const _ of data) {
+
+            _['thumbnail'] = `https://thumbs.mixer.com/channel/${_['id']}.m4v`;
+        }
+
+        return data;
     }
 }

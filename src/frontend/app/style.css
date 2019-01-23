@@ -153,8 +153,8 @@ html, body {
 
 .main-content.channel-display > div:first-child .game-card {
 
-    width: 8%;
-    height: 80%;
+    width: 9%;
+    height: 75%;
     margin: 0;
     position: absolute;
     left: 0;
@@ -171,7 +171,7 @@ html, body {
     position: absolute;
     color: black;
     top: 10%;
-    left: 9.5%;
+    left: 10.5%;
 }
 
 .game-cover-wrapper > .game-info > .title {

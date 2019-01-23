@@ -51,7 +51,8 @@
                 { "source": "type.id", "target": "provider_game_id", "delimiter": "." },
                 { "source": "type.name", "target": "provider_game_name", "delimiter": "." },
                 { "source": "user.avatarUrl", "target": "image", "delimiter": "." },
-                { "source": "viewersCurrent", "target": "view_count" }
+                { "source": "viewersCurrent", "target": "view_count" },
+                { "source": "thumbnail", "target": "thumbnail" }
             ]
         }
     }
