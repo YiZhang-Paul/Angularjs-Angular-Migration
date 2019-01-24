@@ -1,26 +1,14 @@
 import config = require('config');
 import { Request, Response, Router } from 'express';
 import { body, check, validationResult } from 'express-validator/check';
-import { Document } from 'mongoose';
 
-import AccountRepositoryFactory from '../../../shared/repositories/account-repository/account-repository.factory';
 import FakeAuthenticator from '../authentication/fake-authenticator';
-import KeyRemover from '../../../shared/services/key-remover/key-remover';
-import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
+import services from '../services';
 
 const router = Router();
 const rootUrl = config.get<string>('root_url');
-const accountRepository = new AccountRepositoryFactory().createRepository();
-const userRepository = new UserRepositoryFactory().createRepository();
+const service = services.user;
 const authenticator = new FakeAuthenticator();
-const keyRemover = new KeyRemover();
-
-function toObjects(documents: Document[]): any[] {
-
-    const objects = documents.map(_ => _.toObject());
-
-    return keyRemover.remove(objects, ['_id', '__v']);
-}
 
 router.get('/', async (req: Request, res: Response) => {
 
@@ -31,14 +19,14 @@ router.get('/', async (req: Request, res: Response) => {
         return res.sendStatus(status);
     }
 
-    const result = await userRepository.findById(+req.body['id']);
+    const result = service.getUser(+req.body['id']);
 
     if (!result) {
 
         return res.sendStatus(404);
     }
 
-    res.status(200).send(toObjects([result])[0]);
+    res.status(200).send(result);
 });
 
 router.post('/', [
@@ -48,64 +36,42 @@ router.post('/', [
 
 ], async (req: Request, res: Response) => {
 
-    if (validationResult(req).isEmpty()) {
+    const error = validationResult(req);
 
-        const accountId = +req.body['account_id'];
-        const account = await accountRepository.findById(accountId);
+    if (!error.isEmpty()) {
 
-        if (account) {
-
-            const user = await userRepository.findByAccountId(accountId);
-
-            if (!user) {
-
-                const result = await userRepository.insertOne({
-
-                    account_id: accountId,
-                    name: req.body['name'],
-                    view_histories: `http://127.0.0.1:4150${rootUrl}/user/histories`,
-                    bookmarks: `http://127.0.0.1:4150${rootUrl}/user/bookmarks`
-                });
-
-                if (result) {
-
-                    return res.sendStatus(201);
-                }
-            }
-        }
+        return res.sendStatus(400);
     }
 
-    res.sendStatus(400);
+    const accountId = +req.body['account_id'];
+    const name = req.body['name'];
+    const baseUrl = `http://127.0.0.1:4150${rootUrl}/user`;
+    const result = await service.createUser(accountId, { name, baseUrl });
+
+    res.sendStatus(result ? 201 : 400);
 });
 
 router.put('/', [
 
-    body('name')
-        .not()
-        .isEmpty()
-        .isLength({ min: 4 })
-        .trim()
-        .escape()
+    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()
 
-    ], async (req: Request, res: Response) => {
+], async (req: Request, res: Response) => {
 
     const error = validationResult(req);
     const status = error.isEmpty() ? authenticator.authenticate(req) : 400;
+    const { id, name } = req.body;
 
     if (status !== 200) {
 
         return res.sendStatus(status);
     }
 
-    const { id, name } = req.body;
-    const user = await userRepository.findById(+id);
-
-    if (!user) {
+    if (!await service.hasUser(id)) {
 
         return res.sendStatus(404);
     }
 
-    const result = await userRepository.updateOne({ name }, { id });
+    const result = await service.updateUser(id, { name });
 
     res.sendStatus(result ? 204 : 400);
 });
