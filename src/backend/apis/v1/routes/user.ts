@@ -114,11 +114,52 @@ router.post('/', [
     res.sendStatus(400);
 });
 
+router.put('/', [body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()], async (req: Request, res: Response) => {
+
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
+
+    if (!fakeAuthenticate(req)) {
+
+        return res.sendStatus(401);
+    }
+
+    if (isNaN(req.body['id'])) {
+
+        req.body['id'] = -1;
+    }
+
+    const id = +req.body['id'];
+
+    if (id < 0 || id > 3) {
+
+        return res.sendStatus(403);
+    }
+
+    const user = await userRepository.findById(id);
+
+    if (!user) {
+
+        return res.sendStatus(404);
+    }
+
+    const result = await userRepository.updateOne({ name: req.body['name'] }, { id });
+
+    if (!result) {
+
+        return res.sendStatus(400);
+    }
+
+    res.sendStatus(204);
+});
+
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
-
-//     (3). PUT - update user record (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
 
 // api/v1/user - needs authentication (except for POST)
 //     (1). GET - retrieve user record (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
