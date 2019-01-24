@@ -1,8 +1,7 @@
 {
     "port": {
         "collector": "5150",
-        "api": "4150",
-        "server": "3150"
+        "api": "4150"
     },
     "database": {
         "host": "ds163689.mlab.com:63689",

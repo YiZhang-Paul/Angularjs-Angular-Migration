@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
 
-import controllers from '../controllers';
+import services from '../services';
 
 const router = Router();
-const controller = controllers.game;
+const service = services.game;
 
 const root = '/';
 const gameById = '/:id';
@@ -11,13 +11,13 @@ const channelsByGameId = `${gameById}/channels`;
 
 router.get(root, async (_: Request, res: Response) => {
 
-    res.status(200).send(await controller.getGames());
+    res.status(200).send(await service.getGames());
 });
-
+// TODO: add controllers later
 router.get(gameById, async (req: Request, res: Response) => {
 
     const id = +req.params['id'];
-    const game = await controller.getGameById(id);
+    const game = await service.getGameById(id);
 
     if (!game) {
 
@@ -30,7 +30,7 @@ router.get(gameById, async (req: Request, res: Response) => {
 router.get(channelsByGameId, async (req: Request, res: Response) => {
 
     const id = +req.params['id'];
-    const channels = await controller.getChannelsByGameId(id);
+    const channels = await service.getChannelsByGameId(id);
 
     if (!channels.length) {
 

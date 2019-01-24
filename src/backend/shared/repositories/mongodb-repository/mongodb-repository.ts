@@ -35,7 +35,7 @@ export default abstract class MongoDbRepository implements IRepository {
         throw new Error('not supported');
     }
 
-    public findById(_id: string): Promise<Document | null> {
+    public findById<T = string>(_id: T): Promise<Document | null> {
 
         throw new Error('not supported');
     }

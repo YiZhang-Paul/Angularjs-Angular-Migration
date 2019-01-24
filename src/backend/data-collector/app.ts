@@ -28,5 +28,5 @@ setInterval(async () => {
     await gameDataCollector.collect();
 
     await mongoose.disconnect();
-
-}, 3 * 60 * 1000);
+    // TODO: move these into configuration
+}, 1.5 * 60 * 1000);
