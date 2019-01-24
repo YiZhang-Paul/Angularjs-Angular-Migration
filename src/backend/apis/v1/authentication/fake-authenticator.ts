@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 const header = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 const payload = 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ';
@@ -35,4 +35,18 @@ export default class FakeAuthenticator {
 
         return id < 0 || id > 3 ? 403 : 200;
     }
+}
+
+const authenticator = new FakeAuthenticator();
+
+export function authenticate(request: Request, response: Response, next: Function) {
+
+    const status = authenticator.authenticate(request);
+
+    if (status !== 200) {
+
+        return response.sendStatus(status);
+    }
+
+    next();
 }

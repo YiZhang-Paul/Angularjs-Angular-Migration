@@ -3,6 +3,7 @@ import { verifyCastError, verifyCustomError, verifyValidationError } from '../..
 import ViewHistoryModel from './view-history-model';
 
 const idField = 'id';
+const userIdField = 'user_id';
 const channelIdField = 'channel_id';
 const titleField = 'title';
 const streamerNameField = 'streamer_name';
@@ -41,6 +42,38 @@ context('View History model unit test', () => {
             const model = new ViewHistoryModel({ [idField]: '-1' });
 
             await verifyValidationError(model, idField, 'min');
+        });
+    });
+
+    describe(`${userIdField}`, () => {
+
+        it('should be required', async () => {
+
+            const model = new ViewHistoryModel();
+
+            await verifyValidationError(model, userIdField, 'required');
+        });
+
+        it('should be a number', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: 'not_a_number' });
+
+            await verifyCastError(model, userIdField);
+        });
+
+        it('should be an integer', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: '55.5' });
+            const errorMessage = `${userIdField} must be an integer.`;
+
+            await verifyCustomError(model, userIdField, errorMessage);
+        });
+
+        it('should be larger than or equal to 0', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: '-1' });
+
+            await verifyValidationError(model, userIdField, 'min');
         });
     });
 

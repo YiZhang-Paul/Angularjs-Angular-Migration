@@ -48,6 +48,16 @@ export class UserService {
         return !!user;
     }
 
+    private async isValidAccountId(id: number): Promise<boolean> {
+
+        if (!await this.hasAccount(id)) {
+
+            return false;
+        }
+
+        return !await this.hasAssociatedUser(id);
+    }
+
     private async insertUser(accountId: number, data: any): Promise<any> {
 
         return this._userRepository.insertOne({
@@ -82,7 +92,7 @@ export class UserService {
 
     public async createUser(accountId: number, data: any): Promise<any> {
 
-        if (!this.hasAccount(accountId) || this.hasAssociatedUser(accountId)) {
+        if (!await this.isValidAccountId(accountId)) {
 
             return null;
         }

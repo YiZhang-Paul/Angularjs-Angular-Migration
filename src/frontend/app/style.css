@@ -86,6 +86,11 @@ html, body {
     height: 24vh;
 }
 
+.game-card:hover {
+
+    cursor: pointer;
+}
+
 .game-card:hover, .channel-card:hover {
 
     color: rgb(180, 180, 180);

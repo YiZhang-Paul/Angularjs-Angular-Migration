@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 
 import gameRouter from './game';
 import userRouter from './user';
+import viewHistoryRouter from './view-history';
 
 const router = Router();
 
@@ -11,5 +12,6 @@ export default {
 
     index: router,
     game: gameRouter,
-    user: userRouter
+    user: userRouter,
+    viewHistory: viewHistoryRouter
 };
