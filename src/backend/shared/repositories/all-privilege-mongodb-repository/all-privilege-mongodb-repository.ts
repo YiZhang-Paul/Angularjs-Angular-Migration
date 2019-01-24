@@ -66,7 +66,7 @@ export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
         return query;
     }
 
-    public async findById(id: string): Promise<Document | null> {
+    public async findById<T = string>(id: T): Promise<Document | null> {
 
         return this.findOne({ id });
     }

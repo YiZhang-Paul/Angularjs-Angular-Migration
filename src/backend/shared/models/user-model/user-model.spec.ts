@@ -5,6 +5,7 @@ import { getField, verifyCastError, verifyCustomError, verifyValidationError } f
 import UserModel from './user-model';
 
 const userIdField = 'id';
+const accountIdField = 'account_id';
 const nameField = 'name';
 const viewHistoriesField = 'view_histories';
 const bookmarksField = 'bookmarks';
@@ -45,6 +46,38 @@ context('User model unit test', () => {
             const model = new UserModel({ [userIdField]: '-1' });
 
             await verifyValidationError(model, userIdField, 'min');
+        });
+    });
+
+    describe(`${accountIdField}`, () => {
+
+        it('should be required', async () => {
+
+            const model = new UserModel();
+
+            await verifyValidationError(model, accountIdField, 'required');
+        });
+
+        it('should be a number', async () => {
+
+            const model = new UserModel({ [accountIdField]: 'not_a_number' });
+
+            await verifyCastError(model, accountIdField);
+        });
+
+        it('should be an integer', async () => {
+
+            const model = new UserModel({ [accountIdField]: '55.5' });
+            const errorMessage = `${accountIdField} must be an integer.`;
+
+            await verifyCustomError(model, accountIdField, errorMessage);
+        });
+
+        it('should be larger than or equal to 0', async () => {
+
+            const model = new UserModel({ [accountIdField]: '-1' });
+
+            await verifyValidationError(model, accountIdField, 'min');
         });
     });
 

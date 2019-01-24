@@ -21,6 +21,7 @@ const KeywordSchema = new Schema({
 const UserSchema = new Schema({
 
     id: { type: Number, required: true, min: 0, validate: integerValidator },
+    account_id: { type: Number, required: true, min: 0, validate: integerValidator },
     name: { type: String, required: true, minlength: 4, maxlength: 40 },
     view_histories: { type: String, required: true, validate: urlValidator },
     bookmarks: { type: String, required: true, validate: urlValidator },
