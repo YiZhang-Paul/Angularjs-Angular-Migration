@@ -5,6 +5,7 @@ import { Document } from 'mongoose';
 
 import AccountRepositoryFactory from '../../../shared/repositories/account-repository/account-repository.factory';
 import FakeAuthenticator from '../authentication/fake-authenticator';
+import KeyRemover from '../../../shared/services/key-remover/key-remover';
 import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
 
 const router = Router();
@@ -12,25 +13,13 @@ const rootUrl = config.get<string>('root_url');
 const accountRepository = new AccountRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
 const authenticator = new FakeAuthenticator();
-// TODO: extract to class
-function excludeKeys(data: any[], excludes: string[]): any[] {
-
-    return data.map(_ => {
-
-        const json = JSON.stringify(_, (key, value) => {
-
-            return excludes.includes(key) ? undefined : value;
-        });
-
-        return JSON.parse(json);
-    });
-}
+const keyRemover = new KeyRemover();
 
 function toObjects(documents: Document[]): any[] {
 
     const objects = documents.map(_ => _.toObject());
 
-    return excludeKeys(objects, ['_id', '__v']);
+    return keyRemover.remove(objects, ['_id', '__v']);
 }
 
 router.get('/', async (req: Request, res: Response) => {
