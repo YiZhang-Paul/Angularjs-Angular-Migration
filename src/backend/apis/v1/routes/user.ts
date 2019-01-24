@@ -4,27 +4,14 @@ import { body, check, validationResult } from 'express-validator/check';
 import { Document } from 'mongoose';
 
 import AccountRepositoryFactory from '../../../shared/repositories/account-repository/account-repository.factory';
+import FakeAuthenticator from '../authentication/fake-authenticator';
 import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
 
 const router = Router();
 const rootUrl = config.get<string>('root_url');
 const accountRepository = new AccountRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
-
-// TODO: backdoor for testing purpose only
-function fakeAuthenticate(req: Request): boolean {
-
-    const bearer = req.headers['authorization'];
-
-    if (!bearer) {
-
-        return false;
-    }
-
-    const token = bearer.trim().replace(/^bearer\s*/ig, '');
-    // tslint:disable-next-line:max-line-length
-    return token === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-}
+const authenticator = new FakeAuthenticator();
 // TODO: extract to class
 function excludeKeys(data: any[], excludes: string[]): any[] {
 
@@ -48,24 +35,14 @@ function toObjects(documents: Document[]): any[] {
 
 router.get('/', async (req: Request, res: Response) => {
 
-    if (!fakeAuthenticate(req)) {
+    const status = await authenticator.authenticate(req);
 
-        return res.sendStatus(401);
+    if (status !== 200) {
+
+        return res.sendStatus(status);
     }
 
-    if (isNaN(req.body['id'])) {
-
-        req.body['id'] = -1;
-    }
-
-    const id = +req.body['id'];
-
-    if (id < 0 || id > 3) {
-
-        return res.sendStatus(403);
-    }
-
-    const result = await userRepository.findById(id);
+    const result = await userRepository.findById(+req.body['id']);
 
     if (!result) {
 
