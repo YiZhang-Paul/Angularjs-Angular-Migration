@@ -24,7 +24,7 @@ router.get('/', authenticate, async (req: Request, res: Response) => {
 router.post('/', [
 
     check('account_id').isInt({ min: 0 }),
-    body('name').trim().escape()
+    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()
 
 ], async (req: Request, res: Response) => {
 
