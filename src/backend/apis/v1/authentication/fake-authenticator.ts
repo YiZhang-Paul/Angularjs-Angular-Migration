@@ -19,7 +19,7 @@ export default class FakeAuthenticator {
         return header ? this.parseToken(header) === expectedToken : false;
     }
 
-    public async authenticate(request: Request): Promise<200 | 401 | 403> {
+    public authenticate(request: Request): 200 | 401 | 403 {
 
         if (!this.isAuthenticated(request)) {
 

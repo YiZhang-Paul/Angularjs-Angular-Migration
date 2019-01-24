@@ -35,7 +35,7 @@ function toObjects(documents: Document[]): any[] {
 
 router.get('/', async (req: Request, res: Response) => {
 
-    const status = await authenticator.authenticate(req);
+    const status = authenticator.authenticate(req);
 
     if (status !== 200) {
 
@@ -59,9 +59,7 @@ router.post('/', [
 
 ], async (req: Request, res: Response) => {
 
-    const error = validationResult(req);
-
-    if (error.isEmpty()) {
+    if (validationResult(req).isEmpty()) {
 
         const accountId = +req.body['account_id'];
         const account = await accountRepository.findById(accountId);
@@ -91,47 +89,36 @@ router.post('/', [
     res.sendStatus(400);
 });
 
-router.put('/', [body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()], async (req: Request, res: Response) => {
+router.put('/', [
+
+    body('name')
+        .not()
+        .isEmpty()
+        .isLength({ min: 4 })
+        .trim()
+        .escape()
+
+    ], async (req: Request, res: Response) => {
 
     const error = validationResult(req);
+    const status = error.isEmpty() ? authenticator.authenticate(req) : 400;
 
-    if (!error.isEmpty()) {
+    if (status !== 200) {
 
-        return res.sendStatus(400);
+        return res.sendStatus(status);
     }
 
-    if (!fakeAuthenticate(req)) {
-
-        return res.sendStatus(401);
-    }
-
-    if (isNaN(req.body['id'])) {
-
-        req.body['id'] = -1;
-    }
-
-    const id = +req.body['id'];
-
-    if (id < 0 || id > 3) {
-
-        return res.sendStatus(403);
-    }
-
-    const user = await userRepository.findById(id);
+    const { id, name } = req.body;
+    const user = await userRepository.findById(+id);
 
     if (!user) {
 
         return res.sendStatus(404);
     }
 
-    const result = await userRepository.updateOne({ name: req.body['name'] }, { id });
+    const result = await userRepository.updateOne({ name }, { id });
 
-    if (!result) {
-
-        return res.sendStatus(400);
-    }
-
-    res.sendStatus(204);
+    res.sendStatus(result ? 204 : 400);
 });
 
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
