@@ -4,12 +4,14 @@ import { body, check, validationResult } from 'express-validator/check';
 import ChannelRepositoryFactory from '../../../shared/repositories/channel-repository/channel-repository.factory';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
 import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
+import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
 import ViewHistoryRepositoryFactory from '../../../shared/repositories/view-history-repository/view-history-repository.factory';
 
 const router = Router();
 const providerRepository = new ProviderRepositoryFactory().createRepository();
 const channelRepository = new ChannelRepositoryFactory().createRepository();
 const gameRepository = new GameRepositoryFactory().createRepository();
+const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
 router.post('/', [
@@ -28,6 +30,13 @@ router.post('/', [
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
+
+    const user = await userRepository.findById(+req.body['user_id']);
+    // TODO: add to base repository?
+    if (!user) {
 
         return res.sendStatus(400);
     }
@@ -85,7 +94,25 @@ router.post('/', [
         return res.sendStatus(result ? 201 : 400);
     }
 
-    const result = await viewHistoryRepository.updateOne({}, { id: viewHistory.toObject()['id'] });
+    data = {
+
+        timestamp: new Date(),
+        game_id: +req.body['game_id'],
+        streamer_name: req.body['streamer_name'],
+        game_name: req.body['game_name']
+    };
+
+    if (req.body['title']) {
+
+        data['title'] = req.body['title'];
+    }
+
+    if (req.body['image']) {
+
+        data['image'] = req.body['image'];
+    }
+
+    const result = await viewHistoryRepository.updateOne(data, { id: viewHistory.toObject()['id'] });
 
     res.sendStatus(result ? 204 : 400);
 });

@@ -14,7 +14,8 @@ const ViewHistorySchema = new Schema({
     streamer_name: { type: String, maxlength: 50 },
     game_id: { type: Number, required: true, min: 0, validate: integerValidator },
     game_name: { type: String, required: true, maxlength: 100 },
-    image: { type: String, required: true, validate: urlValidator }
+    image: { type: String, required: true, validate: urlValidator },
+    timestamp: { type: Date, default: new Date() }
 });
 
 export default model('ViewHistory', ViewHistorySchema);
