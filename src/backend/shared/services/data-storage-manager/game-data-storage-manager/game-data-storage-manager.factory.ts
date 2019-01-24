@@ -1,6 +1,7 @@
 import IDataStorageManagerFactory from '../data-storage-manager.factory.interface';
 import IDataStorageManager from '../data-storage-manager.interface';
 import GameRepositoryFactory from '../../../repositories/game-repository/game-repository.factory';
+import KeyRemover from '../../key-remover/key-remover';
 import MemoryDataStore from '../../data-store/memory-data-store/memory-data-store';
 import PersistentDataStore from '../../data-store/persistent-data-store/persistent-data-store';
 
@@ -10,9 +11,10 @@ export default class GameDataStorageManagerFactory implements IDataStorageManage
 
     public createStorageManager(): IDataStorageManager {
 
-        const repository = new GameRepositoryFactory().createRepository();
         const memoryStore = new MemoryDataStore();
-        const persistentStore = new PersistentDataStore(repository);
+        const repository = new GameRepositoryFactory().createRepository();
+        const remover = new KeyRemover();
+        const persistentStore = new PersistentDataStore(repository, remover);
 
         return new GameDataStorageManager(memoryStore, persistentStore);
     }

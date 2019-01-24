@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
 
 import IGameRepository from '../../../repositories/game-repository/game-repository.interface';
+import IKeyRemover from '../../key-remover/key-remover.interface';
 
 import IPersistentDataStore from './persistent-data-store.interface';
 
@@ -8,10 +9,12 @@ export default class PersistentDataStore implements IPersistentDataStore {
 
     private readonly _keys = 'search_api_keys';
     private _repository: IGameRepository;
+    private _keyRemover: IKeyRemover;
 
-    constructor(repository: IGameRepository) {
+    constructor(repository: IGameRepository, keyRemover: IKeyRemover) {
 
         this._repository = repository;
+        this._keyRemover = keyRemover;
     }
 
     private hasDuplicate(object: any, objects: any[], key: string): boolean {
@@ -60,24 +63,11 @@ export default class PersistentDataStore implements IPersistentDataStore {
         return data;
     }
 
-    private excludeKeys(data: any[], excludes: string[]): any[] {
-
-        return data.map(_ => {
-
-            const json = JSON.stringify(_, (key, value) => {
-
-                return excludes.includes(key) ? undefined : value;
-            });
-
-            return JSON.parse(json);
-        });
-    }
-
     private toObjects(documents: Document[]): any[] {
 
         const objects = documents.map(_ => _.toObject());
 
-        return this.excludeKeys(objects, ['_id', '__v']);
+        return this._keyRemover.remove(objects, ['_id', '__v']);
     }
 
     public async set(data: any[]): Promise<any[]> {
@@ -98,7 +88,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
             }
         }
 
-        return this.excludeKeys(results, ['_id', '__v']);
+        return this._keyRemover.remove(results, ['_id', '__v']);
     }
 
     public async get(): Promise<any[]> {
