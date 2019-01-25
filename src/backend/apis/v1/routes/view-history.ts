@@ -209,12 +209,38 @@ router.get('/:id', authenticate('user_id'), [
     res.status(200).send(history.toObject());
 });
 
+router.delete('/:id', authenticate('user_id'), [
+
+    check('id').isInt({ min: 0 }),
+    check('user_id').isInt({ min: 0 })
+
+], async (req: Request, res: Response) => {
+
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
+
+    const id = +req.params['id'];
+    const userId = +req.body['user_id'];
+    const user = await userRepository.findById(userId);
+    // TODO: add to base repository?
+    if (!user) {
+
+        return res.sendStatus(404);
+    }
+
+    const result = await viewHistoryRepository.deleteOne({ id, user_id: userId });
+
+    res.sendStatus(result ? 204 : 404);
+});
+
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 router.all('/:id', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
-
-//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
 
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
