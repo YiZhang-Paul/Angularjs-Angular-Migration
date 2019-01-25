@@ -51,7 +51,8 @@ router.post('/', [
         gameName: req.body.game_name,
         streamerName: req.body.streamer_name,
         title: req.body.title || '',
-        image: req.body.image || ''
+        image: req.body.image || '',
+        thumbnail: req.body.thumbnail || ''
     };
 
     const status = await service.createHistory(data);

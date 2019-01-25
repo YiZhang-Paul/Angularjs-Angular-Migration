@@ -32,6 +32,7 @@
         top: 0;
         width: 30%;
         height: 100%;
+        object-fit: cover;
     }
 
     .history-avatar {
@@ -49,13 +50,6 @@
         top: 18px;
         width: 30vw;
         height: 4vw;
-    }
-
-    .remove-history-icon {
-
-        position: absolute;
-        right: 25px;
-        bottom: 15px;
     }
 
     .title {
@@ -77,6 +71,33 @@
         font-weight: 500;
         color: rgb(77, 77, 77);
     }
+
+    .remove-history-icon {
+
+        background-image: url(https://cdn1.iconfinder.com/data/icons/perfect-flat-icons-2/512/Erase-2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        width: 3.5vh;
+        height: 3.5vh;
+        right: 32px;
+        bottom: 20px;
+        border: 4px solid white;
+    }
+
+    .remove-history-icon:hover {
+
+        -webkit-box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
+        -moz-box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
+        box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
+    }
+
+    .remove-history-icon:active {
+
+        -webkit-box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
+        -moz-box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
+        box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
+    }
 </style>
 
 <div class="container" position="relative" width="100%" height="100%">
@@ -87,14 +108,15 @@
         <side-bar class="side-bar" hide-history="true"></side-bar>
         <div class="main-content history-panel" ng-controller="ViewHistoryController">
             <div class="history-card" ng-repeat="history in histories">
-                <div class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
+                <div ng-show="isStaticImage(history.thumbnail)" class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
+                <video ng-show="!isStaticImage(history.thumbnail)" class="history-thumbnail" ng-src="{{ history.thumbnail }}" type="video/mp4"></video>
                 <div class="history-avatar" ng-style="history.image && { 'background-image': 'url(' + history.image + ')' }"></div>
                 <div class="history-details">
                     <span class="title">{{ history.title }}</span></br></br>
                     <span class="streamer">{{ history.streamer_name }}</span> was playing:
                     <span class="game-title">{{ history.game_name | capitalize: ['the', 'of'] }}</span>
                 </div>
-                <div class="remove-history-icon">Remove</div>
+                <div class="remove-history-icon" ng-click="deleteHistory(history)"></div>
             </div>
         </div>
     </div>
