@@ -137,6 +137,21 @@ router.post('/', [
     res.sendStatus(result ? 204 : 400);
 });
 
+router.delete('/', [check('user_id').isInt({ min: 0 })], async (req: Request, res: Response) => {
+
+    const id = +req.body['user_id'];
+    const user = await userRepository.findById(id);
+    // TODO: add to base repository?
+    if (!user) {
+
+        return res.sendStatus(400);
+    }
+
+    const totalDeleted = await viewHistoryRepository.delete({ user_id: id });
+
+    res.sendStatus(totalDeleted ? 200 : 404);
+});
+
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
@@ -144,21 +159,21 @@ export default router;
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
-//     (3). DELETE - delete user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (3). DELETE - delete user view histories (200 OK/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (4). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories/:id - needs authentication
 //     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). DELETE - delete user history (204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (3). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
-//     (3). DELETE - delete user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (3). DELETE - delete user view histories (200 OK/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (4). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories/:id - needs authentication
 //     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). DELETE - delete user history (204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (3). otherwise - 405 Method Not Allowed
