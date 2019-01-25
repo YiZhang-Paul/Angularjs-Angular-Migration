@@ -48,8 +48,8 @@ export default class GameDataReducer implements IDataReducer {
 
         if (target) {
 
-            target['view_count'] += data.view_count;
-            target['search_api_keys'].push(this.getProvider(data));
+            target.view_count += data.view_count;
+            target.search_api_keys.push(this.getProvider(data));
         }
     }
 

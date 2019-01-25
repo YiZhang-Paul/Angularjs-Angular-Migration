@@ -16,7 +16,7 @@ router.get(root, async (_: Request, res: Response) => {
 // TODO: add controllers later
 router.get(gameById, async (req: Request, res: Response) => {
 
-    const id = +req.params['id'];
+    const id = +req.params.id;
     const game = await service.getGameById(id);
 
     if (!game) {
@@ -29,7 +29,7 @@ router.get(gameById, async (req: Request, res: Response) => {
 
 router.get(channelsByGameId, async (req: Request, res: Response) => {
 
-    const id = +req.params['id'];
+    const id = +req.params.id;
     const channels = await service.getChannelsByGameId(id);
 
     if (!channels.length) {

@@ -45,15 +45,15 @@ export default class ProviderResolver implements IProviderResolver {
             return -1;
         }
 
-        const result = providers.find(_ => +_['provider_id'] === providerId);
+        const result = providers.find(_ => +_.provider_id === providerId);
 
-        return result ? +result['provider_game_id'] : -1;
+        return result ? +result.provider_game_id : -1;
     }
 
     public async resolveChannelId(id: number): Promise<number> {
 
         const channel = await this._channelRepository.findById(`${id}`);
 
-        return channel ? channel.toObject()['provider_channel_id'] : -1;
+        return channel ? channel.toObject().provider_channel_id : -1;
     }
 }

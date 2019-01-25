@@ -107,7 +107,7 @@ export class ViewHistoryService {
             title: data.title
         };
 
-        if (data.image) { historyData['image'] = data.image; }
+        if (data.image) { historyData.image = data.image; }
 
         return this._viewHistoryRepository.insertOne(historyData);
     }
@@ -122,8 +122,8 @@ export class ViewHistoryService {
             game_name: data.gameName
         };
         // TODO: use consistent property accessor
-        if (data.title) { historyData['title'] = data.title; }
-        if (data.image) { historyData['image'] = data.image; }
+        if (data.title) { historyData.title = data.title; }
+        if (data.image) { historyData.image = data.image; }
 
         return this._viewHistoryRepository.updateOne(historyData, { id });
     }
@@ -137,14 +137,14 @@ export class ViewHistoryService {
             return 400;
         }
 
-        const history = await this.findHistory(data.userId, channel['id']);
+        const history = await this.findHistory(data.userId, channel.id);
 
         if (history) {
 
-            return await this.updateHistory(history['id'], data) ? 204 : 400;
+            return await this.updateHistory(history.id, data) ? 204 : 400;
         }
 
-        return await this.insertHistory(channel['id'], data) ? 201 : 400;
+        return await this.insertHistory(channel.id, data) ? 201 : 400;
     }
 
     public async getHistory(id: number, userId: number): Promise<any> {

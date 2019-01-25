@@ -26,7 +26,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
 
         const synced = outdated;
 
-        synced['id'] = +updated['id'];
+        synced.id = +updated.id;
         synced[this._keys] = updated[this._keys].slice();
 
         return synced;
@@ -36,7 +36,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
 
         const updateData = document.toObject();
         const keys = updateData[this._keys];
-        const name = updateData['name'];
+        const name = updateData.name;
 
         for (const key of data[this._keys]) {
 
@@ -57,7 +57,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
 
         if (result) {
 
-            data['id'] = +result.toObject()['id'];
+            data.id = +result.toObject().id;
         }
 
         return data;
@@ -76,7 +76,7 @@ export default class PersistentDataStore implements IPersistentDataStore {
 
         for (const _ of data) {
 
-            const game = await this._repository.findByName(_['name']);
+            const game = await this._repository.findByName(_.name);
 
             const result = game ?
                 await this.updateData(game, _) :

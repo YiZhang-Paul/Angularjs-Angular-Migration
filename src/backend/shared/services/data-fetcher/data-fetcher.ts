@@ -36,7 +36,7 @@ export default abstract class DataFetcher implements IDataFetcher {
 
         return data.map(_ => {
 
-            _['provider_id'] = this.id;
+            _.provider_id = this.id;
 
             return _;
         });

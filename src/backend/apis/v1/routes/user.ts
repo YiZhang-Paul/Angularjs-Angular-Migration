@@ -14,7 +14,7 @@ const service = services.user;
 
 router.get('/', authenticate('id'), async (req: Request, res: Response) => {
 
-    const id = +req.body['id'];
+    const id = +req.body.id;
     const result = await service.getUser(id);
 
     res.status(200).send(result);
@@ -28,8 +28,8 @@ router.post('/', [
 
 ], async (req: Request, res: Response) => {
 
-    const accountId = +req.body['account_id'];
-    const name = req.body['name'];
+    const accountId = +req.body.account_id;
+    const name = req.body.name;
     const baseUrl = `http://127.0.0.1:4150${rootUrl}/user`;
     const result = await service.createUser(accountId, { name, baseUrl });
 

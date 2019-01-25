@@ -44,7 +44,7 @@ export class GameService {
 
         if (data.hasOwnProperty(key)) {
 
-            data['channels'] = `api/v1/games/${data[key]}/channels`;
+            data.channels = `api/v1/games/${data[key]}/channels`;
         }
 
         return data;
@@ -54,7 +54,7 @@ export class GameService {
 
         return data.map(_ => {
 
-            _['game_id'] = id;
+            _.game_id = id;
 
             return _;
         });
@@ -63,7 +63,7 @@ export class GameService {
     private async getCachedGame(id: number): Promise<any | null> {
 
         const cached = await this.getGames();
-        const result = cached.find(_ => _['id'] === id);
+        const result = cached.find(_ => _.id === id);
 
         return result ? result : null;
     }

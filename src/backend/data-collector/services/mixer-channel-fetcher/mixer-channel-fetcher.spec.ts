@@ -64,7 +64,7 @@ context('MixerChannelFetcher unit test', () => {
             const result = await fetcher.fetch();
 
             expect(result).is.not.empty;
-            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
+            expect(result.every(_ => _.provider_id === expected)).to.be.true;
         });
     });
 
@@ -112,7 +112,7 @@ context('MixerChannelFetcher unit test', () => {
             const result = await fetcher.fetchById(channelId);
 
             expect(result.length).to.equal(1);
-            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
+            expect(result.every(_ => _.provider_id === expected)).to.be.true;
         });
     });
 
@@ -156,7 +156,7 @@ context('MixerChannelFetcher unit test', () => {
             const result = await fetcher.fetchByGameId(gameId);
 
             expect(result).is.not.empty;
-            expect(result.every(_ => _['provider_id'] === expected)).to.be.true;
+            expect(result.every(_ => _.provider_id === expected)).to.be.true;
         });
     });
 });

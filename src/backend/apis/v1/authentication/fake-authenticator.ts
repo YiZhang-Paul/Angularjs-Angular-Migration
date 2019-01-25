@@ -26,7 +26,7 @@ export default class FakeAuthenticator {
 
     private isAuthenticated(request: Request): boolean {
 
-        const header = request.headers['authorization'];
+        const header = request.headers.authorization;
 
         return header ? this.parseToken(header) === expectedToken : false;
     }

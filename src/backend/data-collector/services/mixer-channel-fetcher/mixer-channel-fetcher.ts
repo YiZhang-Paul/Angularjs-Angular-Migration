@@ -20,7 +20,7 @@ export default class MixerChannelFetcher extends DataFetcher implements IChannel
 
         for (const _ of data) {
 
-            _['thumbnail'] = `https://thumbs.mixer.com/channel/${_['id']}.m4v`;
+            _.thumbnail = `https://thumbs.mixer.com/channel/${_.id}.m4v`;
         }
 
         return data;

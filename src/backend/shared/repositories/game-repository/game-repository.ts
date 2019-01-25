@@ -20,6 +20,6 @@ export default class GameRepository extends AllPrivilegeMongoDbRepository implem
             return new Array<any>();
         }
 
-        return document.toObject()['search_api_keys'];
+        return document.toObject().search_api_keys;
     }
 }

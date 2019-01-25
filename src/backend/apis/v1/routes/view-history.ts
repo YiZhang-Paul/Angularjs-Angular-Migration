@@ -16,7 +16,7 @@ router.get('/', [
 
 ], async (req: Request, res: Response) => {
 
-    const id = +req.body['user_id'];
+    const id = +req.body.user_id;
     const result = await service.getHistories(id);
 
     if (!result.length) {
@@ -44,14 +44,14 @@ router.post('/', [
 
     const data = {
 
-        userId: +req.body['user_id'],
-        providerId: +req.body['provider_id'],
-        providerChannelId: +req.body['provider_channel_id'],
-        gameId: +req.body['game_id'],
-        gameName: req.body['game_name'],
-        streamerName: req.body['streamer_name'],
-        title: req.body['title'] || '',
-        image: req.body['image'] || ''
+        userId: +req.body.user_id,
+        providerId: +req.body.provider_id,
+        providerChannelId: +req.body.provider_channel_id,
+        gameId: +req.body.game_id,
+        gameName: req.body.game_name,
+        streamerName: req.body.streamer_name,
+        title: req.body.title || '',
+        image: req.body.image || ''
     };
 
     const status = await service.createHistory(data);
@@ -67,7 +67,7 @@ router.delete('/', [
 
 ], async (req: Request, res: Response) => {
 
-    const id = +req.body['user_id'];
+    const id = +req.body.user_id;
     const result = await service.clearHistories(id);
 
     res.sendStatus(result ? 200 : 404);
@@ -82,8 +82,8 @@ router.get('/:id', [
 
 ], async (req: Request, res: Response) => {
 
-    const id = +req.params['id'];
-    const userId = +req.body['user_id'];
+    const id = +req.params.id;
+    const userId = +req.body.user_id;
     const result = await service.getHistory(id, userId);
 
     if (!result) {
@@ -103,8 +103,8 @@ router.delete('/:id', [
 
 ], async (req: Request, res: Response) => {
 
-    const id = +req.params['id'];
-    const userId = +req.body['user_id'];
+    const id = +req.params.id;
+    const userId = +req.body.user_id;
     const result = await service.clearHistory(id, userId);
 
     res.sendStatus(result ? 204 : 404);
