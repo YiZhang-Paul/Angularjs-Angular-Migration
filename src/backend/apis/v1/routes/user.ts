@@ -14,12 +14,8 @@ const service = services.user;
 
 router.get('/', authenticate('id'), async (req: Request, res: Response) => {
 
-    const result = await service.getUser(+req.body['id']);
-
-    if (!result) {
-
-        return res.sendStatus(404);
-    }
+    const id = +req.body['id'];
+    const result = await service.getUser(id);
 
     res.status(200).send(result);
 });
@@ -48,19 +44,13 @@ router.put('/', authenticate('id'), [
 ], async (req: Request, res: Response) => {
 
     const { id, name } = req.body;
-
-    if (!await service.hasUser(id)) {
-
-        return res.sendStatus(404);
-    }
-
     const result = await service.updateUser(id, { name });
 
     res.sendStatus(result ? 204 : 400);
 });
 
-router.use('/histories', viewHistoryRoute);
-
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
+
+router.use('/histories', viewHistoryRoute);
 
 export default router;
