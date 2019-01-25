@@ -75,7 +75,7 @@
         "@types/express-validator": "^3.0.0",
         "@types/mocha": "^5.2.5",
         "@types/mongodb": "^3.1.19",
-        "@types/mongoose": "^5.3.9",
+        "@types/mongoose": "^5.3.10",
         "@types/node": "^10.12.18",
         "@types/redis": "^2.8.10",
         "@types/sinon": "^7.0.4",

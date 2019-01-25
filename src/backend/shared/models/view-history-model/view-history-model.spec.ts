@@ -201,13 +201,6 @@ context('View History model unit test', () => {
 
     describe(`${imageField}`, () => {
 
-        it('should be required', async () => {
-
-            const model = new ViewHistoryModel();
-
-            await verifyValidationError(model, imageField, 'required');
-        });
-
         it('should be a string', async () => {
 
             const model = new ViewHistoryModel({ [imageField]: {} });
