@@ -36,9 +36,7 @@ export class UserService {
 
     private async hasAccount(id: number): Promise<boolean> {
 
-        const account = await this._accountRepository.findById(id);
-
-        return !!account;
+        return this._accountRepository.has(id);
     }
 
     private async hasAssociatedUser(accountId: number): Promise<boolean> {
@@ -78,9 +76,7 @@ export class UserService {
 
     public async hasUser(id: number): Promise<boolean> {
 
-        const user = await this._userRepository.findById(id);
-
-        return !!user;
+        return this._userRepository.has(id);
     }
 
     public async updateUser(id: number, data: any): Promise<any> {

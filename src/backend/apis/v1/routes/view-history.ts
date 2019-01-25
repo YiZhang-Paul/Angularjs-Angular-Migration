@@ -29,9 +29,8 @@ router.get('/', authenticate('user_id'), [
     }
 
     const id = +req.body['user_id'];
-    const user = await userRepository.findById(id);
-    // TODO: add to base repository?
-    if (!user) {
+
+    if (!await userRepository.has(id)) {
 
         return res.sendStatus(404);
     }
@@ -66,23 +65,17 @@ router.post('/', authenticate('user_id'), [
         return res.sendStatus(400);
     }
 
-    const user = await userRepository.findById(+req.body['user_id']);
-    // TODO: add to base repository?
-    if (!user) {
+    if (!await userRepository.has(+req.body['user_id'])) {
 
         return res.sendStatus(400);
     }
 
-    const provider = await providerRepository.findById(+req.body['provider_id']);
-
-    if (!provider) {
+    if (!await providerRepository.has(+req.body['provider_id'])) {
 
         return res.sendStatus(400);
     }
 
-    const game = await gameRepository.findById(+req.body['game_id']);
-
-    if (!game) {
+    if (!await gameRepository.has(+req.body['game_id'])) {
 
         return res.sendStatus(400);
     }
@@ -163,9 +156,8 @@ router.delete('/', authenticate('user_id'), [
     }
 
     const id = +req.body['user_id'];
-    const user = await userRepository.findById(id);
-    // TODO: add to base repository?
-    if (!user) {
+
+    if (!await userRepository.has(id)) {
 
         return res.sendStatus(404);
     }
@@ -191,9 +183,8 @@ router.get('/:id', authenticate('user_id'), [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
-    const user = await userRepository.findById(userId);
-    // TODO: add to base repository?
-    if (!user) {
+
+    if (!await userRepository.has(userId)) {
 
         return res.sendStatus(404);
     }
@@ -225,9 +216,8 @@ router.delete('/:id', authenticate('user_id'), [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
-    const user = await userRepository.findById(userId);
-    // TODO: add to base repository?
-    if (!user) {
+
+    if (!await userRepository.has(userId)) {
 
         return res.sendStatus(404);
     }
