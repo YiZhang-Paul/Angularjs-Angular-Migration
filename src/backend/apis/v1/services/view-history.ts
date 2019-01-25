@@ -121,7 +121,7 @@ export class ViewHistoryService {
             streamer_name: data.streamerName,
             game_name: data.gameName
         };
-        // TODO: use consistent property accessor
+
         if (data.title) { historyData.title = data.title; }
         if (data.image) { historyData.image = data.image; }
 

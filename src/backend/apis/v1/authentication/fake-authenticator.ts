@@ -40,7 +40,7 @@ export default class FakeAuthenticator {
 
         if (isNaN(request.body[this.key])) {
 
-            request.body[this.key] = -1;
+            request.body[this.key] = 1;
         }
 
         const id = +request.body[this.key];

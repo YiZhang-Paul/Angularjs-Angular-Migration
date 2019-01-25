@@ -15,7 +15,7 @@
     </div>
     <div class="main-content channel-display" ng-controller="ChannelController">
         <div class="game-cover-wrapper">
-            <div ng-show="game" class="game-card">
+            <div ng-show="game" class="game-card non-selectable">
                 <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
             </div>
             <div class="game-info">
@@ -23,7 +23,7 @@
                 <div class="views">{{ game.view_count + ' watching' }}</div>
             </div>
         </div>
-        <div class="channel-card" ng-repeat="channel in channels">
+        <div class="channel-card non-selectable" ng-repeat="channel in channels">
             <span class="view-count" ng-class="{ 'view-updated': channel.updated }">{{ channel.view_count }}</span>
             <video ng-mouseover="playThumbnail($event)" ng-mouseleave="stopThumbnail($event)" class="stream-thumbnail" ng-src="{{ channel.thumbnail }}" type="video/mp4" loop></video>
             <div class="channel-image" ng-style="channel.image && { 'background-image': 'url(' + channel.image + ')' }"></div>

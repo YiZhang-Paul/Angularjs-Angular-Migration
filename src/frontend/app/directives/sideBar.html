@@ -23,10 +23,11 @@
     }
 </style>
 
-<div id="wrapper">
-    <ul>
-        <li class="side-bar-option" ng-repeat="option in options">
-            {{ option }}
-        </li>
-    </ul>
+<div id="wrapper" class="non-selectable">
+    <div ng-repeat="option in options">
+        <ul class="side-bar-option">
+            <li>{{ option }}</li>
+            <channel-badge badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>
+        </ul>
+    </div>
 </div>
