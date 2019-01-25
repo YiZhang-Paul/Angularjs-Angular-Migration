@@ -5,15 +5,15 @@ import ChannelRepositoryFactory from '../../../shared/repositories/channel-repos
 import { checkBadRequest } from '../services/express-validator-utility';
 import { authenticate } from '../authentication/fake-authenticator';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
+import KeyRemover from '../../../shared/services/key-remover/key-remover';
 import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
-import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
 import ViewHistoryRepositoryFactory from '../../../shared/repositories/view-history-repository/view-history-repository.factory';
 
 const router = Router();
+const remover = new KeyRemover();
 const providerRepository = new ProviderRepositoryFactory().createRepository();
 const channelRepository = new ChannelRepositoryFactory().createRepository();
 const gameRepository = new GameRepositoryFactory().createRepository();
-const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
 router.get('/', [
@@ -25,20 +25,14 @@ router.get('/', [
 ], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
+    const result = await viewHistoryRepository.find({ user_id: id });
 
-    if (!await userRepository.has(id)) {
-
-        return res.sendStatus(404);
-    }
-
-    const histories = await viewHistoryRepository.find({ user_id: id });
-
-    if (!histories.length) {
+    if (!result.length) {
 
         return res.sendStatus(404);
     }
 
-    res.status(200).send(histories);
+    res.status(200).send(result.map(_ => remover.remove(_.toObject(), ['_id', '__v'])));
 });
 
 router.post('/', [
@@ -56,24 +50,22 @@ router.post('/', [
 
 ], async (req: Request, res: Response) => {
 
-    if (!await userRepository.has(+req.body['user_id'])) {
+    const userId = +req.body['user_id'];
+    const providerId = +req.body['provider_id'];
+    const gameId = +req.body['game_id'];
+    const gameName = req.body['game_name'];
+    const streamerName = req.body['streamer_name'];
+    const title = req.body['title'] || '';
+    const image = req.body['image'] || '';
 
-        return res.sendStatus(400);
-    }
-
-    if (!await providerRepository.has(+req.body['provider_id'])) {
-
-        return res.sendStatus(400);
-    }
-
-    if (!await gameRepository.has(+req.body['game_id'])) {
+    if (!await providerRepository.has(providerId) || !await gameRepository.has(gameId)) {
 
         return res.sendStatus(400);
     }
 
     let data: any = {
 
-        provider_id: +req.body['provider_id'],
+        provider_id: providerId,
         provider_channel_id: +req.body['provider_channel_id']
     };
 
@@ -90,19 +82,20 @@ router.post('/', [
     }
 
     const channelId = channel.toObject()['id'];
-    const viewHistory = await viewHistoryRepository.findOne({ user_id: +req.body['user_id'], channel_id: channelId });
+    data = { user_id: userId, channel_id: channelId };
+    const viewHistory = await viewHistoryRepository.findOne(data);
 
     if (!viewHistory) {
 
         data = {
 
-            user_id: +req.body['user_id'],
-            game_id: +req.body['game_id'],
+            user_id: userId,
+            game_id: gameId,
             channel_id: channelId,
-            streamer_name: req.body['streamer_name'],
-            game_name: req.body['game_name'],
-            title: req.body['title'] || '',
-            image: req.body['image'] || ''
+            streamer_name: streamerName,
+            game_name: gameName,
+            title,
+            image
         };
 
         const result = await viewHistoryRepository.insertOne(data);
@@ -113,22 +106,16 @@ router.post('/', [
     data = {
 
         timestamp: new Date(),
-        game_id: +req.body['game_id'],
-        streamer_name: req.body['streamer_name'],
-        game_name: req.body['game_name']
+        game_id: gameId,
+        streamer_name: streamerName,
+        game_name: gameName
     };
 
-    if (req.body['title']) {
+    if (title) { data['title'] = title; }
+    if (image) { data['image'] = image; }
 
-        data['title'] = req.body['title'];
-    }
-
-    if (req.body['image']) {
-
-        data['image'] = req.body['image'];
-    }
-
-    const result = await viewHistoryRepository.updateOne(data, { id: viewHistory.toObject()['id'] });
+    const historyId = viewHistory.toObject()['id'];
+    const result = await viewHistoryRepository.updateOne(data, { id: historyId });
 
     res.sendStatus(result ? 204 : 400);
 });
@@ -142,12 +129,6 @@ router.delete('/', [
 ], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
-
-    if (!await userRepository.has(id)) {
-
-        return res.sendStatus(404);
-    }
-
     const totalDeleted = await viewHistoryRepository.delete({ user_id: id });
 
     res.sendStatus(totalDeleted ? 200 : 404);
@@ -164,21 +145,14 @@ router.get('/:id', [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
+    const result = await viewHistoryRepository.findOne({ id, user_id: userId });
 
-    if (!await userRepository.has(userId)) {
-
-        return res.sendStatus(404);
-    }
-
-    const history = await viewHistoryRepository.findOne({ id, user_id: userId });
-
-    if (!history) {
+    if (!result) {
 
         return res.sendStatus(404);
     }
 
-    // TODO: remove _id and __v
-    res.status(200).send(history.toObject());
+    res.status(200).send(remover.remove(result.toObject(), ['_id', '__v']));
 });
 
 router.delete('/:id', [
@@ -192,12 +166,6 @@ router.delete('/:id', [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
-
-    if (!await userRepository.has(userId)) {
-
-        return res.sendStatus(404);
-    }
-
     const result = await viewHistoryRepository.deleteOne({ id, user_id: userId });
 
     res.sendStatus(result ? 204 : 404);
