@@ -13,7 +13,6 @@ angular.module('migration-sample-app')
             scope.badges.set('Featured Channels', []);
 
             sideBarService.getHistories().then(function(data) {
-                console.log(data);
                 scope.badges.set('View History', data);
             },
             function(err) {

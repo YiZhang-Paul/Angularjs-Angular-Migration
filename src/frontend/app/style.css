@@ -199,9 +199,8 @@ html, body {
     content: "";
     display: block;
     background: url(https://au.kg/images/eye.png) no-repeat;
-    width: 17px;
-    height: 16px;
-    margin-top: 1px;
+    width: 15px;
+    height: 13px;
     margin-right: 3px;
     float: left;
     background-size: cover;

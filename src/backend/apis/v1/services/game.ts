@@ -60,6 +60,21 @@ export class GameService {
         });
     }
 
+    protected attachDefaultImage(data: any[]): any[] {
+
+        const image = 'https://www.bitgab.com/uploads/profile/files/default.png';
+
+        return data.map(_ => {
+
+            if (!_.image) {
+
+                _.image = image;
+            }
+
+            return _;
+        });
+    }
+
     private async getCachedGame(id: number): Promise<any | null> {
 
         const cached = await this.getGames();
@@ -88,7 +103,7 @@ export class GameService {
 
         return result && result.length ? result : [];
     }
-
+    // TODO: extract channel service
     private async getCollectedChannels(id: number, key: string): Promise<any[]> {
 
         await this.loadChannelCollector(this._channelCollectorPromise);
@@ -129,7 +144,7 @@ export class GameService {
         const result = cached && cached.length ?
             cached : await this.getCollectedChannels(id, key);
 
-        return this.attachGameId(result, id);
+        return this.attachDefaultImage(this.attachGameId(result, id));
     }
 }
 
