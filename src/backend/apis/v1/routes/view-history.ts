@@ -14,6 +14,26 @@ const gameRepository = new GameRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
+router.get('/', [check('user_id').isInt({ min: 0 })], async (req: Request, res: Response) => {
+
+    const id = +req.body['user_id'];
+    const user = await userRepository.findById(id);
+    // TODO: add to base repository?
+    if (!user) {
+
+        return res.sendStatus(400);
+    }
+
+    const histories = await viewHistoryRepository.find({ user_id: id });
+
+    if (!histories.length) {
+
+        return res.sendStatus(404);
+    }
+
+    res.status(200).send(histories);
+});
+
 router.post('/', [
 
     check('provider_id').isInt({ min: 0 }),
@@ -121,14 +141,16 @@ router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
 
-// provider_id: { type: Number, required: true, min: 0, validate: integerValidator },
-// provider_channel_id: { type: Number, required: true, min: 0, validate: integerValidator }
-// user_id: { type: Number, required: true, min: 0, validate: integerValidator },
-// title: { type: String, maxlength: 150 },
-// streamer_name: { type: String, maxlength: 50 },
-// game_id: { type: Number, required: true, min: 0, validate: integerValidator },
-// game_name: { type: String, required: true, maxlength: 100 },
-// image: { type: String, required: true, validate: urlValidator }
+// api/v1/user/histories - needs authentication
+//     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
+//     (3). DELETE - delete user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (4). otherwise - 405 Method Not Allowed
+
+// api/v1/user/histories/:id - needs authentication
+//     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (3). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
