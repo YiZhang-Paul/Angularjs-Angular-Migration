@@ -7,9 +7,11 @@ import { authenticate } from '../authentication/fake-authenticator';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
 import KeyRemover from '../../../shared/services/key-remover/key-remover';
 import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
+import services from '../services';
 import ViewHistoryRepositoryFactory from '../../../shared/repositories/view-history-repository/view-history-repository.factory';
 
 const router = Router();
+const service = services.viewHistory;
 const remover = new KeyRemover();
 const providerRepository = new ProviderRepositoryFactory().createRepository();
 const channelRepository = new ChannelRepositoryFactory().createRepository();
@@ -25,16 +27,16 @@ router.get('/', [
 ], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
-    const result = await viewHistoryRepository.find({ user_id: id });
+    const result = await service.getHistories(id);
 
     if (!result.length) {
 
         return res.sendStatus(404);
     }
 
-    res.status(200).send(result.map(_ => remover.remove(_.toObject(), ['_id', '__v'])));
+    res.status(200).send(result);
 });
-
+// TODO: need refactor
 router.post('/', [
 
     authenticate('user_id'),
@@ -129,9 +131,9 @@ router.delete('/', [
 ], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
-    const totalDeleted = await viewHistoryRepository.delete({ user_id: id });
+    const result = await service.clearHistories(id);
 
-    res.sendStatus(totalDeleted ? 200 : 404);
+    res.sendStatus(result ? 200 : 404);
 });
 
 router.get('/:id', [
@@ -145,14 +147,14 @@ router.get('/:id', [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
-    const result = await viewHistoryRepository.findOne({ id, user_id: userId });
+    const result = await service.getHistory(id, userId);
 
     if (!result) {
 
         return res.sendStatus(404);
     }
 
-    res.status(200).send(remover.remove(result.toObject(), ['_id', '__v']));
+    res.status(200).send(result);
 });
 
 router.delete('/:id', [
@@ -166,7 +168,7 @@ router.delete('/:id', [
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
-    const result = await viewHistoryRepository.deleteOne({ id, user_id: userId });
+    const result = await service.clearHistory(id, userId);
 
     res.sendStatus(result ? 204 : 404);
 });
