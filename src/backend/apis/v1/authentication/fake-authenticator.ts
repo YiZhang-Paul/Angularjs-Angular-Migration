@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 
 const header = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 const payload = 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ';
@@ -41,7 +41,7 @@ export default class FakeAuthenticator {
 
 const authenticator = new FakeAuthenticator();
 
-export function authenticate(key: string): Function {
+export function authenticate(key: string): RequestHandler {
 
     return (request: Request, response: Response, next: Function) => {
 

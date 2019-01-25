@@ -15,18 +15,25 @@ const gameRepository = new GameRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
-router.get('/', authenticate, [
+router.get('/', authenticate('user_id'), [
 
     check('user_id').isInt({ min: 0 })
 
 ], async (req: Request, res: Response) => {
+
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
 
     const id = +req.body['user_id'];
     const user = await userRepository.findById(id);
     // TODO: add to base repository?
     if (!user) {
 
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
 
     const histories = await viewHistoryRepository.find({ user_id: id });
@@ -39,7 +46,7 @@ router.get('/', authenticate, [
     res.status(200).send(histories);
 });
 
-router.post('/', authenticate, [
+router.post('/', authenticate('user_id'), [
 
     check('provider_id').isInt({ min: 0 }),
     check('provider_channel_id').isInt({ min: 0 }),
@@ -142,18 +149,25 @@ router.post('/', authenticate, [
     res.sendStatus(result ? 204 : 400);
 });
 
-router.delete('/', authenticate, [
+router.delete('/', authenticate('user_id'), [
 
     check('user_id').isInt({ min: 0 })
 
 ], async (req: Request, res: Response) => {
+
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
 
     const id = +req.body['user_id'];
     const user = await userRepository.findById(id);
     // TODO: add to base repository?
     if (!user) {
 
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
 
     const totalDeleted = await viewHistoryRepository.delete({ user_id: id });
@@ -161,27 +175,54 @@ router.delete('/', authenticate, [
     res.sendStatus(totalDeleted ? 200 : 404);
 });
 
+router.get('/:id', authenticate('user_id'), [
+
+    check('id').isInt({ min: 0 }),
+    check('user_id').isInt({ min: 0 })
+
+], async (req: Request, res: Response) => {
+
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+
+        return res.sendStatus(400);
+    }
+
+    const id = +req.params['id'];
+    const userId = +req.body['user_id'];
+    const user = await userRepository.findById(userId);
+    // TODO: add to base repository?
+    if (!user) {
+
+        return res.sendStatus(404);
+    }
+
+    const history = await viewHistoryRepository.findOne({ id, user_id: userId });
+
+    if (!history) {
+
+        return res.sendStatus(404);
+    }
+
+    // TODO: remove _id and __v
+    res.status(200).send(history.toObject());
+});
+
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 router.all('/:id', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
 
-// api/v1/user/histories - needs authentication
-//     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
-//     (3). DELETE - delete user view histories (200 OK/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
-
-// api/v1/user/histories/:id - needs authentication
-//     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (2). DELETE - delete user history (204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
 
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
-//     (3). DELETE - delete user view histories (200 OK/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (3). DELETE - delete user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (4). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories/:id - needs authentication
 //     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (2). DELETE - delete user history (204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
+//     (2). DELETE - delete user history (204 No Content/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (3). otherwise - 405 Method Not Allowed

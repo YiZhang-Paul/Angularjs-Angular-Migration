@@ -11,7 +11,7 @@ const router = Router();
 const rootUrl = config.get<string>('root_url');
 const service = services.user;
 
-router.get('/', authenticate, async (req: Request, res: Response) => {
+router.get('/', authenticate('id'), async (req: Request, res: Response) => {
 
     const result = await service.getUser(+req.body['id']);
 
@@ -45,7 +45,7 @@ router.post('/', [
     res.sendStatus(result ? 201 : 400);
 });
 
-router.put('/', authenticate, [
+router.put('/', authenticate('id'), [
 
     body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()
 
