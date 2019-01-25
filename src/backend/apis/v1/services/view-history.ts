@@ -1,37 +1,28 @@
 import { Document } from 'mongoose';
 
-import ChannelRepositoryFactory from '../../../shared/repositories/channel-repository/channel-repository.factory';
-import IChannelRepository from '../../../shared/repositories/channel-repository/channel-repository.interface';
-import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
-import IGameRepository from '../../../shared/repositories/game-repository/game-repository.interface';
 import KeyRemover from '../../../shared/services/key-remover/key-remover';
 import IKeyRemover from '../../../shared/services/key-remover/key-remover.interface';
-import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
-import IProviderRepository from '../../../shared/repositories/provider-repository/provider-repository.interface';
 import ViewHistoryRepositoryFactory from '../../../shared/repositories/view-history-repository/view-history-repository.factory';
 import IViewHistoryRepository from '../../../shared/repositories/view-history-repository/view-history-repository.interface';
 
+import channelService from './channel/channel';
+import IChannelService from './channel/channel-service.interface';
+
 export class ViewHistoryService {
 
-    private _providerRepository: IProviderRepository;
-    private _gameRepository: IGameRepository;
-    private _channelRepository: IChannelRepository;
-    private _viewHistoryRepository: IViewHistoryRepository;
     private _remover: IKeyRemover;
+    private _channelService: IChannelService;
+    private _viewHistoryRepository: IViewHistoryRepository;
 
     constructor(
 
-        providerRepository: IProviderRepository,
-        gameRepository: IGameRepository,
-        channelRepository: IChannelRepository,
-        viewHistoryRepository: IViewHistoryRepository,
-        remover: IKeyRemover
+        remover: IKeyRemover,
+        channelService: IChannelService,
+        viewHistoryRepository: IViewHistoryRepository
 
     ) {
 
-        this._providerRepository = providerRepository;
-        this._gameRepository = gameRepository;
-        this._channelRepository = channelRepository;
+        this._channelService = channelService;
         this._viewHistoryRepository = viewHistoryRepository;
         this._remover = remover;
     }
@@ -44,21 +35,6 @@ export class ViewHistoryService {
         return this._remover.remove([object], keys)[0];
     }
 
-    private async hasProvider(id: number): Promise<boolean> {
-
-        return await this._providerRepository.has(id);
-    }
-
-    private async hasGame(id: number): Promise<boolean> {
-
-        return await this._gameRepository.has(id);
-    }
-
-    private async isValidChannel(providerId: number, gameId: number): Promise<boolean> {
-
-        return await this.hasProvider(providerId) && await this.hasGame(gameId);
-    }
-
     private async findHistory(userId: number, channelId: number): Promise<any> {
 
         const filter = { user_id: userId, channel_id: channelId };
@@ -67,32 +43,16 @@ export class ViewHistoryService {
         return result ? result.toObject() : null;
     }
 
-    private async findOrCreateChannel(data: any): Promise<any> {
-
-        const channelData = {
-
-            provider_id: data.providerId,
-            provider_channel_id: data.providerChannelId
-        };
-
-        let channel = await this._channelRepository.findOne(channelData);
-
-        if (!channel) {
-
-            channel = await this._channelRepository.insertOne(channelData);
-        }
-
-        return channel ? channel.toObject() : null;
-    }
-
     private async prepareChannel(data: any): Promise<any> {
 
-        if (!await this.isValidChannel(data.providerId, data.gameId)) {
+        const { providerId, providerChannelId, gameId } = data;
+
+        if (!await this._channelService.isValidChannel(providerId, gameId)) {
 
             return null;
         }
 
-        return this.findOrCreateChannel(data);
+        return this._channelService.findOrCreateChannel(providerId, providerChannelId);
     }
 
     private async insertHistory(channelId: number, data: any): Promise<any> {
@@ -181,9 +141,7 @@ export class ViewHistoryService {
 
 export default new ViewHistoryService(
 
-    new ProviderRepositoryFactory().createRepository(),
-    new GameRepositoryFactory().createRepository(),
-    new ChannelRepositoryFactory().createRepository(),
-    new ViewHistoryRepositoryFactory().createRepository(),
-    new KeyRemover()
+    new KeyRemover(),
+    channelService,
+    new ViewHistoryRepositoryFactory().createRepository()
 );
