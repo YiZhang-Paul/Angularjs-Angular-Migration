@@ -7,6 +7,8 @@ const expectedToken = `${header}.${payload}.${signature}`;
 // backdoor for testing purpose only
 export default class FakeAuthenticator {
 
+    public key = 'id';
+
     private parseToken(header: string): string {
 
         return header.trim().replace(/^bearer\s*/ig, '');
@@ -26,12 +28,12 @@ export default class FakeAuthenticator {
             return 401;
         }
 
-        if (isNaN(request.body['id'])) {
+        if (isNaN(request.body[this.key])) {
 
-            request.body['id'] = -1;
+            request.body[this.key] = -1;
         }
 
-        const id = +request.body['id'];
+        const id = +request.body[this.key];
 
         return id < 0 || id > 3 ? 403 : 200;
     }
@@ -39,14 +41,18 @@ export default class FakeAuthenticator {
 
 const authenticator = new FakeAuthenticator();
 
-export function authenticate(request: Request, response: Response, next: Function) {
+export function authenticate(key: string): Function {
 
-    const status = authenticator.authenticate(request);
+    return (request: Request, response: Response, next: Function) => {
 
-    if (status !== 200) {
+        authenticator.key = key;
+        const status = authenticator.authenticate(request);
 
-        return response.sendStatus(status);
-    }
+        if (status !== 200) {
 
-    next();
+            return response.sendStatus(status);
+        }
+
+        next();
+    };
 }

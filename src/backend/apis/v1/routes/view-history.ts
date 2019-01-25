@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { body, check, validationResult } from 'express-validator/check';
 
 import ChannelRepositoryFactory from '../../../shared/repositories/channel-repository/channel-repository.factory';
+import { authenticate } from '../authentication/fake-authenticator';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
 import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
 import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
@@ -14,7 +15,11 @@ const gameRepository = new GameRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
-router.get('/', [check('user_id').isInt({ min: 0 })], async (req: Request, res: Response) => {
+router.get('/', authenticate, [
+
+    check('user_id').isInt({ min: 0 })
+
+], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
     const user = await userRepository.findById(id);
@@ -34,7 +39,7 @@ router.get('/', [check('user_id').isInt({ min: 0 })], async (req: Request, res: 
     res.status(200).send(histories);
 });
 
-router.post('/', [
+router.post('/', authenticate, [
 
     check('provider_id').isInt({ min: 0 }),
     check('provider_channel_id').isInt({ min: 0 }),
@@ -137,7 +142,11 @@ router.post('/', [
     res.sendStatus(result ? 204 : 400);
 });
 
-router.delete('/', [check('user_id').isInt({ min: 0 })], async (req: Request, res: Response) => {
+router.delete('/', authenticate, [
+
+    check('user_id').isInt({ min: 0 })
+
+], async (req: Request, res: Response) => {
 
     const id = +req.body['user_id'];
     const user = await userRepository.findById(id);
@@ -153,6 +162,7 @@ router.delete('/', [check('user_id').isInt({ min: 0 })], async (req: Request, re
 });
 
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
+router.all('/:id', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
 
@@ -160,12 +170,10 @@ export default router;
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (2). POST - create user view histories (201 Created/204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden)
 //     (3). DELETE - delete user view histories (200 OK/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (4). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories/:id - needs authentication
 //     (1). GET - retrieve user history (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)
 //     (2). DELETE - delete user history (204 No Content/400 Bad Request/401 Unauthorized/403 Forbidden/404 Not Found)
-//     (3). otherwise - 405 Method Not Allowed
 
 // api/v1/user/histories - needs authentication
 //     (1). GET - retrieve user view histories (200 OK/401 Unauthorized/403 Forbidden/404 Not Found)

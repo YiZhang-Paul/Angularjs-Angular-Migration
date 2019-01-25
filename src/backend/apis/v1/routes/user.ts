@@ -5,6 +5,8 @@ import { body, check, validationResult } from 'express-validator/check';
 import { authenticate } from '../authentication/fake-authenticator';
 import services from '../services';
 
+import viewHistoryRoute from './view-history';
+
 const router = Router();
 const rootUrl = config.get<string>('root_url');
 const service = services.user;
@@ -66,6 +68,8 @@ router.put('/', authenticate, [
 
     res.sendStatus(result ? 204 : 400);
 });
+
+router.use('/histories', viewHistoryRoute);
 
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
