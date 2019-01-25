@@ -15,6 +15,7 @@ const ViewHistorySchema = new Schema({
     game_id: { type: Number, required: true, min: 0, validate: integerValidator },
     game_name: { type: String, required: true, maxlength: 100 },
     image: { type: String, validate: urlValidator },
+    thumbnail: { type: String, validate: urlValidator },
     timestamp: { type: Date, default: new Date() }
 });
 

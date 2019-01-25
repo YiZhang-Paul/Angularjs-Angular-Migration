@@ -2,7 +2,7 @@ angular.module('migration-sample-app')
     .factory('sideBarService', ['$http', '$q', function ($http, $q) {
 
         var getHistories = function() {
-            getHistoriesDeferred = $q.defer();
+            var getHistoriesDeferred = $q.defer();
 
             $http.get('http://127.0.0.1:4150/api/v1/user/histories', {headers: {
                 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
@@ -20,4 +20,13 @@ angular.module('migration-sample-app')
         return {
             getHistories: getHistories
         };
+    }])
+angular.module('migration-sample-app')
+    .controller('ViewHistoryController', ['$scope', 'sideBarService', function($scope, sideBarService) {
+
+        $scope.histories = [];
+        console.log(sideBarService.getHistories());
+        sideBarService.getHistories().then(function(data) {
+            $scope.histories = data;
+        },function(err) { console.log(err); });
     }]);

@@ -35,6 +35,21 @@ export class ViewHistoryService {
         return this._remover.remove([object], keys)[0];
     }
 
+    private attachDefaultThumbnail(data: any[]): any[] {
+
+        const thumbnail = 'https://cdnb.artstation.com/p/assets/images/images/002/305/833/large/rami-m-twitch-offline01.jpg?1460036990';
+
+        return data.map(_ => {
+
+            if (!_.thumbnail) {
+
+                _.thumbnail = thumbnail;
+            }
+
+            return _;
+        });
+    }
+
     private async findHistory(userId: number, channelId: number): Promise<any> {
 
         const filter = { user_id: userId, channel_id: channelId };
@@ -68,6 +83,7 @@ export class ViewHistoryService {
         };
 
         if (data.image) { historyData.image = data.image; }
+        if (data.thumbnail) { historyData.thumbnail = data.thumbnail; }
 
         return this._viewHistoryRepository.insertOne(historyData);
     }
@@ -84,6 +100,7 @@ export class ViewHistoryService {
 
         if (data.title) { historyData.title = data.title; }
         if (data.image) { historyData.image = data.image; }
+        if (data.thumbnail) { historyData.thumbnail = data.thumbnail; }
 
         return this._viewHistoryRepository.updateOne(historyData, { id });
     }
@@ -110,17 +127,25 @@ export class ViewHistoryService {
     public async getHistory(id: number, userId: number): Promise<any> {
 
         const filter = { id, user_id: userId };
-        const result = await this._viewHistoryRepository.findOne(filter);
+        const history = await this._viewHistoryRepository.findOne(filter);
 
-        return result ? this.toObject(result) : null;
+        if (!history) {
+
+            return null;
+        }
+
+        const result = this.toObject(history);
+
+        return this.attachDefaultThumbnail([result])[0];
     }
 
     public async getHistories(id: number): Promise<any[]> {
 
         const filter = { user_id: id };
-        const result = await this._viewHistoryRepository.find(filter);
+        const histories = await this._viewHistoryRepository.find(filter);
+        const result = histories.map(_ => this.toObject(_));
 
-        return result.map(_ => this.toObject(_));
+        return this.attachDefaultThumbnail(result);
     }
 
     public async clearHistory(id: number, userId: number): Promise<boolean> {

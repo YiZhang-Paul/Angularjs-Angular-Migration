@@ -21,13 +21,32 @@
         text-align: left;
         font-size: 0.88em;
     }
+
+    .option-wrapper {
+
+        position: relative;
+    }
+
+    .view-all-history {
+        display: block;
+        position: absolute;
+        top: 3px;
+        right: 15px;
+        font-size: 0.75em;
+        color: rgb(202, 202, 202);
+        text-decoration: none;
+    }
+    .view-all-history:hover {
+        color: lightskyblue;
+    }
 </style>
 
 <div id="wrapper" class="non-selectable">
-    <div ng-repeat="option in options">
-        <ul class="side-bar-option">
+    <div class="option-wrapper" ng-repeat="option in options">
+        <ul ng-show="option !== 'View History' || !hideHistory" class="side-bar-option">
             <li>{{ option }}</li>
             <channel-badge badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>
+            <a ui-sref="histories" class="view-all-history" ng-show="option === 'View History'">View All</a>
         </ul>
     </div>
 </div>

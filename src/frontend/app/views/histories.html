@@ -1,0 +1,101 @@
+<style>
+    .main-content.history-panel {
+        display: block;
+    }
+
+    .history-card {
+        font-weight: 400;
+        position: relative;
+        margin: 1vw;
+        margin-left: 10vw;
+        margin-right: 20vw;
+        background-color: rgba(240, 248, 255, 0.034);
+        height: 20vh;
+        overflow: hidden;
+        -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+        -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+        box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+        border-radius: 6px;
+    }
+
+    .history-thumbnail, .history-avatar {
+
+        background-repeat: no-repeat;
+        border-radius: 15px;
+    }
+
+    .history-thumbnail {
+
+        background-size: cover;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 30%;
+        height: 100%;
+    }
+
+    .history-avatar {
+        background-size: cover;
+        position: absolute;
+        left: 32%;
+        top: 18px;
+        width: 4vw;
+        height: 4vw;
+    }
+
+    .history-details {
+        position: absolute;
+        left: 42%;
+        top: 18px;
+        width: 30vw;
+        height: 4vw;
+    }
+
+    .remove-history-icon {
+
+        position: absolute;
+        right: 25px;
+        bottom: 15px;
+    }
+
+    .title {
+
+        font-weight: 700;
+        font-size: 1.6em;
+    }
+
+    .streamer {
+
+        font-size: 1.15em;
+        font-weight: 600;
+        color: tomato;
+    }
+
+    .game-title {
+
+        font-size: 1.4em;
+        font-weight: 500;
+        color: rgb(77, 77, 77);
+    }
+</style>
+
+<div class="container" position="relative" width="100%" height="100%">
+    <div class="top-nav">
+        <div top-nav-bar></div>
+    </div>
+    <div position="relative" width="100%" height="100%">
+        <side-bar class="side-bar" hide-history="true"></side-bar>
+        <div class="main-content history-panel" ng-controller="ViewHistoryController">
+            <div class="history-card" ng-repeat="history in histories">
+                <div class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
+                <div class="history-avatar" ng-style="history.image && { 'background-image': 'url(' + history.image + ')' }"></div>
+                <div class="history-details">
+                    <span class="title">{{ history.title }}</span></br></br>
+                    <span class="streamer">{{ history.streamer_name }}</span> was playing:
+                    <span class="game-title">{{ history.game_name | capitalize: ['the', 'of'] }}</span>
+                </div>
+                <div class="remove-history-icon">Remove</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,6 +18,10 @@ var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate'])
                     channels: null
                 }
             })
+            .state('histories', {
+                url: '/histories',
+                templateUrl: './views/histories.html'
+            })
             .state('error', {
                 url: '/error',
                 templateUrl: './views/error.html'

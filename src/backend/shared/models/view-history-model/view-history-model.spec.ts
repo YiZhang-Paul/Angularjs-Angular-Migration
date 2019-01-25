@@ -10,6 +10,7 @@ const streamerNameField = 'streamer_name';
 const gameIdField = 'game_id';
 const gameNameField = 'game_name';
 const imageField = 'image';
+const thumbnailField = 'thumbnail';
 
 context('View History model unit test', () => {
 
@@ -214,6 +215,24 @@ context('View History model unit test', () => {
             const errorMessage = `${imageField} must be a valid URI.`;
 
             await verifyCustomError(model, imageField, errorMessage);
+        });
+    });
+
+    describe(`${thumbnailField}`, () => {
+
+        it('should be a string', async () => {
+
+            const model = new ViewHistoryModel({ [thumbnailField]: {} });
+
+            await verifyCastError(model, thumbnailField);
+        });
+
+        it('should be a valid url', async () => {
+
+            const model = new ViewHistoryModel({ [thumbnailField]: 'not_a_url' });
+            const errorMessage = `${thumbnailField} must be a valid URI.`;
+
+            await verifyCustomError(model, thumbnailField, errorMessage);
         });
     });
 });
