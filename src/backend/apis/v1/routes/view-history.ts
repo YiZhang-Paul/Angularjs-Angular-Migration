@@ -1,7 +1,8 @@
 import { Request, Response, Router } from 'express';
-import { body, check, validationResult } from 'express-validator/check';
+import { body, check } from 'express-validator/check';
 
 import ChannelRepositoryFactory from '../../../shared/repositories/channel-repository/channel-repository.factory';
+import { checkBadRequest } from '../services/express-validator-utility';
 import { authenticate } from '../authentication/fake-authenticator';
 import GameRepositoryFactory from '../../../shared/repositories/game-repository/game-repository.factory';
 import ProviderRepositoryFactory from '../../../shared/repositories/provider-repository/provider-repository.factory';
@@ -15,18 +16,13 @@ const gameRepository = new GameRepositoryFactory().createRepository();
 const userRepository = new UserRepositoryFactory().createRepository();
 const viewHistoryRepository = new ViewHistoryRepositoryFactory().createRepository();
 
-router.get('/', authenticate('user_id'), [
+router.get('/', [
 
-    check('user_id').isInt({ min: 0 })
+    authenticate('user_id'),
+    check('user_id').isInt({ min: 0 }),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     const id = +req.body['user_id'];
 
@@ -45,8 +41,9 @@ router.get('/', authenticate('user_id'), [
     res.status(200).send(histories);
 });
 
-router.post('/', authenticate('user_id'), [
+router.post('/', [
 
+    authenticate('user_id'),
     check('provider_id').isInt({ min: 0 }),
     check('provider_channel_id').isInt({ min: 0 }),
     check('user_id').isInt({ min: 0 }),
@@ -54,16 +51,10 @@ router.post('/', authenticate('user_id'), [
     body('title').optional().isLength({ max: 150 }).trim().escape(),
     body('streamer_name').not().isEmpty().isLength({ max: 50 }).trim().escape(),
     body('game_name').not().isEmpty().isLength({ max: 100 }).trim().escape(),
-    body('image').optional().isURL()
+    body('image').optional().isURL(),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     if (!await userRepository.has(+req.body['user_id'])) {
 
@@ -142,18 +133,13 @@ router.post('/', authenticate('user_id'), [
     res.sendStatus(result ? 204 : 400);
 });
 
-router.delete('/', authenticate('user_id'), [
+router.delete('/', [
 
-    check('user_id').isInt({ min: 0 })
+    authenticate('user_id'),
+    check('user_id').isInt({ min: 0 }),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     const id = +req.body['user_id'];
 
@@ -167,19 +153,14 @@ router.delete('/', authenticate('user_id'), [
     res.sendStatus(totalDeleted ? 200 : 404);
 });
 
-router.get('/:id', authenticate('user_id'), [
+router.get('/:id', [
 
+    authenticate('user_id'),
     check('id').isInt({ min: 0 }),
-    check('user_id').isInt({ min: 0 })
+    check('user_id').isInt({ min: 0 }),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];
@@ -200,19 +181,14 @@ router.get('/:id', authenticate('user_id'), [
     res.status(200).send(history.toObject());
 });
 
-router.delete('/:id', authenticate('user_id'), [
+router.delete('/:id', [
 
+    authenticate('user_id'),
     check('id').isInt({ min: 0 }),
-    check('user_id').isInt({ min: 0 })
+    check('user_id').isInt({ min: 0 }),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     const id = +req.params['id'];
     const userId = +req.body['user_id'];

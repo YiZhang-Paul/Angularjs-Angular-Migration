@@ -5,7 +5,7 @@ import gameDataCollectorPromise from '../../../shared/services/data-collector/ga
 import IGameDataCollector from '../../../shared/services/data-collector/game-data-collector/game-data-collector.interface';
 // tslint:disable-next-line:max-line-length
 import GameDataStorageManagerFactory from '../../../shared/services/data-storage-manager/game-data-storage-manager/game-data-storage-manager.factory';
-// TODO: rename into service
+
 export class GameService {
 
     private _storage: IDataStorageManager;

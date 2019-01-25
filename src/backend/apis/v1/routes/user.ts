@@ -1,7 +1,8 @@
 import config = require('config');
 import { Request, Response, Router } from 'express';
-import { body, check, validationResult } from 'express-validator/check';
+import { body, check } from 'express-validator/check';
 
+import { checkBadRequest } from '../services/express-validator-utility';
 import { authenticate } from '../authentication/fake-authenticator';
 import services from '../services';
 
@@ -26,16 +27,10 @@ router.get('/', authenticate('id'), async (req: Request, res: Response) => {
 router.post('/', [
 
     check('account_id').isInt({ min: 0 }),
-    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()
+    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape(),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
-
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        return res.sendStatus(400);
-    }
 
     const accountId = +req.body['account_id'];
     const name = req.body['name'];
@@ -47,17 +42,12 @@ router.post('/', [
 
 router.put('/', authenticate('id'), [
 
-    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape()
+    body('name').not().isEmpty().isLength({ min: 4 }).trim().escape(),
+    checkBadRequest()
 
 ], async (req: Request, res: Response) => {
 
     const { id, name } = req.body;
-    const error = validationResult(req);
-
-    if (!error.isEmpty()) {
-
-        res.sendStatus(400);
-    }
 
     if (!await service.hasUser(id)) {
 
