@@ -1,4 +1,4 @@
-var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate'])
+var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate', 'ngMaterial'])
     .config(['$windowProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', '$transitionsProvider',
     function($windowProvider, $stateProvider, $urlRouterProvider, $locationProvider, $transitionsProvider) {
         $stateProvider

@@ -131,6 +131,15 @@
         border: 2px solid gold;
         background-color: rgb(196, 31, 31);
     }
+
+    .empty-history-message {
+        display: block;
+        position: absolute;
+        font-weight: 600;
+        font-size: 1.2em;
+        left: 4%;
+        top: 50%;
+    }
 </style>
 
 <div class="container" position="relative" width="100%" height="100%">
@@ -138,9 +147,10 @@
         <div top-nav-bar></div>
     </div>
     <div position="relative" width="100%" height="100%">
-        <side-bar class="side-bar" hide="['View History']"></side-bar>
+        <side-bar class="side-bar" hide-options="['View History']"></side-bar>
         <div class="main-content history-panel" ng-controller="ViewHistoryController">
-            <div class="delete-all non-selectable" ng-click="clearHistories()">Clear History</div>
+            <div class="delete-all non-selectable" ng-show="histories.length" ng-click="confirmClearHistory($event)">Clear History</div>
+            <span class="empty-history-message" ng-hide="histories.length">This place is so quiet...</span>
             <div class="history-card" ng-repeat="history in histories">
                 <div ng-show="isStaticImage(history.thumbnail)" class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
                 <video ng-show="!isStaticImage(history.thumbnail)" class="history-thumbnail" ng-src="{{ history.thumbnail }}" type="video/mp4"></video>

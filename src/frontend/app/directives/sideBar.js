@@ -38,7 +38,7 @@ angular.module('migration-sample-app')
 
         return {
             scope: {
-                hide: '='
+                hideOptions: '='
             },
             templateUrl: './directives/sideBar.html',
             link: link

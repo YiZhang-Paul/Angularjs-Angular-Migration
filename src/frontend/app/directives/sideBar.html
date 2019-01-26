@@ -43,7 +43,7 @@
 
 <div id="wrapper" class="non-selectable">
     <div class="option-wrapper" ng-repeat="option in options">
-        <ul ng-show="!hide || !hide.includes(option)" class="side-bar-option">
+        <ul ng-show="!hideOptions || !hideOptions.includes(option)" class="side-bar-option">
             <li>{{ option }}</li>
             <channel-badge badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>
             <a ui-sref="{{ targetRoutes[$index] }}" class="view-all" ng-show="badges.get(option).length">View All</a>

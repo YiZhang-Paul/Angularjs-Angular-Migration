@@ -3,7 +3,7 @@
         <div top-nav-bar></div>
     </div>
     <div position="relative" width="100%" height="100%">
-        <side-bar class="side-bar" hide="['Featured Channels']"></side-bar>
+        <side-bar class="side-bar" hide-options="['Featured Channels']"></side-bar>
     </div>
     <div ng-show="true" class="main-content" ng-controller="FeaturedChannelController">
         <div class="channel-card non-selectable" ng-click="addHistory(channel)" ng-repeat="channel in channels">

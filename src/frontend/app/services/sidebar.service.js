@@ -37,8 +37,8 @@ angular.module('migration-sample-app')
         };
     }])
 angular.module('migration-sample-app')
-    .controller('ViewHistoryController', ['$scope', '$http', '$state', 'sideBarService', 'gameService',
-    function($scope, $http, $state, sideBarService, gameService) {
+    .controller('ViewHistoryController', ['$scope', '$http', '$state', '$mdDialog', 'sideBarService', 'gameService',
+    function($scope, $http, $state, $mdDialog, sideBarService, gameService) {
 
         $scope.histories = [];
 
@@ -85,6 +85,20 @@ angular.module('migration-sample-app')
                 console.log(err);
             });
 
+        }
+
+        $scope.confirmClearHistory = function(event) {
+            var confirm = $mdDialog.confirm()
+                .title('Clear all view histories?')
+                .textContent('All view histories will be permanently deleted.')
+                .targetEvent(event)
+                .ok('Ok')
+                .cancel('Cancel');
+
+            $mdDialog.show(confirm).then(function() {
+                $scope.clearHistories();
+            },
+            function() {});
         }
 
         $scope.clearHistories = function () {
