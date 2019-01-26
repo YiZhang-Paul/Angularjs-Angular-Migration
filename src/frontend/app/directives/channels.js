@@ -1,8 +1,29 @@
 angular.module('migration-sample-app')
-    .controller('ChannelController', ['$scope', '$transitions', '$stateParams', '$http', '$interval',
-        function($scope, $transitions, $stateParams, $http, $interval) {
+    .controller('ChannelController', ['$scope', '$transitions', 'gameService', '$stateParams', '$http', '$interval',
+        function($scope, $transitions, gameService, $stateParams, $http, $interval) {
+
             $scope.channels = [];
-            $scope.game = $stateParams.game;
+
+            if ($stateParams.game) {
+                $scope.game = $stateParams.game;
+                $scope.channels = $stateParams.channels;
+            }
+            else {
+                gameService.getGameList().then(function(data) {
+                    var name = $stateParams.name.replace(/-/g, ' ');
+                    for (var i = 0; i < data.length; i++) {
+                        if (name == data[i].name) {
+                            $scope.game = data[i];
+                            break;
+                        }
+                    }
+                    refreshChannels();
+                },
+                function(err) {
+                    console.log(err);
+                });
+            }
+
 
             $transitions.onStart({}, function(transition) {
                 if (transition.from().name == 'channels') {
@@ -10,9 +31,6 @@ angular.module('migration-sample-app')
                 }
             });
 
-            if ($stateParams.channels) {
-                $scope.channels = $stateParams.channels;
-            }
 
             $scope.playThumbnail = function (video) {
                 video.srcElement.play();
@@ -26,6 +44,10 @@ angular.module('migration-sample-app')
             var refreshChannels = function() {
                 $http.get('http://127.0.0.1:4150/api/v1/games/' + $scope.game.id + "/channels")
                     .then(function(data) {
+                        if (!$scope.channels.length) {
+                            $scope.channels =data.data;
+                            return;
+                        }
                         var length = Math.min($scope.channels.length, data.data.length);
                         for (var i = 0; i < length; i++) {
                             if ($scope.channels[i]['provider_id'] == data.data[i]['provider_id'] && $scope.channels[i]['provider_channel_id'] == data.data[i]['provider_channel_id']) {
