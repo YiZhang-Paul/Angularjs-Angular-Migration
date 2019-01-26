@@ -20,6 +20,8 @@ export class ChannelService implements IChannelService {
     private _gameRepository: IGameRepository;
     private _channelRepository: IChannelRepository;
 
+    private _resolvedIds = new Map<string, number | null>();
+
     constructor(
 
         dataStore: IMemoryDataStore,
@@ -51,6 +53,53 @@ export class ChannelService implements IChannelService {
     private async hasGame(id: number): Promise<boolean> {
 
         return await this._gameRepository.has(id);
+    }
+
+    private findResolvedId(key: string): number | null {
+
+        if (!this._resolvedIds.has(key)) {
+
+            return null;
+        }
+
+        const id = this._resolvedIds.get(key);
+
+        return id === undefined ? null : id;
+    }
+    // TODO: extract to class
+    private async resolveGameId(channel: any): Promise<number | null> {
+
+        const key = `${channel.provider_id}<|>${channel.provider_game_id}`;
+        const resolvedId = this.findResolvedId(key);
+
+        if (resolvedId !== null) {
+
+            return resolvedId;
+        }
+
+        const filter = {
+
+            'search_api_keys.provider_id': channel.provider_id,
+            'search_api_keys.provider_game_id': channel.provider_game_id
+        };
+
+        const game = await this._gameRepository.findOne(filter);
+        const result = game ? game.toObject().id : null;
+        this._resolvedIds.set(key, result);
+
+        return this.findResolvedId(key);
+    }
+
+    private async attachResolvedGameId(channels: any[]): Promise<any[]> {
+
+        const result = channels.map(async _ => {
+
+            _.game_id = await this.resolveGameId(_);
+
+            return _;
+        });
+
+        return Promise.all(result);
     }
 
     private attachGameId(data: any[], id: number): any[] {
@@ -117,7 +166,7 @@ export class ChannelService implements IChannelService {
         const result = cached && cached.length ?
             cached : await this.getCollectedChannels(key);
 
-        return this.attachDefaultImage(result);
+        return this.attachDefaultImage(await this.attachResolvedGameId(result));
     }
 
     public async getChannelsByGameId(id: number): Promise<any[]> {
