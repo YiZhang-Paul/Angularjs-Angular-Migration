@@ -4,6 +4,8 @@ import ChannelRepositoryFactory from '../../../../shared/repositories/channel-re
 import IChannelRepository from '../../../../shared/repositories/channel-repository/channel-repository.interface';
 import GameRepositoryFactory from '../../../../shared/repositories/game-repository/game-repository.factory';
 import IGameRepository from '../../../../shared/repositories/game-repository/game-repository.interface';
+import GameResolver from '../../../../shared/services/game-resolver/game-resolver';
+import IGameResolver from '../../../../shared/services/game-resolver/game-resolver.interface';
 import MemoryDataStore from '../../../../shared/services/data-store/memory-data-store/memory-data-store';
 import IMemoryDataStore from '../../../../shared/services/data-store/memory-data-store/memory-data-store.interface';
 import ProviderRepositoryFactory from '../../../../shared/repositories/provider-repository/provider-repository.factory';
@@ -14,29 +16,30 @@ import IChannelService from './channel-service.interface';
 export class ChannelService implements IChannelService {
 
     private _dataStore: IMemoryDataStore;
-    private _channelCollector: IChannelDataCollector | null = null;
-    private _channelCollectorPromise: Promise<IChannelDataCollector>;
+    private _gameResolver: IGameResolver;
     private _providerRepository: IProviderRepository;
     private _gameRepository: IGameRepository;
     private _channelRepository: IChannelRepository;
-
-    private _resolvedIds = new Map<string, number | null>();
+    private _channelCollector: IChannelDataCollector | null = null;
+    private _channelCollectorPromise: Promise<IChannelDataCollector>;
 
     constructor(
 
         dataStore: IMemoryDataStore,
-        channelCollectorPromise: Promise<IChannelDataCollector>,
+        gameResolver: IGameResolver,
         providerRepository: IProviderRepository,
         gameRepository: IGameRepository,
-        channelRepository: IChannelRepository
+        channelRepository: IChannelRepository,
+        channelCollectorPromise: Promise<IChannelDataCollector>
 
     ) {
 
         this._dataStore = dataStore;
-        this._channelCollectorPromise = channelCollectorPromise;
+        this._gameResolver = gameResolver;
         this._providerRepository = providerRepository;
         this._gameRepository = gameRepository;
         this._channelRepository = channelRepository;
+        this._channelCollectorPromise = channelCollectorPromise;
         this.loadChannelCollector(channelCollectorPromise);
     }
 
@@ -55,46 +58,12 @@ export class ChannelService implements IChannelService {
         return await this._gameRepository.has(id);
     }
 
-    private findResolvedId(key: string): number | null {
-
-        if (!this._resolvedIds.has(key)) {
-
-            return null;
-        }
-
-        const id = this._resolvedIds.get(key);
-
-        return id === undefined ? null : id;
-    }
-    // TODO: extract to class
-    private async resolveGameId(channel: any): Promise<number | null> {
-
-        const key = `${channel.provider_id}<|>${channel.provider_game_id}`;
-        const resolvedId = this.findResolvedId(key);
-
-        if (resolvedId !== null) {
-
-            return resolvedId;
-        }
-
-        const filter = {
-
-            'search_api_keys.provider_id': channel.provider_id,
-            'search_api_keys.provider_game_id': channel.provider_game_id
-        };
-
-        const game = await this._gameRepository.findOne(filter);
-        const result = game ? game.toObject().id : null;
-        this._resolvedIds.set(key, result);
-
-        return result;
-    }
-
     private async attachResolvedGameId(channels: any[]): Promise<any[]> {
 
         const result = channels.map(async _ => {
 
-            _.game_id = await this.resolveGameId(_);
+            const game = await this._gameResolver.resolveByChannel(_);
+            _.game_id = game ? game.id : null;
 
             return _;
         });
@@ -204,11 +173,14 @@ export class ChannelService implements IChannelService {
     }
 }
 
+const gameRepository = new GameRepositoryFactory().createRepository();
+
 export default new ChannelService(
 
     new MemoryDataStore(),
-    channelDataCollectorPromise,
+    new GameResolver(gameRepository),
     new ProviderRepositoryFactory().createRepository(),
-    new GameRepositoryFactory().createRepository(),
-    new ChannelRepositoryFactory().createRepository()
+    gameRepository,
+    new ChannelRepositoryFactory().createRepository(),
+    channelDataCollectorPromise
 );
