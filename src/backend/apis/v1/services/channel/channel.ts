@@ -87,7 +87,7 @@ export class ChannelService implements IChannelService {
         const result = game ? game.toObject().id : null;
         this._resolvedIds.set(key, result);
 
-        return this.findResolvedId(key);
+        return result;
     }
 
     private async attachResolvedGameId(channels: any[]): Promise<any[]> {

@@ -20,7 +20,6 @@ angular.module('migration-sample-app')
             });
             scope.badges.set('Followed Channels', []);
             sideBarService.getHistories().then(function(data) {
-                console.log(data);
                 scope.badges.set('View History', data.slice(0, 3));
             },
             function(err) {
