@@ -104,6 +104,33 @@
         -moz-box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
         box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
     }
+
+    .delete-all {
+
+        border: 2px solid gold;
+        position: absolute;
+        width: 15%;
+        height: 4vh;
+        top: 4vh;
+        left: 13.5%;
+        background-color: tomato;
+        border-radius: 7px;
+        text-align: center;
+        line-height: 4vh;
+    }
+
+    .delete-all:hover {
+
+        cursor: pointer;
+        border: 2px solid gold;
+        background-color: rgb(168, 0, 0);
+    }
+
+    .delete-all:active {
+
+        border: 2px solid gold;
+        background-color: rgb(196, 31, 31);
+    }
 </style>
 
 <div class="container" position="relative" width="100%" height="100%">
@@ -113,6 +140,7 @@
     <div position="relative" width="100%" height="100%">
         <side-bar class="side-bar" hide-history="true"></side-bar>
         <div class="main-content history-panel" ng-controller="ViewHistoryController">
+            <div class="delete-all non-selectable" ng-click="clearHistories()">Clear History</div>
             <div class="history-card" ng-repeat="history in histories">
                 <div ng-show="isStaticImage(history.thumbnail)" class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
                 <video ng-show="!isStaticImage(history.thumbnail)" class="history-thumbnail" ng-src="{{ history.thumbnail }}" type="video/mp4"></video>
