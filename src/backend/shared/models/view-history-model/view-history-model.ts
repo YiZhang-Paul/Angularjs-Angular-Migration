@@ -16,7 +16,7 @@ const ViewHistorySchema = new Schema({
     game_name: { type: String, required: true, maxlength: 100 },
     image: { type: String, validate: urlValidator },
     thumbnail: { type: String, validate: urlValidator },
-    timestamp: { type: Date, default: new Date() }
+    timestamp: { type: Number, default: new Date().getUTCMilliseconds() }
 });
 
 export default model('ViewHistory', ViewHistorySchema);

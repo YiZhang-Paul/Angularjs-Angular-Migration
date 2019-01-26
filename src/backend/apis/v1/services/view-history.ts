@@ -92,7 +92,7 @@ export class ViewHistoryService {
 
         const historyData: any = {
 
-            timestamp: new Date(),
+            timestamp: new Date().getUTCMilliseconds(),
             game_id: data.gameId,
             streamer_name: data.streamerName,
             game_name: data.gameName
