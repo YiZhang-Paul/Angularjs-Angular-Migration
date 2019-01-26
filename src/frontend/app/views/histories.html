@@ -67,9 +67,15 @@
 
     .game-title {
 
+        text-decoration: underline;
         font-size: 1.4em;
         font-weight: 500;
         color: rgb(77, 77, 77);
+    }
+
+    .game-title:hover {
+        cursor: pointer;
+        color: rgb(25, 151, 201);
     }
 
     .remove-history-icon {
@@ -114,7 +120,7 @@
                 <div class="history-details">
                     <span class="title">{{ history.title }}</span></br></br>
                     <span class="streamer">{{ history.streamer_name }}</span> was playing:
-                    <span class="game-title">{{ history.game_name | capitalize: ['the', 'of'] }}</span>
+                    <span class="game-title" ng-click="getChannels(history.game_id)">{{ history.game_name | capitalize: ['the', 'of'] }}</span>
                 </div>
                 <div class="remove-history-icon" ng-click="deleteHistory(history)"></div>
             </div>

@@ -37,7 +37,8 @@ angular.module('migration-sample-app')
         };
     }])
 angular.module('migration-sample-app')
-    .controller('ViewHistoryController', ['$scope', 'sideBarService', function($scope, sideBarService) {
+    .controller('ViewHistoryController', ['$scope', '$http', '$state', 'sideBarService', 'gameService',
+    function($scope, $http, $state, sideBarService, gameService) {
 
         $scope.histories = [];
 
@@ -68,5 +69,23 @@ angular.module('migration-sample-app')
             function(err) {
                 console.log(err);
             });
+        }
+
+        var joinWords = function (words) {
+            return words.replace(/\s/g, '-');
+        }
+
+        $scope.getChannels = function(id) {
+
+            gameService.getGame(id).then(function(game) {
+                $http.get('http://127.0.0.1:4150/' + game.channels).then(function(data) {
+                    var channels = data.data;
+                    $state.go('channels', { game, name: joinWords(game.name), channels });
+                });
+            },
+            function(err) {
+                console.log(err);
+            });
+
         }
     }]);
