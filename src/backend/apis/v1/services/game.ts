@@ -1,41 +1,36 @@
-import channelDataCollectorPromise from '../../../shared/services/data-collector/channel-data-collector/channel-data-collector.factory';
-import IChannelDataCollector from '../../../shared/services/data-collector/channel-data-collector/channel-data-collector.interface';
 import IDataStorageManager from '../../../shared/services/data-storage-manager/data-storage-manager.interface';
 import gameDataCollectorPromise from '../../../shared/services/data-collector/game-data-collector/game-data-collector.factory';
 import IGameDataCollector from '../../../shared/services/data-collector/game-data-collector/game-data-collector.interface';
 // tslint:disable-next-line:max-line-length
 import GameDataStorageManagerFactory from '../../../shared/services/data-storage-manager/game-data-storage-manager/game-data-storage-manager.factory';
 
+import channelService from './channel/channel';
+import IChannelService from './channel/channel-service.interface';
+
 export class GameService {
 
     private _storage: IDataStorageManager;
-    private _channelCollector: IChannelDataCollector | null = null;
-    private _channelCollectorPromise: Promise<IChannelDataCollector>;
+    private _channelService: IChannelService;
     private _gameCollector: IGameDataCollector | null = null;
     private _gameCollectorPromise: Promise<IGameDataCollector>;
 
     constructor(
 
         storage: IDataStorageManager,
-        gameCollectorPromise: Promise<IGameDataCollector>,
-        channelCollectorPromise: Promise<IChannelDataCollector>
+        channelService: IChannelService,
+        gameCollectorPromise: Promise<IGameDataCollector>
 
     ) {
 
         this._storage = storage;
+        this._channelService = channelService;
         this._gameCollectorPromise = gameCollectorPromise;
-        this._channelCollectorPromise = channelCollectorPromise;
         this.loadGameCollector(gameCollectorPromise);
     }
 
     private async loadGameCollector(collectorPromise: Promise<IGameDataCollector>): Promise<void> {
 
         this._gameCollector = await collectorPromise;
-    }
-
-    private async loadChannelCollector(collectorPromise: Promise<IChannelDataCollector>): Promise<void> {
-
-        this._channelCollector = await collectorPromise;
     }
 
     private attachChannelUrl(data: any): any {
@@ -48,31 +43,6 @@ export class GameService {
         }
 
         return data;
-    }
-
-    private attachGameId(data: any[], id: number): any[] {
-
-        return data.map(_ => {
-
-            _.game_id = id;
-
-            return _;
-        });
-    }
-
-    protected attachDefaultImage(data: any[]): any[] {
-
-        const image = 'https://www.bitgab.com/uploads/profile/files/default.png';
-
-        return data.map(_ => {
-
-            if (!_.image) {
-
-                _.image = image;
-            }
-
-            return _;
-        });
     }
 
     private async getCachedGame(id: number): Promise<any | null> {
@@ -97,25 +67,6 @@ export class GameService {
         return result && result.length ? result[0] : null;
     }
 
-    private async getCachedChannels(key: string): Promise<any[]> {
-
-        const result = await this._storage.getFromMemory(key);
-
-        return result && result.length ? result : [];
-    }
-    // TODO: extract channel service
-    private async getCollectedChannels(id: number, key: string): Promise<any[]> {
-
-        await this.loadChannelCollector(this._channelCollectorPromise);
-
-        if (this._channelCollector) {
-
-            await this._channelCollector.collectByGameId(id);
-        }
-
-        return this.getCachedChannels(key);
-    }
-
     public async getGames(): Promise<any[]> {
 
         const games = await this._storage.getFromMemory();
@@ -138,19 +89,13 @@ export class GameService {
 
     public async getChannelsByGameId(id: number): Promise<any[]> {
 
-        const key = `games/${id}/channels`;
-        const cached = await this.getCachedChannels(key);
-
-        const result = cached && cached.length ?
-            cached : await this.getCollectedChannels(id, key);
-
-        return this.attachDefaultImage(this.attachGameId(result, id));
+        return this._channelService.getChannelsByGameId(id);
     }
 }
 
 export default new GameService(
 
     new GameDataStorageManagerFactory().createStorageManager(),
-    gameDataCollectorPromise,
-    channelDataCollectorPromise
+    channelService,
+    gameDataCollectorPromise
 );

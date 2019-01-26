@@ -22,6 +22,7 @@ app.get('/', (_: Request, res: Response) => res.redirect(rootUrl));
 
 app.use(rootUrl, routes.index);
 app.use(`${rootUrl}/games`, routes.game);
+app.use(`${rootUrl}/channels`, routes.channel);
 app.use(`${rootUrl}/user`, routes.user);
 
 app.get('*', (_: Request, res: Response) => res.sendStatus(404));

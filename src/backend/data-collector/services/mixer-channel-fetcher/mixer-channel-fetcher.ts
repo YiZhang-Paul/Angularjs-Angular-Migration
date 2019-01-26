@@ -3,6 +3,23 @@ import DataFetcher from '../../../shared/services/data-fetcher/data-fetcher';
 
 export default class MixerChannelFetcher extends DataFetcher implements IChannelFetcher {
 
+    private attachThumbnail(data: any[]): any[] {
+
+        return data.map(_ => {
+
+            _.thumbnail = `https://thumbs.mixer.com/channel/${_.id}.m4v`;
+
+            return _;
+        });
+    }
+
+    protected async fetchData(query: string): Promise<any[]> {
+
+        const data = await super.fetchData(query);
+
+        return this.attachThumbnail(data);
+    }
+
     public async fetch(): Promise<any[]> {
 
         return this.fetchData('?order=viewersCurrent:DESC&limit=80');
@@ -16,13 +33,7 @@ export default class MixerChannelFetcher extends DataFetcher implements IChannel
     public async fetchByGameId(id: number): Promise<any[]> {
 
         const filter = `?where=typeId:eq:${id}`;
-        const data = await this.fetchData(`${filter}&order=viewersCurrent:DESC`);
 
-        for (const _ of data) {
-
-            _.thumbnail = `https://thumbs.mixer.com/channel/${_.id}.m4v`;
-        }
-
-        return data;
+        return this.fetchData(`${filter}&order=viewersCurrent:DESC`);
     }
 }
