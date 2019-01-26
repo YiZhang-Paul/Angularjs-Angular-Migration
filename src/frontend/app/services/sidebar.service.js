@@ -7,9 +7,7 @@ angular.module('migration-sample-app')
             $http.get('http://127.0.0.1:4150/api/v1/user/histories', {headers: {
                 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
             }}).then(function(data) {
-                    getHistoriesDeferred.resolve(data.data.sort(function(a, b) {
-                        return new Date(b.timestamp) - new Date(a.timestamp);
-                    }));
+                    getHistoriesDeferred.resolve(data.data.sort().reverse());
                 },
                 function(err) {
                     getHistoriesDeferred.reject(err);
@@ -47,14 +45,12 @@ angular.module('migration-sample-app')
         },function(err) { console.log(err); });
 
         $scope.isStaticImage = function (url) {
-
             return !/(mp4|m4v)$/i.test(url);
         }
 
         $scope.deleteHistory =function(history) {
 
             sideBarService.deleteHistory(history).then(function(data) {
-
                 var index = -1;
                 for (var i = 0; i < $scope.histories.length; i++) {
                     if ($scope.histories[i].id == history.id) {
