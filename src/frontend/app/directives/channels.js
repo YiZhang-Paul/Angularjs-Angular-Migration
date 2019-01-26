@@ -1,6 +1,6 @@
 angular.module('migration-sample-app')
-    .controller('ChannelController', ['$scope', '$transitions', 'gameService', '$stateParams', '$http', '$interval',
-        function($scope, $transitions, gameService, $stateParams, $http, $interval) {
+    .controller('ChannelController', ['$rootScope', '$scope', '$transitions', 'gameService', '$stateParams', '$http', '$interval',
+        function($rootScope, $scope, $transitions, gameService, $stateParams, $http, $interval) {
 
             $scope.channels = [];
 
@@ -99,7 +99,7 @@ angular.module('migration-sample-app')
                     'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
                 }})
                     .then(function(data) {
-                        console.log(data)
+                        $rootScope.$broadcast('historyUpdated');
                     }, function(err) {
                         console.log(err);
                     });

@@ -15,6 +15,15 @@ angular.module('migration-sample-app')
             function(err) {
                 console.log(err);
             });
+
+            scope.$on('historyUpdated', function() {
+                sideBarService.getHistories().then(function(data) {
+                    scope.badges.set('View History', data.slice(0, 3));
+                },
+                function(err) {
+                    console.log(err);
+                });
+            });
         }
 
         return {
