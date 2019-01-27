@@ -328,16 +328,28 @@ html, body {
     text-align: center;
 }
 
-.game-card.ng-enter, .channel-card.ng-enter {
+.bookmark-card.ng-enter .game-card.ng-enter, .channel-card.ng-enter {
 
     -webkit-transition: 1.2s;
     transition: 1.2s;
     opacity: 0;
 }
 
-.game-card.ng-enter-active, .channel-card.ng-enter-active {
+.bookmark-card.ng-enter-active, .game-card.ng-enter-active, .channel-card.ng-enter-active {
 
     opacity: 1;
+}
+
+.bookmark-card.ng-leave {
+
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    opacity: 1;
+}
+
+.bookmark-card.ng-leave-active {
+
+    opacity: 0;
 }
 
 .follow-button {
@@ -353,8 +365,16 @@ html, body {
     bottom: 5px;
     border-radius: 3px;
     background-color: rgb(112, 77, 177);
+    z-index: 2;
 }
-.channel-card:hover .follow-button {
+.bookmark-card .follow-button {
+    left: 0;
+    right: 0;
+    bottom: 2vh;
+    margin: 0 auto;
+}
+
+.channel-card:hover .follow-button, .bookmark-card:hover .follow-button {
     display: block;
 }
 .follow-button:hover {

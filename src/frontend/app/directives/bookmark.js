@@ -9,4 +9,17 @@ angular.module('migration-sample-app')
         function(err) {
             console.log(err);
         });
+
+        $scope.unfollow = function(bookmark) {
+            bookmarkService.unfollow(bookmark).then(function() {
+                for(var i = 0; i < $scope.bookmarks.length; i++) {
+                    if(bookmark.id == $scope.bookmarks[i].id) {
+                        $scope.bookmarks.splice(i, 1);
+                    }
+                }
+            },
+            function(err) {
+                console.log(err);
+            });
+        }
     }]);
