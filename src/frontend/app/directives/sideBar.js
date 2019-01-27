@@ -41,6 +41,15 @@ angular.module('migration-sample-app')
                     console.log(err);
                 });
             });
+
+            scope.$on('bookmarkUpdated', function() {
+                sideBarService.getBookmarks().then(function(data) {
+                    scope.badges.set('Followed Channels', data.slice(0, 3));
+                },
+                function(err) {
+                    console.log(err);
+                });
+            });
         }
 
         return {

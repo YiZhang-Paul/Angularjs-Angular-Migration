@@ -36,11 +36,21 @@ angular.module('migration-sample-app')
             }
 
             $scope.follow = function(channel) {
-                bookmarkService.follow(channel);
+                bookmarkService.follow(channel).then(function() {
+                    $rootScope.$broadcast('bookmarkUpdated');
+                },
+                function(err) {
+                    console.log(err);
+                });;
             }
 
             $scope.unfollow = function(channel) {
-                bookmarkService.unfollow(channel);
+                bookmarkService.unfollow(channel).then(function() {
+                    $rootScope.$broadcast('bookmarkUpdated');
+                },
+                function(err) {
+                    console.log(err);
+                });
             }
 
             $scope.playThumbnail = function (video) {
