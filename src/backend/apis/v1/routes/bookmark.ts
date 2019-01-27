@@ -49,7 +49,8 @@ router.post('/', [
         gameId: +req.body.game_id,
         streamerName: req.body.streamer_name,
         title: req.body.title || '',
-        image: req.body.image || ''
+        image: req.body.image || '',
+        banner: req.body.banner || ''
     };
 
     const status = await service.createBookmark(data);

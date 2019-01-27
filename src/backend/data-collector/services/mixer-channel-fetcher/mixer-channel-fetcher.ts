@@ -7,7 +7,7 @@ export default class MixerChannelFetcher extends DataFetcher implements IChannel
 
         return data.map(_ => {
 
-            _.thumbnail = `https://thumbs.mixer.com/channel/${_.id}.m4v`;
+            _.stream_thumbnail = `https://thumbs.mixer.com/channel/${_.id}.m4v`;
 
             return _;
         });

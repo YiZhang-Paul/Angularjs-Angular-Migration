@@ -83,6 +83,7 @@ export class BookmarkService {
         };
 
         if (data.image) { bookmarkData.image = data.image; }
+        if (data.banner) { bookmarkData.banner = data.banner; }
 
         return this._repository.insertOne(bookmarkData);
     }

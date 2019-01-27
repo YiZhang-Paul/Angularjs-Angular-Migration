@@ -12,7 +12,8 @@ const BookmarkSchema = new Schema({
     channel_id: { type: Number, required: true, min: 0, validate: integerValidator },
     title: { type: String, maxlength: 150 },
     streamer_name: { type: String, maxlength: 50 },
-    image: { type: String, validate: urlValidator }
+    image: { type: String, validate: urlValidator },
+    banner: { type: String, validate: urlValidator }
 });
 
 export default model('Bookmark', BookmarkSchema);

@@ -39,6 +39,9 @@
     .view-all:hover {
         color: lightskyblue;
     }
+    #followed-streamer-name {
+        font-size: 1.05em;
+    }
 </style>
 
 <div id="wrapper" class="non-selectable">
@@ -48,8 +51,7 @@
             <div class="channel-badge" ng-show="option === 'Followed Channels'" badge="badge" ng-repeat="badge in badges.get(option)">
                 <div class="avatar" ng-style=" badge.image && { 'background-image': 'url(' + badge.image + ')' }"></div>
                 <div class="badge-info">
-                    <span>{{ badge.title }}</span></br>
-                    <span>{{ badge.streamer_name }}</span>
+                    <span id="followed-streamer-name">{{ badge.streamer_name }}</span>
                 </div>
             </div>
             <channel-badge ng-show="option !== 'Followed Channels'" badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>

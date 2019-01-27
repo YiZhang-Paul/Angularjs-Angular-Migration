@@ -22,6 +22,10 @@ var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate', 'ngM
                 url: '/featured',
                 templateUrl: './views/featured.html'
             })
+            .state('bookmarks', {
+                url: '/bookmarks',
+                templateUrl: './views/bookmarks.html'
+            })
             .state('histories', {
                 url: '/histories',
                 templateUrl: './views/histories.html'

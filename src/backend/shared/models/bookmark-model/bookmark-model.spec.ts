@@ -8,6 +8,7 @@ const channelIdField = 'channel_id';
 const titleField = 'title';
 const streamerNameField = 'streamer_name';
 const imageField = 'image';
+const bannerField = 'banner';
 
 context('User model unit test', () => {
 
@@ -156,6 +157,24 @@ context('User model unit test', () => {
             const errorMessage = `${imageField} must be a valid URI.`;
 
             await verifyCustomError(model, imageField, errorMessage);
+        });
+    });
+
+    describe(`${bannerField}`, () => {
+
+        it('should be a string', async () => {
+
+            const model = new BookmarkModel({ [bannerField]: {} });
+
+            await verifyCastError(model, bannerField);
+        });
+
+        it('should be a valid url', async () => {
+
+            const model = new BookmarkModel({ [bannerField]: 'not_a_url' });
+            const errorMessage = `${bannerField} must be a valid URI.`;
+
+            await verifyCustomError(model, bannerField, errorMessage);
         });
     });
 });
