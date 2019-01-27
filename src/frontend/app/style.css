@@ -390,3 +390,7 @@ html, body {
 .followed:hover {
     background-color: rgb(216, 49, 27);
 }
+
+.toast {
+    opacity: 1 !important;
+}

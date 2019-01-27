@@ -1,6 +1,6 @@
-var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate', 'ngMaterial'])
-    .config(['$windowProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', '$transitionsProvider',
-    function($windowProvider, $stateProvider, $urlRouterProvider, $locationProvider, $transitionsProvider) {
+var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate', 'ngMaterial', 'toastr'])
+    .config(['$windowProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', '$transitionsProvider', 'toastrConfig',
+    function($windowProvider, $stateProvider, $urlRouterProvider, $locationProvider, $transitionsProvider, toastrConfig) {
         $stateProvider
             .state('index', {
                 url: '/',
@@ -43,6 +43,11 @@ var app = angular.module('migration-sample-app', ['ui.router', 'ngAnimate', 'ngM
 
         $urlRouterProvider.otherwise('/error');
         $locationProvider.html5Mode(true);
+
+        angular.extend(toastrConfig, {
+            maxOpened: 5,
+            newestOnTop: true
+          });
     }]);
 
 app.controller('GameListController', ['$scope', 'gameService', '$http', '$state',
