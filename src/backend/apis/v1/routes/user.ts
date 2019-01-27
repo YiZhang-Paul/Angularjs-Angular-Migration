@@ -6,6 +6,7 @@ import { checkBadRequest } from '../services/express-validator-utility';
 import { authenticate } from '../authentication/fake-authenticator';
 import services from '../services';
 
+import bookmarkRoute from './bookmark';
 import viewHistoryRoute from './view-history';
 
 const router = Router();
@@ -51,6 +52,7 @@ router.put('/', authenticate('id'), [
 
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
+router.use('/bookmarks', bookmarkRoute);
 router.use('/histories', viewHistoryRoute);
 
 export default router;

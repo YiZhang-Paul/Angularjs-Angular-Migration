@@ -12,19 +12,19 @@ export class ViewHistoryService {
 
     private _remover: IKeyRemover;
     private _channelService: IChannelService;
-    private _viewHistoryRepository: IViewHistoryRepository;
+    private _repository: IViewHistoryRepository;
 
     constructor(
 
         remover: IKeyRemover,
         channelService: IChannelService,
-        viewHistoryRepository: IViewHistoryRepository
+        repository: IViewHistoryRepository
 
     ) {
 
-        this._channelService = channelService;
-        this._viewHistoryRepository = viewHistoryRepository;
         this._remover = remover;
+        this._channelService = channelService;
+        this._repository = repository;
     }
 
     private toObject(document: Document): any {
@@ -53,7 +53,7 @@ export class ViewHistoryService {
     private async findHistory(userId: number, channelId: number): Promise<any> {
 
         const filter = { user_id: userId, channel_id: channelId };
-        const result = await this._viewHistoryRepository.findOne(filter);
+        const result = await this._repository.findOne(filter);
 
         return result ? result.toObject() : null;
     }
@@ -85,7 +85,7 @@ export class ViewHistoryService {
         if (data.image) { historyData.image = data.image; }
         if (data.thumbnail) { historyData.thumbnail = data.thumbnail; }
 
-        return this._viewHistoryRepository.insertOne(historyData);
+        return this._repository.insertOne(historyData);
     }
 
     private async updateHistory(id: number, data: any): Promise<any> {
@@ -102,7 +102,7 @@ export class ViewHistoryService {
         if (data.image) { historyData.image = data.image; }
         if (data.thumbnail) { historyData.thumbnail = data.thumbnail; }
 
-        return this._viewHistoryRepository.updateOne(historyData, { id });
+        return this._repository.updateOne(historyData, { id });
     }
 
     public async createHistory(data: any): Promise<201 | 204 | 400> {
@@ -127,7 +127,7 @@ export class ViewHistoryService {
     public async getHistory(id: number, userId: number): Promise<any> {
 
         const filter = { id, user_id: userId };
-        const history = await this._viewHistoryRepository.findOne(filter);
+        const history = await this._repository.findOne(filter);
 
         if (!history) {
 
@@ -142,7 +142,7 @@ export class ViewHistoryService {
     public async getHistories(id: number): Promise<any[]> {
 
         const filter = { user_id: id };
-        const histories = await this._viewHistoryRepository.find(filter);
+        const histories = await this._repository.find(filter);
         const result = histories.map(_ => this.toObject(_));
 
         return this.attachDefaultThumbnail(result);
@@ -152,13 +152,13 @@ export class ViewHistoryService {
 
         const filter = { id, user_id: userId };
 
-        return this._viewHistoryRepository.deleteOne(filter);
+        return this._repository.deleteOne(filter);
     }
 
     public async clearHistories(id: number): Promise<boolean> {
 
         const filter = { user_id: id };
-        const result = await this._viewHistoryRepository.delete(filter);
+        const result = await this._repository.delete(filter);
 
         return !!result;
     }

@@ -70,7 +70,7 @@ export class ChannelService implements IChannelService {
 
         return Promise.all(result);
     }
-
+    // TODO: extract to generic function
     private attachGameId(data: any[], id: number): any[] {
 
         return data.map(_ => {
