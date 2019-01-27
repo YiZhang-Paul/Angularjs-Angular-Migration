@@ -35,6 +35,21 @@ export class BookmarkService {
         return this._remover.remove([object], keys)[0];
     }
 
+    private attachDefaultImage(data: any[]): any[] {
+
+        const image = 'https://www.bitgab.com/uploads/profile/files/default.png';
+
+        return data.map(_ => {
+
+            if (!_.image) {
+
+                _.image = image;
+            }
+
+            return _;
+        });
+    }
+
     private async findBookmark(userId: number, channelId: number): Promise<any> {
 
         const filter = { user_id: userId, channel_id: channelId };
@@ -42,6 +57,7 @@ export class BookmarkService {
 
         return result ? result.toObject() : null;
     }
+
     // TODO: move to channel service?
     private async prepareChannel(data: any): Promise<any> {
 
@@ -100,15 +116,18 @@ export class BookmarkService {
             return null;
         }
 
-        return this.toObject(bookmark);
+        const result = this.toObject(bookmark);
+
+        return this.attachDefaultImage([result])[0];
     }
 
     public async getBookmarks(id: number): Promise<any[]> {
 
         const filter = { user_id: id };
-        const result = await this._repository.find(filter);
+        const bookmarks = await this._repository.find(filter);
+        const result = bookmarks.map(_ => this.toObject(_));
 
-        return result.map(_ => this.toObject(_));
+        return this.attachDefaultImage(result);
     }
 
     public async deleteBookmark(id: number, userId: number): Promise<boolean> {

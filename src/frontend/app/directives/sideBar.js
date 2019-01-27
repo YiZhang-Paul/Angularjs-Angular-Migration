@@ -18,7 +18,17 @@ angular.module('migration-sample-app')
             function(err) {
                 console.log(err);
             });
-            scope.badges.set('Followed Channels', []);
+
+            $http.get('http://127.0.0.1:4150/api/v1/user/bookmarks', {headers: {
+                'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+            }}).then(function(data) {
+                console.log(data.data);
+                scope.badges.set('Followed Channels', data.data.slice(0, 3));
+            },
+            function(err) {
+                console.log(err);
+            });
+
             sideBarService.getHistories().then(function(data) {
                 scope.badges.set('View History', data.slice(0, 3));
             },

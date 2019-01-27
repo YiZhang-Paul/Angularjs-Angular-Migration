@@ -81,7 +81,7 @@ export class ChannelService implements IChannelService {
         });
     }
 
-    protected attachDefaultImage(data: any[]): any[] {
+    private attachDefaultImage(data: any[]): any[] {
 
         const image = 'https://www.bitgab.com/uploads/profile/files/default.png';
 

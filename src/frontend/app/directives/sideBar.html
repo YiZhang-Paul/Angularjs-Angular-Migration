@@ -45,7 +45,14 @@
     <div class="option-wrapper" ng-repeat="option in options">
         <ul ng-show="!hideOptions || !hideOptions.includes(option)" class="side-bar-option">
             <li>{{ option }}</li>
-            <channel-badge badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>
+            <div class="channel-badge" ng-show="option === 'Followed Channels'" badge="badge" ng-repeat="badge in badges.get(option)">
+                <div class="avatar" ng-style=" badge.image && { 'background-image': 'url(' + badge.image + ')' }"></div>
+                <div class="badge-info">
+                    <span>{{ badge.title }}</span></br>
+                    <span>{{ badge.streamer_name }}</span>
+                </div>
+            </div>
+            <channel-badge ng-show="option !== 'Followed Channels'" badge="badge" ng-repeat="badge in badges.get(option)"></channel-badge>
             <a ui-sref="{{ targetRoutes[$index] }}" class="view-all" ng-show="badges.get(option).length">View All</a>
         </ul>
     </div>
