@@ -3,11 +3,9 @@
         <div top-nav-bar></div>
     </div>
     <div position="relative" width="100%" height="100%">
-        <div class="side-bar" ng-controller="SideBarController">
-            <side-bar></side-bar>
-        </div>
+        <side-bar class="side-bar"></side-bar>
         <div class="main-content" ng-controller="GameListController">
-            <div class="game-card" ng-repeat="game in games" ng-click="getChannels(game)">
+            <div class="game-card non-selectable" ng-repeat="game in games" ng-click="getChannels(game)">
                 <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
                 <div class="name-tag">
                     <span>{{ game.name | capitalize: ['the', 'of'] }}</span>

@@ -4,6 +4,7 @@ import IQueryOption from './query-option.interface';
 
 export default interface IRepository {
 
+    has<T = string>(id: T): Promise<boolean>;
     insert(data: any[]): Promise<Document[]>;
     insertOne(data: any): Promise<Document | null>;
     find(filter?: any, option?: IQueryOption): Promise<Document[]>;

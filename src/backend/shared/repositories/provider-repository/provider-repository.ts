@@ -8,12 +8,12 @@ export default class ProviderRepository extends AllPrivilegeMongoDbRepository im
 
         const document = await this.findOne({ name });
 
-        return document ? +document.toObject()['id'] : -1;
+        return document ? +document.toObject().id : -1;
     }
     public async findApisByName(name: string): Promise<any> {
 
         const document = await this.findOne({ name });
 
-        return document ? document.toObject()['urls'] : null;
+        return document ? document.toObject().urls : null;
     }
 }

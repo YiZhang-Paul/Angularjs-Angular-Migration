@@ -3,12 +3,14 @@ import { verifyCastError, verifyCustomError, verifyValidationError } from '../..
 import ViewHistoryModel from './view-history-model';
 
 const idField = 'id';
+const userIdField = 'user_id';
 const channelIdField = 'channel_id';
 const titleField = 'title';
 const streamerNameField = 'streamer_name';
 const gameIdField = 'game_id';
 const gameNameField = 'game_name';
 const imageField = 'image';
+const thumbnailField = 'thumbnail';
 
 context('View History model unit test', () => {
 
@@ -41,6 +43,38 @@ context('View History model unit test', () => {
             const model = new ViewHistoryModel({ [idField]: '-1' });
 
             await verifyValidationError(model, idField, 'min');
+        });
+    });
+
+    describe(`${userIdField}`, () => {
+
+        it('should be required', async () => {
+
+            const model = new ViewHistoryModel();
+
+            await verifyValidationError(model, userIdField, 'required');
+        });
+
+        it('should be a number', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: 'not_a_number' });
+
+            await verifyCastError(model, userIdField);
+        });
+
+        it('should be an integer', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: '55.5' });
+            const errorMessage = `${userIdField} must be an integer.`;
+
+            await verifyCustomError(model, userIdField, errorMessage);
+        });
+
+        it('should be larger than or equal to 0', async () => {
+
+            const model = new ViewHistoryModel({ [userIdField]: '-1' });
+
+            await verifyValidationError(model, userIdField, 'min');
         });
     });
 
@@ -168,13 +202,6 @@ context('View History model unit test', () => {
 
     describe(`${imageField}`, () => {
 
-        it('should be required', async () => {
-
-            const model = new ViewHistoryModel();
-
-            await verifyValidationError(model, imageField, 'required');
-        });
-
         it('should be a string', async () => {
 
             const model = new ViewHistoryModel({ [imageField]: {} });
@@ -188,6 +215,24 @@ context('View History model unit test', () => {
             const errorMessage = `${imageField} must be a valid URI.`;
 
             await verifyCustomError(model, imageField, errorMessage);
+        });
+    });
+
+    describe(`${thumbnailField}`, () => {
+
+        it('should be a string', async () => {
+
+            const model = new ViewHistoryModel({ [thumbnailField]: {} });
+
+            await verifyCastError(model, thumbnailField);
+        });
+
+        it('should be a valid url', async () => {
+
+            const model = new ViewHistoryModel({ [thumbnailField]: 'not_a_url' });
+            const errorMessage = `${thumbnailField} must be a valid URI.`;
+
+            await verifyCustomError(model, thumbnailField, errorMessage);
         });
     });
 });

@@ -33,6 +33,15 @@ export default class ChannelDataCollector implements IChannelDataCollector {
         await this._memoryStore.set(data, key, 30);
     }
 
+    public async collect(): Promise<void> {
+
+        const data = await this._fetcher.batchFetch();
+        const adapted = data.map(_ => this._adapter.convert(_));
+        const sorted = this.sortByViews(adapted, 'view_count');
+
+        await this.addToStorage(sorted, 'channels');
+    }
+
     public async collectByGameId(id: number): Promise<any[]> {
 
         const data = await this._fetcher.batchFetchByGameId(id);

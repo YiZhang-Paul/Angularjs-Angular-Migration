@@ -1,7 +1,7 @@
 import config = require('config');
 import mongoose = require('mongoose');
 
-import ChannelDataCollectorPromise from '../shared/services/data-collector/channel-data-collector/channel-data-collector.factory';
+import channelDataCollectorPromise from '../shared/services/data-collector/channel-data-collector/channel-data-collector.factory';
 import gameDataCollectorPromise from '../shared/services/data-collector/game-data-collector/game-data-collector.factory';
 import ProviderRepositoryFactory from '../shared/repositories/provider-repository/provider-repository.factory';
 import IRepository from '../shared/repositories/repository.interface';
@@ -27,16 +27,14 @@ function getProviderData(name: string): any {
 
 async function initialize(repository: IRepository, providers: string[]): Promise<void> {
 
-    const channelDataCollector = await ChannelDataCollectorPromise;
     const gameDataCollector = await gameDataCollectorPromise;
+    const channelDataCollector = await channelDataCollectorPromise;
 
     await repository.delete({});
     await repository.insert(providers.map(getProviderData));
 
-    await channelDataCollector.collectByGameId(3);
-
     await gameDataCollector.collect();
-    await gameDataCollector.collectById(3);
+    await channelDataCollector.collect();
 
     await mongoose.disconnect();
 }

@@ -15,6 +15,11 @@ export default abstract class MongoDbRepository implements IRepository {
         this._model = documentGenerator.model;
     }
 
+    public has<T = string>(_id: T): Promise<boolean> {
+
+        throw new Error('not supported');
+    }
+
     public insert(_data: any[]): Promise<Document[]> {
 
         throw new Error('not supported');

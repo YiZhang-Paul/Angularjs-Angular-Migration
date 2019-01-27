@@ -1,0 +1,21 @@
+<div class="container" position="relative" width="100%" height="100%">
+    <div class="top-nav">
+        <div top-nav-bar></div>
+    </div>
+    <div position="relative" width="100%" height="100%">
+        <side-bar class="side-bar" hide-options="['Featured Channels']"></side-bar>
+    </div>
+    <div ng-show="true" class="main-content" ng-controller="FeaturedChannelController">
+        <div class="channel-card non-selectable" ng-click="addHistory(channel)" ng-repeat="channel in channels">
+            <span class="view-count" ng-class="{ 'view-updated': channel.updated }">{{ channel.view_count }}</span>
+            <video ng-mouseover="playThumbnail($event)" ng-mouseleave="stopThumbnail($event)" class="stream-thumbnail" ng-src="{{ channel.thumbnail }}" type="video/mp4" loop></video>
+            <div class="channel-image" ng-style="channel.image && { 'background-image': 'url(' + channel.image + ')' }"></div>
+            <div class="name-tag">
+                <span>{{ channel.title }}</span></br></br>
+                <span>{{ channel.streamer_name }}</span>
+                <div class="follow-button followed" ng-click="unfollow(channel)" ng-show="isFollowed(channel)">unfollow</div>
+                <div class="follow-button unfollowed" ng-click="follow(channel)" ng-hide="isFollowed(channel)">follow</div>
+            </div>
+        </div>
+    </div>
+</div>

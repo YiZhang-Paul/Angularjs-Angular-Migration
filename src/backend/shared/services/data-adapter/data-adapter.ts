@@ -22,9 +22,19 @@ export default abstract class DataAdapter<T> implements IDataAdapter {
         return mappings;
     }
 
+    private isNullOrUndefined(object: any): boolean {
+
+        return object === undefined || object === null;
+    }
+
     protected readValue(object: any, keys: string[]): any {
 
-        if (object === undefined || !keys.length) {
+        if (this.isNullOrUndefined(object)) {
+
+            return undefined;
+        }
+
+        if (!keys.length) {
 
             return object;
         }

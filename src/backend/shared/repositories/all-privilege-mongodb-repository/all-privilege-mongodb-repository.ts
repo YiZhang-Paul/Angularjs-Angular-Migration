@@ -7,6 +7,13 @@ type Query<T> = DocumentQuery<T, Document, {}>;
 
 export default class AllPrivilegeMongoDbRepository extends MongoDbRepository {
 
+    public async has<T = string>(id: T): Promise<boolean> {
+
+        const document = await this.findById(id);
+
+        return !!document;
+    }
+
     public async insert(data: any[]): Promise<Document[]> {
 
         const documents = this._documentGenerator.createDocuments(data);

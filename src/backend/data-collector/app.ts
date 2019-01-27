@@ -3,6 +3,7 @@ import Express = require('express');
 import { Request, Response } from 'Express';
 import mongoose = require('mongoose');
 
+import channelDataCollectorPromise from '../shared/services/data-collector/channel-data-collector/channel-data-collector.factory';
 import gameDataCollectorPromise from '../shared/services/data-collector/game-data-collector/game-data-collector.factory';
 import { connectMongoose } from '../mongo-database';
 import '../redis-database';
@@ -24,8 +25,10 @@ setInterval(async () => {
     connectMongoose();
 
     const gameDataCollector = await gameDataCollectorPromise;
+    const channelDataCollector = await channelDataCollectorPromise;
 
     await gameDataCollector.collect();
+    await channelDataCollector.collect();
 
     await mongoose.disconnect();
     // TODO: move these into configuration
