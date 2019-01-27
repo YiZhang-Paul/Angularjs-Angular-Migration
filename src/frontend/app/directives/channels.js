@@ -1,6 +1,6 @@
 angular.module('migration-sample-app')
-    .controller('ChannelController', ['$rootScope', '$scope', '$transitions', 'gameService', '$stateParams', '$http', '$interval',
-        function($rootScope, $scope, $transitions, gameService, $stateParams, $http, $interval) {
+    .controller('ChannelController', ['$state', '$rootScope', '$scope', '$transitions', 'bookmarkService', 'gameService', '$stateParams', '$http', '$interval',
+        function($state, $rootScope, $scope, $transitions, bookmarkService, gameService, $stateParams, $http, $interval) {
 
             $scope.channels = [];
 
@@ -31,6 +31,17 @@ angular.module('migration-sample-app')
                 }
             });
 
+            $scope.isFollowed = function(channel) {
+                return bookmarkService.isfollowed(channel);
+            }
+
+            $scope.follow = function(channel) {
+                bookmarkService.follow(channel);
+            }
+
+            $scope.unfollow = function(channel) {
+                bookmarkService.unfollow(channel);
+            }
 
             $scope.playThumbnail = function (video) {
                 video.srcElement.play();

@@ -77,6 +77,8 @@ export class BookmarkService {
 
             user_id: data.userId,
             game_id: data.gameId,
+            provider_id: data.providerId,
+            provider_channel_id: data.providerChannelId,
             channel_id: channelId,
             streamer_name: data.streamerName,
             title: data.title

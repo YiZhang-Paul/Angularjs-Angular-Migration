@@ -28,6 +28,8 @@
             <div class="name-tag">
                 <span>{{ channel.title }}</span></br></br>
                 <span>{{ channel.streamer_name }}</span>
+                <div class="follow-button followed" ng-click="unfollow(channel)" ng-show="isFollowed(channel)">unfollow</div>
+                <div class="follow-button unfollowed" ng-click="follow(channel)" ng-hide="isFollowed(channel)">follow</div>
             </div>
         </div>
     </div>

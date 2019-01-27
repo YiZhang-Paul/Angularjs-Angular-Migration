@@ -339,3 +339,34 @@ html, body {
 
     opacity: 1;
 }
+
+.follow-button {
+    text-align: center;
+    line-height: 1.5vw;
+    font-size: 1.05em;
+    font-weight: 600;
+    display: none;
+    position: absolute;
+    width: 4vw;
+    height: 1.5vw;
+    right: 2px;
+    bottom: 5px;
+    border-radius: 3px;
+    background-color: rgb(112, 77, 177);
+}
+.channel-card:hover .follow-button {
+    display: block;
+}
+.follow-button:hover {
+
+    cursor: pointer;
+}
+.unfollowed:hover {
+    background-color: rgb(137, 90, 223);
+}
+.followed {
+    background-color: rgb(177, 36, 18);
+}
+.followed:hover {
+    background-color: rgb(216, 49, 27);
+}

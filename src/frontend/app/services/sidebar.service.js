@@ -1,5 +1,18 @@
 angular.module('migration-sample-app')
-    .factory('sideBarService', ['$http', '$q', function ($http, $q) {
+    .factory('sideBarService', ['$http', '$state', '$q', function ($http, $state, $q) {
+
+        var getBookmarks =function() {
+            var getBookmarksDeferred = $q.defer();
+            $http.get('http://127.0.0.1:4150/api/v1/user/bookmarks', {headers: {
+                'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+            }}).then(function(data) {
+                getBookmarksDeferred.resolve(data.data);
+            },
+            function(err) {
+                getBookmarksDeferred.reject(err);
+            });
+            return getBookmarksDeferred.promise;
+        }
 
         var getHistories = function() {
             var getHistoriesDeferred = $q.defer();
@@ -32,6 +45,7 @@ angular.module('migration-sample-app')
         }
 
         return {
+            getBookmarks: getBookmarks,
             getHistories: getHistories,
             deleteHistory: deleteHistory
         };

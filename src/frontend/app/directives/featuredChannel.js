@@ -1,6 +1,6 @@
 angular.module('migration-sample-app')
-    .controller('FeaturedChannelController', ['$rootScope', '$scope', '$transitions', '$http', '$interval',
-        function($rootScope, $scope, $transitions, $http, $interval) {
+    .controller('FeaturedChannelController', ['$rootScope', '$scope', '$transitions', 'bookmarkService', '$http', '$q', '$interval',
+        function($rootScope, $scope, $transitions, bookmarkService, $http, $q, $interval) {
 
             $scope.channels = [];
 
@@ -24,6 +24,18 @@ angular.module('migration-sample-app')
             $scope.stopThumbnail = function(video) {
                 video.srcElement.pause();
                 video.srcElement.currentTime = 0;
+            }
+
+            $scope.isFollowed = function(channel) {
+                return bookmarkService.isfollowed(channel);
+            }
+
+            $scope.follow = function(channel) {
+                bookmarkService.follow(channel);
+            }
+
+            $scope.unfollow = function(channel) {
+                bookmarkService.unfollow(channel);
             }
 
             var refreshChannels = function() {
