@@ -65,7 +65,7 @@ angular.module('migration-sample-app')
             scope: {
                 hideOptions: '='
             },
-            templateUrl: './directives/sideBar.html',
+            templateUrl: './app/directives/sideBar.html',
             link: link
         };
     }]);

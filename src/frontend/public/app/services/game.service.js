@@ -1,6 +1,5 @@
 angular.module('migration-sample-app')
     .factory('gameService', ['$http', '$q', function ($http, $q) {
-
         var getGameList = function() {
             var getgameListDeferred = $q.defer();
 

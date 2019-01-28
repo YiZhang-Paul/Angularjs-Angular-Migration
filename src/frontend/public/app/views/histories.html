@@ -158,7 +158,7 @@
                 <div class="history-details">
                     <span class="title">{{ history.title }}</span></br></br>
                     <span class="streamer">{{ history.streamer_name }}</span> was playing:
-                    <span class="game-title" ng-click="getChannels(history.game_id)">{{ history.game_name | capitalize: ['the', 'of'] }}</span>
+                    <span class="game-title" ng-click="getChannels(history.game_id)">{{ history.game_name | capitalize }}</span>
                 </div>
                 <div class="remove-history-icon" ng-click="deleteHistory(history)"></div>
             </div>

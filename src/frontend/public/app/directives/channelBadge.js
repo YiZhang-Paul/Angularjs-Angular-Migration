@@ -6,6 +6,6 @@ angular.module('migration-sample-app')
             scope: {
                 badge: '='
             },
-            templateUrl: './directives/channelBadge.html'
+            templateUrl: './app/directives/channelBadge.html'
         };
     }]);
