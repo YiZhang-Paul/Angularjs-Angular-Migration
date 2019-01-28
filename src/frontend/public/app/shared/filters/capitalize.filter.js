@@ -2,16 +2,16 @@
 
 (() => {
 
-const app = angular.module('migration-sample-app');
+const app = angular.module('sample-app-shared');
 
 app.filter('capitalize', () => {
 
-    return (text, whitelist = ['the', 'of']) => {
+    return (text = '', whitelist = ['the', 'of']) => {
 
         const toSkip = new Set(whitelist);
         const words = text.toLowerCase().match(/\S+/g);
 
-        if (!words.length) {
+        if (!words || !words.length) {
 
             return text;
         }

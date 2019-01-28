@@ -32,7 +32,7 @@ angular.module('migration-sample-app')
             });
 
             $scope.isFollowed = function(channel) {
-                return bookmarkService.isfollowed(channel);
+                return bookmarkService.isFollowed(channel);
             }
 
             $scope.follow = function(channel) {

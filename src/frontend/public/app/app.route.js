@@ -34,12 +34,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
         templateUrl: './app/views/featured.html'
     };
 
-    const bookmarks = {
-
-        url: '/bookmarks',
-        templateUrl: './app/views/bookmarks.html'
-    };
-
     const histories = {
 
         url: '/histories',
@@ -56,7 +50,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
     $stateProvider.state('games', games);
     $stateProvider.state('channels', channels);
     $stateProvider.state('featured', featured);
-    $stateProvider.state('bookmarks', bookmarks);
     $stateProvider.state('histories', histories);
     $stateProvider.state('error', error);
     $urlRouterProvider.otherwise('/error');

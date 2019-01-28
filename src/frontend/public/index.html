@@ -4,31 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.12/angular-material.min.css">
     <link rel="stylesheet" href="https://unpkg.com/angular-toastr/dist/angular-toastr.css">
+    <link rel="stylesheet" href="./style.css">
     <title>Angular Migration Sample App</title>
 </head>
 <body ng-app="migration-sample-app">
+
     <ui-view></ui-view>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+    <!-- vendors -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.21/angular-ui-router.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-aria.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.12/angular-material.min.js"></script>
     <script src="https://unpkg.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <!-- entry point -->
     <script src="./app/app.module.js"></script>
     <script src="./app/app.route.js"></script>
+    <!-- bookmark component -->
+    <script src="./app/components/bookmark/bookmark.js"></script>
+    <script src="./app/components/bookmark/bookmark.route.js"></script>
+    <script src="./app/components/bookmark/bookmark.service.js"></script>
+
     <script src="./app/directives/topNavBar.js"></script>
     <script src="./app/directives/games.js"></script>
     <script src="./app/directives/sideBar.js"></script>
     <script src="./app/directives/channels.js"></script>
-    <script src="./app/directives/bookmark.js"></script>
     <script src="./app/directives/featuredChannel.js"></script>
     <script src="./app/directives/channelBadge.js"></script>
     <script src="./app/services/game.service.js"></script>
-    <script src="./app/services/bookmark.service.js"></script>
     <script src="./app/services/sidebar.service.js"></script>
-    <script src="./app/filters/game.filter.js"></script>
+    <!-- shared module -->
+    <script src="./app/shared/shared.module.js"></script>
+    <script src="./app/shared/filters/capitalize.filter.js"></script>
 </body>
 </html>

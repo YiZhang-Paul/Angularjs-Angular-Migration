@@ -7,7 +7,8 @@ const app = angular.module('migration-sample-app', [
     'ui.router',
     'ngAnimate',
     'ngMaterial',
-    'toastr'
+    'toastr',
+    'sample-app-shared'
 ]);
 
 app.config(($transitionsProvider, $windowProvider, $locationProvider, toastrConfig) => {
