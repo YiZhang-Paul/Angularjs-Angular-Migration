@@ -12,12 +12,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
         redirectTo: 'games'
     };
 
-    const games = {
-
-        url: '/games',
-        templateUrl: './app/views/main.html'
-    };
-
     const channels = {
 
         url: '/games/:name',
@@ -47,7 +41,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
     };
 
     $stateProvider.state('index', index);
-    $stateProvider.state('games', games);
     $stateProvider.state('channels', channels);
     $stateProvider.state('featured', featured);
     $stateProvider.state('histories', histories);

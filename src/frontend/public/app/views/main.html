@@ -4,8 +4,8 @@
     </div>
     <div position="relative" width="100%" height="100%">
         <side-bar class="side-bar"></side-bar>
-        <div class="main-content" ng-controller="GameListController">
-            <div class="game-card non-selectable" ng-repeat="game in games" ng-click="toChannelsView(game)">
+        <div class="main-content" ng-controller="GameListController as $ctrl">
+            <div class="game-card non-selectable" ng-repeat="game in $ctrl.games" ng-click="$ctrl.toChannelsView(game)">
                 <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
                 <div class="name-tag">
                     <span>{{ game.name | capitalize }}</span>

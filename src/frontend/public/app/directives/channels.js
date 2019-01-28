@@ -9,7 +9,7 @@ angular.module('migration-sample-app')
                 $scope.channels = $stateParams.channels;
             }
             else {
-                gameService.getGameList().then(function(data) {
+                gameService.getGames().then(function(data) {
                     var name = $stateParams.name.replace(/-/g, ' ');
                     for (var i = 0; i < data.length; i++) {
                         if (name == data[i].name) {
