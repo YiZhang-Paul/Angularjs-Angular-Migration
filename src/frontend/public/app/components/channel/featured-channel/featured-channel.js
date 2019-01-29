@@ -4,17 +4,15 @@
 
 const app = angular.module('migration-sample-app');
 
-class ChannelController {
+class FeaturedChannelController {
 
-    constructor($rootScope, $stateParams, $transitions, $http, $interval, bookmarkService, gameService) {
+    constructor($rootScope, $transitions, $http, $interval, bookmarkService) {
         'ngInject';
         this.$rootScope = $rootScope;
-        this.$stateParams = $stateParams;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
         this.bookmarkService = bookmarkService;
-        this.gameService = gameService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
@@ -22,54 +20,12 @@ class ChannelController {
         this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
 
         this.channels = [];
-        this.game = null;
     }
 
     $onInit() {
 
-        this.loadComponent();
+        this.loadChannels();
         this.setupChannelLoading();
-    }
-
-    async loadComponent() {
-
-        if (this.$stateParams.game) {
-
-            this.game = this.$stateParams.game;
-            this.channels = this.$stateParams.channels;
-
-            return;
-        }
-
-        try {
-
-            const games = await this.gameService.getGames();
-            const name = this.$stateParams.name.replace(/-/g, ' ');
-
-            this.game = games.find(_ => _.name === name);
-            this.loadChannels();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-    }
-
-    setupChannelLoading() {
-
-        const interval = this.$interval(() => {
-
-            this.loadChannels();
-
-        }, 10 * 1000);
-
-        this.$transitions.onStart({}, transition => {
-
-            if (transition.from().name === 'channels') {
-
-                this.$interval.cancel(interval);
-            }
-        });
     }
 
     blinkViewCount(channel) {
@@ -115,9 +71,9 @@ class ChannelController {
 
         try {
 
-            const url = `${this.api}/games/${this.game.id}/channels`;
+            const url = `${this.api}/channels`;
             const response = await this.$http.get(url);
-            const channels = response.data;
+            const channels = response.data.slice(0, 50);
 
             for (let i = 0; i < channels.length; i++) {
 
@@ -135,6 +91,23 @@ class ChannelController {
 
             console.log(error);
         }
+    }
+
+    setupChannelLoading() {
+
+        const interval = this.$interval(() => {
+
+            this.loadChannels();
+
+        }, 10 * 1000);
+
+        this.$transitions.onStart({}, transition => {
+
+            if (transition.from().name === 'featured') {
+
+                this.$interval.cancel(interval);
+            }
+        });
     }
 
     playThumbnail(video) {
@@ -197,6 +170,6 @@ class ChannelController {
     }
 }
 
-app.controller('ChannelController', ChannelController);
+app.controller('FeaturedChannelController', FeaturedChannelController);
 
 })();

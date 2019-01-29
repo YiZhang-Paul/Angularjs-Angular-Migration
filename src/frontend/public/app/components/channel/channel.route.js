@@ -19,7 +19,7 @@ app.config($stateProvider => {
     const featured = {
 
         url: '/featured',
-        templateUrl: './app/views/featured.html'
+        templateUrl: './app/components/channel/featured-channel/featured-channel.html'
     };
 
     $stateProvider.state('channels', channels);
