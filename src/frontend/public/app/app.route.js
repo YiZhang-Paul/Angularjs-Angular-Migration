@@ -15,7 +15,7 @@ app.config(($stateProvider, $urlRouterProvider) => {
     const histories = {
 
         url: '/histories',
-        templateUrl: './app/views/histories.html'
+        templateUrl: './app/components/view-history/view-history.html'
     };
 
     const error = {
