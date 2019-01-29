@@ -28,20 +28,19 @@
     "scripts": {
         "lint": "tslint -c tslint.json 'src/**/*.ts'",
         "clean": "rm -rf dist",
-        "build": "npm run lint && tsc && cp -r config dist/backend && cp -r config dist/frontend && copyfiles -e **/*.ts -u 1 src/frontend/**/*.* dist",
+        "build": "npm run lint && tsc && cp -r config dist/backend && cp -r config dist/frontend && copyfiles -e **/*.{ts,js} -u 1 src/frontend/**/*.* dist && webpack",
         "rebuild": "npm run clean && npm run build",
         "test-int": "npm run rebuild && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha --opts \"mocha.opts\" \"src/**/integration-tests/**/*.spec.ts\"",
         "test-unit": "npm run rebuild && nyc mocha --opts \"mocha.opts\" --exclude \"src/**/integration-tests/**/*.spec.ts\" \"src/**/*.spec.ts\"",
         "test": "npm run rebuild && set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& nyc mocha --opts \"mocha.opts\" \"src/**/*.spec.ts\"",
-        "frontend-nodemon": "nodemon --verbose --watch src/frontend -e js,html,css --exec \"copyfiles -e **/*.ts -u 1 src/frontend/**/*.* dist && npm run start-server\"",
+        "frontend-nodemon": "nodemon --verbose --watch src/frontend -e js,html,css --exec \"copyfiles -e **/*.{ts,js} -u 1 src/frontend/**/*.* dist && npm run start-server\"",
         "frontend-dev": "npm run rebuild && concurrently \"npm run start-backend\" \"npm run frontend-nodemon\"",
         "backend-dev": "nodemon --verbose --watch src/backend -e ts --exec \"npm run rebuild && npm run start-backend\"",
         "start-collector": "cd dist/backend && node data-collector/app",
         "start-api": "cd dist/backend && node apis/v1/app",
         "start-server": "cd dist/frontend && node server",
         "start-backend": "set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& concurrently \"npm run start-collector\" \"npm run start-api\"",
-        "start": "npm run rebuild && concurrently \"npm run start-collector\" \"npm run start-api\" \"npm run start-server\"",
-        "build-frontend": "webpack"
+        "start": "npm run rebuild && concurrently \"npm run start-collector\" \"npm run start-api\" \"npm run start-server\""
     },
     "repository": {
         "type": "git",
@@ -54,6 +53,7 @@
     },
     "homepage": "https://github.com/YiZhang-Paul/Angularjs-Angular-Migration#readme",
     "dependencies": {
+        "@babel/polyfill": "^7.2.5",
         "axios": "^0.18.0",
         "bcryptjs": "^2.4.3",
         "concurrently": "^4.1.0",

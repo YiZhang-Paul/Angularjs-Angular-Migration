@@ -1,7 +1,13 @@
-'use strict';
+import { TopNavigationBarComponent } from './top-navigation-bar/top-navigation-bar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
-(() => {
+import { SidebarService } from './sidebar/sidebar.service';
 
-angular.module('sample-app-common', []);
+const moduleName = 'sample-app-common';
 
-})();
+export default moduleName;
+
+angular.module(moduleName, [])
+    .component('topNavbar', TopNavigationBarComponent)
+    .component('sidebar', SidebarComponent)
+    .service('sidebarService', SidebarService);

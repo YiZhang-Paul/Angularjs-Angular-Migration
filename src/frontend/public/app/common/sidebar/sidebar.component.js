@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('sample-app-common');
-
-class SidebarComponent {
+export class Sidebar {
 
     constructor($scope, $http, toastr, sidebarService) {
         'ngInject';
@@ -92,14 +86,12 @@ class SidebarComponent {
     }
 }
 
-app.component('sidebar', {
+export const SidebarComponent = {
 
     bindings: {
 
         hideOptions: '<'
     },
     templateUrl: './app/common/sidebar/sidebar.html',
-    controller: SidebarComponent
-});
-
-})();
+    controller: Sidebar
+};

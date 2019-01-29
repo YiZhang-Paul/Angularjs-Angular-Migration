@@ -1,11 +1,5 @@
-'use strict';
+export default $stateProvider => {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-app.config($stateProvider => {
-    'ngInject';
     const channels = {
 
         url: '/games/:name',
@@ -24,6 +18,4 @@ app.config($stateProvider => {
 
     $stateProvider.state('channels', channels);
     $stateProvider.state('featured', featured);
-});
-
-})();
+}

@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('sample-app-common');
-
-class sidebarService {
+export class SidebarService {
 
     constructor($http) {
         'ngInject';
@@ -72,7 +66,3 @@ class sidebarService {
         }
     }
 }
-
-app.service('sidebarService', sidebarService);
-
-})();

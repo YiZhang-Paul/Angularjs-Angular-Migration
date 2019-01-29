@@ -1,7 +1,8 @@
-'use strict';
+import { capitalizeFilter } from './filters/capitalize.filter';
 
-(() => {
+const moduleName = 'sample-app-shared';
 
-angular.module('sample-app-shared', []);
+export default moduleName;
 
-})();
+angular.module(moduleName, [])
+    .filter('capitalize', capitalizeFilter);

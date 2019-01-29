@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('sample-app-shared');
-
-app.filter('capitalize', () => {
+export const capitalizeFilter = () => {
 
     return (text = '', whitelist = ['the', 'of']) => {
 
@@ -26,6 +20,4 @@ app.filter('capitalize', () => {
 
         return words.join(' ');
     }
-})
-
-})();
+}

@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class FeaturedChannelController {
+export class FeaturedChannelController {
 
     constructor($rootScope, $transitions, $http, $interval, bookmarkService) {
         'ngInject';
@@ -169,7 +163,3 @@ class FeaturedChannelController {
         }
     }
 }
-
-app.controller('FeaturedChannelController', FeaturedChannelController);
-
-})();

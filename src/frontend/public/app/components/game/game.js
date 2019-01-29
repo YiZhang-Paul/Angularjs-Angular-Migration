@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class GameListController {
+export class GameListController {
 
     constructor($interval, $http, $state, gameService) {
         'ngInject';
@@ -79,7 +73,3 @@ class GameListController {
         }
     }
 }
-
-app.controller('GameListController', GameListController);
-
-})();

@@ -1,11 +1,5 @@
-'use strict';
+export default ($stateProvider, $urlRouterProvider) => {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-app.config(($stateProvider, $urlRouterProvider) => {
-    'ngInject';
     const index = {
 
         url: '/',
@@ -21,6 +15,4 @@ app.config(($stateProvider, $urlRouterProvider) => {
     $stateProvider.state('index', index);
     $stateProvider.state('error', error);
     $urlRouterProvider.otherwise('/error');
-});
-
-})();
+}

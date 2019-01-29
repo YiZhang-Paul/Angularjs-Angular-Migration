@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class ViewHistoryController {
+export class ViewHistoryController {
 
     constructor($http, $state, $mdDialog, sidebarService, gameService) {
         'ngInject';
@@ -106,7 +100,3 @@ class ViewHistoryController {
         }
     }
 }
-
-app.controller('ViewHistoryController', ViewHistoryController);
-
-})();

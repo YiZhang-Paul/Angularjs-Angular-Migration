@@ -1,10 +1,4 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class BookmarkService {
+export class BookmarkService {
 
     constructor($http) {
         'ngInject';
@@ -90,7 +84,3 @@ class BookmarkService {
         }
     }
 }
-
-app.service('bookmarkService', BookmarkService);
-
-})();

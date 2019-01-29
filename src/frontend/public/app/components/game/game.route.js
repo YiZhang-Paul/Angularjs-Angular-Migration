@@ -1,11 +1,5 @@
-'use strict';
+export default $stateProvider => {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-app.config($stateProvider => {
-    'ngInject';
     const games = {
 
         url: '/games',
@@ -13,6 +7,4 @@ app.config($stateProvider => {
     };
 
     $stateProvider.state('games', games);
-});
-
-})();
+}

@@ -1,6 +1,11 @@
-'use strict';
+import "@babel/polyfill";
 
-(() => {
+import ComponentModule from './components/components.module';
+import CommonModule from './common/common.module';
+import SharedModule from './shared/shared.module';
+
+import AppConfig from './app.config';
+import AppRoute from './app.route';
 
 const app = angular.module('migration-sample-app', [
 
@@ -8,22 +13,10 @@ const app = angular.module('migration-sample-app', [
     'ngAnimate',
     'ngMaterial',
     'toastr',
-    'sample-app-common',
-    'sample-app-shared'
+    ComponentModule,
+    CommonModule,
+    SharedModule
 ]);
 
-app.config(($transitionsProvider, $windowProvider, $locationProvider, toastrConfig) => {
-    'ngInject';
-    const $transitions = $transitionsProvider.$get();
-
-    $transitions.onSuccess({}, () => {
-
-        const $window = $windowProvider.$get();
-        $window.scrollTo(0, 0);
-    });
-
-    $locationProvider.html5Mode(true);
-    angular.extend(toastrConfig, { maxOpened: 5, newestOnTop: true });
-});
-
-})();
+app.config(AppConfig);
+app.config(AppRoute);
