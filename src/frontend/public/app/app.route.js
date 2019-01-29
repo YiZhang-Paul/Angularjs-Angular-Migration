@@ -15,7 +15,7 @@ app.config(($stateProvider, $urlRouterProvider) => {
     const error = {
 
         url: '/error',
-        templateUrl: './app/views/error.html'
+        templateUrl: './app/error.html'
     };
 
     $stateProvider.state('index', index);

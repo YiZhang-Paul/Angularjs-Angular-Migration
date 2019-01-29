@@ -9,7 +9,7 @@ app.config($stateProvider => {
     const games = {
 
         url: '/games',
-        templateUrl: './app/views/main.html'
+        templateUrl: './app/app.html'
     };
 
     $stateProvider.state('games', games);
