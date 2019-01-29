@@ -8,11 +8,11 @@ const port = config.get<{ server: string }>('port').server;
 
 app.disable('x-powered-by');
 
-app.use(Express.static(path.join(__dirname, 'app')));
+app.use(Express.static(path.join(__dirname, 'public')));
 
 app.get('/*', (_: Request, res: Response) => {
 
-    const index = path.join(__dirname, 'app', 'index.html');
+    const index = path.join(__dirname, 'public', 'index.html');
 
     res.sendFile(index);
 });

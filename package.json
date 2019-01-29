@@ -85,6 +85,7 @@
         "chai-http": "^4.2.1",
         "copyfiles": "^2.1.0",
         "mocha": "^5.2.0",
+        "ng-annotate": "^1.2.2",
         "nodemon": "^1.18.9",
         "nyc": "^13.1.0",
         "sinon": "^7.2.3",
