@@ -12,12 +12,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
         redirectTo: 'games'
     };
 
-    const histories = {
-
-        url: '/histories',
-        templateUrl: './app/components/view-history/view-history.html'
-    };
-
     const error = {
 
         url: '/error',
@@ -25,7 +19,6 @@ app.config(($stateProvider, $urlRouterProvider) => {
     };
 
     $stateProvider.state('index', index);
-    $stateProvider.state('histories', histories);
     $stateProvider.state('error', error);
     $urlRouterProvider.otherwise('/error');
 });
