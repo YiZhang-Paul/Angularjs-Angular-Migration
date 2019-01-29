@@ -20,7 +20,8 @@ class GameListController {
     $onInit() {
 
         this.loadGames();
-        this.interval = this.$interval(this.loadGames, 10000);
+        const callback = this.loadGames.bind(this);
+        this.interval = this.$interval(callback, 10 * 1000);
     }
 
     async loadGames() {

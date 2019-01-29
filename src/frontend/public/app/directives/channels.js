@@ -37,7 +37,7 @@ angular.module('migration-sample-app')
 
             $scope.follow = function(channel) {
                 bookmarkService.follow(channel).then(function() {
-                    $rootScope.$broadcast('bookmarkUpdated');
+                    $rootScope.$broadcast('followedChannel');
                 },
                 function(err) {
                     console.log(err);
@@ -46,7 +46,7 @@ angular.module('migration-sample-app')
 
             $scope.unfollow = function(channel) {
                 bookmarkService.unfollow(channel).then(function() {
-                    $rootScope.$broadcast('bookmarkUpdated');
+                    $rootScope.$broadcast('unfollowedChannel');
                 },
                 function(err) {
                     console.log(err);

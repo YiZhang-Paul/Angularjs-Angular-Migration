@@ -44,13 +44,14 @@ class BookmarkService {
 
             const response = await this.$http.get(this.api, this.defaultOptions);
             this.bookmarks = response.data;
-
-            return this.bookmarks;
         }
         catch (error) {
 
-            throw error;
+            console.log(error);
+            this.bookmarks = [];
         }
+
+        return this.bookmarks;
     }
 
     isFollowed(data) {

@@ -51,7 +51,7 @@ class BookmarkController {
         if (index !== -1) {
 
             this.bookmarks.splice(index, 1);
-            this.$rootScope.$broadcast('bookmarkUpdated');
+            this.$rootScope.$broadcast('unfollowedChannel');
         }
     }
 }

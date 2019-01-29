@@ -8,6 +8,7 @@ const app = angular.module('migration-sample-app', [
     'ngAnimate',
     'ngMaterial',
     'toastr',
+    'sample-app-common',
     'sample-app-shared'
 ]);
 
