@@ -1,20 +1,24 @@
 export const capitalizeFilter = () => {
 
+    const getWords = text => text.match(/\S+/g);
+    const toLowerCase = words => words.map(_ => _.toLowerCase());
+    const capitalize = word => `${word[0].toUpperCase()}${word.slice(1)}`;
+
     return (text = '', whitelist = ['the', 'of']) => {
 
-        const toSkip = new Set(whitelist);
-        const words = text.toLowerCase().match(/\S+/g);
+        if (!text || !text.trim()) {
 
-        if (!words || !words.length) {
-
-            return text;
+            return '';
         }
+
+        const words = toLowerCase(getWords(text));
+        const ignored = new Set(toLowerCase(whitelist));
 
         for (let i = 0; i < words.length; i++) {
 
-            if (!toSkip.has(words[i]) && /[a-zA-Z]/.test(words[i][0])) {
+            if (!ignored.has(words[i])) {
 
-                words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+                words[i] = capitalize(words[i]);
             }
         }
 
