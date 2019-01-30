@@ -18,7 +18,7 @@ const moduleName = 'sample-app-components';
 
 export default moduleName;
 
-angular.module(moduleName, [])
+angular.module(moduleName, ['ui.router'])
     .config(BookmarkRoute)
     .config(ChannelRoute)
     .config(GameRoute)

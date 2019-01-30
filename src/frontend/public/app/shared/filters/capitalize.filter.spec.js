@@ -4,21 +4,21 @@ const mockModule = angular.mock.module;
 
 context('capitalize filter unit test', () => {
 
+    let filter;
+
     beforeEach(mockModule(SharedModule));
 
+    beforeEach('test setup', inject($filter => {
+
+        filter = $filter('capitalize');
+    }));
+
+    it('should resolve', () => {
+
+        expect(filter).is.not.null;
+    });
+
     describe('capitalize()', () => {
-
-        let filter;
-
-        beforeEach('test setup', inject($filter => {
-
-            filter = $filter('capitalize');
-        }));
-
-        it('should resolve', () => {
-
-            expect(filter).is.not.null;
-        });
 
         it('should return empty string when input is null', () => {
 

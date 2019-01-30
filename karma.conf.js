@@ -7,6 +7,7 @@ module.exports = function (config) {
         files: [
             './node_modules/angular/angular.js',
             './node_modules/angular-mocks/angular-mocks.js',
+            './node_modules/@uirouter/angularjs/release/angular-ui-router.js',
             entry
         ],
         preprocessors: {
@@ -25,8 +26,15 @@ module.exports = function (config) {
                         },
                         include: path.resolve('./src/frontend/public/'),
                         exclude: /\.?specs?\.js$/
+                    },
+                    {
+                        test: /\.m?js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        use: {
+                            loader: 'babel-loader'
+                        }
                     }
-                ]
+                ],
             }
         },
         reporters: ['mocha', 'coverage-istanbul', 'remap-coverage'],

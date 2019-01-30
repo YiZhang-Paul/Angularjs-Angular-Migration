@@ -7,19 +7,12 @@ export class GameService {
         this.api = 'http://127.0.0.1:4150/api/v1/games';
     }
 
-    async getGame(id) {
+    getGame(id) {
 
-        try {
+        const url = `${this.api}/${id}`;
 
-            const url = `${this.api}/${id}`;
-            const response = await this.$http.get(url);
-
-            return response.data[0];
-        }
-        catch (error) {
-
-            throw error;
-        }
+        return this.$http.get(url)
+            .then(response => response.data[0]);
     }
 
     async getGames() {
