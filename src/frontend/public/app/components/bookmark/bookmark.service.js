@@ -1,3 +1,5 @@
+import { findByProperties, hasOwnProperties } from '../../shared/utilities/utilities';
+
 export class BookmarkService {
 
     constructor($http) {
@@ -13,74 +15,74 @@ export class BookmarkService {
         this.getBookmarks();
     }
 
-    findBookmark(data) {
+    getBookmarks() {
 
-        return this.bookmarks.find(_ => {
+        return this.$http.get(this.api, this.defaultOptions)
+            .then(response => response.data)
+            .catch(error => {
 
-            const followed = _.channel_id === data.channel_id;
-            const provided = _.provider_id === data.provider_id
-                          && _.provider_channel_id === data.provider_channel_id;
+                console.log(error);
 
-            return followed || provided;
-        });
-    }
-
-    getBookmarkId(data) {
-
-        const bookmark = this.findBookmark(data);
-
-        return bookmark ? bookmark.id : -1;
-    }
-
-    async getBookmarks() {
-
-        try {
-
-            const response = await this.$http.get(this.api, this.defaultOptions);
-            this.bookmarks = response.data;
-        }
-        catch (error) {
-
-            console.log(error);
-            this.bookmarks = [];
-        }
-
-        return this.bookmarks;
+                return [];
+            });
     }
 
     isFollowed(data) {
 
-        return !!this.findBookmark(data);
+        return !!findBookmark(this.bookmarks, data);
     }
 
-    async follow(data) {
+    follow(data) {
 
-        try {
+        return this.$http.post(this.api, data, this.defaultOptions)
+            .then(response => {
 
-            const response = await this.$http.post(this.api, data, this.defaultOptions);
-            await this.getBookmarks();
+                return this.getBookmarks().then(bookmarks => {
 
-            return response.data;
-        }
-        catch (error) {
+                    this.bookmarks = bookmarks;
 
-            throw error;
-        }
+                    return response.data;
+                });
+            });
     }
 
-    async unfollow(data) {
+    unfollow(data) {
 
-        try {
+        const id = getBookmarkId(this.bookmarks, data);
+        const url = `${this.api}/${id}`;
 
-            const url = `${this.api}/${this.getBookmarkId(data)}`;
-            const response = await this.$http.delete(url, this.defaultOptions);
-            await this.getBookmarks();
+        return this.$http.delete(url, this.defaultOptions).then(response => {
 
-            return response.data;
-        }
-        catch (error) {
+            return this.getBookmarks().then(bookmarks => {
 
-            throw error;
-        }
+                this.bookmarks = bookmarks;
+
+                return response.data;
+            });
+        });
     }
+}
+
+function findBookmark(bookmarks, data) {
+
+    const keys = ['provider_id', 'provider_channel_id'];
+
+    if (hasOwnProperties(data, keys)) {
+
+        return findByProperties(bookmarks, data, keys);
+    }
+
+    if (data.hasOwnProperty('channel_id')) {
+
+        return findByProperties(bookmarks, data, ['channel_id']);
+    }
+
+    return null;
+}
+
+function getBookmarkId(bookmarks, data) {
+
+    const bookmark = findBookmark(bookmarks, data);
+
+    return bookmark ? bookmark.id : -1;
 }

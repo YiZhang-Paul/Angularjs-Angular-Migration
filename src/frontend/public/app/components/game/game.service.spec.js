@@ -71,12 +71,12 @@ context('game service unit test', () => {
 
         it('should throw error when request failed', () => {
 
-            const status = 400;
-            httpBackend.expectGET(/.*/).respond(status);
+            const expected = 400;
+            httpBackend.expectGET(/.*/).respond(expected);
 
             service.getGame(id)
                 .then(() => q.reject(new Error()))
-                .catch(error => expect(error.status).to.equal(status));
+                .catch(error => expect(error.status).to.equal(expected));
 
             httpBackend.flush();
         });
@@ -114,6 +114,7 @@ context('game service unit test', () => {
 
             service.getGames().then(result => {
 
+                expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
 
@@ -122,12 +123,12 @@ context('game service unit test', () => {
 
         it('should throw error when request failed', () => {
 
-            const status = 400;
-            httpBackend.expectGET(/.*/).respond(status);
+            const expected = 400;
+            httpBackend.expectGET(/.*/).respond(expected);
 
             service.getGames()
                 .then(() => q.reject(new Error()))
-                .catch(error => expect(error.status).to.equal(status));
+                .catch(error => expect(error.status).to.equal(expected));
 
             httpBackend.flush();
         });
