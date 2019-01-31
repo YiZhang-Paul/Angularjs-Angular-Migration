@@ -5,13 +5,16 @@ const mockModule = angular.mock.module;
 context('game service unit test', () => {
 
     const api = 'http://127.0.0.1:4150/api/v1/games';
+
+    let q;
     let httpBackend;
     let service;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('test setup', inject(($injector) => {
+    beforeEach('test setup', inject($injector => {
 
+        q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
         service = $injector.get('gameService');
     }));
@@ -29,9 +32,10 @@ context('game service unit test', () => {
 
     describe('getGame()', () => {
 
+        const id = 17;
+
         it('should send GET request to correct url', () => {
 
-            const id = 17;
             const expected = `${api}/${id}`;
             httpBackend.expectGET(expected).respond([]);
 
@@ -42,10 +46,8 @@ context('game service unit test', () => {
 
         it('should return first data in response collection', () => {
 
-            const id = 17;
-            const url = `${api}/${id}`;
-            const expected = { name: 'Paul' };
-            httpBackend.expectGET(url).respond([expected]);
+            const expected = { data: 'random_data' };
+            httpBackend.expectGET(/.*/).respond([expected]);
 
             service.getGame(id).then(result => {
 
@@ -55,19 +57,79 @@ context('game service unit test', () => {
             httpBackend.flush();
         });
 
-        it('should return null when no game found');
+        it('should return null when no game found', () => {
 
-        it('should throw error when request failed');
+            httpBackend.expectGET(/.*/).respond([]);
+
+            service.getGame(id).then(result => {
+
+                expect(result).to.be.null;
+            });
+
+            httpBackend.flush();
+        });
+
+        it('should throw error when request failed', () => {
+
+            const status = 400;
+            httpBackend.expectGET(/.*/).respond(status);
+
+            service.getGame(id)
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error.status).to.equal(status));
+
+            httpBackend.flush();
+        });
     });
 
     describe('getGames()', () => {
 
-        it('should send GET request to correct url');
+        it('should send GET request to correct url', () => {
 
-        it('should return all data found');
+            const expected = api;
+            httpBackend.expectGET(expected).respond([]);
 
-        it('should return empty collection when no game found');
+            service.getGames();
 
-        it('should throw error when request failed');
+            httpBackend.flush();
+        });
+
+        it('should return all data found', () => {
+
+            const expected = [{ data: 'data_1' }, { data: 'data_2' }];
+            httpBackend.expectGET(/.*/).respond(expected);
+
+            service.getGames().then(result => {
+
+                expect(result).is.not.empty;
+                expect(result).to.deep.equal(expected);
+            });
+
+            httpBackend.flush();
+        });
+
+        it('should return empty collection when no game found', () => {
+
+            httpBackend.expectGET(/.*/).respond([]);
+
+            service.getGames().then(result => {
+
+                expect(result).to.be.empty;
+            });
+
+            httpBackend.flush();
+        });
+
+        it('should throw error when request failed', () => {
+
+            const status = 400;
+            httpBackend.expectGET(/.*/).respond(status);
+
+            service.getGames()
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error.status).to.equal(status));
+
+            httpBackend.flush();
+        });
     });
 });

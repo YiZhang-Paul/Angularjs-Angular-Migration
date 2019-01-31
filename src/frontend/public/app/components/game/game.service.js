@@ -12,20 +12,11 @@ export class GameService {
         const url = `${this.api}/${id}`;
 
         return this.$http.get(url)
-            .then(response => response.data[0]);
+            .then(response => response.data[0] ? response.data[0] : null);
     }
 
-    async getGames() {
+    getGames() {
 
-        try {
-
-            const response = await this.$http.get(this.api);
-
-            return response.data;
-        }
-        catch (error) {
-
-            throw error;
-        }
+        return this.$http.get(this.api).then(response => response.data);
     }
 }
