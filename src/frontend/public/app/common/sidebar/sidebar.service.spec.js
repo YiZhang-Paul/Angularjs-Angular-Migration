@@ -11,8 +11,6 @@ context('sidebar service unit test', () => {
     let deleteHistoryStub;
 
     let q;
-    //TODO: remove when fully refactored
-    let httpBackend;
     let scope;
     let service;
 
@@ -26,7 +24,6 @@ context('sidebar service unit test', () => {
         deleteHistoryStub = stub(historyService, 'deleteHistory');
 
         q = $injector.get('$q');
-        httpBackend = $injector.get('$httpBackend');
         scope = $injector.get('$rootScope');
         service = $injector.get('sidebarService');
     }));
@@ -48,10 +45,9 @@ context('sidebar service unit test', () => {
 
             getHistoriesStub.returns(q.resolve([]));
 
-            service.getHistories().then(() => {
+            service.getHistories();
 
-                sinonExpect.calledOnce(getHistoriesStub);
-            });
+            sinonExpect.calledOnce(getHistoriesStub);
         });
 
         it('should return view histories found sorted by timestamp in descending order', () => {
@@ -90,46 +86,6 @@ context('sidebar service unit test', () => {
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
-
-            scope.$apply();
-        });
-    });
-
-    describe('deleteHistory()', () => {
-
-        const history = { id: 6 };
-
-        it('should use view history http service to delete data', () => {
-
-            deleteHistoryStub.returns(q.resolve({}));
-
-            service.deleteHistory(history).then(() => {
-
-                sinonExpect.calledOnce(deleteHistoryStub);
-            });
-        });
-
-        it('should return view history http service response on success', () => {
-
-            const expected = { status: 200, data: 'random_data' };
-            deleteHistoryStub.returns(q.resolve(expected));
-
-            service.deleteHistory(history).then(result => {
-
-                expect(result).to.deep.equal(expected);
-            });
-
-            scope.$apply();
-        });
-
-        it('should throw error when deletion failed', () => {
-
-            const expected = 400;
-            deleteHistoryStub.returns(q.reject({ status: expected }));
-
-            service.deleteHistory(history)
-                .then(() => q.reject(new Error()))
-                .catch(error => expect(error.status).to.equal(expected));
 
             scope.$apply();
         });

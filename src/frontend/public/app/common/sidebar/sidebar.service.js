@@ -37,9 +37,4 @@ export class SidebarService {
             return [];
         });
     }
-
-    deleteHistory(history) {
-
-        return this.historyService.deleteHistory(history.id);
-    }
 }
