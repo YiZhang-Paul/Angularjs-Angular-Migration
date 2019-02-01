@@ -14,10 +14,12 @@ export class BookmarkService {
         this.bookmarks = [];
         this.getBookmarks();
     }
-    // TODO: refactor
+
     getBookmarks() {
 
-        return this.$http.get(this.api, this.defaultOptions)
+        const options = [this.api, this.defaultOptions];
+
+        return this.$http.get(...options)
             .then(response => response.data)
             .catch(error => {
 
@@ -31,27 +33,29 @@ export class BookmarkService {
 
         return !!findBookmark(this.bookmarks, data);
     }
-    // TODO: refactor
+
     follow(data) {
 
-        return this.$http.post(this.api, data, this.defaultOptions)
-            .then(response => {
+        const options = [this.api, data, this.defaultOptions];
 
-                return this.getBookmarks().then(bookmarks => {
+        return this.$http.post(...options).then(response => {
 
-                    this.bookmarks = bookmarks;
+            return this.getBookmarks().then(bookmarks => {
 
-                    return response.data;
-                });
+                this.bookmarks = bookmarks;
+
+                return response.data;
             });
+        });
     }
-    // TODO: refactor
+
     unfollow(data) {
 
         const id = getBookmarkId(this.bookmarks, data);
         const url = `${this.api}/${id}`;
+        const options = [url, this.defaultOptions];
 
-        return this.$http.delete(url, this.defaultOptions).then(response => {
+        return this.$http.delete(...options).then(response => {
 
             return this.getBookmarks().then(bookmarks => {
 
