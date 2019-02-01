@@ -1,3 +1,4 @@
+import { BookmarkHttpService } from './services/bookmark-http.service';
 import { GameHttpService } from './services/game-http.service';
 import { ViewHistoryHttpService } from './services/view-history-http.service';
 
@@ -8,6 +9,7 @@ const moduleName = 'sample-app-shared';
 export default moduleName;
 
 angular.module(moduleName, [])
+    .service('bookmarkHttpService', BookmarkHttpService)
     .service('gameHttpService', GameHttpService)
     .service('viewHistoryHttpService', ViewHistoryHttpService)
     .filter('capitalize', capitalizeFilter);

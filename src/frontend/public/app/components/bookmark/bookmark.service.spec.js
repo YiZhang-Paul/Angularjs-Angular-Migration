@@ -68,25 +68,6 @@ context('bookmark service unit test', () => {
 
     describe('getBookmarks()', () => {
 
-        it('should send GET request to correct url', () => {
-
-            const expected = api;
-            httpBackend.expectGET(expected).respond([]);
-
-            service.getBookmarks();
-
-            httpBackend.flush();
-        });
-
-        it('should include authentication token in request header', () => {
-
-            httpBackend.expectGET(/.*/, hasAuthenticationToken).respond([]);
-
-            service.getBookmarks();
-
-            httpBackend.flush();
-        });
-
         it('should return bookmarks found', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
@@ -178,36 +159,6 @@ context('bookmark service unit test', () => {
 
     describe('follow()', () => {
 
-        it('should send POST request to correct url', () => {
-
-            const expected = api;
-            httpBackend.expectPOST(expected).respond({});
-
-            service.follow({});
-
-            httpBackend.flush();
-        });
-
-        it('should include authentication token in request header', () => {
-
-            const data = {};
-            httpBackend.expectPOST(/.*/, data, hasAuthenticationToken).respond({});
-
-            service.follow(data);
-
-            httpBackend.flush();
-        });
-
-        it('should send data along with request', () => {
-
-            const expected = { provider_id: 1, provider_channel_id: 5 };
-            httpBackend.expectPOST(/.*/, expected).respond({});
-
-            service.follow(expected);
-
-            httpBackend.flush();
-        });
-
         it('should cache bookmarks when added successfully', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
@@ -248,27 +199,6 @@ context('bookmark service unit test', () => {
     });
 
     describe('unfollow()', () => {
-
-        it('should send DELETE request to correct url', () => {
-
-            const bookmark = service.bookmarks[2];
-            const data = { channel_id: bookmark.channel_id };
-            const expected = `${api}/${bookmark.id}`;
-            httpBackend.expectDELETE(expected).respond({});
-
-            service.unfollow(data);
-
-            httpBackend.flush();
-        });
-
-        it('should include authentication token in request header', () => {
-
-            httpBackend.expectDELETE(/.*/, hasAuthenticationToken).respond({});
-
-            service.unfollow({});
-
-            httpBackend.flush();
-        });
 
         it('should update bookmarks cache when deleted successfully', () => {
 
