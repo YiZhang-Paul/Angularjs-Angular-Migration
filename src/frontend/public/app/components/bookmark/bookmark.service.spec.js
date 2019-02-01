@@ -32,7 +32,7 @@ context('bookmark service unit test', () => {
         ];
     }));
 
-    beforeEach(() => {
+    beforeEach('mock http backend setup', () => {
 
         httpBackend.whenGET(/.*/).respond([]);
         httpBackend.whenPOST(/.*/).respond({});

@@ -14,7 +14,7 @@ export class BookmarkService {
         this.bookmarks = [];
         this.getBookmarks();
     }
-
+    // TODO: refactor
     getBookmarks() {
 
         return this.$http.get(this.api, this.defaultOptions)
@@ -31,7 +31,7 @@ export class BookmarkService {
 
         return !!findBookmark(this.bookmarks, data);
     }
-
+    // TODO: refactor
     follow(data) {
 
         return this.$http.post(this.api, data, this.defaultOptions)
@@ -45,7 +45,7 @@ export class BookmarkService {
                 });
             });
     }
-
+    // TODO: refactor
     unfollow(data) {
 
         const id = getBookmarkId(this.bookmarks, data);

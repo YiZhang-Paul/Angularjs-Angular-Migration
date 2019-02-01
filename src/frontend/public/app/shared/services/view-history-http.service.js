@@ -10,56 +10,36 @@ export class ViewHistoryHttpService {
         this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
     }
 
-    sortByTimestamp(data) {
+    getHistories() {
 
-        return data.slice().sort((a, b) => {
+        const options = [this.api, this.defaultOptions];
 
-            return b.timestamp - a.timestamp;
+        return this.$http.get(...options).then(response => {
+
+            return sortByTimestamp(response.data);
         });
     }
 
-    async getHistories() {
+    deleteHistory(id) {
 
-        try {
+        const url = `${this.api}/${id}`;
+        const options = [url, this.defaultOptions];
 
-            const url = `${this.api}/histories`;
-            const response = await this.$http.get(url, this.defaultOptions);
-
-            return this.sortByTimestamp(response.data);
-        }
-        catch (error) {
-
-            console.log(error);
-
-            return [];
-        }
+        return this.$http.delete(...options).then(response => response.data);
     }
 
-    async deleteHistory(history) {
+    deleteHistories() {
 
-        try {
+        const options = [this.api, this.defaultOptions];
 
-            const url = `${this.api}/histories/${history.id}`;
-
-            return this.$http.delete(url, this.defaultOptions);
-        }
-        catch (error) {
-
-            throw error;
-        }
+        return this.$http.delete(...options).then(response => response.data);
     }
+}
 
-    async deleteHistories() {
+function sortByTimestamp(data) {
 
-        try {
+    return data.slice().sort((a, b) => {
 
-            const url = `${this.api}/api/v1/user/histories`;
-            await this.$http.delete(url, this.defaultOptions);
-            this.histories = [];
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-    }
+        return b.timestamp - a.timestamp;
+    });
 }
