@@ -1,8 +1,8 @@
-import ComponentsModule from '../components.module';
+import SharedModule from '../shared.module';
 
 const mockModule = angular.mock.module;
 
-context('game service unit test', () => {
+context('game http service unit test', () => {
 
     const api = 'http://127.0.0.1:4150/api/v1/games';
 
@@ -10,13 +10,13 @@ context('game service unit test', () => {
     let httpBackend;
     let service;
 
-    beforeEach(mockModule(ComponentsModule));
+    beforeEach(mockModule(SharedModule));
 
     beforeEach('test setup', inject($injector => {
 
         q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
-        service = $injector.get('gameService');
+        service = $injector.get('gameHttpService');
     }));
 
     afterEach('test teardown', () => {

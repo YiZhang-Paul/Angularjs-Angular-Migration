@@ -1,4 +1,4 @@
-export class GameService {
+export class GameHttpService {
 
     constructor($http) {
         'ngInject';
@@ -11,8 +11,10 @@ export class GameService {
 
         const url = `${this.api}/${id}`;
 
-        return this.$http.get(url)
-            .then(response => response.data[0] ? response.data[0] : null);
+        return this.$http.get(url).then(response => {
+
+            return response.data[0] ? response.data[0] : null;
+        });
     }
 
     getGames() {

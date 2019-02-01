@@ -1,12 +1,12 @@
 export class ViewHistoryController {
 
-    constructor($http, $state, $mdDialog, viewHistoryHttpService, gameService) {
+    constructor($http, $state, $mdDialog, gameHttpService, viewHistoryHttpService) {
         'ngInject';
         this.$http = $http;
         this.$state = $state;
         this.$mdDialog = $mdDialog;
+        this.gameService = gameHttpService;
         this.historyService = viewHistoryHttpService;
-        this.gameService = gameService;
 
         this.api = 'http://127.0.0.1:4150';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
