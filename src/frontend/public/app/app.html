@@ -4,7 +4,7 @@
     </div>
     <div position="relative" width="100%" height="100%">
         <sidebar class="side-bar"></sidebar>
-        <div class="main-content" ng-controller="GameListController as $ctrl">
+        <div class="main-content" ng-controller="GameController as $ctrl">
             <div class="game-card non-selectable" ng-repeat="game in $ctrl.games" ng-click="$ctrl.toChannelsView(game)">
                 <div class="game-image" ng-style="game.image && { 'background-image': 'url(' + game.image + ')' }"></div>
                 <div class="name-tag">

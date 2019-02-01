@@ -1,53 +1,27 @@
-export class GameListController {
+export class GameController {
 
-    constructor($interval, $http, $state, gameService) {
+    constructor($interval, $http, $state, gameHttpService) {
         'ngInject';
         this.$interval = $interval;
         this.$http = $http;
         this.$state = $state;
-        this.service = gameService;
+        this.service = gameHttpService;
 
+        this.task = null;
         this.games = [];
-        this.interval = null;
     }
 
     $onInit() {
 
         this.loadGames();
-        const callback = this.loadGames.bind(this);
-        this.interval = this.$interval(callback, 10 * 1000);
+        this.task = this.$interval(this.loadGames.bind(this), 10 * 1000);
     }
 
-    async loadGames() {
+    loadGames() {
 
-        this.syncGames(await this.getGames());
-    }
-
-    async getGames() {
-
-        try {
-
-            return this.service.getGames();
-        }
-        catch (error) {
-
-            return [];
-        }
-    }
-
-    syncGames(games) {
-
-        for (let i = 0; i < games.length; i++) {
-
-            if (this.games[i] && this.games[i].id === games[i].id) {
-
-                this.games[i].view_count = games[i].view_count;
-
-                continue;
-            }
-
-            this.games[i] = games[i];
-        }
+        this.service.getGames()
+            .then(games => syncGames(this.games, games))
+            .catch(() => null);
     }
 
     joinWords(words) {
@@ -65,11 +39,26 @@ export class GameListController {
             const name = this.joinWords(game.name);
 
             this.$state.go('channels', { name, game, channels });
-            this.$interval.cancel(this.interval);
+            this.$interval.cancel(this.task);
         }
         catch (error) {
 
             console.log(error);
         }
+    }
+}
+
+function syncGames(oldGames, newGames) {
+
+    for (let i = 0; i < newGames.length; i++) {
+
+        if (oldGames[i] && oldGames[i].id === newGames[i].id) {
+
+            oldGames[i].view_count = newGames[i].view_count;
+
+            continue;
+        }
+
+        oldGames[i] = newGames[i];
     }
 }

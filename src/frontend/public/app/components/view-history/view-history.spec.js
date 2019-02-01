@@ -49,27 +49,30 @@ context('view history component unit test', () => {
         expect(controller).is.not.null;
     });
 
-    it('should load view histories on instantiation', () => {
+    describe('$onInit()', () => {
 
-        const expected = [{ id: 1 }, { id: 2 }, { id: 4 }];
-        getHistoriesStub.returns(q.resolve(expected));
+        it('should load view histories on instantiation', () => {
 
-        controller.$onInit();
-        scope.$apply();
+            const expected = [{ id: 1 }, { id: 2 }, { id: 4 }];
+            getHistoriesStub.returns(q.resolve(expected));
 
-        sinonExpect.calledOnce(getHistoriesStub);
-        expect(controller.histories).to.deep.equal(expected);
-    });
+            controller.$onInit();
+            scope.$apply();
 
-    it('should default to empty collection when load histories failed', () => {
+            sinonExpect.calledOnce(getHistoriesStub);
+            expect(controller.histories).to.deep.equal(expected);
+        });
+        //TODO: find a way to mute console.log in source code ONLY
+        it('should default to empty collection when load view histories failed', () => {
 
-        getHistoriesStub.returns(q.reject(new Error()));
+            getHistoriesStub.returns(q.reject(new Error()));
 
-        controller.$onInit();
-        scope.$apply();
+            controller.$onInit();
+            scope.$apply();
 
-        expect(Array.isArray(controller.histories)).to.be.true;
-        expect(controller.histories).to.be.empty;
+            expect(Array.isArray(controller.histories)).to.be.true;
+            expect(controller.histories).to.be.empty;
+        });
     });
 
     describe('deleteHistory()', () => {
