@@ -1,11 +1,11 @@
 export class ViewHistoryController {
 
-    constructor($http, $state, $mdDialog, sidebarService, gameService) {
+    constructor($http, $state, $mdDialog, viewHistoryHttpService, gameService) {
         'ngInject';
         this.$http = $http;
         this.$state = $state;
         this.$mdDialog = $mdDialog;
-        this.sidebarService = sidebarService;
+        this.historyService = viewHistoryHttpService;
         this.gameService = gameService;
 
         this.api = 'http://127.0.0.1:4150';
@@ -21,16 +21,11 @@ export class ViewHistoryController {
         this.loadHistories();
     }
 
-    async loadHistories() {
+    loadHistories() {
 
-        try {
-
-            this.histories = await this.sidebarService.getHistories();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.historyService.getHistories()
+            .then(histories => this.histories = histories)
+            .catch(error => console.log(error));
     }
 
     isStaticImage(url) {
@@ -63,14 +58,14 @@ export class ViewHistoryController {
 
     deleteHistory(history) {
 
-        const index = this.histories.findIndex(_ => _.id === history.id);
+        const id = history.id;
+        const index = this.histories.findIndex(_ => _.id === id);
 
         if (index !== -1) {
 
             this.histories.splice(index, 1);
+            this.historyService.deleteHistory(id).catch(() => null);
         }
-
-        this.sidebarService.deleteHistory(history).catch(() => null);
     }
 
     async confirmClearHistory(event) {
@@ -86,17 +81,10 @@ export class ViewHistoryController {
         this.clearHistories();
     }
 
-    async clearHistories() {
+    clearHistories() {
 
-        try {
-
-            const url = `${this.api}/api/v1/user/histories`;
-            await this.$http.delete(url, this.defaultOptions);
-            this.histories = [];
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.historyService.deleteHistories()
+            .then(() => this.histories = [])
+            .catch(error => console.log(error));
     }
 }

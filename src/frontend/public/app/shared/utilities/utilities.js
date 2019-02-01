@@ -1,3 +1,13 @@
+export function excludeIndex(collection, index) {
+
+    if (index < 0 || index > collection.length - 1) {
+
+        throw new Error('Invalid Index.');
+    }
+
+    return [...collection.slice(0, index), ...collection.slice(index + 1)];
+}
+
 export function hasMatchingValues(a, b, keys) {
 
     return keys.every(key => a[key] === b[key]);
@@ -17,6 +27,7 @@ export function findByProperties(objects, filter, keys) {
 
 export default {
 
+    excludeIndex,
     hasMatchingValues,
     hasOwnProperties,
     findByProperties
