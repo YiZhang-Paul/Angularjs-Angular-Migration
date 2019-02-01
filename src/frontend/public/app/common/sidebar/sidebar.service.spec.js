@@ -2,9 +2,15 @@ import SharedModule from '../../shared/shared.module';
 import CommonModule from '../common.module';
 
 const mockModule = angular.mock.module;
+const stub = sinon.stub;
+const sinonExpect = sinon.assert;
 
 context('sidebar service unit test', () => {
 
+    let getHistoriesStub;
+
+    let q;
+    //TODO: remove when fully refactored
     let httpBackend;
     let service;
 
@@ -13,12 +19,17 @@ context('sidebar service unit test', () => {
 
     beforeEach('test setup', inject($injector => {
 
+        const historyService = $injector.get('viewHistoryHttpService');
+        getHistoriesStub = stub(historyService, 'getHistories');
+
+        q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
         service = $injector.get('sidebarService');
     }));
 
     afterEach('test teardown', () => {
 
+        getHistoriesStub.restore();
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
@@ -30,46 +41,48 @@ context('sidebar service unit test', () => {
 
     describe('getHistories()', () => {
 
+        it('should use view history http service to fetch data', () => {
+
+            getHistoriesStub.returns(q.resolve([]));
+
+            service.getHistories().then(() => {
+
+                sinonExpect.calledOnce(getHistoriesStub);
+            });
+        });
+
         it('should return view histories found sorted by timestamp in descending order', () => {
 
-            const histories = [{ timestamp: 2 }, { timestamp: 4 }, { timestamp: 6 }];
-            const expected = histories.slice().reverse();
-            httpBackend.whenGET(/.*/).respond(histories);
+            const expected = [{ timestamp: 6 }, { timestamp: 4 }, { timestamp: 2 }];
+            getHistoriesStub.returns(q.resolve(expected));
 
             service.getHistories().then(result => {
 
                 expect(result).is.not.empty;
                 expect(result).to.deep.equal(expected);
             });
-
-            httpBackend.flush();
         });
 
         it('should return empty collection when no view history found', () => {
 
-            httpBackend.whenGET(/.*/).respond([]);
+            getHistoriesStub.returns(q.resolve([]));
 
             service.getHistories().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
-
-            httpBackend.flush();
         });
 
         it('should return empty collection when failed to retrieve histories', () => {
 
-            const expected = 400;
-            httpBackend.whenGET(/.*/).respond(expected);
+            getHistoriesStub.returns(q.reject(new Error()));
 
             service.getHistories().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
-
-            httpBackend.flush();
         });
     });
 });

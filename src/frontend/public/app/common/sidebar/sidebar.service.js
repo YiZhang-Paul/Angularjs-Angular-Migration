@@ -3,7 +3,7 @@ export class SidebarService {
     constructor($http, viewHistoryHttpService) {
         'ngInject';
         this.$http = $http;
-        this.viewHistoryHttpService = viewHistoryHttpService;
+        this.historyService = viewHistoryHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1/user';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
@@ -28,26 +28,14 @@ export class SidebarService {
         }
     }
 
-    sortByTimestamp(data) {
-
-        return data.slice().sort((a, b) => {
-
-            return b.timestamp - a.timestamp;
-        });
-    }
-
     getHistories() {
 
-        const url = `${this.api}/histories`;
+        return this.historyService.getHistories().catch(error => {
 
-        return this.$http.get(url, this.defaultOptions)
-            .then(response => this.sortByTimestamp(response.data))
-            .catch(error => {
+            console.log(error);
 
-                console.log(error);
-
-                return [];
-            });
+            return [];
+        });
     }
 
     async deleteHistory(history) {
