@@ -21,6 +21,17 @@ context('bookmark service unit test', () => {
         q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
         service = $injector.get('bookmarkService');
+    }));
+
+    beforeEach('mock http backend setup', () => {
+
+        httpBackend.whenGET(/.*/).respond([]);
+        httpBackend.whenPOST(/.*/).respond({});
+        httpBackend.whenDELETE(/.*/).respond({});
+        httpBackend.flush();
+    });
+
+    beforeEach('mock data setup', () => {
 
         service.bookmarks = [
 
@@ -30,14 +41,6 @@ context('bookmark service unit test', () => {
             { id: 7, channel_id: 11 },
             { id: 9, provider_id: 2, provider_channel_id: 54 }
         ];
-    }));
-
-    beforeEach('mock http backend setup', () => {
-
-        httpBackend.whenGET(/.*/).respond([]);
-        httpBackend.whenPOST(/.*/).respond({});
-        httpBackend.whenDELETE(/.*/).respond({});
-        httpBackend.flush();
     });
 
     afterEach('test teardown', () => {
@@ -53,11 +56,14 @@ context('bookmark service unit test', () => {
 
     it('should load bookmarks on instantiation', inject($injector => {
 
-        httpBackend.expectGET(/.*/).respond([]);
+        const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
+        httpBackend.expectGET(/.*/).respond(expected);
 
         service = $injector.instantiate(BookmarkService);
 
         httpBackend.flush();
+
+        expect(service.bookmarks).to.deep.equal(expected);
     }));
 
     describe('getBookmarks()', () => {

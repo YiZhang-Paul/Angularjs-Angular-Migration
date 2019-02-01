@@ -12,7 +12,12 @@ export class BookmarkService {
         this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
 
         this.bookmarks = [];
-        this.getBookmarks();
+        this.cacheBookmarks();
+    }
+
+    cacheBookmarks() {
+
+        return this.getBookmarks().then(response => this.bookmarks = response);
     }
 
     getBookmarks() {
@@ -40,12 +45,7 @@ export class BookmarkService {
 
         return this.$http.post(...options).then(response => {
 
-            return this.getBookmarks().then(bookmarks => {
-
-                this.bookmarks = bookmarks;
-
-                return response.data;
-            });
+            return this.cacheBookmarks().then(() => response.data);
         });
     }
 
@@ -57,12 +57,7 @@ export class BookmarkService {
 
         return this.$http.delete(...options).then(response => {
 
-            return this.getBookmarks().then(bookmarks => {
-
-                this.bookmarks = bookmarks;
-
-                return response.data;
-            });
+            return this.cacheBookmarks().then(() => response.data);
         });
     }
 }
