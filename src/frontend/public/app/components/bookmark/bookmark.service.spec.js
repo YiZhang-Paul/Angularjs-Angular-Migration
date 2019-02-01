@@ -1,35 +1,40 @@
+import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
-import { hasAuthenticationToken, hasMatchingValue } from '../../shared/utilities/test-utilities/test-verifications';
+import { hasMatchingValue } from '../../shared/utilities/test-utilities/test-verifications';
 
 import { BookmarkService } from './bookmark.service';
 
 const mockModule = angular.mock.module;
+const stub = sinon.stub;
+const sinonExpect = sinon.assert;
 
 context('bookmark service unit test', () => {
 
-    const api = 'http://127.0.0.1:4150/api/v1/user/bookmarks';
+    let getBookmarksStub;
+    let addBookmarkStub;
+    let deleteBookmarkStub;
 
     let q;
-    let httpBackend;
+    let scope;
     let service;
 
+    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
 
     beforeEach('test setup', inject($injector => {
 
+        const bookmarkHttpService = $injector.get('bookmarkHttpService');
+        getBookmarksStub = stub(bookmarkHttpService, 'getBookmarks');
+        addBookmarkStub = stub(bookmarkHttpService, 'addBookmark');
+        deleteBookmarkStub = stub(bookmarkHttpService, 'deleteBookmark');
+
         q = $injector.get('$q');
-        httpBackend = $injector.get('$httpBackend');
+        scope = $injector.get('$rootScope');
+        getBookmarksStub.returns(q.resolve([]));
         service = $injector.get('bookmarkService');
+        getBookmarksStub.reset();
     }));
-
-    beforeEach('mock http backend setup', () => {
-
-        httpBackend.whenGET(/.*/).respond([]);
-        httpBackend.whenPOST(/.*/).respond({});
-        httpBackend.whenDELETE(/.*/).respond({});
-        httpBackend.flush();
-    });
 
     beforeEach('mock data setup', () => {
 
@@ -45,8 +50,9 @@ context('bookmark service unit test', () => {
 
     afterEach('test teardown', () => {
 
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
+        getBookmarksStub.restore();
+        addBookmarkStub.restore();
+        deleteBookmarkStub.restore();
     });
 
     it('should resolve', () => {
@@ -57,21 +63,29 @@ context('bookmark service unit test', () => {
     it('should load bookmarks on instantiation', inject($injector => {
 
         const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-        httpBackend.expectGET(/.*/).respond(expected);
+        getBookmarksStub.returns(q.resolve(expected));
 
         service = $injector.instantiate(BookmarkService);
-
-        httpBackend.flush();
+        scope.$apply();
 
         expect(service.bookmarks).to.deep.equal(expected);
     }));
 
     describe('getBookmarks()', () => {
 
+        it('should use bookmark http service to fetch data', () => {
+
+            getBookmarksStub.returns(q.resolve([]));
+
+            service.getBookmarks();
+
+            sinonExpect.calledOnce(getBookmarksStub);
+        });
+
         it('should return bookmarks found', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            httpBackend.expectGET(/.*/).respond(expected);
+            getBookmarksStub.returns(q.resolve(expected));
 
             service.getBookmarks().then(result => {
 
@@ -79,33 +93,33 @@ context('bookmark service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            httpBackend.flush();
+            scope.$apply();
         });
 
         it('should return empty collection when no bookmark found', () => {
 
-            httpBackend.expectGET(/.*/).respond([]);
+            getBookmarksStub.returns(q.resolve([]));
 
             service.getBookmarks().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
-            })
+            });
 
-            httpBackend.flush();
+            scope.$apply();
         });
 
-        it('should return empty collection when http request failed', () => {
+        it('should return empty collection when failed to retrieve data', () => {
 
-            httpBackend.expectGET(/.*/).respond(404);
+            getBookmarksStub.returns(q.reject(new Error()));
 
             service.getBookmarks().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
-            })
+            });
 
-            httpBackend.flush();
+            scope.$apply();
         });
     });
 
@@ -159,83 +173,109 @@ context('bookmark service unit test', () => {
 
     describe('follow()', () => {
 
+        it('should use bookmark http service to add bookmark', () => {
+
+            addBookmarkStub.returns(q.resolve({}));
+            getBookmarksStub.returns(q.resolve([]));
+
+            service.follow({});
+
+            sinonExpect.calledOnce(addBookmarkStub);
+        });
+
         it('should cache bookmarks when added successfully', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            httpBackend.expectGET(/.*/).respond(expected);
+            addBookmarkStub.returns(q.resolve({}));
+            getBookmarksStub.returns(q.resolve(expected));
 
             service.follow({}).then(() => {
 
+                sinonExpect.calledOnce(getBookmarksStub);
                 expect(service.bookmarks).to.deep.equal(expected);
             });
 
-            httpBackend.flush();
+            scope.$apply();
         });
 
-        it('should return server response on success', () => {
+        it('should not cache bookmarks when failed to add bookmark', () => {
 
-            const expected = { status: 200, data: 'random_data' };
-            httpBackend.expectPOST(/.*/).respond(expected);
-
-            service.follow({}).then(result => {
-
-                expect(result).to.deep.equal(expected);
-            });
-
-            httpBackend.flush();
-        });
-
-        it('should throw error when http request failed', () => {
-
-            const expected = 404;
-            httpBackend.expectPOST(/.*/).respond(expected);
+            const expected = { status: 400 };
+            addBookmarkStub.returns(q.reject(expected));
 
             service.follow({})
                 .then(() => q.reject(new Error()))
-                .catch(error => expect(error.status).to.equal(expected));
+                .catch(() => sinonExpect.notCalled(getBookmarksStub));
 
-            httpBackend.flush();
+            scope.$apply();
+        });
+
+        it('should throw error when failed to add bookmark', () => {
+
+            const expected = { status: 400 };
+            addBookmarkStub.returns(q.reject(expected));
+
+            service.follow({})
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error).to.deep.equal(expected));
+
+            scope.$apply();
         });
     });
 
     describe('unfollow()', () => {
 
-        it('should update bookmarks cache when deleted successfully', () => {
+        it('should use bookmark http service to delete bookmark', () => {
+
+            const bookmark = service.bookmarks[2];
+            const channelId = bookmark.channel_id;
+            const expected = bookmark.id;
+            deleteBookmarkStub.returns(q.resolve({}));
+            getBookmarksStub.returns(q.resolve([]));
+
+            service.unfollow({ channel_id: channelId });
+
+            sinonExpect.calledOnce(deleteBookmarkStub);
+            sinonExpect.calledWith(deleteBookmarkStub, expected);
+        });
+
+        it('should cache bookmarks when deleted successfully', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            httpBackend.expectGET(/.*/).respond(expected);
+            deleteBookmarkStub.returns(q.resolve({}));
+            getBookmarksStub.returns(q.resolve(expected));
 
             service.unfollow({}).then(() => {
 
+                sinonExpect.calledOnce(getBookmarksStub);
                 expect(service.bookmarks).to.deep.equal(expected);
             });
 
-            httpBackend.flush();
+            scope.$apply();
         });
 
-        it('should return server response on success', () => {
+        it('should not cache bookmarks when failed to delete bookmark', () => {
 
-            const expected = { status: 200, data: 'random_data' };
-            httpBackend.expectDELETE(/.*/).respond(expected);
-
-            service.unfollow({}).then(result => {
-
-                expect(result).to.deep.equal(expected);
-            });
-
-            httpBackend.flush();
-        });
-
-        it('should throw error when http request failed', () => {
-
-            const expected = 404;
-            httpBackend.expectDELETE(/.*/).respond(expected);
+            const expected = { status: 400 };
+            deleteBookmarkStub.returns(q.reject(expected));
 
             service.unfollow({})
                 .then(() => q.reject(new Error()))
-                .catch(error => expect(error.status).to.equal(expected));
+                .catch(() => sinonExpect.notCalled(getBookmarksStub));
 
-            httpBackend.flush();
+            scope.$apply();
+        });
+
+        it('should throw error when failed to add bookmark', () => {
+
+            const expected = { status: 400 };
+            deleteBookmarkStub.returns(q.reject(expected));
+
+            service.unfollow({})
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error).to.deep.equal(expected));
+
+            scope.$apply();
         });
     });
 });

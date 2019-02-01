@@ -2,9 +2,9 @@ import { findByProperties, hasOwnProperties } from '../../shared/utilities/utili
 
 export class BookmarkService {
 
-    constructor($http) {
+    constructor(bookmarkHttpService) {
         'ngInject';
-        this.$http = $http;
+        this.service = bookmarkHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1/user/bookmarks';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
@@ -17,47 +17,42 @@ export class BookmarkService {
 
     cacheBookmarks() {
 
-        return this.getBookmarks().then(response => this.bookmarks = response);
+        return this.getBookmarks().then(bookmarks => {
+
+            this.bookmarks = bookmarks;
+        });
     }
 
     getBookmarks() {
 
-        const options = [this.api, this.defaultOptions];
+        return this.service.getBookmarks().catch(error => {
 
-        return this.$http.get(...options)
-            .then(response => response.data)
-            .catch(error => {
+            console.log(error);
 
-                console.log(error);
-
-                return [];
-            });
+            return [];
+        });
     }
 
     isFollowed(data) {
 
-        return !!findBookmark(this.bookmarks, data);
+        return getBookmarkId(this.bookmarks, data) !== -1;
     }
 
     follow(data) {
 
-        const options = [this.api, data, this.defaultOptions];
+        return this.service.addBookmark(data).then(() => {
 
-        return this.$http.post(...options).then(response => {
-
-            return this.cacheBookmarks().then(() => response.data);
+            return this.cacheBookmarks();
         });
     }
 
     unfollow(data) {
 
         const id = getBookmarkId(this.bookmarks, data);
-        const url = `${this.api}/${id}`;
-        const options = [url, this.defaultOptions];
 
-        return this.$http.delete(...options).then(response => {
+        return this.service.deleteBookmark(id).then(() => {
 
-            return this.cacheBookmarks().then(() => response.data);
+            return this.cacheBookmarks();
         });
     }
 }

@@ -13,6 +13,7 @@ context('sidebar service unit test', () => {
     let q;
     //TODO: remove when fully refactored
     let httpBackend;
+    let scope;
     let service;
 
     beforeEach(mockModule(SharedModule));
@@ -26,6 +27,7 @@ context('sidebar service unit test', () => {
 
         q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
+        scope = $injector.get('$rootScope');
         service = $injector.get('sidebarService');
     }));
 
@@ -33,8 +35,6 @@ context('sidebar service unit test', () => {
 
         getHistoriesStub.restore();
         deleteHistoryStub.restore();
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should resolve', () => {
@@ -64,6 +64,8 @@ context('sidebar service unit test', () => {
                 expect(result).is.not.empty;
                 expect(result).to.deep.equal(expected);
             });
+
+            scope.$apply();
         });
 
         it('should return empty collection when no view history found', () => {
@@ -75,6 +77,8 @@ context('sidebar service unit test', () => {
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
+
+            scope.$apply();
         });
 
         it('should return empty collection when failed to retrieve histories', () => {
@@ -86,6 +90,8 @@ context('sidebar service unit test', () => {
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
+
+            scope.$apply();
         });
     });
 
@@ -112,6 +118,8 @@ context('sidebar service unit test', () => {
 
                 expect(result).to.deep.equal(expected);
             });
+
+            scope.$apply();
         });
 
         it('should throw error when deletion failed', () => {
@@ -122,6 +130,8 @@ context('sidebar service unit test', () => {
             service.deleteHistory(history)
                 .then(() => q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
+
+            scope.$apply();
         });
     });
 });

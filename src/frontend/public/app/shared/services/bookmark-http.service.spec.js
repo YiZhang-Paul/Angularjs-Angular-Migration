@@ -82,7 +82,7 @@ context('bookmark http service unit test', () => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
-            })
+            });
 
             httpBackend.flush();
         });

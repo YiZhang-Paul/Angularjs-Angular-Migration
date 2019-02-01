@@ -40,8 +40,6 @@ context('view history component unit test', () => {
         getHistoriesStub.restore();
         deleteHistoryStub.restore();
         deleteHistoriesStub.restore();
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should resolve', () => {
@@ -90,6 +88,7 @@ context('view history component unit test', () => {
             deleteHistoryStub.returns(q.resolve({}));
 
             controller.deleteHistory({ id });
+            scope.$apply();
 
             sinonExpect.calledOnce(deleteHistoryStub);
             sinonExpect.calledWith(deleteHistoryStub, id);
@@ -102,6 +101,7 @@ context('view history component unit test', () => {
             const expected = controller.histories.slice();
 
             controller.deleteHistory({ id });
+            scope.$apply();
 
             sinonExpect.notCalled(deleteHistoryStub);
             expect(controller.histories).to.deep.equal(expected);
