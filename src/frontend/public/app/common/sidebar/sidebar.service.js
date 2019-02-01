@@ -38,17 +38,8 @@ export class SidebarService {
         });
     }
 
-    async deleteHistory(history) {
+    deleteHistory(history) {
 
-        try {
-
-            const url = `${this.api}/histories/${history.id}`;
-
-            return this.$http.delete(url, this.defaultOptions);
-        }
-        catch (error) {
-
-            throw error;
-        }
+        return this.historyService.deleteHistory(history.id);
     }
 }

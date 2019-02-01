@@ -8,6 +8,7 @@ const sinonExpect = sinon.assert;
 context('sidebar service unit test', () => {
 
     let getHistoriesStub;
+    let deleteHistoryStub;
 
     let q;
     //TODO: remove when fully refactored
@@ -21,6 +22,7 @@ context('sidebar service unit test', () => {
 
         const historyService = $injector.get('viewHistoryHttpService');
         getHistoriesStub = stub(historyService, 'getHistories');
+        deleteHistoryStub = stub(historyService, 'deleteHistory');
 
         q = $injector.get('$q');
         httpBackend = $injector.get('$httpBackend');
@@ -30,6 +32,7 @@ context('sidebar service unit test', () => {
     afterEach('test teardown', () => {
 
         getHistoriesStub.restore();
+        deleteHistoryStub.restore();
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
@@ -83,6 +86,42 @@ context('sidebar service unit test', () => {
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
             });
+        });
+    });
+
+    describe('deleteHistory()', () => {
+
+        const history = { id: 6 };
+
+        it('should use view history http service to delete data', () => {
+
+            deleteHistoryStub.returns(q.resolve({}));
+
+            service.deleteHistory(history).then(() => {
+
+                sinonExpect.calledOnce(deleteHistoryStub);
+            });
+        });
+
+        it('should return view history http service response on success', () => {
+
+            const expected = { status: 200, data: 'random_data' };
+            deleteHistoryStub.returns(q.resolve(expected));
+
+            service.deleteHistory(history).then(result => {
+
+                expect(result).to.deep.equal(expected);
+            });
+        });
+
+        it('should throw error when deletion failed', () => {
+
+            const expected = 400;
+            deleteHistoryStub.returns(q.reject({ status: expected }));
+
+            service.deleteHistory(history)
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error.status).to.equal(expected));
         });
     });
 });
