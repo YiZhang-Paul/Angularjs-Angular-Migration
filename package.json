@@ -59,6 +59,7 @@
         "angular-animate": "^1.7.6",
         "angular-aria": "^1.7.6",
         "angular-material": "^1.1.12",
+        "angular-toastr": "^2.1.1",
         "axios": "^0.18.0",
         "bcryptjs": "^2.4.3",
         "concurrently": "^4.1.0",

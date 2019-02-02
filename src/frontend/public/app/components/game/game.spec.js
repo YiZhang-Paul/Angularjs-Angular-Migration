@@ -32,10 +32,10 @@ context('game component unit test', () => {
         goStub = stub(state, 'go');
 
         q = $injector.get('$q');
-        scope = $injector.get('$rootScope');
+        scope = $injector.get('$rootScope').$new();
         interval = $injector.get('$interval');
         cancelStub = stub(interval, 'cancel');
-        controller = $controller('GameController');
+        controller = $controller('GameController', { $rootScope: scope });
     }));
 
     afterEach('test teardown', () => {

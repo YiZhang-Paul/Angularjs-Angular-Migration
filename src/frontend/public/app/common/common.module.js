@@ -7,7 +7,7 @@ const moduleName = 'sample-app-common';
 
 export default moduleName;
 
-angular.module(moduleName, [])
+angular.module(moduleName, ['toastr'])
     .component('topNavbar', TopNavigationBarComponent)
     .component('sidebar', SidebarComponent)
     .service('sidebarService', SidebarService);

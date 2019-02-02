@@ -47,8 +47,8 @@ context('view history component unit test', () => {
         showStub = stub(dialog, 'show')
 
         q = $injector.get('$q');
-        scope = $injector.get('$rootScope');
-        controller = $controller('ViewHistoryController');
+        scope = $injector.get('$rootScope').$new();
+        controller = $controller('ViewHistoryController', { $rootScope: scope });
     }));
 
     afterEach('test teardown', () => {
