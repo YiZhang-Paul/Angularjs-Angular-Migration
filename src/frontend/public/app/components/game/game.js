@@ -14,7 +14,10 @@ export class GameController {
     $onInit() {
 
         this.loadGames();
-        this.task = this.$interval(this.loadGames.bind(this), 10 * 1000);
+
+        const callback = this.loadGames.bind(this);
+        const time = 10 * 1000;
+        this.task = this.$interval(callback, time);
     }
 
     loadGames() {

@@ -4,6 +4,7 @@ import ComponentsModule from '../components.module';
 import { excludeIndex } from '../../shared/utilities/utilities';
 
 const mockModule = angular.mock.module;
+const spy = sinon.spy;
 const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
@@ -12,6 +13,8 @@ context('view history component unit test', () => {
     let getHistoriesStub;
     let deleteHistoryStub;
     let deleteHistoriesStub;
+    let confirmSpy;
+    let showStub;
 
     let q;
     let scope;
@@ -29,6 +32,10 @@ context('view history component unit test', () => {
         deleteHistoryStub = stub(historyService, 'deleteHistory');
         deleteHistoriesStub = stub(historyService, 'deleteHistories');
 
+        const dialog = $injector.get('$mdDialog');
+        confirmSpy = spy(dialog, 'confirm');
+        showStub = stub(dialog, 'show')
+
         q = $injector.get('$q');
         scope = $injector.get('$rootScope');
         httpBackend = $injector.get('$httpBackend');
@@ -40,6 +47,8 @@ context('view history component unit test', () => {
         getHistoriesStub.restore();
         deleteHistoryStub.restore();
         deleteHistoriesStub.restore();
+        confirmSpy.restore();
+        showStub.restore();
     });
 
     it('should resolve', () => {
@@ -146,6 +155,54 @@ context('view history component unit test', () => {
 
             expect(expected).is.not.empty;
             expect(controller.histories).to.deep.equal(expected);
+        });
+    });
+
+    describe('confirmClearHistories()', () => {
+
+        beforeEach('confirmClearHistories() test setup', () => {
+
+            deleteHistoriesStub.returns(q.resolve({}));
+            showStub.returns(q.resolve({}));
+        });
+
+        it('should show confirmation dialog', () => {
+
+            controller.confirmClearHistories({});
+            scope.$apply();
+
+            sinonExpect.calledOnce(confirmSpy);
+            sinonExpect.calledOnce(showStub);
+        });
+
+        it('should bind confirmation dialog to correct event', () => {
+
+            const expected = { payload: 'random_payload' };
+
+            controller.confirmClearHistories(expected);
+            scope.$apply();
+
+            const result = showStub.args[0][0]._options.targetEvent;
+
+            expect(result).to.deep.equal(expected);
+        });
+
+        it('should clear histories on confirmation', () => {
+
+            controller.confirmClearHistories({});
+            scope.$apply();
+
+            sinonExpect.calledOnce(deleteHistoriesStub);
+        });
+
+        it('should not clear histories on cancellation', () => {
+
+            showStub.returns(q.reject({}));
+
+            controller.confirmClearHistories({});
+            scope.$apply();
+
+            sinonExpect.notCalled(deleteHistoriesStub);
         });
     });
 });

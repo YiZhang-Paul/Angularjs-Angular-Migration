@@ -68,23 +68,29 @@ export class ViewHistoryController {
         }
     }
 
-    async confirmClearHistory(event) {
-
-        const confirm = this.$mdDialog.confirm()
-            .title('Clear all view histories?')
-            .textContent('All view histories will be permanently deleted.')
-            .targetEvent(event)
-            .ok('Ok')
-            .cancel('Cancel');
-
-        await this.$mdDialog.show(confirm);
-        this.clearHistories();
-    }
-
     clearHistories() {
 
         this.historyService.deleteHistories()
             .then(() => this.histories = [])
             .catch(error => console.log(error));
     }
+
+    confirmClearHistories(event) {
+
+        showConfirmationDialog(this.$mdDialog, event)
+            .then(() => this.clearHistories())
+            .catch(() => null);
+    }
+}
+
+function showConfirmationDialog($mdDialog, event) {
+
+    const options = $mdDialog.confirm()
+        .title('Clear all view histories?')
+        .textContent('All view histories will be permanently deleted.')
+        .targetEvent(event)
+        .ok('Ok')
+        .cancel('Cancel');
+
+    return $mdDialog.show(options);
 }
