@@ -17,24 +17,24 @@ export class BookmarkController {
 
         this.service.getBookmarks()
             .then(bookmarks => this.bookmarks = bookmarks)
-            .catch(() => null);
+            .catch(() => this.bookmarks = []);
     }
-
+    // TODO: reconsider scope.emit + rootScope.on vs rootScope.broadcast + scope.on
     unfollow(bookmark) {
 
         this.service.unfollow(bookmark)
-            .then(() => this.removeBookmark(bookmark.id))
+            .then(() => removeCached(this.bookmarks, bookmark.id))
+            .then(() => this.$rootScope.$broadcast('unfollowedChannel'))
             .catch(error => console.log(error));
     }
+}
 
-    removeBookmark(id) {
+function removeCached(cache, id) {
 
-        const index = this.bookmarks.findIndex(_ => _.id === id);
+    const index = cache.findIndex(_ => _.id === id);
 
-        if (index !== -1) {
-            // TODO: reconsider scope.emit + rootScope.on vs rootScope.broadcast + scope.on
-            this.bookmarks.splice(index, 1);
-            this.$rootScope.$broadcast('unfollowedChannel');
-        }
+    if (index !== -1) {
+
+        cache.splice(index, 1);
     }
 }
