@@ -49,7 +49,7 @@ context('view history component unit test', () => {
 
     describe('$onInit()', () => {
 
-        it('should load view histories on instantiation', () => {
+        it('should load view histories on initialization', () => {
 
             const expected = [{ id: 1 }, { id: 2 }, { id: 4 }];
             getHistoriesStub.returns(q.resolve(expected));

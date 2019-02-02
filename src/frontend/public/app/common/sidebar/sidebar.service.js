@@ -1,8 +1,8 @@
 export class SidebarService {
 
-    constructor($http, viewHistoryHttpService) {
+    constructor(bookmarkHttpService, viewHistoryHttpService) {
         'ngInject';
-        this.$http = $http;
+        this.bookmarkService = bookmarkHttpService;
         this.historyService = viewHistoryHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1/user';
@@ -11,21 +11,14 @@ export class SidebarService {
         this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
     }
 
-    async getBookmarks() {
+    getBookmarks() {
 
-        try {
-
-            const url = `${this.api}/bookmarks`;
-            const response = await this.$http.get(url, this.defaultOptions);
-
-            return response.data;
-        }
-        catch (error) {
+        return this.bookmarkService.getBookmarks().catch(error => {
 
             console.log(error);
 
             return [];
-        }
+        });
     }
 
     getHistories() {

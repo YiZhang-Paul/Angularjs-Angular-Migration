@@ -7,8 +7,8 @@ const sinonExpect = sinon.assert;
 
 context('sidebar service unit test', () => {
 
+    let getBookmarksStub;
     let getHistoriesStub;
-    let deleteHistoryStub;
 
     let q;
     let scope;
@@ -19,9 +19,11 @@ context('sidebar service unit test', () => {
 
     beforeEach('test setup', inject($injector => {
 
+        const bookmarkService = $injector.get('bookmarkHttpService');
+        getBookmarksStub = stub(bookmarkService, 'getBookmarks');
+
         const historyService = $injector.get('viewHistoryHttpService');
         getHistoriesStub = stub(historyService, 'getHistories');
-        deleteHistoryStub = stub(historyService, 'deleteHistory');
 
         q = $injector.get('$q');
         scope = $injector.get('$rootScope');
@@ -30,13 +32,65 @@ context('sidebar service unit test', () => {
 
     afterEach('test teardown', () => {
 
+        getBookmarksStub.restore();
         getHistoriesStub.restore();
-        deleteHistoryStub.restore();
     });
 
     it('should resolve', () => {
 
         expect(service).is.not.null;
+    });
+
+    describe('getBookmarks()', () => {
+
+        it('should use bookmark http service to fetch data', () => {
+
+            getBookmarksStub.returns(q.resolve([]));
+
+            service.getBookmarks();
+
+            sinonExpect.calledOnce(getBookmarksStub);
+        });
+
+        it('should return bookmarks found', () => {
+
+            const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            getBookmarksStub.returns(q.resolve(expected));
+
+            service.getBookmarks().then(result => {
+
+                expect(result).is.not.empty;
+                expect(result).to.deep.equal(expected);
+            });
+
+            scope.$apply();
+        });
+
+        it('should return empty collection when no bookmark found', () => {
+
+            getBookmarksStub.returns(q.resolve([]));
+
+            service.getBookmarks().then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            scope.$apply();
+        });
+
+        it('should return empty collection when failed to retrieve bookmarks', () => {
+
+            getBookmarksStub.returns(q.reject(new Error()));
+
+            service.getBookmarks().then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            scope.$apply();
+        });
     });
 
     describe('getHistories()', () => {
@@ -77,7 +131,7 @@ context('sidebar service unit test', () => {
             scope.$apply();
         });
 
-        it('should return empty collection when failed to retrieve histories', () => {
+        it('should return empty collection when failed to retrieve view histories', () => {
 
             getHistoriesStub.returns(q.reject(new Error()));
 

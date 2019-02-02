@@ -13,29 +13,18 @@ export class BookmarkController {
         this.loadBookmarks();
     }
 
-    async loadBookmarks() {
+    loadBookmarks() {
 
-        try {
-
-            this.bookmarks = await this.service.getBookmarks();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.service.getBookmarks()
+            .then(bookmarks => this.bookmarks = bookmarks)
+            .catch(() => null);
     }
 
-    async unfollow(bookmark) {
+    unfollow(bookmark) {
 
-        try {
-
-            await this.service.unfollow(bookmark);
-            this.removeBookmark(bookmark.id);
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.service.unfollow(bookmark)
+            .then(() => this.removeBookmark(bookmark.id))
+            .catch(error => console.log(error));
     }
 
     removeBookmark(id) {
@@ -43,7 +32,7 @@ export class BookmarkController {
         const index = this.bookmarks.findIndex(_ => _.id === id);
 
         if (index !== -1) {
-
+            // TODO: reconsider scope.emit + rootScope.on vs rootScope.broadcast + scope.on
             this.bookmarks.splice(index, 1);
             this.$rootScope.$broadcast('unfollowedChannel');
         }

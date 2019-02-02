@@ -47,7 +47,7 @@ context('game component unit test', () => {
 
         const games = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
-        it('should load games on instantiation', () => {
+        it('should load games on initialization', () => {
 
             const expected = games;
             getGamesStub.returns(q.resolve(expected));
