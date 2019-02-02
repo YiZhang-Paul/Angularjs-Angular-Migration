@@ -20,6 +20,15 @@ export class ViewHistoryHttpService {
         });
     }
 
+    addHistory(channel) {
+
+        const name = channel.provider_game_name;
+        const data = Object.assign({ game_name: name }, channel);
+        const options = [this.api, data, this.defaultOptions];
+
+        return this.$http.post(...options).then(response => response.data);
+    }
+
     deleteHistory(id) {
 
         const url = `${this.api}/${id}`;

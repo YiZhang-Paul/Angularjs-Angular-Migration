@@ -94,6 +94,72 @@ context('view history http service unit test', () => {
         });
     });
 
+    describe('addHistory()', () => {
+
+        it('should send POST request to correct url', () => {
+
+            const expected = api;
+            httpBackend.expectPOST(expected).respond({});
+
+            service.addHistory({});
+
+            httpBackend.flush();
+        });
+
+        it('should include authentication token in request header', () => {
+
+            const data = {};
+            httpBackend.expectPOST(/.*/, data, hasAuthenticationToken).respond({});
+
+            service.addHistory(data);
+
+            httpBackend.flush();
+        });
+
+        it('should send data along with request', () => {
+
+            const data = {
+
+                provider_id: 1,
+                provider_channel_id: 5,
+                provider_game_name: 'random_name'
+            };
+
+            const name = data.provider_game_name;
+            const expected = Object.assign({ game_name: name }, data);
+            httpBackend.expectPOST(/.*/, expected).respond({});
+
+            service.addHistory(data);
+
+            httpBackend.flush();
+        });
+
+        it('should return server response on success', () => {
+
+            const expected = { status: 200, data: 'random_data' };
+            httpBackend.expectPOST(/.*/).respond(expected);
+
+            service.addHistory({}).then(result => {
+
+                expect(result).to.deep.equal(expected);
+            });
+
+            httpBackend.flush();
+        });
+
+        it('should throw error when http request failed', () => {
+
+            const expected = 400;
+            httpBackend.expectPOST(/.*/).respond(expected);
+
+            service.addHistory({})
+                .then(() => q.reject(new Error()))
+                .catch(error => expect(error.status).to.equal(expected));
+
+            httpBackend.flush();
+        });
+    });
+
     describe('deleteHistory()', () => {
 
         const id = 52;
