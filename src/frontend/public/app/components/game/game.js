@@ -1,5 +1,5 @@
 export class GameController {
-
+    // TODO: create service
     constructor($interval, $http, $state, gameHttpService) {
         'ngInject';
         this.$interval = $interval;

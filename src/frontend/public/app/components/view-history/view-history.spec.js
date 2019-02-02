@@ -13,13 +13,14 @@ context('view history component unit test', () => {
     let getHistoriesStub;
     let deleteHistoryStub;
     let deleteHistoriesStub;
+    let getGameStub;
+    let getChannelsByGameIdStub;
+    let goStub;
     let confirmSpy;
     let showStub;
 
     let q;
     let scope;
-    //TODO: remove when fully refactored
-    let httpBackend;
     let controller;
 
     beforeEach(mockModule(SharedModule));
@@ -32,13 +33,21 @@ context('view history component unit test', () => {
         deleteHistoryStub = stub(historyService, 'deleteHistory');
         deleteHistoriesStub = stub(historyService, 'deleteHistories');
 
+        const gameService = $injector.get('gameHttpService');
+        getGameStub = stub(gameService, 'getGame');
+
+        const channelService = $injector.get('channelHttpService');
+        getChannelsByGameIdStub = stub(channelService, 'getChannelsByGameId');
+
+        const state = $injector.get('$state');
+        goStub = stub(state, 'go');
+
         const dialog = $injector.get('$mdDialog');
         confirmSpy = spy(dialog, 'confirm');
         showStub = stub(dialog, 'show')
 
         q = $injector.get('$q');
         scope = $injector.get('$rootScope');
-        httpBackend = $injector.get('$httpBackend');
         controller = $controller('ViewHistoryController');
     }));
 
@@ -47,6 +56,9 @@ context('view history component unit test', () => {
         getHistoriesStub.restore();
         deleteHistoryStub.restore();
         deleteHistoriesStub.restore();
+        getGameStub.restore();
+        getChannelsByGameIdStub.restore();
+        goStub.restore();
         confirmSpy.restore();
         showStub.restore();
     });
@@ -82,6 +94,75 @@ context('view history component unit test', () => {
         });
     });
 
+    describe('isStaticImage()', () => {
+
+        it('should return true when file is not in mp4 or m4v format', () => {
+
+            expect(controller.isStaticImage('file.png')).to.be.true;
+        });
+
+        it('should return false for mp4 format', () => {
+
+            expect(controller.isStaticImage('file.mp4')).to.be.false;
+        });
+
+        it('should return false for m4v format', () => {
+
+            expect(controller.isStaticImage('file.m4v')).to.be.false;
+        });
+    });
+
+    describe('toChannelsView()', () => {
+
+        const id = 55;
+        const game = { name: 'random game name 5' };
+
+        beforeEach('toChannelsView() test setup', () => {
+
+            getGameStub.returns(q.resolve(game));
+            getChannelsByGameIdStub.returns(q.resolve([]));
+        });
+
+        it('should use game http service to fetch game data', () => {
+
+            controller.toChannelsView(id);
+            scope.$apply();
+
+            sinonExpect.calledOnce(getGameStub);
+        });
+
+        it('should use channel http service to fetch channel data', () => {
+
+            controller.toChannelsView(id);
+            scope.$apply();
+
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+        });
+
+        it('should change route with correct route parameters', () => {
+
+            const name = 'random-game-name-5';
+            const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            const expected = { game, name, channels };
+            getChannelsByGameIdStub.returns(q.resolve(channels));
+
+            controller.toChannelsView(id);
+            scope.$apply();
+
+            sinonExpect.calledOnce(goStub);
+            sinonExpect.calledWith(goStub, 'channels', expected);
+        });
+
+        it('should not throw on error', () => {
+
+            getGameStub.returns(q.reject(new Error()));
+            getChannelsByGameIdStub.returns(q.reject(new Error()));
+
+            controller.toChannelsView(id);
+            scope.$apply();
+        });
+    });
+
     describe('deleteHistory()', () => {
 
         beforeEach('deleteHistory() test setup', () => {
@@ -114,6 +195,17 @@ context('view history component unit test', () => {
 
             sinonExpect.notCalled(deleteHistoryStub);
             expect(controller.histories).to.deep.equal(expected);
+        });
+
+        it('should not throw on deletion error', () => {
+
+            const id = controller.histories[1].id;
+            deleteHistoryStub.returns(q.reject(new Error()));
+
+            controller.deleteHistory({ id });
+            scope.$apply();
+
+            sinonExpect.calledOnce(deleteHistoryStub);
         });
     });
 

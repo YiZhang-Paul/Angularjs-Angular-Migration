@@ -1,3 +1,9 @@
+// TODO: use value provider
+export function joinText(text, delimiter = '-') {
+
+    return text.trim().replace(/\s/g, delimiter);
+}
+
 export function excludeIndex(collection, index) {
 
     if (index < 0 || index > collection.length - 1) {

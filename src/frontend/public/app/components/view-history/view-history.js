@@ -1,17 +1,15 @@
-export class ViewHistoryController {
+import { joinText } from '../../shared/utilities/utilities';
 
-    constructor($http, $state, $mdDialog, gameHttpService, viewHistoryHttpService) {
+export class ViewHistoryController {
+    // TODO: create service
+    constructor($q, $state, $mdDialog, gameHttpService, channelHttpService, viewHistoryHttpService) {
         'ngInject';
-        this.$http = $http;
+        this.$q = $q;
         this.$state = $state;
         this.$mdDialog = $mdDialog;
         this.gameService = gameHttpService;
+        this.channelService = channelHttpService;
         this.historyService = viewHistoryHttpService;
-
-        this.api = 'http://127.0.0.1:4150';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
 
         this.histories = [];
     }
@@ -33,27 +31,14 @@ export class ViewHistoryController {
         return !/(mp4|m4v)$/i.test(url);
     }
 
-    joinWords(words) {
+    toChannelsView(id) {
 
-        return words.replace(/\s/g, '-');
-    }
+        const gamePromise = this.gameService.getGame(id);
+        const channelsPromise = this.channelService.getChannelsByGameId(id);
 
-    async getChannels(id) {
-
-        try {
-
-            const game = await this.gameService.getGame(id);
-            const name = this.joinWords(game.name);
-            const url = `${this.api}/${game.channels}`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-
-            this.$state.go('channels', { game, name, channels });
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.$q.all([gamePromise, channelsPromise])
+            .then(responses => changeRoute(this.$state, ...responses))
+            .catch(error => console.log(error));
     }
 
     deleteHistory(history) {
@@ -81,6 +66,13 @@ export class ViewHistoryController {
             .then(() => this.clearHistories())
             .catch(() => null);
     }
+}
+
+function changeRoute($state, game, channels) {
+
+    const name = joinText(game.name);
+
+    $state.go('channels', { game, name, channels });
 }
 
 function showConfirmationDialog($mdDialog, event) {
