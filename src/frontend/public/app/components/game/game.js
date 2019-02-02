@@ -1,11 +1,13 @@
+import { joinText } from '../../shared/utilities/utilities';
+
 export class GameController {
     // TODO: create service
-    constructor($interval, $http, $state, gameHttpService) {
+    constructor($interval, $state, gameHttpService, channelHttpService) {
         'ngInject';
         this.$interval = $interval;
-        this.$http = $http;
         this.$state = $state;
-        this.service = gameHttpService;
+        this.gameService = gameHttpService;
+        this.channelService = channelHttpService;
 
         this.task = null;
         this.games = [];
@@ -22,32 +24,21 @@ export class GameController {
 
     loadGames() {
 
-        this.service.getGames()
+        this.gameService.getGames()
             .then(games => syncGames(this.games, games))
             .catch(() => null);
     }
 
-    joinWords(words) {
+    toChannelsView(game) {
 
-        return words.replace(/\s/g, '-');
+        this.channelService.getChannelsByGameId(game.id)
+            .then(channels => changeRoute(this.$state, game, channels))
+            .catch(error => console.log(error));
     }
 
-    async toChannelsView(game) {
+    $onDestroy() {
 
-        try {
-
-            const url = `http://127.0.0.1:4150/${game.channels}`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-            const name = this.joinWords(game.name);
-
-            this.$state.go('channels', { name, game, channels });
-            this.$interval.cancel(this.task);
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.$interval.cancel(this.task);
     }
 }
 
@@ -64,4 +55,11 @@ function syncGames(oldGames, newGames) {
 
         oldGames[i] = newGames[i];
     }
+}
+
+function changeRoute($state, game, channels) {
+
+    const name = joinText(game.name);
+
+    $state.go('channels', { game, name, channels });
 }
