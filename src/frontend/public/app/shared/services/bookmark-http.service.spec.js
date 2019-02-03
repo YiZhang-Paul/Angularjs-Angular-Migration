@@ -1,6 +1,6 @@
 import SharedModule from '../shared.module';
 
-import { hasAuthenticationToken } from '../utilities/test-utilities/test-verifications';
+import { hasAuthenticationToken } from '../utilities/test-verifications';
 
 const mockModule = angular.mock.module;
 

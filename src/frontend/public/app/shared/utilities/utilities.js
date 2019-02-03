@@ -1,4 +1,3 @@
-// TODO: use value provider
 export function joinText(text, delimiter = '-') {
 
     return text.trim().replace(/\s/g, delimiter);
@@ -23,6 +22,7 @@ export function hasOwnProperties(object, keys) {
 
     return keys.every(key => object.hasOwnProperty(key));
 }
+
 export function findByProperties(objects, filter, keys) {
 
     return objects.find(_ => {
@@ -33,6 +33,7 @@ export function findByProperties(objects, filter, keys) {
 
 export default {
 
+    joinText,
     excludeIndex,
     hasMatchingValues,
     hasOwnProperties,

@@ -2,7 +2,7 @@ import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
 import { excludeIndex } from '../../shared/utilities/utilities';
-import { hasMatchingValue } from '../../shared/utilities/test-utilities/test-verifications';
+import { hasMatchingValue } from '../../shared/utilities/test-verifications';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
