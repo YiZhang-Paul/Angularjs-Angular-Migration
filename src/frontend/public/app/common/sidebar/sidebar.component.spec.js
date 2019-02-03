@@ -15,7 +15,7 @@ context('sidebar component unit test', () => {
     let getHistoriesStub;
     let successStub;
     let errorStub;
-    //TODO: check $rootScope
+
     beforeEach(mockModule(CommonModule));
 
     beforeEach('mock sidebar service setup', mockModule($provide => {

@@ -8,7 +8,7 @@ context('capitalize filter unit test', () => {
 
     beforeEach(mockModule(SharedModule));
 
-    beforeEach('test setup', inject($filter => {
+    beforeEach('general test setup', inject($filter => {
 
         filter = $filter('capitalize');
     }));

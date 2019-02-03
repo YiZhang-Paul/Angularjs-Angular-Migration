@@ -6,43 +6,62 @@ const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('game component unit test', () => {
-    // TODO: reformat these
+
+    let $q;
+    let $interval;
+    let $rootScope;
+    let controller;
+
     let getGamesStub;
     let getChannelsByGameIdStub;
     let goStub;
     let cancelStub;
 
-    let q;
-    let scope;
-    let interval;
-    let controller;
-
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('test setup', inject(($injector, $controller) => {
+    beforeEach('mock game http service setup', mockModule($provide => {
 
-        const gameService = $injector.get('gameHttpService');
-        getGamesStub = stub(gameService, 'getGames');
+        getGamesStub = stub();
 
-        const channelService = $injector.get('channelHttpService');
-        getChannelsByGameIdStub = stub(channelService, 'getChannelsByGameId');
+        $provide.service('gameHttpService', () => ({
 
-        const state = $injector.get('$state');
-        goStub = stub(state, 'go');
-
-        q = $injector.get('$q');
-        scope = $injector.get('$rootScope').$new();
-        interval = $injector.get('$interval');
-        cancelStub = stub(interval, 'cancel');
-        controller = $controller('GameController', { $rootScope: scope });
+            getGames: getGamesStub
+        }));
     }));
 
-    afterEach('test teardown', () => {
+    beforeEach('mock channel http service setup', mockModule($provide => {
 
-        getGamesStub.restore();
-        getChannelsByGameIdStub.restore();
-        goStub.restore();
+        getChannelsByGameIdStub = stub();
+
+        $provide.service('channelHttpService', () => ({
+
+            getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock $state setup', mockModule($provide => {
+
+        goStub = stub();
+
+        $provide.service('$state', () => ({
+
+            go: goStub
+        }));
+    }));
+
+    beforeEach('general test setup', inject(($injector, $controller) => {
+
+        $q = $injector.get('$q');
+        $interval = $injector.get('$interval');
+        $rootScope = $injector.get('$rootScope');
+        controller = $controller('GameController');
+
+        cancelStub = stub($interval, 'cancel');
+    }));
+
+    afterEach('general test teardown', () => {
+
         cancelStub.restore();
     });
 
@@ -58,10 +77,10 @@ context('game component unit test', () => {
         it('should load games on initialization', () => {
 
             const expected = games;
-            getGamesStub.returns(q.resolve(expected));
+            getGamesStub.returns($q.resolve(expected));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getGamesStub);
             expect(controller.games).to.deep.equal(expected);
@@ -71,22 +90,25 @@ context('game component unit test', () => {
 
             const seconds = 60;
             const expected = Math.floor(seconds / 10);
-            getGamesStub.returns(q.resolve([]));
+            getGamesStub.returns($q.resolve([]));
 
             controller.$onInit();
-            interval.flush(seconds * 1000);
-            // include initial call before interval is set
-            sinonExpect.callCount(getGamesStub, expected + 1);
+            $rootScope.$apply();
+            // reset initial call to load games
+            getGamesStub.resetHistory();
+            $interval.flush(seconds * 1000);
+
+            sinonExpect.callCount(getGamesStub, expected);
         });
 
         it('should keep cached games when load games failed', () => {
 
             controller.games = games;
             const expected = controller.games.slice();
-            getGamesStub.returns(q.reject(new Error()));
+            getGamesStub.returns($q.reject(new Error()));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
             expect(Array.isArray(controller.games)).to.be.true;
             expect(controller.games).to.deep.equal(expected);
@@ -96,10 +118,10 @@ context('game component unit test', () => {
 
             controller.games = [{ id: 1, view_count: 2 }, { id: 2, view_count: 5 }];
             const expected = [{ id: 1, view_count: 114 }, { id: 2, view_count: 1 }];
-            getGamesStub.returns(q.resolve(expected));
+            getGamesStub.returns($q.resolve(expected));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
             expect(controller.games).to.deep.equal(expected);
         });
@@ -113,7 +135,7 @@ context('game component unit test', () => {
             controller.task = expected;
 
             controller.$onDestroy();
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(cancelStub);
             sinonExpect.calledWith(cancelStub, expected);
@@ -126,13 +148,13 @@ context('game component unit test', () => {
 
         beforeEach('toChannelsView() test setup', () => {
 
-            getChannelsByGameIdStub.returns(q.resolve([]));
+            getChannelsByGameIdStub.returns($q.resolve([]));
         });
 
         it('should use channel http service to fetch data', () => {
 
             controller.toChannelsView(game);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsByGameIdStub);
         });
@@ -142,10 +164,10 @@ context('game component unit test', () => {
             const name = 'random-game-name-5';
             const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = { game, name, channels };
-            getChannelsByGameIdStub.returns(q.resolve(channels));
+            getChannelsByGameIdStub.returns($q.resolve(channels));
 
             controller.toChannelsView(game);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(goStub);
             sinonExpect.calledWith(goStub, 'channels', expected);
@@ -153,10 +175,10 @@ context('game component unit test', () => {
 
         it('should not throw on error', () => {
 
-            getChannelsByGameIdStub.returns(q.reject(new Error()));
+            getChannelsByGameIdStub.returns($q.reject(new Error()));
 
             controller.toChannelsView(game);
-            scope.$apply();
+            $rootScope.$apply();
         });
     });
 });

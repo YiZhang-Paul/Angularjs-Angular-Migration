@@ -10,6 +10,10 @@ const sinonExpect = sinon.assert;
 
 context('view history component unit test', () => {
 
+    let $q;
+    let $rootScope;
+    let controller;
+
     let getHistoriesStub;
     let deleteHistoryStub;
     let deleteHistoriesStub;
@@ -19,48 +23,70 @@ context('view history component unit test', () => {
     let confirmSpy;
     let showStub;
 
-    let q;
-    let scope;
-    let controller;
-
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('test setup', inject(($injector, $controller) => {
+    beforeEach('mock view history http service setup', mockModule($provide => {
 
-        const historyService = $injector.get('viewHistoryHttpService');
-        getHistoriesStub = stub(historyService, 'getHistories');
-        deleteHistoryStub = stub(historyService, 'deleteHistory');
-        deleteHistoriesStub = stub(historyService, 'deleteHistories');
+        getHistoriesStub = stub();
+        deleteHistoryStub = stub();
+        deleteHistoriesStub = stub();
 
-        const gameService = $injector.get('gameHttpService');
-        getGameStub = stub(gameService, 'getGame');
+        $provide.service('viewHistoryHttpService', () => ({
 
-        const channelService = $injector.get('channelHttpService');
-        getChannelsByGameIdStub = stub(channelService, 'getChannelsByGameId');
-
-        const state = $injector.get('$state');
-        goStub = stub(state, 'go');
-
-        const dialog = $injector.get('$mdDialog');
-        confirmSpy = spy(dialog, 'confirm');
-        showStub = stub(dialog, 'show')
-
-        q = $injector.get('$q');
-        scope = $injector.get('$rootScope').$new();
-        controller = $controller('ViewHistoryController', { $rootScope: scope });
+            getHistories: getHistoriesStub,
+            deleteHistory: deleteHistoryStub,
+            deleteHistories: deleteHistoriesStub
+        }));
     }));
 
-    afterEach('test teardown', () => {
+    beforeEach('mock game http service setup', mockModule($provide => {
 
-        getHistoriesStub.restore();
-        deleteHistoryStub.restore();
-        deleteHistoriesStub.restore();
-        getGameStub.restore();
-        getChannelsByGameIdStub.restore();
-        goStub.restore();
+        getGameStub = stub();
+
+        $provide.service('gameHttpService', () => ({
+
+            getGame: getGameStub
+        }));
+    }));
+
+    beforeEach('mock channel http service setup', mockModule($provide => {
+
+        getChannelsByGameIdStub = stub();
+
+        $provide.service('channelHttpService', () => ({
+
+            getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock $state setup', mockModule($provide => {
+
+        goStub = stub();
+
+        $provide.service('$state', () => ({
+
+            go: goStub
+        }));
+    }));
+
+    beforeEach('mock $mdDialog setup', inject($injector => {
+
+        const $mdDialog = $injector.get('$mdDialog');
+        confirmSpy = spy($mdDialog, 'confirm');
+        showStub = stub($mdDialog, 'show');
+    }));
+
+    beforeEach('general test setup', inject(($injector, $controller) => {
+
+        $q = $injector.get('$q');
+        $rootScope = $injector.get('$rootScope');
+        controller = $controller('ViewHistoryController');
+    }));
+
+    afterEach('general test teardown', () => {
+
         confirmSpy.restore();
-        showStub.restore();
     });
 
     it('should resolve', () => {
@@ -73,10 +99,10 @@ context('view history component unit test', () => {
         it('should load view histories on initialization', () => {
 
             const expected = [{ id: 1 }, { id: 2 }, { id: 4 }];
-            getHistoriesStub.returns(q.resolve(expected));
+            getHistoriesStub.returns($q.resolve(expected));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getHistoriesStub);
             expect(controller.histories).to.deep.equal(expected);
@@ -84,10 +110,10 @@ context('view history component unit test', () => {
 
         it('should default to empty collection when load view histories failed', () => {
 
-            getHistoriesStub.returns(q.reject(new Error()));
+            getHistoriesStub.returns($q.reject(new Error()));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
             expect(Array.isArray(controller.histories)).to.be.true;
             expect(controller.histories).to.be.empty;
@@ -119,14 +145,14 @@ context('view history component unit test', () => {
 
         beforeEach('toChannelsView() test setup', () => {
 
-            getGameStub.returns(q.resolve(game));
-            getChannelsByGameIdStub.returns(q.resolve([]));
+            getGameStub.returns($q.resolve(game));
+            getChannelsByGameIdStub.returns($q.resolve([]));
         });
 
         it('should use game http service to fetch game data', () => {
 
             controller.toChannelsView(id);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getGameStub);
         });
@@ -134,7 +160,7 @@ context('view history component unit test', () => {
         it('should use channel http service to fetch channel data', () => {
 
             controller.toChannelsView(id);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsByGameIdStub);
         });
@@ -144,10 +170,10 @@ context('view history component unit test', () => {
             const name = 'random-game-name-5';
             const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = { game, name, channels };
-            getChannelsByGameIdStub.returns(q.resolve(channels));
+            getChannelsByGameIdStub.returns($q.resolve(channels));
 
             controller.toChannelsView(id);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(goStub);
             sinonExpect.calledWith(goStub, 'channels', expected);
@@ -155,11 +181,11 @@ context('view history component unit test', () => {
 
         it('should not throw on error', () => {
 
-            getGameStub.returns(q.reject(new Error()));
-            getChannelsByGameIdStub.returns(q.reject(new Error()));
+            getGameStub.returns($q.reject(new Error()));
+            getChannelsByGameIdStub.returns($q.reject(new Error()));
 
             controller.toChannelsView(id);
-            scope.$apply();
+            $rootScope.$apply();
         });
     });
 
@@ -175,10 +201,10 @@ context('view history component unit test', () => {
             const index = 1;
             const id = controller.histories[index].id;
             const expected = excludeIndex(controller.histories, index);
-            deleteHistoryStub.returns(q.resolve({}));
+            deleteHistoryStub.returns($q.resolve({}));
 
             controller.deleteHistory({ id });
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoryStub);
             sinonExpect.calledWith(deleteHistoryStub, id);
@@ -191,7 +217,7 @@ context('view history component unit test', () => {
             const expected = controller.histories.slice();
 
             controller.deleteHistory({ id });
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.notCalled(deleteHistoryStub);
             expect(controller.histories).to.deep.equal(expected);
@@ -200,10 +226,10 @@ context('view history component unit test', () => {
         it('should not throw on deletion error', () => {
 
             const id = controller.histories[1].id;
-            deleteHistoryStub.returns(q.reject(new Error()));
+            deleteHistoryStub.returns($q.reject(new Error()));
 
             controller.deleteHistory({ id });
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoryStub);
         });
@@ -218,9 +244,10 @@ context('view history component unit test', () => {
 
         it('should use view history http service to delete histories', () => {
 
-            deleteHistoriesStub.returns(q.resolve({}));
+            deleteHistoriesStub.returns($q.resolve({}));
 
             controller.clearHistories();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoriesStub);
         });
@@ -228,10 +255,10 @@ context('view history component unit test', () => {
         it('should clear cached histories when deletion is successful', () => {
 
             const oldCache = controller.histories.slice();
-            deleteHistoriesStub.returns(q.resolve({}));
+            deleteHistoriesStub.returns($q.resolve({}));
 
             controller.clearHistories();
-            scope.$apply();
+            $rootScope.$apply();
 
             expect(oldCache).is.not.empty;
             expect(controller.histories).to.be.empty;
@@ -240,10 +267,10 @@ context('view history component unit test', () => {
         it('should not clear cached histories when deletion failed', () => {
 
             const expected = controller.histories.slice();
-            deleteHistoriesStub.returns(q.reject(new Error()));
+            deleteHistoriesStub.returns($q.reject(new Error()));
 
             controller.clearHistories();
-            scope.$apply();
+            $rootScope.$apply();
 
             expect(expected).is.not.empty;
             expect(controller.histories).to.deep.equal(expected);
@@ -254,14 +281,14 @@ context('view history component unit test', () => {
 
         beforeEach('confirmClearHistories() test setup', () => {
 
-            deleteHistoriesStub.returns(q.resolve({}));
-            showStub.returns(q.resolve({}));
+            deleteHistoriesStub.returns($q.resolve({}));
+            showStub.returns($q.resolve({}));
         });
 
         it('should show confirmation dialog', () => {
 
             controller.confirmClearHistories({});
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(confirmSpy);
             sinonExpect.calledOnce(showStub);
@@ -272,7 +299,7 @@ context('view history component unit test', () => {
             const expected = { payload: 'random_payload' };
 
             controller.confirmClearHistories(expected);
-            scope.$apply();
+            $rootScope.$apply();
 
             const result = showStub.args[0][0]._options.targetEvent;
 
@@ -282,17 +309,17 @@ context('view history component unit test', () => {
         it('should clear histories on confirmation', () => {
 
             controller.confirmClearHistories({});
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoriesStub);
         });
 
         it('should not clear histories on cancellation', () => {
 
-            showStub.returns(q.reject({}));
+            showStub.returns($q.reject({}));
 
             controller.confirmClearHistories({});
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.notCalled(deleteHistoriesStub);
         });

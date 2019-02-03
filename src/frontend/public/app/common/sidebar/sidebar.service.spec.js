@@ -7,39 +7,53 @@ const sinonExpect = sinon.assert;
 
 context('sidebar service unit test', () => {
 
-    let q;
-    let scope;
-    let service;
-
     let getBookmarksStub;
     let getChannelsStub;
     let getHistoriesStub;
 
+    let $q;
+    let $rootScope;
+    let service;
+
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(CommonModule));
 
-    beforeEach('test setup', inject($injector => {
+    beforeEach('mock bookmark http service setup', mockModule($provide => {
 
-        q = $injector.get('$q');
-        scope = $injector.get('$rootScope');
-        service = $injector.get('sidebarService');
+        getBookmarksStub = stub();
 
-        const bookmarkService = $injector.get('bookmarkHttpService');
-        getBookmarksStub = stub(bookmarkService, 'getBookmarks');
+        $provide.service('bookmarkHttpService', () => ({
 
-        const channelService = $injector.get('channelHttpService');
-        getChannelsStub = stub(channelService, 'getChannels');
-
-        const historyService = $injector.get('viewHistoryHttpService');
-        getHistoriesStub = stub(historyService, 'getHistories');
+            getBookmarks: getBookmarksStub
+        }));
     }));
 
-    afterEach('test teardown', () => {
+    beforeEach('mock channel http service setup', mockModule($provide => {
 
-        getBookmarksStub.restore();
-        getChannelsStub.restore();
-        getHistoriesStub.restore();
-    });
+        getChannelsStub = stub();
+
+        $provide.service('channelHttpService', () => ({
+
+            getChannels: getChannelsStub
+        }));
+    }));
+
+    beforeEach('mock view history http service setup', mockModule($provide => {
+
+        getHistoriesStub = stub();
+
+        $provide.service('viewHistoryHttpService', () => ({
+
+            getHistories: getHistoriesStub
+        }));
+    }));
+
+    beforeEach('general test setup', inject($injector => {
+
+        $q = $injector.get('$q');
+        $rootScope = $injector.get('$rootScope');
+        service = $injector.get('sidebarService');
+    }));
 
     it('should resolve', () => {
 
@@ -50,7 +64,7 @@ context('sidebar service unit test', () => {
 
         it('should use bookmark http service to fetch data', () => {
 
-            getBookmarksStub.returns(q.resolve([]));
+            getBookmarksStub.returns($q.resolve([]));
 
             service.getBookmarks();
 
@@ -60,7 +74,7 @@ context('sidebar service unit test', () => {
         it('should return bookmarks found', () => {
 
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getBookmarksStub.returns(q.resolve(expected));
+            getBookmarksStub.returns($q.resolve(expected));
 
             service.getBookmarks().then(result => {
 
@@ -68,12 +82,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when no bookmark found', () => {
 
-            getBookmarksStub.returns(q.resolve([]));
+            getBookmarksStub.returns($q.resolve([]));
 
             service.getBookmarks().then(result => {
 
@@ -81,12 +95,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when failed to retrieve bookmarks', () => {
 
-            getBookmarksStub.returns(q.reject(new Error()));
+            getBookmarksStub.returns($q.reject(new Error()));
 
             service.getBookmarks().then(result => {
 
@@ -94,7 +108,7 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
     });
 
@@ -102,10 +116,10 @@ context('sidebar service unit test', () => {
 
         it('should use channel http service to fetch data', () => {
 
-            getChannelsStub.returns(q.resolve([]));
+            getChannelsStub.returns($q.resolve([]));
 
             service.getFeaturedChannels();
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsStub);
         });
@@ -113,7 +127,7 @@ context('sidebar service unit test', () => {
         it('should return channels found', () => {
 
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getChannelsStub.returns(q.resolve(expected));
+            getChannelsStub.returns($q.resolve(expected));
 
             service.getFeaturedChannels().then(result => {
 
@@ -121,12 +135,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when no channel found', () => {
 
-            getChannelsStub.returns(q.resolve([]));
+            getChannelsStub.returns($q.resolve([]));
 
             service.getFeaturedChannels().then(result => {
 
@@ -134,12 +148,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when failed to retrieve channels', () => {
 
-            getChannelsStub.returns(q.reject(new Error()));
+            getChannelsStub.returns($q.reject(new Error()));
 
             service.getFeaturedChannels().then(result => {
 
@@ -147,7 +161,7 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
     });
 
@@ -155,7 +169,7 @@ context('sidebar service unit test', () => {
 
         it('should use view history http service to fetch data', () => {
 
-            getHistoriesStub.returns(q.resolve([]));
+            getHistoriesStub.returns($q.resolve([]));
 
             service.getHistories();
 
@@ -165,7 +179,7 @@ context('sidebar service unit test', () => {
         it('should return view histories found sorted by timestamp in descending order', () => {
 
             const expected = [{ timestamp: 6 }, { timestamp: 4 }, { timestamp: 2 }];
-            getHistoriesStub.returns(q.resolve(expected));
+            getHistoriesStub.returns($q.resolve(expected));
 
             service.getHistories().then(result => {
 
@@ -173,12 +187,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when no view history found', () => {
 
-            getHistoriesStub.returns(q.resolve([]));
+            getHistoriesStub.returns($q.resolve([]));
 
             service.getHistories().then(result => {
 
@@ -186,12 +200,12 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
 
         it('should return empty collection when failed to retrieve view histories', () => {
 
-            getHistoriesStub.returns(q.reject(new Error()));
+            getHistoriesStub.returns($q.reject(new Error()));
 
             service.getHistories().then(result => {
 
@@ -199,7 +213,7 @@ context('sidebar service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            scope.$apply();
+            $rootScope.$apply();
         });
     });
 });

@@ -7,23 +7,23 @@ context('channel http service unit test', () => {
     const channelApi = 'http://127.0.0.1:4150/api/v1/channels';
     const gameChannelApi = 'http://127.0.0.1:4150/api/v1/games';
 
-    let q;
-    let httpBackend;
+    let $q;
+    let $httpBackend;
     let service;
 
     beforeEach(mockModule(SharedModule));
 
-    beforeEach('test setup', inject($injector => {
+    beforeEach('general test setup', inject($injector => {
 
-        q = $injector.get('$q');
-        httpBackend = $injector.get('$httpBackend');
+        $q = $injector.get('$q');
+        $httpBackend = $injector.get('$httpBackend');
         service = $injector.get('channelHttpService');
     }));
 
-    afterEach('test teardown', () => {
+    afterEach('general test teardown', () => {
 
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should resolve', () => {
@@ -36,17 +36,17 @@ context('channel http service unit test', () => {
         it('should send GET request to correct url', () => {
 
             const expected = channelApi;
-            httpBackend.expectGET(expected).respond([]);
+            $httpBackend.expectGET(expected).respond([]);
 
             service.getChannels();
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should return all data found', () => {
 
             const expected = [{ data: 'data_1' }, { data: 'data_2' }];
-            httpBackend.expectGET(/.*/).respond(expected);
+            $httpBackend.expectGET(/.*/).respond(expected);
 
             service.getChannels().then(result => {
 
@@ -54,12 +54,12 @@ context('channel http service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should return empty collection when no channel found', () => {
 
-            httpBackend.expectGET(/.*/).respond([]);
+            $httpBackend.expectGET(/.*/).respond([]);
 
             service.getChannels().then(result => {
 
@@ -67,19 +67,19 @@ context('channel http service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should throw error when request failed', () => {
 
             const expected = 400;
-            httpBackend.expectGET(/.*/).respond(expected);
+            $httpBackend.expectGET(/.*/).respond(expected);
 
             service.getChannels()
-                .then(() => q.reject(new Error()))
+                .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
     });
 
@@ -90,17 +90,17 @@ context('channel http service unit test', () => {
         it('should send GET request to correct url', () => {
 
             const expected = `${gameChannelApi}/${id}/channels`;
-            httpBackend.expectGET(expected).respond([]);
+            $httpBackend.expectGET(expected).respond([]);
 
             service.getChannelsByGameId(id);
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should return all data found', () => {
 
             const expected = [{ data: 'data_1' }, { data: 'data_2' }];
-            httpBackend.expectGET(/.*/).respond(expected);
+            $httpBackend.expectGET(/.*/).respond(expected);
 
             service.getChannelsByGameId(id).then(result => {
 
@@ -108,12 +108,12 @@ context('channel http service unit test', () => {
                 expect(result).to.deep.equal(expected);
             });
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should return empty collection when no channel found', () => {
 
-            httpBackend.expectGET(/.*/).respond([]);
+            $httpBackend.expectGET(/.*/).respond([]);
 
             service.getChannelsByGameId(id).then(result => {
 
@@ -121,19 +121,19 @@ context('channel http service unit test', () => {
                 expect(result).to.be.empty;
             });
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
 
         it('should throw error when request failed', () => {
 
             const expected = 400;
-            httpBackend.expectGET(/.*/).respond(expected);
+            $httpBackend.expectGET(/.*/).respond(expected);
 
             service.getChannelsByGameId(id)
-                .then(() => q.reject(new Error()))
+                .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
-            httpBackend.flush();
+            $httpBackend.flush();
         });
     });
 });
