@@ -38,7 +38,7 @@ export class Sidebar {
 
     _loadFeaturedChannels(key) {
 
-        this.service.getChannels().then(channels => {
+        this.service.getFeaturedChannels().then(channels => {
 
             this.badges.set(key, this._addGameName(channels.slice(0, 3)));
         });
