@@ -7,7 +7,11 @@ import SharedModule from './shared/shared.module';
 import AppConfig from './app.config';
 import AppRoute from './app.route';
 
-const app = angular.module('migration-sample-app', [
+const moduleName = 'migration-sample-app';
+
+export default moduleName;
+
+const app = angular.module(moduleName, [
 
     'ui.router',
     'ngAnimate',
