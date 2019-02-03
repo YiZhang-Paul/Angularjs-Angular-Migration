@@ -1,6 +1,6 @@
 export class ChannelController {
 
-    constructor($rootScope, $stateParams, $transitions, $http, $interval, bookmarkService, gameService) {
+    constructor($rootScope, $stateParams, $transitions, $http, $interval, bookmarkService, gameHttpService) {
         'ngInject';
         this.$rootScope = $rootScope;
         this.$stateParams = $stateParams;
@@ -8,7 +8,7 @@ export class ChannelController {
         this.$http = $http;
         this.$interval = $interval;
         this.bookmarkService = bookmarkService;
-        this.gameService = gameService;
+        this.gameService = gameHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
