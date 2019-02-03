@@ -2,20 +2,12 @@ import { findByProperties, hasOwnProperties } from '../../shared/utilities/utili
 
 export class BookmarkService {
 
-    constructor(bookmarkHttpService) {
+    constructor($rootScope, bookmarkHttpService) {
         'ngInject';
+        this.$rootScope = $rootScope;
         this.service = bookmarkHttpService;
-        // TODO: bookmark controller should reference this cache
+
         this.bookmarks = [];
-        this.cacheBookmarks();
-    }
-
-    cacheBookmarks() {
-
-        return this.getBookmarks().then(bookmarks => {
-
-            this.bookmarks = bookmarks;
-        });
     }
 
     getBookmarks() {
@@ -28,9 +20,41 @@ export class BookmarkService {
         });
     }
 
+    cacheBookmarks() {
+
+        return this.getBookmarks().then(bookmarks => {
+
+            this.bookmarks = bookmarks;
+        });
+    }
+
+    _findBookmark(data) {
+
+        const channelKeys = ['channel_id'];
+        const providerKeys = ['provider_id', 'provider_channel_id'];
+        const hasChannelId = data.hasOwnProperty(channelKeys[0]);
+        const hasProvider = hasOwnProperties(data, providerKeys);
+
+        if (!hasChannelId && !hasProvider) {
+
+            return null;
+        }
+
+        const keys = hasChannelId ? channelKeys : providerKeys;
+
+        return findByProperties(this.bookmarks, data, keys);
+    }
+
+    _getBookmarkId(data) {
+
+        const bookmark = this._findBookmark(data);
+
+        return bookmark ? bookmark.id : -1;
+    }
+
     isFollowed(data) {
 
-        return getBookmarkId(this.bookmarks, data) !== -1;
+        return this._getBookmarkId(data) !== -1;
     }
 
     follow(data) {
@@ -41,37 +65,20 @@ export class BookmarkService {
         });
     }
 
+    _removeCached(id) {
+
+        const index = this.bookmarks.findIndex(_ => _.id === id);
+        this.bookmarks.splice(index, 1);
+    }
+
     unfollow(data) {
 
-        const id = getBookmarkId(this.bookmarks, data);
+        const id = this._getBookmarkId(data);
 
         return this.service.deleteBookmark(id).then(() => {
 
-            return this.cacheBookmarks();
+            this._removeCached(id);
+            this.$rootScope.$broadcast('unfollowedChannel');
         });
     }
-}
-
-function findBookmark(bookmarks, data) {
-
-    const keys = ['provider_id', 'provider_channel_id'];
-
-    if (hasOwnProperties(data, keys)) {
-
-        return findByProperties(bookmarks, data, keys);
-    }
-
-    if (data.hasOwnProperty('channel_id')) {
-
-        return findByProperties(bookmarks, data, ['channel_id']);
-    }
-
-    return null;
-}
-
-function getBookmarkId(bookmarks, data) {
-
-    const bookmark = findBookmark(bookmarks, data);
-
-    return bookmark ? bookmark.id : -1;
 }

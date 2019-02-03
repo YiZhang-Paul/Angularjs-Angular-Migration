@@ -1,40 +1,22 @@
 export class BookmarkController {
 
-    constructor($rootScope, bookmarkService) {
+    constructor(bookmarkService) {
         'ngInject';
-        this.$rootScope = $rootScope;
         this.service = bookmarkService;
+    }
 
-        this.bookmarks = [];
+    get bookmarks() {
+
+        return this.service.bookmarks;
     }
 
     $onInit() {
 
-        this.loadBookmarks();
+        this.service.cacheBookmarks();
     }
 
-    loadBookmarks() {
-
-        this.service.getBookmarks()
-            .then(bookmarks => this.bookmarks = bookmarks)
-            .catch(() => this.bookmarks = []);
-    }
-    // TODO: reconsider scope.emit + rootScope.on vs rootScope.broadcast + scope.on
     unfollow(bookmark) {
 
-        this.service.unfollow(bookmark)
-            .then(() => removeCached(this.bookmarks, bookmark.id))
-            .then(() => this.$rootScope.$broadcast('unfollowedChannel'))
-            .catch(error => console.log(error));
-    }
-}
-
-function removeCached(cache, id) {
-
-    const index = cache.findIndex(_ => _.id === id);
-
-    if (index !== -1) {
-
-        cache.splice(index, 1);
+        this.service.unfollow(bookmark).catch(error => console.log(error));
     }
 }

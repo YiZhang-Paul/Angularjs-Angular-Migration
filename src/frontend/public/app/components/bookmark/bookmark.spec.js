@@ -1,42 +1,37 @@
 import ComponentsModule from '../components.module';
 
-import { excludeIndex } from '../../shared/utilities/utilities';
-
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('bookmark component unit test', () => {
 
-    let getBookmarksStub;
-    let unfollowStub;
-    let $broadcastStub;
-
-    let q;
-    let scope;
+    let $q;
+    let $rootScope;
     let controller;
+
+    let cacheBookmarksStub;
+    let unfollowStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock bookmark service', mockModule($provide => {
+    beforeEach('mock bookmark service setup', mockModule($provide => {
 
-        getBookmarksStub = stub();
+        cacheBookmarksStub = stub();
         unfollowStub = stub();
 
         $provide.service('bookmarkService', () => ({
 
-            getBookmarks: getBookmarksStub,
+            cacheBookmarks: cacheBookmarksStub,
             unfollow: unfollowStub
         }));
     }));
 
-    beforeEach('test setup', inject(($injector, $controller) => {
+    beforeEach('general test setup', inject(($injector, $controller) => {
 
-        q = $injector.get('$q');
-        scope = $injector.get('$rootScope').$new();
-        controller = $controller('BookmarkController', { $rootScope: scope });
-
-        $broadcastStub = stub(scope, '$broadcast').callThrough();
+        $q = $injector.get('$q');
+        $rootScope = $injector.get('$rootScope');
+        controller = $controller('BookmarkController');
     }));
 
     it('should resolve', () => {
@@ -44,108 +39,52 @@ context('bookmark component unit test', () => {
         expect(controller).is.not.null;
     });
 
-    describe('$onInit()', () => {
+    describe('bookmarks', () => {
 
-        it('should use bookmark service to fetch bookmarks', () => {
+        it('should reference bookmark service cache', () => {
 
-            getBookmarksStub.returns(q.resolve([]));
+            const expected = [{ id: 1 }, { id: 4 }];
+            controller.service.bookmarks = expected;
 
-            controller.$onInit();
-            scope.$apply();
-
-            sinonExpect.calledOnce(getBookmarksStub);
-        });
-
-        it('should load bookmarks on initialization', () => {
-
-            const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getBookmarksStub.returns(q.resolve(expected));
-
-            controller.$onInit();
-            scope.$apply();
-
-            expect(controller.bookmarks).is.not.empty;
             expect(controller.bookmarks).to.deep.equal(expected);
         });
+    });
 
-        it('should default to empty collection when load bookmarks failed', () => {
+    describe('$onInit()', () => {
 
-            getBookmarksStub.returns(q.reject(new Error()));
+        it('should use bookmark service to cache bookmarks on initialization', () => {
+
+            cacheBookmarksStub.returns($q.resolve({}));
 
             controller.$onInit();
-            scope.$apply();
+            $rootScope.$apply();
 
-            expect(Array.isArray(controller.bookmarks)).to.be.true;
-            expect(controller.bookmarks).to.be.empty;
+            sinonExpect.calledOnce(cacheBookmarksStub);
         });
     });
 
     describe('unfollow()', () => {
 
-        beforeEach('unfollow() test setup', () => {
-
-            controller.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
-        });
-
         it('should use bookmark service to delete bookmark', () => {
 
             const expected = { id: 5 };
-            unfollowStub.returns(q.resolve({}));
+            unfollowStub.returns($q.resolve({}));
 
             controller.unfollow(expected);
-            scope.$apply();
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(unfollowStub);
             sinonExpect.calledWith(unfollowStub, expected);
         });
 
-        it('should remove bookmark from cache when successfully unfollowed', () => {
+        it('should not throw error when failed to delete bookmark', () => {
 
-            const index = 1;
-            const bookmark = controller.bookmarks[index];
-            const expected = excludeIndex(controller.bookmarks, index);
-            unfollowStub.returns(q.resolve({}));
-
-            controller.unfollow(bookmark);
-            scope.$apply();
-
-            expect(controller.bookmarks).is.not.empty;
-            expect(controller.bookmarks).to.deep.equal(expected);
-        });
-
-        it('should raise event when successfully unfollowed', () => {
-
-            const bookmark = controller.bookmarks[1];
-            unfollowStub.returns(q.resolve({}));
-
-            controller.unfollow(bookmark);
-            scope.$apply();
-
-            expect(bookmark).is.not.undefined;
-            sinonExpect.calledOnce($broadcastStub);
-            sinonExpect.calledWith($broadcastStub, 'unfollowedChannel');
-        });
-
-        it('should not remove bookmark from cache when failed to unfollow', () => {
-
-            const expected = controller.bookmarks.slice();
-            unfollowStub.returns(q.reject(new Error()));
+            unfollowStub.returns($q.reject(new Error()));
 
             controller.unfollow({});
-            scope.$apply();
+            $rootScope.$apply();
 
-            expect(controller.bookmarks).is.not.empty;
-            expect(controller.bookmarks).to.deep.equal(expected);
-        });
-
-        it('should not raise event when failed to unfollow', () => {
-
-            unfollowStub.returns(q.reject(new Error()));
-
-            controller.unfollow({});
-            scope.$apply();
-
-            sinonExpect.notCalled($broadcastStub);
+            sinonExpect.calledOnce(unfollowStub);
         });
     });
 });
