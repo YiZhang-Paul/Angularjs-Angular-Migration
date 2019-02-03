@@ -81,7 +81,7 @@ context('view history component unit test', () => {
             sinonExpect.calledOnce(getHistoriesStub);
             expect(controller.histories).to.deep.equal(expected);
         });
-        //TODO: find a way to mute console.log in source code ONLY
+
         it('should default to empty collection when load view histories failed', () => {
 
             getHistoriesStub.returns(q.reject(new Error()));
