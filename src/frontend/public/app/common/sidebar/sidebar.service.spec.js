@@ -7,32 +7,37 @@ const sinonExpect = sinon.assert;
 
 context('sidebar service unit test', () => {
 
-    let getBookmarksStub;
-    let getHistoriesStub;
-
     let q;
     let scope;
     let service;
+
+    let getBookmarksStub;
+    let getChannelsStub;
+    let getHistoriesStub;
 
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(CommonModule));
 
     beforeEach('test setup', inject($injector => {
 
-        const bookmarkService = $injector.get('bookmarkHttpService');
-        getBookmarksStub = stub(bookmarkService, 'getBookmarks');
-
-        const historyService = $injector.get('viewHistoryHttpService');
-        getHistoriesStub = stub(historyService, 'getHistories');
-
         q = $injector.get('$q');
         scope = $injector.get('$rootScope');
         service = $injector.get('sidebarService');
+
+        const bookmarkService = $injector.get('bookmarkHttpService');
+        getBookmarksStub = stub(bookmarkService, 'getBookmarks');
+
+        const channelService = $injector.get('channelHttpService');
+        getChannelsStub = stub(channelService, 'getChannels');
+
+        const historyService = $injector.get('viewHistoryHttpService');
+        getHistoriesStub = stub(historyService, 'getHistories');
     }));
 
     afterEach('test teardown', () => {
 
         getBookmarksStub.restore();
+        getChannelsStub.restore();
         getHistoriesStub.restore();
     });
 
@@ -84,6 +89,59 @@ context('sidebar service unit test', () => {
             getBookmarksStub.returns(q.reject(new Error()));
 
             service.getBookmarks().then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            scope.$apply();
+        });
+    });
+
+    describe('getFeaturedChannels()', () => {
+
+        it('should use channel http service to fetch data', () => {
+
+            getChannelsStub.returns(q.resolve([]));
+
+            service.getFeaturedChannels();
+            scope.$apply();
+
+            sinonExpect.calledOnce(getChannelsStub);
+        });
+
+        it('should return channels found', () => {
+
+            const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            getChannelsStub.returns(q.resolve(expected));
+
+            service.getFeaturedChannels().then(result => {
+
+                expect(result).is.not.empty;
+                expect(result).to.deep.equal(expected);
+            });
+
+            scope.$apply();
+        });
+
+        it('should return empty collection when no channel found', () => {
+
+            getChannelsStub.returns(q.resolve([]));
+
+            service.getFeaturedChannels().then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            scope.$apply();
+        });
+
+        it('should return empty collection when failed to retrieve channels', () => {
+
+            getChannelsStub.returns(q.reject(new Error()));
+
+            service.getFeaturedChannels().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
