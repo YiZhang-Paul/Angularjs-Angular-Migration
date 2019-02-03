@@ -1,8 +1,7 @@
 import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
-import { excludeIndex } from '../../shared/utilities/utilities';
-import { hasMatchingValue } from '../../shared/utilities/test-verifications';
+import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -17,6 +16,8 @@ context('bookmark service unit test', () => {
     let getBookmarksStub;
     let addBookmarkStub;
     let deleteBookmarkStub;
+    let hasOwnPropertiesStub;
+    let findByPropertiesStub;
     let $broadcastStub;
 
     beforeEach(mockModule(SharedModule));
@@ -36,6 +37,18 @@ context('bookmark service unit test', () => {
         }));
     }));
 
+    beforeEach('mock generic utility service setup', mockModule($provide => {
+
+        hasOwnPropertiesStub = stub();
+        findByPropertiesStub = stub();
+
+        $provide.service('genericUtilityService', () => ({
+
+            hasOwnProperties: hasOwnPropertiesStub,
+            findByProperties: findByPropertiesStub
+        }));
+    }));
+
     beforeEach('general test setup', inject($injector => {
 
         $q = $injector.get('$q');
@@ -44,18 +57,6 @@ context('bookmark service unit test', () => {
 
         $broadcastStub = stub($rootScope, '$broadcast').callThrough();
     }));
-
-    beforeEach('mock data setup', () => {
-
-        service.bookmarks = [
-
-            { id: 9, provider_id: 1, provider_channel_id: 87 },
-            { id: 2, provider_id: 0, provider_channel_id: 22 },
-            { id: 5, channel_id: 19 },
-            { id: 7, channel_id: 11 },
-            { id: 9, provider_id: 2, provider_channel_id: 54 }
-        ];
-    });
 
     afterEach('general test teardown', () => {
 
@@ -150,47 +151,62 @@ context('bookmark service unit test', () => {
 
         it('should return true when bookmark with matching channel id is found', () => {
 
-            const channelId = service.bookmarks[2].channel_id;
-            const data = { channel_id: channelId };
+            hasOwnPropertiesStub.returns(false);
+            findByPropertiesStub.returns({ id: 5 });
+            const data = { channel_id: 15 };
 
-            expect(channelId).is.not.undefined;
-            expect(service.isFollowed(data)).to.be.true;
+            const result = service.isFollowed(data);
+
+            expect(result).to.be.true;
+            sinonExpect.calledOnce(hasOwnPropertiesStub);
+            sinonExpect.calledOnce(findByPropertiesStub);
         });
 
         it('should return true when bookmark with matching provider information is found', () => {
 
-            const bookmark = service.bookmarks[1];
-            const providerId = bookmark.provider_id;
-            const providerChannelId = bookmark.provider_channel_id;
-            const data = { provider_id: providerId, provider_channel_id: providerChannelId };
+            hasOwnPropertiesStub.returns(true);
+            findByPropertiesStub.returns({ id: 5 });
 
-            expect(providerId).is.not.undefined;
-            expect(providerChannelId).is.not.undefined;
-            expect(service.isFollowed(data)).to.be.true;
+            const result = service.isFollowed({});
+
+            expect(result).to.be.true;
+            sinonExpect.calledOnce(hasOwnPropertiesStub);
+            sinonExpect.calledOnce(findByPropertiesStub);
         });
 
         it('should return false when input data is invalid', () => {
 
-            expect(service.isFollowed({})).to.be.false;
+            hasOwnPropertiesStub.returns(false);
+
+            const result = service.isFollowed({});
+
+            expect(result).to.be.false;
+            sinonExpect.calledOnce(hasOwnPropertiesStub);
+            sinonExpect.notCalled(findByPropertiesStub);
         });
 
         it('should return false when no bookmark with matching channel id is found', () => {
 
-            const bookmarks = service.bookmarks;
-            const data = { channel_id: -1 };
+            hasOwnPropertiesStub.returns(false);
+            findByPropertiesStub.returns(null);
 
-            expect(hasMatchingValue(data, bookmarks, 'channel_id')).to.be.false;
-            expect(service.isFollowed(data)).to.be.false;
+            const result = service.isFollowed({ channel_id: 15 });
+
+            expect(result).to.be.false;
+            sinonExpect.calledOnce(hasOwnPropertiesStub);
+            sinonExpect.calledOnce(findByPropertiesStub);
         });
 
         it('should return false when no bookmark with matching provider information is found', () => {
 
-            const bookmarks = service.bookmarks;
-            const data = { provider_id: -1, provider_channel_id: -1 };
+            hasOwnPropertiesStub.returns(true);
+            findByPropertiesStub.returns(null);
 
-            expect(hasMatchingValue(data, bookmarks, 'provider_id')).to.be.false;
-            expect(hasMatchingValue(data, bookmarks, 'provider_channel_id')).to.be.false;
-            expect(service.isFollowed(data)).to.be.false;
+            const result = service.isFollowed({});
+
+            expect(result).to.be.false;
+            sinonExpect.calledOnce(hasOwnPropertiesStub);
+            sinonExpect.calledOnce(findByPropertiesStub);
         });
     });
 
@@ -252,29 +268,35 @@ context('bookmark service unit test', () => {
             // clear $locationChangeStart and $locationChangeSuccess broadcast
             $rootScope.$apply();
             $broadcastStub.resetHistory();
+            hasOwnPropertiesStub.returns(true);
+            findByPropertiesStub.returns({ id: 0 });
         });
 
         it('should use bookmark http service to delete bookmark', () => {
 
-            const bookmark = service.bookmarks[2];
-            const expected = bookmark.id;
+            const expected = 5;
+            findByPropertiesStub.returns({ id: expected });
             deleteBookmarkStub.returns($q.resolve({}));
 
-            service.unfollow(bookmark);
+            service.unfollow({});
             $rootScope.$apply();
 
+            sinonExpect.calledOnce(findByPropertiesStub);
             sinonExpect.calledOnce(deleteBookmarkStub);
             sinonExpect.calledWith(deleteBookmarkStub, expected);
         });
 
         it('should remove bookmark from cache when successfully deleted bookmark', () => {
 
-            const index = 2;
+            service.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            const index = 1;
             const bookmark = service.bookmarks[index];
             const expected = excludeIndex(service.bookmarks, index);
             deleteBookmarkStub.returns($q.resolve({}));
+            findByPropertiesStub.returns(bookmark);
 
-            service.unfollow(bookmark);
+            service.unfollow({});
             $rootScope.$apply();
 
             expect(service.bookmarks).is.not.empty;
@@ -283,10 +305,9 @@ context('bookmark service unit test', () => {
 
         it('should raise event when successfully deleted bookmark', () => {
 
-            const bookmark = service.bookmarks[2];
             deleteBookmarkStub.returns($q.resolve({}));
 
-            service.unfollow(bookmark);
+            service.unfollow({});
             $rootScope.$apply();
 
             sinonExpect.calledOnce($broadcastStub);
@@ -295,8 +316,10 @@ context('bookmark service unit test', () => {
 
         it('should not remove bookmark from cache when failed to delete bookmark', () => {
 
+            service.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = service.bookmarks.slice();
             deleteBookmarkStub.returns($q.reject(new Error()));
+            findByPropertiesStub.returns({ id: expected[1].id });
 
             service.unfollow({}).catch(() => null);
             $rootScope.$apply();

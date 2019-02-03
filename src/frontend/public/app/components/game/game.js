@@ -1,13 +1,12 @@
-import { joinText } from '../../shared/utilities/utilities';
-
 export class GameController {
     // TODO: create service
-    constructor($interval, $state, gameHttpService, channelHttpService) {
+    constructor($interval, $state, gameHttpService, channelHttpService, genericUtilityService) {
         'ngInject';
         this.$interval = $interval;
         this.$state = $state;
         this.gameService = gameHttpService;
         this.channelService = channelHttpService;
+        this.utilities = genericUtilityService;
 
         this.task = null;
         this.games = [];
@@ -22,17 +21,39 @@ export class GameController {
         this.task = this.$interval(callback, time);
     }
 
+    _syncGames(games) {
+
+        for (let i = 0; i < games.length; i++) {
+
+            if (this.games[i] && this.games[i].id === games[i].id) {
+
+                this.games[i].view_count = games[i].view_count;
+
+                continue;
+            }
+
+            this.games[i] = games[i];
+        }
+    }
+
     loadGames() {
 
         this.gameService.getGames()
-            .then(games => syncGames(this.games, games))
+            .then(games => this._syncGames(games))
             .catch(() => null);
+    }
+
+    _changeRoute(game, channels) {
+
+        const name = this.utilities.joinText(game.name);
+
+        this.$state.go('channels', { game, name, channels });
     }
 
     toChannelsView(game) {
 
         this.channelService.getChannelsByGameId(game.id)
-            .then(channels => changeRoute(this.$state, game, channels))
+            .then(channels => this._changeRoute(game, channels))
             .catch(error => console.log(error));
     }
 
@@ -40,26 +61,4 @@ export class GameController {
 
         this.$interval.cancel(this.task);
     }
-}
-
-function syncGames(oldGames, newGames) {
-
-    for (let i = 0; i < newGames.length; i++) {
-
-        if (oldGames[i] && oldGames[i].id === newGames[i].id) {
-
-            oldGames[i].view_count = newGames[i].view_count;
-
-            continue;
-        }
-
-        oldGames[i] = newGames[i];
-    }
-}
-
-function changeRoute($state, game, channels) {
-
-    const name = joinText(game.name);
-
-    $state.go('channels', { game, name, channels });
 }

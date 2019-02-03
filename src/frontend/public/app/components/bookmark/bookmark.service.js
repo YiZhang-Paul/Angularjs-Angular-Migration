@@ -1,11 +1,10 @@
-import { findByProperties, hasOwnProperties } from '../../shared/utilities/utilities';
-
 export class BookmarkService {
 
-    constructor($rootScope, bookmarkHttpService) {
+    constructor($rootScope, bookmarkHttpService, genericUtilityService) {
         'ngInject';
         this.$rootScope = $rootScope;
         this.service = bookmarkHttpService;
+        this.utilities = genericUtilityService;
 
         this.bookmarks = [];
     }
@@ -33,7 +32,7 @@ export class BookmarkService {
         const channelKeys = ['channel_id'];
         const providerKeys = ['provider_id', 'provider_channel_id'];
         const hasChannelId = data.hasOwnProperty(channelKeys[0]);
-        const hasProvider = hasOwnProperties(data, providerKeys);
+        const hasProvider = this.utilities.hasOwnProperties(data, providerKeys);
 
         if (!hasChannelId && !hasProvider) {
 
@@ -42,7 +41,7 @@ export class BookmarkService {
 
         const keys = hasChannelId ? channelKeys : providerKeys;
 
-        return findByProperties(this.bookmarks, data, keys);
+        return this.utilities.findByProperties(this.bookmarks, data, keys);
     }
 
     _getBookmarkId(data) {

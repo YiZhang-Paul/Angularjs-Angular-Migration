@@ -1,8 +1,16 @@
-import { joinText } from '../../shared/utilities/utilities';
-
 export class ViewHistoryController {
     // TODO: create service
-    constructor($q, $state, $mdDialog, gameHttpService, channelHttpService, viewHistoryHttpService) {
+    constructor(
+
+        $q,
+        $state,
+        $mdDialog,
+        gameHttpService,
+        channelHttpService,
+        viewHistoryHttpService,
+        genericUtilityService
+
+    ) {
         'ngInject';
         this.$q = $q;
         this.$state = $state;
@@ -10,6 +18,7 @@ export class ViewHistoryController {
         this.gameService = gameHttpService;
         this.channelService = channelHttpService;
         this.historyService = viewHistoryHttpService;
+        this.utilities = genericUtilityService;
 
         this.histories = [];
     }
@@ -31,13 +40,20 @@ export class ViewHistoryController {
         return !/(mp4|m4v)$/i.test(url);
     }
 
+    _changeRoute(game, channels) {
+
+        const name = this.utilities.joinText(game.name);
+
+        this.$state.go('channels', { game, name, channels });
+    }
+
     toChannelsView(id) {
 
         const gamePromise = this.gameService.getGame(id);
         const channelsPromise = this.channelService.getChannelsByGameId(id);
 
         this.$q.all([gamePromise, channelsPromise])
-            .then(responses => changeRoute(this.$state, ...responses))
+            .then(responses => this._changeRoute(...responses))
             .catch(error => console.log(error));
     }
 
@@ -60,29 +76,22 @@ export class ViewHistoryController {
             .catch(error => console.log(error));
     }
 
+    _showConfirmationDialog(event) {
+
+        const options = this.$mdDialog.confirm()
+            .title('Clear all view histories?')
+            .textContent('All view histories will be permanently deleted.')
+            .targetEvent(event)
+            .ok('Ok')
+            .cancel('Cancel');
+
+        return this.$mdDialog.show(options);
+    }
+
     confirmClearHistories(event) {
 
-        showConfirmationDialog(this.$mdDialog, event)
+        this._showConfirmationDialog(event)
             .then(() => this.clearHistories())
             .catch(() => null);
     }
-}
-
-function changeRoute($state, game, channels) {
-
-    const name = joinText(game.name);
-
-    $state.go('channels', { game, name, channels });
-}
-
-function showConfirmationDialog($mdDialog, event) {
-
-    const options = $mdDialog.confirm()
-        .title('Clear all view histories?')
-        .textContent('All view histories will be permanently deleted.')
-        .targetEvent(event)
-        .ok('Ok')
-        .cancel('Cancel');
-
-    return $mdDialog.show(options);
 }

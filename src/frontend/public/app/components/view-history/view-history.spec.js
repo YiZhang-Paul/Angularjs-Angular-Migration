@@ -1,7 +1,7 @@
 import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
-import { excludeIndex } from '../../shared/utilities/utilities';
+import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;
 const spy = sinon.spy;
@@ -19,6 +19,7 @@ context('view history component unit test', () => {
     let deleteHistoriesStub;
     let getGameStub;
     let getChannelsByGameIdStub;
+    let joinTextStub;
     let goStub;
     let confirmSpy;
     let showStub;
@@ -57,6 +58,16 @@ context('view history component unit test', () => {
         $provide.service('channelHttpService', () => ({
 
             getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock generic utility service setup', mockModule($provide => {
+
+        joinTextStub = stub();
+
+        $provide.service('genericUtilityService', () => ({
+
+            joinText: joinTextStub
         }));
     }));
 
@@ -147,6 +158,7 @@ context('view history component unit test', () => {
 
             getGameStub.returns($q.resolve(game));
             getChannelsByGameIdStub.returns($q.resolve([]));
+            joinTextStub.returns('');
         });
 
         it('should use game http service to fetch game data', () => {
@@ -171,10 +183,12 @@ context('view history component unit test', () => {
             const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = { game, name, channels };
             getChannelsByGameIdStub.returns($q.resolve(channels));
+            joinTextStub.returns(name);
 
             controller.toChannelsView(id);
             $rootScope.$apply();
 
+            sinonExpect.calledOnce(joinTextStub);
             sinonExpect.calledOnce(goStub);
             sinonExpect.calledWith(goStub, 'channels', expected);
         });

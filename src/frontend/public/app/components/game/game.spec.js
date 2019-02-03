@@ -14,6 +14,7 @@ context('game component unit test', () => {
 
     let getGamesStub;
     let getChannelsByGameIdStub;
+    let joinTextStub;
     let goStub;
     let cancelStub;
 
@@ -37,6 +38,16 @@ context('game component unit test', () => {
         $provide.service('channelHttpService', () => ({
 
             getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock generic utility service setup', mockModule($provide => {
+
+        joinTextStub = stub();
+
+        $provide.service('genericUtilityService', () => ({
+
+            joinText: joinTextStub
         }));
     }));
 
@@ -149,6 +160,7 @@ context('game component unit test', () => {
         beforeEach('toChannelsView() test setup', () => {
 
             getChannelsByGameIdStub.returns($q.resolve([]));
+            joinTextStub.returns('');
         });
 
         it('should use channel http service to fetch data', () => {
@@ -165,10 +177,12 @@ context('game component unit test', () => {
             const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = { game, name, channels };
             getChannelsByGameIdStub.returns($q.resolve(channels));
+            joinTextStub.returns(name);
 
             controller.toChannelsView(game);
             $rootScope.$apply();
 
+            sinonExpect.calledOnce(joinTextStub);
             sinonExpect.calledOnce(goStub);
             sinonExpect.calledWith(goStub, 'channels', expected);
         });
