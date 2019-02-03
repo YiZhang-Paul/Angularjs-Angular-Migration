@@ -5,7 +5,7 @@ export class BookmarkService {
     constructor(bookmarkHttpService) {
         'ngInject';
         this.service = bookmarkHttpService;
-
+        // TODO: bookmark controller should reference this cache
         this.bookmarks = [];
         this.cacheBookmarks();
     }
