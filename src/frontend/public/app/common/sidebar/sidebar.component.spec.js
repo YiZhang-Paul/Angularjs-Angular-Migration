@@ -11,7 +11,7 @@ context('sidebar component unit test', () => {
     let component;
 
     let getBookmarksStub;
-    let getChannelsStub;
+    let getFeaturedChannelsStub;
     let getHistoriesStub;
     let successStub;
     let errorStub;
@@ -21,13 +21,13 @@ context('sidebar component unit test', () => {
     beforeEach('mock sidebar service setup', mockModule($provide => {
 
         getBookmarksStub = stub();
-        getChannelsStub = stub();
+        getFeaturedChannelsStub = stub();
         getHistoriesStub = stub();
 
         $provide.service('sidebarService', () => ({
 
             getBookmarks: getBookmarksStub,
-            getChannels: getChannelsStub,
+            getFeaturedChannels: getFeaturedChannelsStub,
             getHistories: getHistoriesStub
         }));
     }));
@@ -62,7 +62,7 @@ context('sidebar component unit test', () => {
         beforeEach('$onInit() test setup', () => {
 
             getBookmarksStub.returns($q.resolve([]));
-            getChannelsStub.returns($q.resolve([]));
+            getFeaturedChannelsStub.returns($q.resolve([]));
             getHistoriesStub.returns($q.resolve([]));
         });
 
@@ -92,7 +92,7 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getChannelsStub);
+            sinonExpect.calledOnce(getFeaturedChannelsStub);
         });
 
         it('should load featured channels on initialization', () => {
@@ -105,7 +105,7 @@ context('sidebar component unit test', () => {
                 { id: 4, provider_game_name: 'name_4', game_name: 'name_4' }
             ];
 
-            getChannelsStub.returns($q.resolve(expected));
+            getFeaturedChannelsStub.returns($q.resolve(expected));
 
             component.$onInit();
             $rootScope.$apply();
@@ -133,7 +133,7 @@ context('sidebar component unit test', () => {
                 { id: 4, provider_game_name: 'name_4', game_name: 'name_4' }
             ];
 
-            getChannelsStub.returns($q.resolve(channels));
+            getFeaturedChannelsStub.returns($q.resolve(channels));
 
             component.$onInit();
             $rootScope.$apply();
