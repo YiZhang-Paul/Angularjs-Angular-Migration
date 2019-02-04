@@ -53,6 +53,48 @@ context('channel service unit test', () => {
         expect(service).is.not.null;
     });
 
+    describe('getChannelsByGameId()', () => {
+
+        const id = 76;
+
+        it('should use channel http service to fetch channels', () => {
+
+            getChannelsByGameIdStub.returns($q.resolve([]));
+
+            service.getChannelsByGameId(id);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledWith(getChannelsByGameIdStub, id);
+        });
+
+        it('should return empty collection when no channel is found', () => {
+
+            getChannelsByGameIdStub.returns($q.resolve([]));
+
+            service.getChannelsByGameId(id).then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            $rootScope.$apply();
+        });
+
+        it('should return empty collection when failed to fetch channels', () => {
+
+            getChannelsByGameIdStub.returns($q.reject(new Error()));
+
+            service.getChannelsByGameId(id).then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            $rootScope.$apply();
+        });
+    });
+
     describe('refreshChannels()', () => {
 
         let oldChannels;

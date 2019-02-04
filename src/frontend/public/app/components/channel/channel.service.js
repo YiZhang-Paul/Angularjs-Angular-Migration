@@ -1,8 +1,19 @@
 export class ChannelService {
 
-    constructor(bookmarkService) {
+    constructor(bookmarkService, channelHttpService) {
         'ngInject';
         this.bookmarkService = bookmarkService;
+        this.channelService = channelHttpService;
+    }
+
+    getChannelsByGameId(id) {
+
+        return this.channelService.getChannelsByGameId(id).catch(error => {
+
+            console.log(error);
+
+            return [];
+        });
     }
 
     _isSameChannel(a, b) {
