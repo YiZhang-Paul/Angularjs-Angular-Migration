@@ -8,6 +8,7 @@ const sinonExpect = sinon.assert;
 context('channel component unit test', () => {
 
     let $q;
+    let $interval;
     let $rootScope;
     let $stateParams;
     let component;
@@ -21,6 +22,7 @@ context('channel component unit test', () => {
     let followStub;
     let unfollowStub;
     let addHistoryStub;
+    let cancelStub;
 
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
@@ -78,10 +80,18 @@ context('channel component unit test', () => {
     beforeEach('general test setup', inject(($injector, $controller) => {
 
         $q = $injector.get('$q');
+        $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         $stateParams = $injector.get('$stateParams');
         component = $controller('ChannelController');
+
+        cancelStub = stub($interval, 'cancel');
     }));
+
+    afterEach('general test teardown', () => {
+
+        cancelStub.restore();
+    });
 
     it('should resolve', () => {
 
@@ -146,6 +156,22 @@ context('channel component unit test', () => {
             sinonExpect.calledOnce(refreshChannelsStub);
         });
 
+        it('should load channels every 10 seconds', () => {
+
+            const seconds = 60;
+            const expected = Math.floor(seconds / 10);
+
+            component.$onInit();
+            $rootScope.$apply();
+            // reset initial call to load channels
+            getChannelsByGameIdStub.resetHistory();
+            refreshChannelsStub.resetHistory();
+            $interval.flush(seconds * 1000);
+
+            sinonExpect.callCount(getChannelsByGameIdStub, expected);
+            sinonExpect.callCount(refreshChannelsStub, expected);
+        });
+
         it('should not load channel data when game data is not found', () => {
 
             $stateParams.game = null;
@@ -181,6 +207,21 @@ context('channel component unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsByGameIdStub);
+        });
+    });
+
+    describe('$onDestroy()', () => {
+
+        it('should cancel interval', () => {
+
+            const expected = 2;
+            component.task = expected;
+
+            component.$onDestroy();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(cancelStub);
+            sinonExpect.calledWith(cancelStub, expected);
         });
     });
 

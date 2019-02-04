@@ -2,7 +2,6 @@ export class FeaturedChannelController {
 
     constructor(
 
-        $transitions,
         $interval,
         channelService,
         featuredChannelService,
@@ -11,13 +10,13 @@ export class FeaturedChannelController {
 
     ) {
         'ngInject';
-        this.$transitions = $transitions;
         this.$interval = $interval;
         this.channelService = channelService;
         this.featuredChannelService = featuredChannelService;
         this.historyService = viewHistoryService;
         this.thumbnailPlayer = thumbnailPlayerService;
 
+        this.task = null;
         this.channels = [];
     }
 
@@ -38,19 +37,11 @@ export class FeaturedChannelController {
 
     _setupChannelLoading() {
 
-        const interval = this.$interval(() => {
+        this.task = this.$interval(() => {
 
             this._loadChannels();
 
         }, 10 * 1000);
-
-        this.$transitions.onStart({}, transition => {
-
-            if (transition.from().name === 'featured') {
-
-                this.$interval.cancel(interval);
-            }
-        });
     }
 
     playThumbnail(thumbnail) {
@@ -81,5 +72,10 @@ export class FeaturedChannelController {
     addHistory(channel) {
 
         this.historyService.addHistory(channel);
+    }
+
+    $onDestroy() {
+
+        this.$interval.cancel(this.task);
     }
 }

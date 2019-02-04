@@ -1,17 +1,26 @@
 export class ChannelController {
 
-    constructor($stateParams, $transitions, $interval, channelService, viewHistoryService, thumbnailPlayerService, gameHttpService) {
+    constructor(
+
+        $stateParams,
+        $interval,
+        gameHttpService,
+        channelService,
+        viewHistoryService,
+        thumbnailPlayerService
+
+    ) {
         'ngInject';
         this.$stateParams = $stateParams;
-        this.$transitions = $transitions;
         this.$interval = $interval;
+        this.gameService = gameHttpService;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
         this.thumbnailPlayer = thumbnailPlayerService;
-        this.gameService = gameHttpService;
 
-        this.channels = [];
+        this.task = null;
         this.game = null;
+        this.channels = [];
     }
 
     $onInit() {
@@ -61,19 +70,11 @@ export class ChannelController {
 
     _setupChannelLoading() {
 
-        const interval = this.$interval(() => {
+        this.task = this.$interval(() => {
 
             this._loadChannels();
 
         }, 10 * 1000);
-
-        this.$transitions.onStart({}, transition => {
-
-            if (transition.from().name === 'channels') {
-
-                this.$interval.cancel(interval);
-            }
-        });
     }
 
     playThumbnail(thumbnail) {
@@ -104,5 +105,10 @@ export class ChannelController {
     addHistory(channel) {
 
         this.historyService.addHistory(channel);
+    }
+
+    $onDestroy() {
+
+        this.$interval.cancel(this.task);
     }
 }

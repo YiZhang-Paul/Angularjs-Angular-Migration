@@ -7,6 +7,7 @@ const sinonExpect = sinon.assert;
 context('featured channel component unit test', () => {
 
     let $q;
+    let $interval;
     let $rootScope;
     let component;
 
@@ -18,6 +19,7 @@ context('featured channel component unit test', () => {
     let followStub;
     let unfollowStub;
     let addHistoryStub;
+    let cancelStub;
 
     beforeEach(mockModule(ComponentsModule));
 
@@ -72,9 +74,17 @@ context('featured channel component unit test', () => {
     beforeEach('general test setup', inject(($injector, $controller) => {
 
         $q = $injector.get('$q');
+        $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         component = $controller('FeaturedChannelController');
+
+        cancelStub = stub($interval, 'cancel');
     }));
+
+    afterEach('general test teardown', () => {
+
+        cancelStub.restore();
+    });
 
     it('should resolve', () => {
 
@@ -112,12 +122,43 @@ context('featured channel component unit test', () => {
             expect(component.channels).to.deep.equal(expected);
         });
 
+        it('should load channels every 10 seconds', () => {
+
+            const seconds = 60;
+            const expected = Math.floor(seconds / 10);
+
+            component.$onInit();
+            $rootScope.$apply();
+            // reset initial call to load channels
+            getFeaturedChannelsStub.resetHistory();
+            refreshChannelsStub.resetHistory();
+            $interval.flush(seconds * 1000);
+
+            sinonExpect.callCount(getFeaturedChannelsStub, expected);
+            sinonExpect.callCount(refreshChannelsStub, expected);
+        });
+
         it('should not throw error when failed to load featured channels', () => {
 
             getFeaturedChannelsStub.returns($q.reject(new Error()));
 
             component.$onInit();
             $rootScope.$apply();
+        });
+    });
+
+    describe('$onDestroy()', () => {
+
+        it('should cancel interval', () => {
+
+            const expected = 2;
+            component.task = expected;
+
+            component.$onDestroy();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(cancelStub);
+            sinonExpect.calledWith(cancelStub, expected);
         });
     });
 
