@@ -5,7 +5,7 @@ export function hasMatchingValue(object, objects, key) {
 
 export function hasAuthenticationToken(header) {
 
-    return /^bearer\s+\w+/i.test(header.Authorization);
+    return /^bearer\s+\w+\.\w+\.\w+$/i.test(header.Authorization);
 }
 
 export default {

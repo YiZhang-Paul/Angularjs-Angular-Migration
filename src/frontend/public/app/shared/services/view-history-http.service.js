@@ -1,18 +1,16 @@
 export class ViewHistoryHttpService {
 
-    constructor($http) {
+    constructor($http, authenticatorService) {
         'ngInject';
         this.$http = $http;
+        this.authenticator = authenticatorService;
 
         this.api = 'http://127.0.0.1:4150/api/v1/user/histories';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
     }
 
     getHistories() {
 
-        const options = [this.api, this.defaultOptions];
+        const options = [this.api, this.authenticator.defaultOptions];
 
         return this.$http.get(...options).then(response => {
 
@@ -24,7 +22,7 @@ export class ViewHistoryHttpService {
 
         const name = channel.provider_game_name;
         const data = Object.assign({ game_name: name }, channel);
-        const options = [this.api, data, this.defaultOptions];
+        const options = [this.api, data, this.authenticator.defaultOptions];
 
         return this.$http.post(...options).then(response => response.data);
     }
@@ -32,14 +30,14 @@ export class ViewHistoryHttpService {
     deleteHistory(id) {
 
         const url = `${this.api}/${id}`;
-        const options = [url, this.defaultOptions];
+        const options = [url, this.authenticator.defaultOptions];
 
         return this.$http.delete(...options).then(response => response.data);
     }
 
     deleteHistories() {
 
-        const options = [this.api, this.defaultOptions];
+        const options = [this.api, this.authenticator.defaultOptions];
 
         return this.$http.delete(...options).then(response => response.data);
     }

@@ -1,3 +1,4 @@
+import { AuthenticatorService } from './services/authenticator.service';
 import { BookmarkHttpService } from './services/bookmark-http.service';
 import { ChannelHttpService } from './services/channel-http.service';
 import { GameHttpService } from './services/game-http.service';
@@ -11,6 +12,7 @@ const moduleName = 'sample-app-shared';
 export default moduleName;
 
 angular.module(moduleName, [])
+    .service('authenticatorService', AuthenticatorService)
     .service('bookmarkHttpService', BookmarkHttpService)
     .service('channelHttpService', ChannelHttpService)
     .service('gameHttpService', GameHttpService)
