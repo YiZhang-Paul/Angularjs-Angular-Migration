@@ -7,6 +7,7 @@ import { GameController } from './game/game';
 import { ViewHistoryController } from './view-history/view-history';
 
 import { BookmarkService } from './bookmark/bookmark.service';
+import { ChannelService } from './channel/channel.service';
 
 import BookmarkRoute from './bookmark/bookmark.route';
 import ChannelRoute from './channel/channel.route';
@@ -28,4 +29,5 @@ angular.module(moduleName, ['ui.router', 'ngMaterial'])
     .controller('FeaturedChannelController', FeaturedChannelController)
     .controller('GameController', GameController)
     .controller('ViewHistoryController', ViewHistoryController)
-    .service('bookmarkService', BookmarkService);
+    .service('bookmarkService', BookmarkService)
+    .service('channelService', ChannelService);

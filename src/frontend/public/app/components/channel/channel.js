@@ -1,13 +1,13 @@
 export class ChannelController {
 
-    constructor($rootScope, $stateParams, $transitions, $http, $interval, bookmarkService, gameHttpService) {
+    constructor($rootScope, $stateParams, $transitions, $http, $interval, channelService, gameHttpService) {
         'ngInject';
         this.$rootScope = $rootScope;
         this.$stateParams = $stateParams;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
-        this.bookmarkService = bookmarkService;
+        this.channelService = channelService;
         this.gameService = gameHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
@@ -133,44 +133,27 @@ export class ChannelController {
 
     playThumbnail(video) {
 
-        video.srcElement.play();
+        this.channelService.playThumbnail(video);
     }
 
     stopThumbnail(video) {
 
-        video.srcElement.pause();
-        video.srcElement.currentTime = 0;
+        this.channelService.stopThumbnail(video);
     }
 
     isFollowed(channel) {
 
-        return this.bookmarkService.isFollowed(channel);
+        return this.channelService.isFollowed(channel);
     }
 
-    async follow(channel) {
+    follow(channel) {
 
-        try {
-
-            await this.bookmarkService.follow(channel);
-            this.$rootScope.$broadcast('followedChannel');
-        }
-        catch (error) {
-
-            console.log();
-        }
+        this.channelService.follow(channel);
     }
 
-    async unfollow(channel) {
+    unfollow(channel) {
 
-        try {
-
-            await this.bookmarkService.unfollow(channel);
-            this.$rootScope.$broadcast('unfollowedChannel');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.channelService.unfollow(channel);
     }
 
     async addHistory(channel) {

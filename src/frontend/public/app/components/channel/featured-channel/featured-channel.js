@@ -1,12 +1,12 @@
 export class FeaturedChannelController {
 
-    constructor($rootScope, $transitions, $http, $interval, bookmarkService) {
+    constructor($rootScope, $transitions, $http, $interval, channelService) {
         'ngInject';
         this.$rootScope = $rootScope;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
-        this.bookmarkService = bookmarkService;
+        this.channelService = channelService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
         this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
@@ -106,44 +106,27 @@ export class FeaturedChannelController {
 
     playThumbnail(video) {
 
-        video.srcElement.play();
+        this.channelService.playThumbnail(video);
     }
 
     stopThumbnail(video) {
 
-        video.srcElement.pause();
-        video.srcElement.currentTime = 0;
+        this.channelService.stopThumbnail(video);
     }
 
     isFollowed(channel) {
 
-        return this.bookmarkService.isFollowed(channel);
+        return this.channelService.isFollowed(channel);
     }
 
-    async follow(channel) {
+    follow(channel) {
 
-        try {
-
-            await this.bookmarkService.follow(channel);
-            this.$rootScope.$broadcast('followedChannel');
-        }
-        catch (error) {
-
-            console.log();
-        }
+        this.channelService.follow(channel);
     }
 
-    async unfollow(channel) {
+    unfollow(channel) {
 
-        try {
-
-            await this.bookmarkService.unfollow(channel);
-            this.$rootScope.$broadcast('unfollowedChannel');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.channelService.unfollow(channel);
     }
 
     async addHistory(channel) {
