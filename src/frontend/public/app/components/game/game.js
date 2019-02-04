@@ -1,6 +1,14 @@
 export class GameController {
     // TODO: create service
-    constructor($interval, $state, gameHttpService, channelHttpService, genericUtilityService) {
+    constructor(
+
+        $interval,
+        $state,
+        gameHttpService,
+        channelHttpService,
+        genericUtilityService
+
+    ) {
         'ngInject';
         this.$interval = $interval;
         this.$state = $state;
@@ -14,9 +22,9 @@ export class GameController {
 
     $onInit() {
 
-        this.loadGames();
+        this._loadGames();
 
-        const callback = this.loadGames.bind(this);
+        const callback = this._loadGames.bind(this);
         const time = 10 * 1000;
         this.task = this.$interval(callback, time);
     }
@@ -36,11 +44,13 @@ export class GameController {
         }
     }
 
-    loadGames() {
+    _loadGames() {
 
-        this.gameService.getGames()
-            .then(games => this._syncGames(games))
-            .catch(() => null);
+        this.gameService.getGames().then(games => {
+
+            this._syncGames(games);
+        })
+        .catch(() => null);
     }
 
     _changeRoute(game, channels) {
@@ -52,9 +62,11 @@ export class GameController {
 
     toChannelsView(game) {
 
-        this.channelService.getChannelsByGameId(game.id)
-            .then(channels => this._changeRoute(game, channels))
-            .catch(error => console.log(error));
+        this.channelService.getChannelsByGameId(game.id).then(channels => {
+
+            this._changeRoute(game, channels);
+        })
+        .catch(error => console.log(error));
     }
 
     $onDestroy() {

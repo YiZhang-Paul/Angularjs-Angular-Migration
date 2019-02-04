@@ -25,14 +25,16 @@ export class ViewHistoryController {
 
     $onInit() {
 
-        this.loadHistories();
+        this._loadHistories();
     }
 
-    loadHistories() {
+    _loadHistories() {
 
-        this.historyService.getHistories()
-            .then(histories => this.histories = histories)
-            .catch(error => console.log(error));
+        this.historyService.getHistories().then(histories => {
+
+            this.histories = histories;
+        })
+        .catch(error => console.log(error));
     }
 
     isStaticImage(url) {
@@ -52,9 +54,11 @@ export class ViewHistoryController {
         const gamePromise = this.gameService.getGame(id);
         const channelsPromise = this.channelService.getChannelsByGameId(id);
 
-        this.$q.all([gamePromise, channelsPromise])
-            .then(responses => this._changeRoute(...responses))
-            .catch(error => console.log(error));
+        this.$q.all([gamePromise, channelsPromise]).then(responses => {
+
+            this._changeRoute(...responses);
+        })
+        .catch(error => console.log(error));
     }
 
     deleteHistory(history) {
@@ -71,9 +75,11 @@ export class ViewHistoryController {
 
     clearHistories() {
 
-        this.historyService.deleteHistories()
-            .then(() => this.histories = [])
-            .catch(error => console.log(error));
+        this.historyService.deleteHistories().then(() => {
+
+            this.histories = [];
+        })
+        .catch(error => console.log(error));
     }
 
     _showConfirmationDialog(event) {
@@ -90,8 +96,10 @@ export class ViewHistoryController {
 
     confirmClearHistories(event) {
 
-        this._showConfirmationDialog(event)
-            .then(() => this.clearHistories())
-            .catch(() => null);
+        this._showConfirmationDialog(event).then(() => {
+
+            this.clearHistories();
+        })
+        .catch(() => null);
     }
 }

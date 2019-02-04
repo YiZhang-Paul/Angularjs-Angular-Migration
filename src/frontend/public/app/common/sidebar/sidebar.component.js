@@ -11,13 +11,13 @@ export class Sidebar {
 
         this.badges = new Map();
     }
-    // TODO: research proper way/possibility of proper private methods
+
     $onInit() {
 
         this._loadBadges();
         this._registerEvents();
     }
-
+    // TODO: move to service
     _addGameName(channels) {
 
         return channels.map(_ => {

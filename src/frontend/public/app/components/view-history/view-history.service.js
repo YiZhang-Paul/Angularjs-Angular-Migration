@@ -8,8 +8,10 @@ export class ViewHistoryService {
 
     addHistory(channel) {
 
-        return this.historyService.addHistory(channel)
-            .then(() => this.$rootScope.$broadcast('historyUpdated'))
-            .catch(error => console.log(error));
+        return this.historyService.addHistory(channel).then(() => {
+
+            this.$rootScope.$broadcast('historyUpdated');
+        })
+        .catch(error => console.log(error));
     }
 }

@@ -28,7 +28,7 @@ export class ChannelController {
         this._loadComponent();
         this._setupChannelLoading();
     }
-
+    // TODO: move to service
     _loadGame() {
 
         return this.gameService.getGames().then(games => {
