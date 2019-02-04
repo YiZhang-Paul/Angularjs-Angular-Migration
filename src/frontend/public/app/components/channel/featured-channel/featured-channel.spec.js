@@ -15,6 +15,7 @@ context('featured channel component unit test', () => {
     let isFollowedStub;
     let followStub;
     let unfollowStub;
+    let addHistoryStub;
 
     beforeEach(mockModule(ComponentsModule));
 
@@ -25,6 +26,7 @@ context('featured channel component unit test', () => {
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
+        addHistoryStub = stub();
 
         $provide.service('channelService', () => ({
 
@@ -32,7 +34,8 @@ context('featured channel component unit test', () => {
             stopThumbnail: stopThumbnailStub,
             isFollowed: isFollowedStub,
             follow: followStub,
-            unfollow: unfollowStub
+            unfollow: unfollowStub,
+            addHistory: addHistoryStub
         }));
     }));
 
@@ -119,6 +122,21 @@ context('featured channel component unit test', () => {
 
             sinonExpect.calledOnce(unfollowStub);
             sinonExpect.calledWith(unfollowStub, channel);
+        });
+    });
+
+    describe('addHistory()', () => {
+
+        it('should use channel service to add view history', () => {
+
+            const channel = { channel_id: 5 };
+            addHistoryStub.returns($q.resolve({}));
+
+            component.addHistory(channel);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(addHistoryStub);
+            sinonExpect.calledWith(addHistoryStub, channel);
         });
     });
 });

@@ -1,8 +1,9 @@
 export class ChannelService {
 
-    constructor(bookmarkService) {
+    constructor(bookmarkService, viewHistoryService) {
         'ngInject';
         this.bookmarkService = bookmarkService;
+        this.historyService = viewHistoryService;
     }
 
     playThumbnail(video) {
@@ -35,5 +36,10 @@ export class ChannelService {
 
             console.log(error);
         });
+    }
+
+    addHistory(channel) {
+
+        return this.historyService.addHistory(channel);
     }
 }

@@ -1,17 +1,13 @@
 export class FeaturedChannelController {
 
-    constructor($rootScope, $transitions, $http, $interval, channelService) {
+    constructor($transitions, $http, $interval, channelService) {
         'ngInject';
-        this.$rootScope = $rootScope;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
-        this.channelService = channelService;
+        this.service = channelService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
 
         this.channels = [];
     }
@@ -106,43 +102,31 @@ export class FeaturedChannelController {
 
     playThumbnail(video) {
 
-        this.channelService.playThumbnail(video);
+        this.service.playThumbnail(video);
     }
 
     stopThumbnail(video) {
 
-        this.channelService.stopThumbnail(video);
+        this.service.stopThumbnail(video);
     }
 
     isFollowed(channel) {
 
-        return this.channelService.isFollowed(channel);
+        return this.service.isFollowed(channel);
     }
 
     follow(channel) {
 
-        this.channelService.follow(channel);
+        this.service.follow(channel);
     }
 
     unfollow(channel) {
 
-        this.channelService.unfollow(channel);
+        this.service.unfollow(channel);
     }
 
-    async addHistory(channel) {
+    addHistory(channel) {
 
-        try {
-
-            const url = `${this.api}/user/histories`;
-            const gameName = channel.provider_game_name;
-            const data = Object.assign({ game_name: gameName }, channel);
-
-            await this.$http.post(url, data, this.defaultOptions);
-            this.$rootScope.$broadcast('historyUpdated');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.service.addHistory(channel);
     }
 }
