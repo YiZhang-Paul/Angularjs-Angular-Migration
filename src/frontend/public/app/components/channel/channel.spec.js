@@ -9,10 +9,14 @@ context('channel component unit test', () => {
 
     let $q;
     let $rootScope;
+    let $stateParams;
     let component;
 
     let playStub;
     let stopStub;
+    let getGamesStub;
+    let getChannelsByGameIdStub;
+    let refreshChannelsStub;
     let isFollowedStub;
     let followStub;
     let unfollowStub;
@@ -33,14 +37,28 @@ context('channel component unit test', () => {
         }));
     }));
 
+    beforeEach('mock game http service setup', mockModule($provide => {
+
+        getGamesStub = stub();
+
+        $provide.service('gameHttpService', () => ({
+
+            getGames: getGamesStub
+        }));
+    }));
+
     beforeEach('mock channel service setup', mockModule($provide => {
 
+        getChannelsByGameIdStub = stub();
+        refreshChannelsStub = stub();
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
 
         $provide.service('channelService', () => ({
 
+            getChannelsByGameId: getChannelsByGameIdStub,
+            refreshChannels: refreshChannelsStub,
             isFollowed: isFollowedStub,
             follow: followStub,
             unfollow: unfollowStub
@@ -61,12 +79,109 @@ context('channel component unit test', () => {
 
         $q = $injector.get('$q');
         $rootScope = $injector.get('$rootScope');
+        $stateParams = $injector.get('$stateParams');
         component = $controller('ChannelController');
     }));
 
     it('should resolve', () => {
 
         expect(component).is.not.null;
+    });
+
+    describe('$onInit()', () => {
+
+        const name = 'some-game-5';
+        const game = { id: 15, name: 'some game 5' };
+        const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+        beforeEach('$onInit() test setup', () => {
+
+            $stateParams.name = name;
+            $stateParams.game = game;
+            $stateParams.channels = channels;
+            getGamesStub.returns($q.resolve([game]));
+            getChannelsByGameIdStub.returns($q.resolve(channels));
+            refreshChannelsStub.callsFake((a, b) => a.push(...b));
+        });
+
+        it('should load data from state parameters when both game and channels data exist', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            expect(component.game).to.deep.equal(game);
+            expect(component.channels).to.deep.equal(channels);
+            sinonExpect.notCalled(getGamesStub);
+            sinonExpect.notCalled(getChannelsByGameIdStub);
+            sinonExpect.notCalled(refreshChannelsStub);
+        });
+
+        it('should fetch game and channels data from services when game data is missing from state parameters', () => {
+
+            $stateParams.game = null;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            expect(component.game).to.deep.equal(game);
+            expect(component.channels).to.deep.equal(channels);
+            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
+            sinonExpect.calledOnce(refreshChannelsStub);
+        });
+
+        it('should fetch game and channels data from services when channels data is missing from state parameters', () => {
+
+            $stateParams.channels = null;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            expect(component.game).to.deep.equal(game);
+            expect(component.channels).to.deep.equal(channels);
+            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
+            sinonExpect.calledOnce(refreshChannelsStub);
+        });
+
+        it('should not load channel data when game data is not found', () => {
+
+            $stateParams.game = null;
+            $stateParams.channels = null;
+            getGamesStub.returns($q.resolve([]));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.notCalled(getChannelsByGameIdStub);
+        });
+
+        it('should not throw error when failed to fetch game data from service', () => {
+
+            $stateParams.game = null;
+            $stateParams.channels = null;
+            getGamesStub.returns($q.reject(new Error()));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getGamesStub);
+        });
+
+        it('should not throw error when failed to fetch channel data from service', () => {
+
+            $stateParams.game = null;
+            $stateParams.channels = null;
+            getChannelsByGameIdStub.returns($q.reject(new Error()));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+        });
     });
 
     describe('playThumbnail()', () => {

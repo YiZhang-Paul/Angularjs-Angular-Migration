@@ -1,17 +1,14 @@
 export class ChannelController {
 
-    constructor($stateParams, $transitions, $http, $interval, channelService, viewHistoryService, thumbnailPlayerService, gameHttpService) {
+    constructor($stateParams, $transitions, $interval, channelService, viewHistoryService, thumbnailPlayerService, gameHttpService) {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$transitions = $transitions;
-        this.$http = $http;
         this.$interval = $interval;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
         this.thumbnailPlayer = thumbnailPlayerService;
         this.gameService = gameHttpService;
-
-        this.api = 'http://127.0.0.1:4150/api/v1';
 
         this.channels = [];
         this.game = null;
@@ -19,13 +16,39 @@ export class ChannelController {
 
     $onInit() {
 
-        this.loadComponent();
-        this.setupChannelLoading();
+        this._loadComponent();
+        this._setupChannelLoading();
     }
 
-    async loadComponent() {
+    _loadGame() {
 
-        if (this.$stateParams.game) {
+        return this.gameService.getGames().then(games => {
+
+            const name = this.$stateParams.name.replace(/-/g, ' ');
+            const game = games.find(_ => _.name === name);
+
+            this.game = game ? game : null;
+        })
+        .catch(error => console.log(error));
+    }
+
+    _loadChannels() {
+
+        if (!this.game) {
+
+            return;
+        }
+
+        this.channelService.getChannelsByGameId(this.game.id).then(channels => {
+
+            this.channelService.refreshChannels(this.channels, channels);
+        })
+        .catch(error => console.log(error));
+    }
+
+    _loadComponent() {
+
+        if (this.$stateParams.game && this.$stateParams.channels) {
 
             this.game = this.$stateParams.game;
             this.channels = this.$stateParams.channels;
@@ -33,25 +56,14 @@ export class ChannelController {
             return;
         }
 
-        try {
-
-            const games = await this.gameService.getGames();
-            const name = this.$stateParams.name.replace(/-/g, ' ');
-
-            this.game = games.find(_ => _.name === name);
-            this.loadChannels();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this._loadGame().then(() => this._loadChannels());
     }
 
-    setupChannelLoading() {
+    _setupChannelLoading() {
 
         const interval = this.$interval(() => {
 
-            this.loadChannels();
+            this._loadChannels();
 
         }, 10 * 1000);
 
@@ -62,53 +74,6 @@ export class ChannelController {
                 this.$interval.cancel(interval);
             }
         });
-    }
-
-    isSameChannel(a, b) {
-
-        if (!a || !b || a.provider_id !== b.provider_id) {
-
-            return false;
-        }
-
-        return a.provider_channel_id === b.provider_channel_id;
-    }
-
-    syncChannel(oldChannel, newChannel) {
-
-        oldChannel.streamer_name = newChannel.streamer_name;
-        oldChannel.title = newChannel.title;
-
-        if (oldChannel.view_count !== newChannel.view_count) {
-
-            oldChannel.view_count = newChannel.view_count;
-        }
-    }
-
-    async loadChannels() {
-
-        try {
-
-            const url = `${this.api}/games/${this.game.id}/channels`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-
-            for (let i = 0; i < channels.length; i++) {
-
-                if (!this.isSameChannel(this.channels[i], channels[i])) {
-
-                    this.channels[i] = channels[i];
-
-                    continue;
-                }
-
-                this.syncChannel(this.channels[i], channels[i]);
-            }
-        }
-        catch (error) {
-
-            console.log(error);
-        }
     }
 
     playThumbnail(thumbnail) {
