@@ -1,11 +1,12 @@
 export class FeaturedChannelController {
 
-    constructor($transitions, $http, $interval, channelService) {
+    constructor($transitions, $http, $interval, channelService, viewHistoryService) {
         'ngInject';
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
-        this.service = channelService;
+        this.channelService = channelService;
+        this.historyService = viewHistoryService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
 
@@ -102,31 +103,31 @@ export class FeaturedChannelController {
 
     playThumbnail(video) {
 
-        this.service.playThumbnail(video);
+        this.channelService.playThumbnail(video);
     }
 
     stopThumbnail(video) {
 
-        this.service.stopThumbnail(video);
+        this.channelService.stopThumbnail(video);
     }
 
     isFollowed(channel) {
 
-        return this.service.isFollowed(channel);
+        return this.channelService.isFollowed(channel);
     }
 
     follow(channel) {
 
-        this.service.follow(channel);
+        this.channelService.follow(channel);
     }
 
     unfollow(channel) {
 
-        this.service.unfollow(channel);
+        this.channelService.unfollow(channel);
     }
 
     addHistory(channel) {
 
-        this.service.addHistory(channel);
+        this.historyService.addHistory(channel);
     }
 }

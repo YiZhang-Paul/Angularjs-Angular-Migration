@@ -28,7 +28,6 @@ context('channel component unit test', () => {
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
-        addHistoryStub = stub();
 
         $provide.service('channelService', () => ({
 
@@ -36,7 +35,16 @@ context('channel component unit test', () => {
             stopThumbnail: stopThumbnailStub,
             isFollowed: isFollowedStub,
             follow: followStub,
-            unfollow: unfollowStub,
+            unfollow: unfollowStub
+        }));
+    }));
+
+    beforeEach('mock view history service setup', mockModule($provide => {
+
+        addHistoryStub = stub();
+
+        $provide.service('viewHistoryService', () => ({
+
             addHistory: addHistoryStub
         }));
     }));
@@ -129,7 +137,7 @@ context('channel component unit test', () => {
 
     describe('addHistory()', () => {
 
-        it('should use channel service to add view history', () => {
+        it('should use view history service to add view history', () => {
 
             const channel = { channel_id: 5 };
             addHistoryStub.returns($q.resolve({}));

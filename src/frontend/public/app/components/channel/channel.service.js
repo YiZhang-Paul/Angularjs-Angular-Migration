@@ -37,9 +37,4 @@ export class ChannelService {
             console.log(error);
         });
     }
-
-    addHistory(channel) {
-
-        return this.historyService.addHistory(channel);
-    }
 }

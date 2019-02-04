@@ -1,12 +1,13 @@
 export class ChannelController {
 
-    constructor($stateParams, $transitions, $http, $interval, channelService, gameHttpService) {
+    constructor($stateParams, $transitions, $http, $interval, channelService, viewHistoryService, gameHttpService) {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
         this.channelService = channelService;
+        this.historyService = viewHistoryService;
         this.gameService = gameHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
@@ -154,6 +155,6 @@ export class ChannelController {
 
     addHistory(channel) {
 
-        this.channelService.addHistory(channel);
+        this.historyService.addHistory(channel);
     }
 }

@@ -53,45 +53,6 @@ context('channel service unit test', () => {
         expect(service).is.not.null;
     });
 
-    describe('playThumbnail()', () => {
-
-        it('should play thumbnail', () => {
-
-            const playStub = stub();
-            const element = { play: playStub };
-
-            service.playThumbnail({ srcElement: element });
-
-            sinonExpect.calledOnce(playStub);
-        });
-    });
-
-    describe('stopThumbnail()', () => {
-
-        let pauseStub;
-        let element;
-
-        beforeEach('stopThumbnail() test setup', () => {
-
-            pauseStub = stub();
-            element = { pause: pauseStub, currentTime: 55 };
-        });
-
-        it('should stop thumbnail', () => {
-
-            service.stopThumbnail({ srcElement: element });
-
-            sinonExpect.calledOnce(pauseStub);
-        });
-
-        it('set current play time to 0', () => {
-
-            service.stopThumbnail({ srcElement: element });
-
-            expect(element.currentTime).to.equal(0);
-        });
-    });
-
     describe('isFollowed()', () => {
 
         it('should use bookmark service to check channel status', () => {
@@ -157,21 +118,6 @@ context('channel service unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.calledOnce(unfollowStub);
-        });
-    });
-
-    describe('addHistory()', () => {
-
-        it('should use view history service to add view history', () => {
-
-            const channel = { channel_id: 5 };
-            addHistoryStub.returns($q.resolve({}));
-
-            service.addHistory(channel);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(addHistoryStub);
-            sinonExpect.calledWith(addHistoryStub, channel);
         });
     });
 });
