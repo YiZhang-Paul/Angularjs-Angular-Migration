@@ -10,12 +10,22 @@ context('channel service unit test', () => {
     let $rootScope;
     let service;
 
+    let getChannelsByGameIdStub;
     let isFollowedStub;
     let followStub;
     let unfollowStub;
-    let addHistoryStub;
 
     beforeEach(mockModule(ComponentsModule));
+
+    beforeEach('mock channel http service setup', mockModule($provide => {
+
+        getChannelsByGameIdStub = stub();
+
+        $provide.service('channelHttpService', () => ({
+
+            getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
 
     beforeEach('mock bookmark service setup', mockModule($provide => {
 
@@ -31,16 +41,6 @@ context('channel service unit test', () => {
         }));
     }));
 
-    beforeEach('mock view history service setup', mockModule($provide => {
-
-        addHistoryStub = stub();
-
-        $provide.service('viewHistoryService', () => ({
-
-            addHistory: addHistoryStub
-        }));
-    }));
-
     beforeEach('general test setup', inject($injector => {
 
         $q = $injector.get('$q');
@@ -53,42 +53,139 @@ context('channel service unit test', () => {
         expect(service).is.not.null;
     });
 
-    describe('playThumbnail()', () => {
+    describe('getChannelsByGameId()', () => {
 
-        it('should play thumbnail', () => {
+        const id = 76;
 
-            const playStub = stub();
-            const element = { play: playStub };
+        it('should use channel http service to fetch channels', () => {
 
-            service.playThumbnail({ srcElement: element });
+            getChannelsByGameIdStub.returns($q.resolve([]));
 
-            sinonExpect.calledOnce(playStub);
+            service.getChannelsByGameId(id);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledWith(getChannelsByGameIdStub, id);
+        });
+
+        it('should return empty collection when no channel is found', () => {
+
+            getChannelsByGameIdStub.returns($q.resolve([]));
+
+            service.getChannelsByGameId(id).then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            $rootScope.$apply();
+        });
+
+        it('should return empty collection when failed to fetch channels', () => {
+
+            getChannelsByGameIdStub.returns($q.reject(new Error()));
+
+            service.getChannelsByGameId(id).then(result => {
+
+                expect(Array.isArray(result)).to.be.true;
+                expect(result).to.be.empty;
+            });
+
+            $rootScope.$apply();
         });
     });
 
-    describe('stopThumbnail()', () => {
+    describe('refreshChannels()', () => {
 
-        let pauseStub;
-        let element;
+        let oldChannels;
 
-        beforeEach('stopThumbnail() test setup', () => {
+        beforeEach('refreshChannels() test setup', () => {
 
-            pauseStub = stub();
-            element = { pause: pauseStub, currentTime: 55 };
+            oldChannels = [
+
+                {
+                    provider_id: 0,
+                    provider_channel_id: 2,
+                    streamer_name: 'name_1',
+                    title: 'title_1',
+                    view_count: 1
+                },
+                {
+                    provider_id: 0,
+                    provider_channel_id: 5,
+                    streamer_name: 'name_2',
+                    title: 'title_2',
+                    view_count: 5
+                }
+            ];
         });
 
-        it('should stop thumbnail', () => {
+        it('should overwrite old channel when new channel is a different channel', () => {
 
-            service.stopThumbnail({ srcElement: element });
+            const expected = [
 
-            sinonExpect.calledOnce(pauseStub);
+                oldChannels[0],
+                {
+                    provider_id: 0,
+                    provider_channel_id: 9,
+                    streamer_name: 'name_3',
+                    title: 'title_3',
+                    view_count: 15
+                }
+            ];
+
+            service.refreshChannels(oldChannels, expected);
+
+            expect(oldChannels).to.deep.equal(expected);
         });
 
-        it('set current play time to 0', () => {
+        it('should update old channel details when new channel is same channel', () => {
 
-            service.stopThumbnail({ srcElement: element });
+            const expected = [
 
-            expect(element.currentTime).to.equal(0);
+                oldChannels[0],
+                {
+                    provider_id: oldChannels[1].provider_id,
+                    provider_channel_id: oldChannels[1].provider_channel_id,
+                    streamer_name: 'new_name',
+                    title: 'new_title',
+                    view_count: oldChannels[1].view_count + 199
+                }
+            ];
+
+            service.refreshChannels(oldChannels, expected);
+
+            expect(oldChannels).to.deep.equal(expected);
+        });
+
+        it('should include all new channels when they are more than total number of old channels', () => {
+
+            const expected = [
+
+                oldChannels[0],
+                oldChannels[1],
+                {
+                    provider_id: 1,
+                    provider_channel_id: 77,
+                    streamer_name: 'name_3',
+                    title: 'title_3',
+                    view_count: 92
+                }
+            ];
+
+            service.refreshChannels(oldChannels, expected);
+
+            expect(oldChannels).to.deep.equal(expected);
+        });
+
+        it('should keep old channels when they are more than total number of new channels', () => {
+
+            const expected = oldChannels.slice();
+            const newChannels = oldChannels.slice(0, 1);
+
+            service.refreshChannels(oldChannels, newChannels);
+
+            expect(oldChannels).to.deep.equal(expected);
         });
     });
 
@@ -157,21 +254,6 @@ context('channel service unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.calledOnce(unfollowStub);
-        });
-    });
-
-    describe('addHistory()', () => {
-
-        it('should use view history service to add view history', () => {
-
-            const channel = { channel_id: 5 };
-            addHistoryStub.returns($q.resolve({}));
-
-            service.addHistory(channel);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(addHistoryStub);
-            sinonExpect.calledWith(addHistoryStub, channel);
         });
     });
 });

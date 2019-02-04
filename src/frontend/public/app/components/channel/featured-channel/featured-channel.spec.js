@@ -7,34 +7,66 @@ const sinonExpect = sinon.assert;
 context('featured channel component unit test', () => {
 
     let $q;
+    let $interval;
     let $rootScope;
     let component;
 
-    let playThumbnailStub;
-    let stopThumbnailStub;
+    let playStub;
+    let stopStub;
+    let getFeaturedChannelsStub;
+    let refreshChannelsStub;
     let isFollowedStub;
     let followStub;
     let unfollowStub;
     let addHistoryStub;
+    let cancelStub;
 
     beforeEach(mockModule(ComponentsModule));
 
+    beforeEach('mock thumbnail player service setup', mockModule($provide => {
+
+        playStub = stub();
+        stopStub = stub();
+
+        $provide.service('thumbnailPlayerService', () => ({
+
+            play: playStub,
+            stop: stopStub
+        }));
+    }));
+
+    beforeEach('mock featured channel service setup', mockModule($provide => {
+
+        getFeaturedChannelsStub = stub();
+
+        $provide.service('featuredChannelService', () => ({
+
+            getFeaturedChannels: getFeaturedChannelsStub
+        }));
+    }));
+
     beforeEach('mock channel service setup', mockModule($provide => {
 
-        playThumbnailStub = stub();
-        stopThumbnailStub = stub();
+        refreshChannelsStub = stub();
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
-        addHistoryStub = stub();
 
         $provide.service('channelService', () => ({
 
-            playThumbnail: playThumbnailStub,
-            stopThumbnail: stopThumbnailStub,
+            refreshChannels: refreshChannelsStub,
             isFollowed: isFollowedStub,
             follow: followStub,
-            unfollow: unfollowStub,
+            unfollow: unfollowStub
+        }));
+    }));
+
+    beforeEach('mock view history service setup', mockModule($provide => {
+
+        addHistoryStub = stub();
+
+        $provide.service('viewHistoryService', () => ({
+
             addHistory: addHistoryStub
         }));
     }));
@@ -42,40 +74,119 @@ context('featured channel component unit test', () => {
     beforeEach('general test setup', inject(($injector, $controller) => {
 
         $q = $injector.get('$q');
+        $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         component = $controller('FeaturedChannelController');
+
+        cancelStub = stub($interval, 'cancel');
     }));
+
+    afterEach('general test teardown', () => {
+
+        cancelStub.restore();
+    });
 
     it('should resolve', () => {
 
         expect(component).is.not.null;
     });
 
-    describe('playThumbnail()', () => {
+    describe('$onInit()', () => {
 
-        it('should use channel service to play thumbnail', () => {
+        const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
-            const video = { srcElement: { currentTime: 55 } };
+        beforeEach('$onInit() test setup', () => {
 
-            component.playThumbnail(video);
+            getFeaturedChannelsStub.returns($q.resolve(channels));
+        });
+
+        it('should use featured channel service and channel service to load channels on initialization', () => {
+
+            component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(playThumbnailStub);
-            sinonExpect.calledWith(playThumbnailStub, video);
+            sinonExpect.calledOnce(getFeaturedChannelsStub);
+            sinonExpect.calledOnce(refreshChannelsStub);
+            sinonExpect.calledWith(refreshChannelsStub, [], channels);
+        });
+
+        it('should load channels on initialization', () => {
+
+            const expected = channels.slice();
+            refreshChannelsStub.callsFake((a, b) => a.push(...b));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(refreshChannelsStub);
+            expect(component.channels).to.deep.equal(expected);
+        });
+
+        it('should load channels every 10 seconds', () => {
+
+            const seconds = 60;
+            const expected = Math.floor(seconds / 10);
+
+            component.$onInit();
+            $rootScope.$apply();
+            // reset initial call to load channels
+            getFeaturedChannelsStub.resetHistory();
+            refreshChannelsStub.resetHistory();
+            $interval.flush(seconds * 1000);
+
+            sinonExpect.callCount(getFeaturedChannelsStub, expected);
+            sinonExpect.callCount(refreshChannelsStub, expected);
+        });
+
+        it('should not throw error when failed to load featured channels', () => {
+
+            getFeaturedChannelsStub.returns($q.reject(new Error()));
+
+            component.$onInit();
+            $rootScope.$apply();
+        });
+    });
+
+    describe('$onDestroy()', () => {
+
+        it('should cancel interval', () => {
+
+            const expected = 2;
+            component.task = expected;
+
+            component.$onDestroy();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(cancelStub);
+            sinonExpect.calledWith(cancelStub, expected);
+        });
+    });
+
+    describe('playThumbnail()', () => {
+
+        it('should use thumbnail player service to play thumbnail', () => {
+
+            const thumbnail = { srcElement: { currentTime: 55 } };
+
+            component.playThumbnail(thumbnail);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(playStub);
+            sinonExpect.calledWith(playStub, thumbnail);
         });
     });
 
     describe('stopThumbnail()', () => {
 
-        it('should use channel service to stop thumbnail', () => {
+        it('should use thumbnail player service to stop thumbnail', () => {
 
-            const video = { srcElement: { currentTime: 55 } };
+            const thumbnail = { srcElement: { currentTime: 55 } };
 
-            component.stopThumbnail(video);
+            component.stopThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(stopThumbnailStub);
-            sinonExpect.calledWith(stopThumbnailStub, video);
+            sinonExpect.calledOnce(stopStub);
+            sinonExpect.calledWith(stopStub, thumbnail);
         });
     });
 
@@ -127,7 +238,7 @@ context('featured channel component unit test', () => {
 
     describe('addHistory()', () => {
 
-        it('should use channel service to add view history', () => {
+        it('should use view history service to add view history', () => {
 
             const channel = { channel_id: 5 };
             addHistoryStub.returns($q.resolve({}));

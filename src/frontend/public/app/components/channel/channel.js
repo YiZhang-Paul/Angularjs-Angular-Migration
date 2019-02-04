@@ -1,29 +1,63 @@
 export class ChannelController {
 
-    constructor($stateParams, $transitions, $http, $interval, channelService, gameHttpService) {
+    constructor(
+
+        $stateParams,
+        $interval,
+        gameHttpService,
+        channelService,
+        viewHistoryService,
+        thumbnailPlayerService
+
+    ) {
         'ngInject';
         this.$stateParams = $stateParams;
-        this.$transitions = $transitions;
-        this.$http = $http;
         this.$interval = $interval;
-        this.channelService = channelService;
         this.gameService = gameHttpService;
+        this.channelService = channelService;
+        this.historyService = viewHistoryService;
+        this.thumbnailPlayer = thumbnailPlayerService;
 
-        this.api = 'http://127.0.0.1:4150/api/v1';
-
-        this.channels = [];
+        this.task = null;
         this.game = null;
+        this.channels = [];
     }
 
     $onInit() {
 
-        this.loadComponent();
-        this.setupChannelLoading();
+        this._loadComponent();
+        this._setupChannelLoading();
     }
 
-    async loadComponent() {
+    _loadGame() {
 
-        if (this.$stateParams.game) {
+        return this.gameService.getGames().then(games => {
+
+            const name = this.$stateParams.name.replace(/-/g, ' ');
+            const game = games.find(_ => _.name === name);
+
+            this.game = game ? game : null;
+        })
+        .catch(error => console.log(error));
+    }
+
+    _loadChannels() {
+
+        if (!this.game) {
+
+            return;
+        }
+
+        this.channelService.getChannelsByGameId(this.game.id).then(channels => {
+
+            this.channelService.refreshChannels(this.channels, channels);
+        })
+        .catch(error => console.log(error));
+    }
+
+    _loadComponent() {
+
+        if (this.$stateParams.game && this.$stateParams.channels) {
 
             this.game = this.$stateParams.game;
             this.channels = this.$stateParams.channels;
@@ -31,110 +65,26 @@ export class ChannelController {
             return;
         }
 
-        try {
-
-            const games = await this.gameService.getGames();
-            const name = this.$stateParams.name.replace(/-/g, ' ');
-
-            this.game = games.find(_ => _.name === name);
-            this.loadChannels();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this._loadGame().then(() => this._loadChannels());
     }
 
-    setupChannelLoading() {
+    _setupChannelLoading() {
 
-        const interval = this.$interval(() => {
+        this.task = this.$interval(() => {
 
-            this.loadChannels();
+            this._loadChannels();
 
         }, 10 * 1000);
-
-        this.$transitions.onStart({}, transition => {
-
-            if (transition.from().name === 'channels') {
-
-                this.$interval.cancel(interval);
-            }
-        });
     }
 
-    blinkViewCount(channel) {
+    playThumbnail(thumbnail) {
 
-        let step = 0;
-        channel.updated = true;
-
-        const interval = this.$interval(() => {
-
-            channel.updated = ++step % 2;
-
-            if (step === 6) {
-
-                this.$interval.cancel(interval);
-            }
-
-        }, 150);
+        this.thumbnailPlayer.play(thumbnail);
     }
 
-    isSameChannel(a, b) {
+    stopThumbnail(thumbnail) {
 
-        if (!a || !b || a.provider_id !== b.provider_id) {
-
-            return false;
-        }
-
-        return a.provider_channel_id === b.provider_channel_id;
-    }
-
-    syncChannel(oldChannel, newChannel) {
-
-        oldChannel.streamer_name = newChannel.streamer_name;
-        oldChannel.title = newChannel.title;
-
-        if (oldChannel.view_count !== newChannel.view_count) {
-
-            oldChannel.view_count = newChannel.view_count;
-            this.blinkViewCount(oldChannel);
-        }
-    }
-
-    async loadChannels() {
-
-        try {
-
-            const url = `${this.api}/games/${this.game.id}/channels`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-
-            for (let i = 0; i < channels.length; i++) {
-
-                if (!this.isSameChannel(this.channels[i], channels[i])) {
-
-                    this.channels[i] = channels[i];
-
-                    continue;
-                }
-
-                this.syncChannel(this.channels[i], channels[i]);
-            }
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-    }
-
-    playThumbnail(video) {
-
-        this.channelService.playThumbnail(video);
-    }
-
-    stopThumbnail(video) {
-
-        this.channelService.stopThumbnail(video);
+        this.thumbnailPlayer.stop(thumbnail);
     }
 
     isFollowed(channel) {
@@ -154,6 +104,11 @@ export class ChannelController {
 
     addHistory(channel) {
 
-        this.channelService.addHistory(channel);
+        this.historyService.addHistory(channel);
+    }
+
+    $onDestroy() {
+
+        this.$interval.cancel(this.task);
     }
 }
