@@ -10,8 +10,8 @@ context('featured channel component unit test', () => {
     let $rootScope;
     let component;
 
-    let playThumbnailStub;
-    let stopThumbnailStub;
+    let playStub;
+    let stopStub;
     let isFollowedStub;
     let followStub;
     let unfollowStub;
@@ -19,18 +19,26 @@ context('featured channel component unit test', () => {
 
     beforeEach(mockModule(ComponentsModule));
 
+    beforeEach('mock thumbnail player service setup', mockModule($provide => {
+
+        playStub = stub();
+        stopStub = stub();
+
+        $provide.service('thumbnailPlayerService', () => ({
+
+            play: playStub,
+            stop: stopStub
+        }));
+    }));
+
     beforeEach('mock channel service setup', mockModule($provide => {
 
-        playThumbnailStub = stub();
-        stopThumbnailStub = stub();
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
 
         $provide.service('channelService', () => ({
 
-            playThumbnail: playThumbnailStub,
-            stopThumbnail: stopThumbnailStub,
             isFollowed: isFollowedStub,
             follow: followStub,
             unfollow: unfollowStub
@@ -61,29 +69,29 @@ context('featured channel component unit test', () => {
 
     describe('playThumbnail()', () => {
 
-        it('should use channel service to play thumbnail', () => {
+        it('should use thumbnail player service to play thumbnail', () => {
 
-            const video = { srcElement: { currentTime: 55 } };
+            const thumbnail = { srcElement: { currentTime: 55 } };
 
-            component.playThumbnail(video);
+            component.playThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(playThumbnailStub);
-            sinonExpect.calledWith(playThumbnailStub, video);
+            sinonExpect.calledOnce(playStub);
+            sinonExpect.calledWith(playStub, thumbnail);
         });
     });
 
     describe('stopThumbnail()', () => {
 
-        it('should use channel service to stop thumbnail', () => {
+        it('should use thumbnail player service to stop thumbnail', () => {
 
-            const video = { srcElement: { currentTime: 55 } };
+            const thumbnail = { srcElement: { currentTime: 55 } };
 
-            component.stopThumbnail(video);
+            component.stopThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(stopThumbnailStub);
-            sinonExpect.calledWith(stopThumbnailStub, video);
+            sinonExpect.calledOnce(stopStub);
+            sinonExpect.calledWith(stopStub, thumbnail);
         });
     });
 

@@ -1,12 +1,13 @@
 export class FeaturedChannelController {
 
-    constructor($transitions, $http, $interval, channelService, viewHistoryService) {
+    constructor($transitions, $http, $interval, channelService, viewHistoryService, thumbnailPlayerService) {
         'ngInject';
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
+        this.thumbnailPlayer = thumbnailPlayerService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
 
@@ -101,14 +102,14 @@ export class FeaturedChannelController {
         });
     }
 
-    playThumbnail(video) {
+    playThumbnail(thumbnail) {
 
-        this.channelService.playThumbnail(video);
+        this.thumbnailPlayer.play(thumbnail);
     }
 
-    stopThumbnail(video) {
+    stopThumbnail(thumbnail) {
 
-        this.channelService.stopThumbnail(video);
+        this.thumbnailPlayer.stop(thumbnail);
     }
 
     isFollowed(channel) {

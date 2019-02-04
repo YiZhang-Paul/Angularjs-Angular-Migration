@@ -1,6 +1,6 @@
 export class ChannelController {
 
-    constructor($stateParams, $transitions, $http, $interval, channelService, viewHistoryService, gameHttpService) {
+    constructor($stateParams, $transitions, $http, $interval, channelService, viewHistoryService, thumbnailPlayerService, gameHttpService) {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$transitions = $transitions;
@@ -8,6 +8,7 @@ export class ChannelController {
         this.$interval = $interval;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
+        this.thumbnailPlayer = thumbnailPlayerService;
         this.gameService = gameHttpService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
@@ -128,14 +129,14 @@ export class ChannelController {
         }
     }
 
-    playThumbnail(video) {
+    playThumbnail(thumbnail) {
 
-        this.channelService.playThumbnail(video);
+        this.thumbnailPlayer.play(thumbnail);
     }
 
-    stopThumbnail(video) {
+    stopThumbnail(thumbnail) {
 
-        this.channelService.stopThumbnail(video);
+        this.thumbnailPlayer.stop(thumbnail);
     }
 
     isFollowed(channel) {

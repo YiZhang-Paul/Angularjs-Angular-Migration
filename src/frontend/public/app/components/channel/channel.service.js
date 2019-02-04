@@ -6,17 +6,6 @@ export class ChannelService {
         this.historyService = viewHistoryService;
     }
 
-    playThumbnail(video) {
-
-        video.srcElement.play();
-    }
-
-    stopThumbnail(video) {
-
-        video.srcElement.pause();
-        video.srcElement.currentTime = 0;
-    }
-
     isFollowed(channel) {
 
         return this.bookmarkService.isFollowed(channel);
