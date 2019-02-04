@@ -1,16 +1,8 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-app.component('channelBadge', {
+export const ChannelBadgeComponent = {
 
     bindings: {
 
         badge: '<'
     },
     templateUrl: './app/components/channel/channel-badge/channel-badge.html'
-});
-
-})();
+};

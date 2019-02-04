@@ -1,47 +1,27 @@
-'use strict';
-
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class GameListController {
-
-    constructor($interval, $http, $state, gameService) {
+export class GameController {
+    // TODO: create service
+    constructor($interval, $state, gameHttpService, channelHttpService, genericUtilityService) {
         'ngInject';
         this.$interval = $interval;
-        this.$http = $http;
         this.$state = $state;
-        this.service = gameService;
+        this.gameService = gameHttpService;
+        this.channelService = channelHttpService;
+        this.utilities = genericUtilityService;
 
+        this.task = null;
         this.games = [];
-        this.interval = null;
     }
 
     $onInit() {
 
         this.loadGames();
+
         const callback = this.loadGames.bind(this);
-        this.interval = this.$interval(callback, 10 * 1000);
+        const time = 10 * 1000;
+        this.task = this.$interval(callback, time);
     }
 
-    async loadGames() {
-
-        this.syncGames(await this.getGames());
-    }
-
-    async getGames() {
-
-        try {
-
-            return this.service.getGames();
-        }
-        catch (error) {
-
-            return [];
-        }
-    }
-
-    syncGames(games) {
+    _syncGames(games) {
 
         for (let i = 0; i < games.length; i++) {
 
@@ -56,30 +36,29 @@ class GameListController {
         }
     }
 
-    joinWords(words) {
+    loadGames() {
 
-        return words.replace(/\s/g, '-');
+        this.gameService.getGames()
+            .then(games => this._syncGames(games))
+            .catch(() => null);
     }
 
-    async toChannelsView(game) {
+    _changeRoute(game, channels) {
 
-        try {
+        const name = this.utilities.joinText(game.name);
 
-            const url = `http://127.0.0.1:4150/${game.channels}`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-            const name = this.joinWords(game.name);
+        this.$state.go('channels', { game, name, channels });
+    }
 
-            this.$state.go('channels', { name, game, channels });
-            this.$interval.cancel(this.interval);
-        }
-        catch (error) {
+    toChannelsView(game) {
 
-            console.log(error);
-        }
+        this.channelService.getChannelsByGameId(game.id)
+            .then(channels => this._changeRoute(game, channels))
+            .catch(error => console.log(error));
+    }
+
+    $onDestroy() {
+
+        this.$interval.cancel(this.task);
     }
 }
-
-app.controller('GameListController', GameListController);
-
-})();

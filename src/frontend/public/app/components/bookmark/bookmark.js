@@ -1,61 +1,22 @@
-'use strict';
+export class BookmarkController {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class BookmarkController {
-
-    constructor($rootScope, bookmarkService) {
+    constructor(bookmarkService) {
         'ngInject';
-        this.$rootScope = $rootScope;
         this.service = bookmarkService;
+    }
 
-        this.bookmarks = [];
+    get bookmarks() {
+
+        return this.service.bookmarks;
     }
 
     $onInit() {
 
-        this.loadBookmarks();
+        this.service.cacheBookmarks();
     }
 
-    async loadBookmarks() {
+    unfollow(bookmark) {
 
-        try {
-
-            this.bookmarks = await this.service.getBookmarks();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-    }
-
-    async unfollow(bookmark) {
-
-        try {
-
-            await this.service.unfollow(bookmark);
-            this.removeBookmark(bookmark.id);
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-    }
-
-    removeBookmark(id) {
-
-        const index = this.bookmarks.findIndex(_ => _.id === id);
-
-        if (index !== -1) {
-
-            this.bookmarks.splice(index, 1);
-            this.$rootScope.$broadcast('unfollowedChannel');
-        }
+        this.service.unfollow(bookmark).catch(error => console.log(error));
     }
 }
-
-app.controller('BookmarkController', BookmarkController);
-
-})();

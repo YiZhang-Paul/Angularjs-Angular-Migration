@@ -1,35 +1,24 @@
-'use strict';
+export class Sidebar {
 
-(() => {
-
-const app = angular.module('sample-app-common');
-
-class SidebarComponent {
-
-    constructor($scope, $http, toastr, sidebarService) {
+    constructor($scope, toastr, sidebarService) {
         'ngInject';
         this.$scope = $scope;
-        this.$http = $http;
         this.toastr = toastr;
         this.service = sidebarService;
 
         this.options = ['Followed Channels', 'Featured Channels', 'View History'];
         this.targetRoutes = ['bookmarks', 'featured', 'histories'];
 
-        this.bookmarks = [];
         this.badges = new Map();
     }
-
+    // TODO: research proper way/possibility of proper private methods
     $onInit() {
 
-        this.loadBookmarks(this.options[0]);
-        this.loadFeaturedChannels(this.options[1]);
-        this.loadHistories(this.options[2]);
-        this.registerBookmarkEvents();
-        this.registerViewHistoryEvents();
+        this._loadBadges();
+        this._registerEvents();
     }
 
-    addGameName(channels) {
+    _addGameName(channels) {
 
         return channels.map(_ => {
 
@@ -39,67 +28,75 @@ class SidebarComponent {
         });
     }
 
-    async loadBookmarks(key) {
+    _loadBookmarks(key) {
 
-        this.bookmarks = await this.service.getBookmarks();
-        this.badges.set(key, this.bookmarks.slice(0, 3));
+        this.service.getBookmarks().then(bookmarks => {
+
+            this.badges.set(key, bookmarks.slice(0, 3));
+        });
     }
 
-    async loadFeaturedChannels(key) {
+    _loadFeaturedChannels(key) {
 
-        try {
+        this.service.getFeaturedChannels().then(channels => {
 
-            const api = 'http://127.0.0.1:4150/api/v1/channels';
-            const response = await this.$http.get(api);
-            const channels = response.data.slice(0, 3);
-            this.badges.set(key, this.addGameName(channels));
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+            this.badges.set(key, this._addGameName(channels.slice(0, 3)));
+        });
     }
 
-    async loadHistories(key) {
+    _loadHistories(key) {
 
-        const histories = await this.service.getHistories();
-        this.badges.set(key, histories.slice(0, 3));
+        this.service.getHistories().then(histories => {
+
+            this.badges.set(key, histories.slice(0, 3));
+        });
     }
 
-    registerBookmarkEvents() {
+    _loadBadges() {
+
+        this._loadBookmarks(this.options[0]);
+        this._loadFeaturedChannels(this.options[1]);
+        this._loadHistories(this.options[2]);
+    }
+
+    _registerBookmarkEvents() {
 
         const timeout = { timeOut: 2500 };
 
-        this.$scope.$on('followedChannel', async () => {
+        this.$scope.$on('followedChannel', () => {
 
-            await this.loadBookmarks(this.options[0]);
+            this._loadBookmarks(this.options[0]);
             this.toastr.success('You just followed a channel.', timeout);
         });
 
-        this.$scope.$on('unfollowedChannel', async () => {
+        this.$scope.$on('unfollowedChannel', () => {
 
-            await this.loadBookmarks(this.options[0]);
+            this._loadBookmarks(this.options[0]);
             this.toastr.error('You just unfollowed a channel.', timeout);
         });
     }
 
-    registerViewHistoryEvents() {
+    _registerViewHistoryEvents() {
 
-        this.$scope.$on('historyUpdated', async () => {
+        this.$scope.$on('historyUpdated', () => {
 
-            await this.loadHistories(this.options[2]);
+            this._loadHistories(this.options[2]);
         });
+    }
+
+    _registerEvents() {
+
+        this._registerBookmarkEvents();
+        this._registerViewHistoryEvents();
     }
 }
 
-app.component('sidebar', {
+export const SidebarComponent = {
 
     bindings: {
 
         hideOptions: '<'
     },
     templateUrl: './app/common/sidebar/sidebar.html',
-    controller: SidebarComponent
-});
-
-})();
+    controller: Sidebar
+};

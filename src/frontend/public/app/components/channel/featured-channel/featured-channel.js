@@ -1,23 +1,13 @@
-'use strict';
+export class FeaturedChannelController {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class FeaturedChannelController {
-
-    constructor($rootScope, $transitions, $http, $interval, bookmarkService) {
+    constructor($transitions, $http, $interval, channelService) {
         'ngInject';
-        this.$rootScope = $rootScope;
         this.$transitions = $transitions;
         this.$http = $http;
         this.$interval = $interval;
-        this.bookmarkService = bookmarkService;
+        this.service = channelService;
 
         this.api = 'http://127.0.0.1:4150/api/v1';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
 
         this.channels = [];
     }
@@ -112,64 +102,31 @@ class FeaturedChannelController {
 
     playThumbnail(video) {
 
-        video.srcElement.play();
+        this.service.playThumbnail(video);
     }
 
     stopThumbnail(video) {
 
-        video.srcElement.pause();
-        video.srcElement.currentTime = 0;
+        this.service.stopThumbnail(video);
     }
 
     isFollowed(channel) {
 
-        return this.bookmarkService.isFollowed(channel);
+        return this.service.isFollowed(channel);
     }
 
-    async follow(channel) {
+    follow(channel) {
 
-        try {
-
-            await this.bookmarkService.follow(channel);
-            this.$rootScope.$broadcast('followedChannel');
-        }
-        catch (error) {
-
-            console.log();
-        }
+        this.service.follow(channel);
     }
 
-    async unfollow(channel) {
+    unfollow(channel) {
 
-        try {
-
-            await this.bookmarkService.unfollow(channel);
-            this.$rootScope.$broadcast('unfollowedChannel');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.service.unfollow(channel);
     }
 
-    async addHistory(channel) {
+    addHistory(channel) {
 
-        try {
-
-            const url = `${this.api}/user/histories`;
-            const gameName = channel.provider_game_name;
-            const data = Object.assign({ game_name: gameName }, channel);
-
-            await this.$http.post(url, data, this.defaultOptions);
-            this.$rootScope.$broadcast('historyUpdated');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.service.addHistory(channel);
     }
 }
-
-app.controller('FeaturedChannelController', FeaturedChannelController);
-
-})();

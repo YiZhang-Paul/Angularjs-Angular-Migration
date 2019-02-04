@@ -1,23 +1,24 @@
-'use strict';
+export class ViewHistoryController {
+    // TODO: create service
+    constructor(
 
-(() => {
+        $q,
+        $state,
+        $mdDialog,
+        gameHttpService,
+        channelHttpService,
+        viewHistoryHttpService,
+        genericUtilityService
 
-const app = angular.module('migration-sample-app');
-
-class ViewHistoryController {
-
-    constructor($http, $state, $mdDialog, sidebarService, gameService) {
+    ) {
         'ngInject';
-        this.$http = $http;
+        this.$q = $q;
         this.$state = $state;
         this.$mdDialog = $mdDialog;
-        this.sidebarService = sidebarService;
-        this.gameService = gameService;
-
-        this.api = 'http://127.0.0.1:4150';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
+        this.gameService = gameHttpService;
+        this.channelService = channelHttpService;
+        this.historyService = viewHistoryHttpService;
+        this.utilities = genericUtilityService;
 
         this.histories = [];
     }
@@ -27,16 +28,11 @@ class ViewHistoryController {
         this.loadHistories();
     }
 
-    async loadHistories() {
+    loadHistories() {
 
-        try {
-
-            this.histories = await this.sidebarService.getHistories();
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.historyService.getHistories()
+            .then(histories => this.histories = histories)
+            .catch(error => console.log(error));
     }
 
     isStaticImage(url) {
@@ -44,69 +40,58 @@ class ViewHistoryController {
         return !/(mp4|m4v)$/i.test(url);
     }
 
-    joinWords(words) {
+    _changeRoute(game, channels) {
 
-        return words.replace(/\s/g, '-');
+        const name = this.utilities.joinText(game.name);
+
+        this.$state.go('channels', { game, name, channels });
     }
 
-    async getChannels(id) {
+    toChannelsView(id) {
 
-        try {
+        const gamePromise = this.gameService.getGame(id);
+        const channelsPromise = this.channelService.getChannelsByGameId(id);
 
-            const game = await this.gameService.getGame(id);
-            const name = this.joinWords(game.name);
-            const url = `${this.api}/${game.channels}`;
-            const response = await this.$http.get(url);
-            const channels = response.data;
-
-            this.$state.go('channels', { game, name, channels });
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.$q.all([gamePromise, channelsPromise])
+            .then(responses => this._changeRoute(...responses))
+            .catch(error => console.log(error));
     }
 
     deleteHistory(history) {
 
-        const index = this.histories.findIndex(_ => _.id === history.id);
+        const id = history.id;
+        const index = this.histories.findIndex(_ => _.id === id);
 
         if (index !== -1) {
 
             this.histories.splice(index, 1);
+            this.historyService.deleteHistory(id).catch(() => null);
         }
-
-        this.sidebarService.deleteHistory(history).catch(() => null);
     }
 
-    async confirmClearHistory(event) {
+    clearHistories() {
 
-        const confirm = this.$mdDialog.confirm()
+        this.historyService.deleteHistories()
+            .then(() => this.histories = [])
+            .catch(error => console.log(error));
+    }
+
+    _showConfirmationDialog(event) {
+
+        const options = this.$mdDialog.confirm()
             .title('Clear all view histories?')
             .textContent('All view histories will be permanently deleted.')
             .targetEvent(event)
             .ok('Ok')
             .cancel('Cancel');
 
-        await this.$mdDialog.show(confirm);
-        this.clearHistories();
+        return this.$mdDialog.show(options);
     }
 
-    async clearHistories() {
+    confirmClearHistories(event) {
 
-        try {
-
-            const url = `${this.api}/api/v1/user/histories`;
-            await this.$http.delete(url, this.defaultOptions);
-            this.histories = [];
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this._showConfirmationDialog(event)
+            .then(() => this.clearHistories())
+            .catch(() => null);
     }
 }
-
-app.controller('ViewHistoryController', ViewHistoryController);
-
-})();

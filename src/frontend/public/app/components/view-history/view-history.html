@@ -149,7 +149,7 @@
     <div position="relative" width="100%" height="100%">
         <sidebar class="side-bar" hide-options="['View History']"></sidebar>
         <div class="main-content history-panel" ng-controller="ViewHistoryController as $ctrl">
-            <div class="delete-all non-selectable" ng-show="$ctrl.histories.length" ng-click="$ctrl.confirmClearHistory($event)">Clear History</div>
+            <div class="delete-all non-selectable" ng-show="$ctrl.histories.length" ng-click="$ctrl.confirmClearHistories($event)">Clear History</div>
             <span class="empty-history-message" ng-hide="$ctrl.histories.length">This place is so quiet...</span>
             <div class="history-card" ng-repeat="history in $ctrl.histories">
                 <div ng-show="$ctrl.isStaticImage(history.thumbnail)" class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
@@ -158,7 +158,7 @@
                 <div class="history-details">
                     <span class="title">{{ history.title }}</span></br></br>
                     <span class="streamer">{{ history.streamer_name }}</span> was playing:
-                    <span class="game-title" ng-click="$ctrl.getChannels(history.game_id)">{{ history.game_name | capitalize }}</span>
+                    <span class="game-title" ng-click="$ctrl.toChannelsView(history.game_id)">{{ history.game_name | capitalize }}</span>
                 </div>
                 <div class="remove-history-icon" ng-click="$ctrl.deleteHistory(history)"></div>
             </div>

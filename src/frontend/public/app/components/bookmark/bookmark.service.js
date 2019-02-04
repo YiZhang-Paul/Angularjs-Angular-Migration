@@ -1,96 +1,85 @@
-'use strict';
+export class BookmarkService {
 
-(() => {
-
-const app = angular.module('migration-sample-app');
-
-class BookmarkService {
-
-    constructor($http) {
+    constructor($rootScope, bookmarkHttpService, genericUtilityService) {
         'ngInject';
-        this.$http = $http;
-
-        this.api = 'http://127.0.0.1:4150/api/v1/user/bookmarks';
-        this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        this.defaultHeaders = { 'Authorization': `bearer ${this.token}` };
-        this.defaultOptions = Object.freeze({ headers: this.defaultHeaders });
+        this.$rootScope = $rootScope;
+        this.service = bookmarkHttpService;
+        this.utilities = genericUtilityService;
 
         this.bookmarks = [];
-        this.getBookmarks();
     }
 
-    findBookmark(data) {
+    getBookmarks() {
 
-        return this.bookmarks.find(_ => {
+        return this.service.getBookmarks().catch(error => {
 
-            const followed = _.channel_id === data.channel_id;
-            const provided = _.provider_id === data.provider_id
-                          && _.provider_channel_id === data.provider_channel_id;
+            console.log(error);
 
-            return followed || provided;
+            return [];
         });
     }
 
-    getBookmarkId(data) {
+    cacheBookmarks() {
 
-        const bookmark = this.findBookmark(data);
+        return this.getBookmarks().then(bookmarks => {
+
+            this.bookmarks = bookmarks;
+        });
+    }
+
+    _findBookmark(data) {
+
+        const channelKeys = ['channel_id'];
+        const providerKeys = ['provider_id', 'provider_channel_id'];
+        const hasChannelId = data.hasOwnProperty(channelKeys[0]);
+        const hasProvider = this.utilities.hasOwnProperties(data, providerKeys);
+
+        if (!hasChannelId && !hasProvider) {
+
+            return null;
+        }
+
+        const keys = hasChannelId ? channelKeys : providerKeys;
+
+        return this.utilities.findByProperties(this.bookmarks, data, keys);
+    }
+
+    _getBookmarkId(data) {
+
+        const bookmark = this._findBookmark(data);
 
         return bookmark ? bookmark.id : -1;
     }
 
-    async getBookmarks() {
-
-        try {
-
-            const response = await this.$http.get(this.api, this.defaultOptions);
-            this.bookmarks = response.data;
-        }
-        catch (error) {
-
-            console.log(error);
-            this.bookmarks = [];
-        }
-
-        return this.bookmarks;
-    }
-
     isFollowed(data) {
 
-        return !!this.findBookmark(data);
+        return this._getBookmarkId(data) !== -1;
     }
 
-    async follow(data) {
+    follow(data) {
 
-        try {
+        return this.service.addBookmark(data).then(() => {
 
-            const response = await this.$http.post(this.api, data, this.defaultOptions);
-            await this.getBookmarks();
+            this.$rootScope.$broadcast('followedChannel');
 
-            return response.data;
-        }
-        catch (error) {
-
-            throw error;
-        }
+            return this.cacheBookmarks();
+        });
     }
 
-    async unfollow(data) {
+    _removeCached(id) {
 
-        try {
+        const index = this.bookmarks.findIndex(_ => _.id === id);
+        this.bookmarks.splice(index, 1);
+    }
 
-            const url = `${this.api}/${this.getBookmarkId(data)}`;
-            const response = await this.$http.delete(url, this.defaultOptions);
-            await this.getBookmarks();
+    unfollow(data) {
 
-            return response.data;
-        }
-        catch (error) {
+        const id = this._getBookmarkId(data);
 
-            throw error;
-        }
+        return this.service.deleteBookmark(id).then(() => {
+
+            this._removeCached(id);
+            this.$rootScope.$broadcast('unfollowedChannel');
+        });
     }
 }
-
-app.service('bookmarkService', BookmarkService);
-
-})();
