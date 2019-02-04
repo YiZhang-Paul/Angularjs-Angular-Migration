@@ -212,12 +212,18 @@ context('bookmark service unit test', () => {
 
     describe('follow()', () => {
 
-        it('should use bookmark http service to add bookmark', () => {
-
+        beforeEach('follow() test setup', () => {
+            // clear $locationChangeStart and $locationChangeSuccess broadcast
+            $rootScope.$apply();
+            $broadcastStub.resetHistory();
             addBookmarkStub.returns($q.resolve({}));
             getBookmarksStub.returns($q.resolve([]));
+        });
+
+        it('should use bookmark http service to add bookmark', () => {
 
             service.follow({});
+            $rootScope.$apply();
 
             sinonExpect.calledOnce(addBookmarkStub);
         });
@@ -225,7 +231,6 @@ context('bookmark service unit test', () => {
         it('should cache bookmarks when added successfully', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            addBookmarkStub.returns($q.resolve({}));
             getBookmarksStub.returns($q.resolve(expected));
 
             service.follow({}).then(() => {
@@ -237,16 +242,34 @@ context('bookmark service unit test', () => {
             $rootScope.$apply();
         });
 
+        it('should raise event when successfully added bookmark', () => {
+
+            service.follow({});
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce($broadcastStub);
+            sinonExpect.calledWith($broadcastStub, 'followedChannel');
+        });
+
         it('should not cache bookmarks when failed to add bookmark', () => {
 
             const expected = { status: 400 };
             addBookmarkStub.returns($q.reject(expected));
 
-            service.follow({})
-                .then(() => $q.reject(new Error()))
-                .catch(() => sinonExpect.notCalled(getBookmarksStub));
-
+            service.follow({}).catch(() => null);
             $rootScope.$apply();
+
+            sinonExpect.notCalled(getBookmarksStub);
+        });
+
+        it('should not raise event when failed to add bookmark', () => {
+
+            addBookmarkStub.returns($q.reject(new Error()));
+
+            service.follow({}).catch(() => null);
+            $rootScope.$apply();
+
+            sinonExpect.notCalled($broadcastStub);
         });
 
         it('should throw error when failed to add bookmark', () => {

@@ -60,6 +60,8 @@ export class BookmarkService {
 
         return this.service.addBookmark(data).then(() => {
 
+            this.$rootScope.$broadcast('followedChannel');
+
             return this.cacheBookmarks();
         });
     }
