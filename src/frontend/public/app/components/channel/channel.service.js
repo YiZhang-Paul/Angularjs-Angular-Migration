@@ -1,9 +1,40 @@
 export class ChannelService {
 
-    constructor(bookmarkService, viewHistoryService) {
+    constructor(bookmarkService) {
         'ngInject';
         this.bookmarkService = bookmarkService;
-        this.historyService = viewHistoryService;
+    }
+
+    _isSameChannel(a, b) {
+
+        if (!a || !b || a.provider_id !== b.provider_id) {
+
+            return false;
+        }
+
+        return a.provider_channel_id === b.provider_channel_id;
+    }
+
+    _syncChannel(outdated, updated) {
+
+        outdated.streamer_name = updated.streamer_name;
+        outdated.title = updated.title;
+        outdated.view_count = updated.view_count;
+    }
+
+    refreshChannels(outdated, updated) {
+
+        for (let i = 0; i < updated.length; i++) {
+
+            if (!this._isSameChannel(outdated[i], updated[i])) {
+
+                outdated[i] = updated[i];
+
+                continue;
+            }
+
+            this._syncChannel(outdated[i], updated[i]);
+        }
     }
 
     isFollowed(channel) {

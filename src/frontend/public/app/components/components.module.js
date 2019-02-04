@@ -8,6 +8,7 @@ import { ViewHistoryController } from './view-history/view-history';
 
 import { BookmarkService } from './bookmark/bookmark.service';
 import { ChannelService } from './channel/channel.service';
+import { FeaturedChannelService } from './channel/featured-channel/featured-channel.service';
 import { ViewHistoryService } from './view-history/view-history.service';
 
 import BookmarkRoute from './bookmark/bookmark.route';
@@ -32,4 +33,5 @@ angular.module(moduleName, ['ui.router', 'ngMaterial'])
     .controller('ViewHistoryController', ViewHistoryController)
     .service('bookmarkService', BookmarkService)
     .service('channelService', ChannelService)
+    .service('featuredChannelService', FeaturedChannelService)
     .service('viewHistoryService', ViewHistoryService);

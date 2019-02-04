@@ -12,6 +12,8 @@ context('featured channel component unit test', () => {
 
     let playStub;
     let stopStub;
+    let getFeaturedChannelsStub;
+    let refreshChannelsStub;
     let isFollowedStub;
     let followStub;
     let unfollowStub;
@@ -31,14 +33,26 @@ context('featured channel component unit test', () => {
         }));
     }));
 
+    beforeEach('mock featured channel service setup', mockModule($provide => {
+
+        getFeaturedChannelsStub = stub();
+
+        $provide.service('featuredChannelService', () => ({
+
+            getFeaturedChannels: getFeaturedChannelsStub
+        }));
+    }));
+
     beforeEach('mock channel service setup', mockModule($provide => {
 
+        refreshChannelsStub = stub();
         isFollowedStub = stub();
         followStub = stub();
         unfollowStub = stub();
 
         $provide.service('channelService', () => ({
 
+            refreshChannels: refreshChannelsStub,
             isFollowed: isFollowedStub,
             follow: followStub,
             unfollow: unfollowStub
@@ -65,6 +79,46 @@ context('featured channel component unit test', () => {
     it('should resolve', () => {
 
         expect(component).is.not.null;
+    });
+
+    describe('$onInit()', () => {
+
+        const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+        beforeEach('$onInit() test setup', () => {
+
+            getFeaturedChannelsStub.returns($q.resolve(channels));
+        });
+
+        it('should use featured channel service and channel service to load channels on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(getFeaturedChannelsStub);
+            sinonExpect.calledOnce(refreshChannelsStub);
+            sinonExpect.calledWith(refreshChannelsStub, [], channels);
+        });
+
+        it('should load channels on initialization', () => {
+
+            const expected = channels.slice();
+            refreshChannelsStub.callsFake((a, b) => a.push(...b));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(refreshChannelsStub);
+            expect(component.channels).to.deep.equal(expected);
+        });
+
+        it('should not throw error when failed to load featured channels', () => {
+
+            getFeaturedChannelsStub.returns($q.reject(new Error()));
+
+            component.$onInit();
+            $rootScope.$apply();
+        });
     });
 
     describe('playThumbnail()', () => {

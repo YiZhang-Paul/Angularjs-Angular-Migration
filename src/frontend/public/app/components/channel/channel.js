@@ -64,23 +64,6 @@ export class ChannelController {
         });
     }
 
-    blinkViewCount(channel) {
-
-        let step = 0;
-        channel.updated = true;
-
-        const interval = this.$interval(() => {
-
-            channel.updated = ++step % 2;
-
-            if (step === 6) {
-
-                this.$interval.cancel(interval);
-            }
-
-        }, 150);
-    }
-
     isSameChannel(a, b) {
 
         if (!a || !b || a.provider_id !== b.provider_id) {
@@ -99,7 +82,6 @@ export class ChannelController {
         if (oldChannel.view_count !== newChannel.view_count) {
 
             oldChannel.view_count = newChannel.view_count;
-            this.blinkViewCount(oldChannel);
         }
     }
 
