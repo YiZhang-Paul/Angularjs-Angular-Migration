@@ -100,6 +100,17 @@ context('view history component unit test', () => {
         });
     });
 
+    describe('histories', () => {
+
+        it('should reference cache from view history service', inject($injector => {
+
+            const service = $injector.get('viewHistoryService');
+            service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            expect(controller.histories).to.deep.equal(service.histories);
+        }));
+    });
+
     describe('isStaticImage()', () => {
 
         it('should return true when file is not in mp4 or m4v format', () => {
