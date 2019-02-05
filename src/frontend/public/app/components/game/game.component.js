@@ -1,4 +1,4 @@
-export class GameController {
+export class Game {
 
     constructor(
 
@@ -56,3 +56,9 @@ export class GameController {
         this.$interval.cancel(this.task);
     }
 }
+
+export const GameComponent = {
+
+    templateUrl: './app/app.html',
+    controller: Game
+};

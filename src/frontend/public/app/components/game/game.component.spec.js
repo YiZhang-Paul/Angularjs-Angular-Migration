@@ -9,7 +9,7 @@ context('game component unit test', () => {
     let $q;
     let $interval;
     let $rootScope;
-    let controller;
+    let component;
 
     let getChannelsByGameIdStub;
     let cacheGamesStub;
@@ -59,12 +59,12 @@ context('game component unit test', () => {
         }));
     }));
 
-    beforeEach('general test setup', inject(($injector, $controller) => {
+    beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
-        controller = $controller('GameController');
+        component = $componentController('game');
 
         cancelStub = stub($interval, 'cancel');
     }));
@@ -76,14 +76,14 @@ context('game component unit test', () => {
 
     it('should resolve', () => {
 
-        expect(controller).is.not.null;
+        expect(component).is.not.null;
     });
 
     describe('$onInit()', () => {
 
         it('should cache games on initialization', () => {
 
-            controller.$onInit();
+            component.$onInit();
             $rootScope.$apply();
 
             sinonExpect.calledOnce(cacheGamesStub);
@@ -94,7 +94,7 @@ context('game component unit test', () => {
             const seconds = 60;
             const expected = Math.floor(seconds / 10);
 
-            controller.$onInit();
+            component.$onInit();
             $rootScope.$apply();
             // reset initial call to cache games
             cacheGamesStub.resetHistory();
@@ -109,9 +109,9 @@ context('game component unit test', () => {
         it('should cancel interval', () => {
 
             const expected = 2;
-            controller.task = expected;
+            component.task = expected;
 
-            controller.$onDestroy();
+            component.$onDestroy();
             $rootScope.$apply();
 
             sinonExpect.calledOnce(cancelStub);
@@ -126,7 +126,7 @@ context('game component unit test', () => {
             const service = $injector.get('gameService');
             service.games = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
-            expect(controller.games).to.deep.equal(service.games);
+            expect(component.games).to.deep.equal(service.games);
         }));
     });
 
@@ -142,7 +142,7 @@ context('game component unit test', () => {
 
         it('should use channel http service to fetch data', () => {
 
-            controller.toChannelsView(game);
+            component.toChannelsView(game);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsByGameIdStub);
@@ -156,7 +156,7 @@ context('game component unit test', () => {
             getChannelsByGameIdStub.returns($q.resolve(channels));
             joinTextStub.returns(name);
 
-            controller.toChannelsView(game);
+            component.toChannelsView(game);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(joinTextStub);
@@ -168,7 +168,7 @@ context('game component unit test', () => {
 
             getChannelsByGameIdStub.returns($q.reject(new Error()));
 
-            controller.toChannelsView(game);
+            component.toChannelsView(game);
             $rootScope.$apply();
         });
     });
