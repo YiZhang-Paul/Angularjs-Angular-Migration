@@ -17,6 +17,16 @@ export class GameHttpService {
         });
     }
 
+    getGameByName(name) {
+
+        return this.getGames().then(games => {
+
+            const game = games.find(_ => _.name === name);
+
+            return game ? game : null;
+        });
+    }
+
     getGames() {
 
         return this.$http.get(this.api).then(response => response.data);

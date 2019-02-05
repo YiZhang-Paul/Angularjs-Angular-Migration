@@ -82,6 +82,62 @@ context('game http service unit test', () => {
         });
     });
 
+    describe('getGameByName()', () => {
+
+        it('should send GET request to correct url', () => {
+
+            const expected = api;
+            $httpBackend.expectGET(expected).respond([]);
+
+            service.getGameByName('');
+
+            $httpBackend.flush();
+        });
+
+        it('should return game data found', () => {
+
+            const name = 'random game name';
+            const games = [{ name: 'name_1' }, { name }, { name: 'name_3' }];
+            const expected = name;
+            $httpBackend.expectGET(/.*/).respond(games);
+
+            service.getGameByName(name).then(result => {
+
+                expect(result).is.not.null;
+                expect(result.name).to.equal(expected);
+            });
+
+            $httpBackend.flush();
+        });
+
+        it('should return null when game data is not found', () => {
+
+            const name = 'name_2';
+            const games = [{ name: 'name_1' }, { name: 'name_3' }];
+            $httpBackend.expectGET(/.*/).respond(games);
+
+            service.getGameByName(name).then(result => {
+
+                expect(games.every(_ => _.name !== name)).to.be.true;
+                expect(result).is.null;
+            });
+
+            $httpBackend.flush();
+        });
+
+        it('should throw error when request failed', () => {
+
+            const expected = 400;
+            $httpBackend.expectGET(/.*/).respond(expected);
+
+            service.getGameByName('')
+                .then(() => $q.reject(new Error()))
+                .catch(error => expect(error.status).to.equal(expected));
+
+            $httpBackend.flush();
+        });
+    });
+
     describe('getGames()', () => {
 
         it('should send GET request to correct url', () => {

@@ -28,17 +28,16 @@ export class Channel {
         this._loadComponent();
         this._setupChannelLoading();
     }
-    // TODO: move to service
+
     _loadGame() {
 
-        return this.gameService.getGames().then(games => {
+        const name = this.$stateParams.name.replace(/-/g, ' ');
 
-            const name = this.$stateParams.name.replace(/-/g, ' ');
-            const game = games.find(_ => _.name === name);
+        return this.gameService.getGameByName(name).then(game => {
 
-            this.game = game ? game : null;
+            this.game = game;
         })
-        .catch(error => console.log(error));
+        .catch(() => null);
     }
 
     _loadChannels() {

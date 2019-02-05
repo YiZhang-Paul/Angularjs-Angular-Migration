@@ -1,4 +1,3 @@
-import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
 const mockModule = angular.mock.module;
@@ -15,7 +14,7 @@ context('channel component unit test', () => {
 
     let playStub;
     let stopStub;
-    let getGamesStub;
+    let getGameByNameStub;
     let getChannelsByGameIdStub;
     let refreshChannelsStub;
     let isFollowedStub;
@@ -24,7 +23,6 @@ context('channel component unit test', () => {
     let addHistoryStub;
     let cancelStub;
 
-    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
 
     beforeEach('mock thumbnail player service setup', mockModule($provide => {
@@ -41,11 +39,11 @@ context('channel component unit test', () => {
 
     beforeEach('mock game http service setup', mockModule($provide => {
 
-        getGamesStub = stub();
+        getGameByNameStub = stub();
 
         $provide.service('gameHttpService', () => ({
 
-            getGames: getGamesStub
+            getGameByName: getGameByNameStub
         }));
     }));
 
@@ -109,7 +107,7 @@ context('channel component unit test', () => {
             $stateParams.name = name;
             $stateParams.game = game;
             $stateParams.channels = channels;
-            getGamesStub.returns($q.resolve([game]));
+            getGameByNameStub.returns($q.resolve(game));
             getChannelsByGameIdStub.returns($q.resolve(channels));
             refreshChannelsStub.callsFake((a, b) => a.push(...b));
         });
@@ -121,7 +119,7 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.notCalled(getGamesStub);
+            sinonExpect.notCalled(getGameByNameStub);
             sinonExpect.notCalled(getChannelsByGameIdStub);
             sinonExpect.notCalled(refreshChannelsStub);
         });
@@ -135,7 +133,8 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getGameByNameStub);
+            sinonExpect.calledWith(getGameByNameStub, game.name);
             sinonExpect.calledOnce(getChannelsByGameIdStub);
             sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
             sinonExpect.calledOnce(refreshChannelsStub);
@@ -150,7 +149,8 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getGameByNameStub);
+            sinonExpect.calledWith(getGameByNameStub, game.name);
             sinonExpect.calledOnce(getChannelsByGameIdStub);
             sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
             sinonExpect.calledOnce(refreshChannelsStub);
@@ -176,12 +176,12 @@ context('channel component unit test', () => {
 
             $stateParams.game = null;
             $stateParams.channels = null;
-            getGamesStub.returns($q.resolve([]));
+            getGameByNameStub.returns($q.resolve(null));
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getGameByNameStub);
             sinonExpect.notCalled(getChannelsByGameIdStub);
         });
 
@@ -189,12 +189,12 @@ context('channel component unit test', () => {
 
             $stateParams.game = null;
             $stateParams.channels = null;
-            getGamesStub.returns($q.reject(new Error()));
+            getGameByNameStub.returns($q.reject(new Error()));
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGamesStub);
+            sinonExpect.calledOnce(getGameByNameStub);
         });
 
         it('should not throw error when failed to fetch channel data from service', () => {
