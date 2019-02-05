@@ -1,4 +1,4 @@
-export class FeaturedChannelController {
+export class FeaturedChannel {
 
     constructor(
 
@@ -79,3 +79,9 @@ export class FeaturedChannelController {
         this.$interval.cancel(this.task);
     }
 }
+
+export const FeaturedChannelComponent = {
+
+    templateUrl: './app/components/channel/featured-channel/featured-channel.html',
+    controller: FeaturedChannel
+};
