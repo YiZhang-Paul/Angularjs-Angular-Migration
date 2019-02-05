@@ -12,7 +12,6 @@ context('game component unit test', () => {
     let $rootScope;
     let controller;
 
-    let getGamesStub;
     let getChannelsByGameIdStub;
     let joinTextStub;
     let goStub;
@@ -20,16 +19,6 @@ context('game component unit test', () => {
 
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
-
-    beforeEach('mock game http service setup', mockModule($provide => {
-
-        getGamesStub = stub();
-
-        $provide.service('gameHttpService', () => ({
-
-            getGames: getGamesStub
-        }));
-    }));
 
     beforeEach('mock channel http service setup', mockModule($provide => {
 

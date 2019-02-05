@@ -1,17 +1,33 @@
 export class GameService {
 
-    syncGames(oldGames, newGames) {
+    constructor(gameHttpService) {
+        'ngInject';
+        this.service = gameHttpService;
 
-        for (let i = 0; i < newGames.length; i++) {
+        this.games = [];
+    }
 
-            if (oldGames[i] && oldGames[i].id === newGames[i].id) {
+    _syncGames(games) {
 
-                oldGames[i].view_count = newGames[i].view_count;
+        for (let i = 0; i < games.length; i++) {
+
+            if (this.games[i] && this.games[i].id === games[i].id) {
+
+                this.games[i].view_count = games[i].view_count;
 
                 continue;
             }
 
-            oldGames[i] = newGames[i];
+            this.games[i] = games[i];
         }
+    }
+
+    cacheGames() {
+
+        this.service.getGames().then(games => {
+
+            this._syncGames(games);
+        })
+        .catch(error => console.log(error));
     }
 }
