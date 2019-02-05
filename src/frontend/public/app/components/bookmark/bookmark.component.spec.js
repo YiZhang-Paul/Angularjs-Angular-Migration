@@ -8,7 +8,7 @@ context('bookmark component unit test', () => {
 
     let $q;
     let $rootScope;
-    let controller;
+    let component;
 
     let cacheBookmarksStub;
     let unfollowStub;
@@ -27,16 +27,16 @@ context('bookmark component unit test', () => {
         }));
     }));
 
-    beforeEach('general test setup', inject(($injector, $controller) => {
+    beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
         $rootScope = $injector.get('$rootScope');
-        controller = $controller('BookmarkController');
+        component = $componentController('bookmark');
     }));
 
     it('should resolve', () => {
 
-        expect(controller).is.not.null;
+        expect(component).is.not.null;
     });
 
     describe('bookmarks', () => {
@@ -44,9 +44,9 @@ context('bookmark component unit test', () => {
         it('should reference bookmark service cache', () => {
 
             const expected = [{ id: 1 }, { id: 4 }];
-            controller.service.bookmarks = expected;
+            component.service.bookmarks = expected;
 
-            expect(controller.bookmarks).to.deep.equal(expected);
+            expect(component.bookmarks).to.deep.equal(expected);
         });
     });
 
@@ -56,7 +56,7 @@ context('bookmark component unit test', () => {
 
             cacheBookmarksStub.returns($q.resolve({}));
 
-            controller.$onInit();
+            component.$onInit();
             $rootScope.$apply();
 
             sinonExpect.calledOnce(cacheBookmarksStub);
@@ -70,7 +70,7 @@ context('bookmark component unit test', () => {
             const expected = { id: 5 };
             unfollowStub.returns($q.resolve({}));
 
-            controller.unfollow(expected);
+            component.unfollow(expected);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(unfollowStub);
@@ -81,7 +81,7 @@ context('bookmark component unit test', () => {
 
             unfollowStub.returns($q.reject(new Error()));
 
-            controller.unfollow({});
+            component.unfollow({});
             $rootScope.$apply();
 
             sinonExpect.calledOnce(unfollowStub);
