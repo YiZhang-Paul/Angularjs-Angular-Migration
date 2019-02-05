@@ -33,7 +33,7 @@ context('generic utility service unit test', () => {
 
             const expected = 'some&random&text';
 
-            const result = service.joinText('some random  text', '&');
+            const result = service.joinText('some random text', '&');
 
             expect(result).to.equal(expected);
         });
@@ -45,14 +45,22 @@ context('generic utility service unit test', () => {
 
         it('should throw error when given index is smaller than 0', () => {
 
-            expect(() => service.excludeIndex(collection, -1)).to.throw();
+            expect(() => {
+
+                service.excludeIndex(collection, -1);
+
+            }).to.throw();
         });
 
         it('should throw error when given index is larger than maximum index', () => {
 
-            const index = collection.length;
+            expect(() => {
 
-            expect(() => service.excludeIndex(collection, index)).to.throw();
+                const index = collection.length;
+
+                service.excludeIndex(collection, index);
+
+            }).to.throw();
         });
 
         it('should exclude element at given index', () => {
@@ -121,16 +129,19 @@ context('generic utility service unit test', () => {
 
         it('should return object that matches values of all keys', () => {
 
+            const keys = ['id', 'age'];
             const expected = objects[0];
 
-            const result = service.findByProperties(objects, object, ['id', 'age']);
+            const result = service.findByProperties(objects, object, keys);
 
             expect(result).to.deep.equal(expected);
         });
 
         it('should return null when no object matching values of all keys is found', () => {
 
-            const result = service.findByProperties(objects, object, ['id', 'time']);
+            const keys = ['id', 'time'];
+
+            const result = service.findByProperties(objects, object, keys);
 
             expect(result).to.be.null;
         });

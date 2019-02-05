@@ -11,7 +11,7 @@ context('view history http service unit test', () => {
 
     let $q;
     let $httpBackend;
-    let viewHistoryHttpService;
+    let service;
 
     let authenticatorStub;
 
@@ -28,7 +28,7 @@ context('view history http service unit test', () => {
 
         $q = $injector.get('$q');
         $httpBackend = $injector.get('$httpBackend');
-        viewHistoryHttpService = $injector.get('viewHistoryHttpService');
+        service = $injector.get('viewHistoryHttpService');
     }));
 
     afterEach('general test teardown', () => {
@@ -39,7 +39,7 @@ context('view history http service unit test', () => {
 
     it('should resolve', () => {
 
-        expect(viewHistoryHttpService).is.not.null;
+        expect(service).is.not.null;
     });
 
     describe('getHistories()', () => {
@@ -49,7 +49,7 @@ context('view history http service unit test', () => {
             const expected = api;
             $httpBackend.expectGET(expected).respond([]);
 
-            viewHistoryHttpService.getHistories();
+            service.getHistories();
 
             $httpBackend.flush();
         });
@@ -58,7 +58,7 @@ context('view history http service unit test', () => {
 
             $httpBackend.expectGET(/.*/, hasAuthenticationToken).respond([]);
 
-            viewHistoryHttpService.getHistories();
+            service.getHistories();
 
             $httpBackend.flush();
         });
@@ -69,7 +69,7 @@ context('view history http service unit test', () => {
             const expected = histories.slice().reverse();
             $httpBackend.expectGET(/.*/).respond(histories);
 
-            viewHistoryHttpService.getHistories().then(result => {
+            service.getHistories().then(result => {
 
                 expect(result).is.not.empty;
                 expect(result).to.deep.equal(expected);
@@ -82,7 +82,7 @@ context('view history http service unit test', () => {
 
             $httpBackend.expectGET(/.*/).respond([]);
 
-            viewHistoryHttpService.getHistories().then(result => {
+            service.getHistories().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
                 expect(result).to.be.empty;
@@ -96,7 +96,7 @@ context('view history http service unit test', () => {
             const expected = 400;
             $httpBackend.expectGET(/.*/).respond(expected);
 
-            viewHistoryHttpService.getHistories()
+            service.getHistories()
                 .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
@@ -111,7 +111,7 @@ context('view history http service unit test', () => {
             const expected = api;
             $httpBackend.expectPOST(expected).respond({});
 
-            viewHistoryHttpService.addHistory({});
+            service.addHistory({});
 
             $httpBackend.flush();
         });
@@ -121,7 +121,7 @@ context('view history http service unit test', () => {
             const data = {};
             $httpBackend.expectPOST(/.*/, data, hasAuthenticationToken).respond({});
 
-            viewHistoryHttpService.addHistory(data);
+            service.addHistory(data);
 
             $httpBackend.flush();
         });
@@ -139,7 +139,7 @@ context('view history http service unit test', () => {
             const expected = Object.assign({ game_name: name }, data);
             $httpBackend.expectPOST(/.*/, expected).respond({});
 
-            viewHistoryHttpService.addHistory(data);
+            service.addHistory(data);
 
             $httpBackend.flush();
         });
@@ -149,7 +149,7 @@ context('view history http service unit test', () => {
             const expected = { status: 200, data: 'random_data' };
             $httpBackend.expectPOST(/.*/).respond(expected);
 
-            viewHistoryHttpService.addHistory({}).then(result => {
+            service.addHistory({}).then(result => {
 
                 expect(result).to.deep.equal(expected);
             });
@@ -162,7 +162,7 @@ context('view history http service unit test', () => {
             const expected = 400;
             $httpBackend.expectPOST(/.*/).respond(expected);
 
-            viewHistoryHttpService.addHistory({})
+            service.addHistory({})
                 .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
@@ -179,7 +179,7 @@ context('view history http service unit test', () => {
             const expected = `${api}/${id}`;
             $httpBackend.expectDELETE(expected).respond([]);
 
-            viewHistoryHttpService.deleteHistory(id);
+            service.deleteHistory(id);
 
             $httpBackend.flush();
         });
@@ -188,7 +188,7 @@ context('view history http service unit test', () => {
 
             $httpBackend.expectDELETE(/.*/, hasAuthenticationToken).respond([]);
 
-            viewHistoryHttpService.deleteHistory(id);
+            service.deleteHistory(id);
 
             $httpBackend.flush();
         });
@@ -198,7 +198,7 @@ context('view history http service unit test', () => {
             const expected = { status: 200, data: 'random_data' };
             $httpBackend.expectDELETE(/.*/).respond(expected);
 
-            viewHistoryHttpService.deleteHistory(id).then(result => {
+            service.deleteHistory(id).then(result => {
 
                 expect(result).to.deep.equal(expected);
             });
@@ -211,7 +211,7 @@ context('view history http service unit test', () => {
             const expected = 400;
             $httpBackend.expectDELETE(/.*/).respond(expected);
 
-            viewHistoryHttpService.deleteHistory(id)
+            service.deleteHistory(id)
                 .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
@@ -226,7 +226,7 @@ context('view history http service unit test', () => {
             const expected = api;
             $httpBackend.expectDELETE(expected).respond([]);
 
-            viewHistoryHttpService.deleteHistories();
+            service.deleteHistories();
 
             $httpBackend.flush();
         });
@@ -235,7 +235,7 @@ context('view history http service unit test', () => {
 
             $httpBackend.expectDELETE(/.*/, hasAuthenticationToken).respond([]);
 
-            viewHistoryHttpService.deleteHistories();
+            service.deleteHistories();
 
             $httpBackend.flush();
         });
@@ -245,7 +245,7 @@ context('view history http service unit test', () => {
             const expected = { status: 200, data: 'random_data' };
             $httpBackend.expectDELETE(/.*/).respond(expected);
 
-            viewHistoryHttpService.deleteHistories().then(result => {
+            service.deleteHistories().then(result => {
 
                 expect(result).to.deep.equal(expected);
             });
@@ -258,7 +258,7 @@ context('view history http service unit test', () => {
             const expected = 400;
             $httpBackend.expectDELETE(/.*/).respond(expected);
 
-            viewHistoryHttpService.deleteHistories()
+            service.deleteHistories()
                 .then(() => $q.reject(new Error()))
                 .catch(error => expect(error.status).to.equal(expected));
 
