@@ -1,6 +1,6 @@
 import SharedModule from '../shared.module';
 
-import { mockAuthenticator } from '../../../testing/stubs/authenticator.stub';
+import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.stub';
 import { hasAuthenticationToken } from '../utilities/test-verifications';
 
 const mockModule = angular.mock.module;
@@ -13,16 +13,12 @@ context('bookmark http service unit test', () => {
     let $httpBackend;
     let service;
 
-    let authenticatorStub;
-
     beforeEach(mockModule(SharedModule));
 
-    beforeEach('mocks setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        authenticatorStub = mockAuthenticator();
-
-        $provide.service('authenticatorService', () => authenticatorStub);
-    }));
+        mockAuthenticatorService(mockModule);
+    });
 
     beforeEach('general test setup', inject($injector => {
 

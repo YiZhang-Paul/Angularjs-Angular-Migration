@@ -1,10 +1,16 @@
 const stub = sinon.stub;
+const name = 'authenticatorService';
 
-export function mockAuthenticator() {
+export function mockAuthenticatorService(module) {
 
     const mock = { defaultOptions: null };
-    const headers = { Authorization: 'bearer xxx.xxxx.xxx' };
 
+    module($provide => {
+
+        $provide.service(name, () => mock);
+    });
+
+    const headers = { Authorization: 'bearer xxx.xxxx.xxx' };
     stub(mock, 'defaultOptions').get(() => ({ headers }));
 
     return mock;
