@@ -6,53 +6,56 @@ const sinonExpect = sinon.assert;
 
 context('thumbnail player service unit test', () => {
 
-    let service;
+    let thumbnailPlayerService;
+
+    let domElementStub;
 
     beforeEach(mockModule(SharedModule));
 
+    beforeEach('mocks setup', () => {
+
+        domElementStub = {
+
+            play: stub(),
+            pause: stub(),
+            currentTime: 55
+        };
+    });
+
     beforeEach('general test setup', inject($injector => {
 
-        service = $injector.get('thumbnailPlayerService');
+        thumbnailPlayerService = $injector.get('thumbnailPlayerService');
     }));
 
     it('should resolve', () => {
 
-        expect(service).is.not.null;
+        expect(thumbnailPlayerService).is.not.null;
     });
 
     describe('play()', () => {
 
         it('should play thumbnail', () => {
 
-            const domElement = { play: stub() };
+            thumbnailPlayerService.play({ srcElement: domElementStub });
 
-            service.play({ srcElement: domElement });
-
-            sinonExpect.calledOnce(domElement.play);
+            sinonExpect.calledOnce(domElementStub.play);
         });
     });
 
     describe('stop()', () => {
 
-        let domElement;
-
-        beforeEach('stop() test setup', () => {
-
-            domElement = { pause: stub(), currentTime: 55 };
-        });
-
         it('should stop thumbnail', () => {
 
-            service.stop({ srcElement: domElement });
+            thumbnailPlayerService.stop({ srcElement: domElementStub });
 
-            sinonExpect.calledOnce(domElement.pause);
+            sinonExpect.calledOnce(domElementStub.pause);
         });
 
         it('should set current play time to 0', () => {
 
-            service.stop({ srcElement: domElement });
+            thumbnailPlayerService.stop({ srcElement: domElementStub });
 
-            expect(domElement.currentTime).to.equal(0);
+            expect(domElementStub.currentTime).to.equal(0);
         });
     });
 });
