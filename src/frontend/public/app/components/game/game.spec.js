@@ -1,4 +1,3 @@
-import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
 const mockModule = angular.mock.module;
@@ -13,11 +12,11 @@ context('game component unit test', () => {
     let controller;
 
     let getChannelsByGameIdStub;
+    let cacheGamesStub;
     let joinTextStub;
     let goStub;
     let cancelStub;
 
-    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
 
     beforeEach('mock channel http service setup', mockModule($provide => {
@@ -27,6 +26,16 @@ context('game component unit test', () => {
         $provide.service('channelHttpService', () => ({
 
             getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock game service setup', mockModule($provide => {
+
+        cacheGamesStub = stub();
+
+        $provide.service('gameService', () => ({
+
+            cacheGames: cacheGamesStub
         }));
     }));
 
@@ -72,58 +81,26 @@ context('game component unit test', () => {
 
     describe('$onInit()', () => {
 
-        const games = [{ id: 1 }, { id: 4 }, { id: 7 }];
-
-        it('should load games on initialization', () => {
-
-            const expected = games;
-            getGamesStub.returns($q.resolve(expected));
+        it('should cache games on initialization', () => {
 
             controller.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGamesStub);
-            expect(controller.games).to.deep.equal(expected);
+            sinonExpect.calledOnce(cacheGamesStub);
         });
 
-        it('should load games every 10 seconds', () => {
+        it('should cache games every 10 seconds', () => {
 
             const seconds = 60;
             const expected = Math.floor(seconds / 10);
-            getGamesStub.returns($q.resolve([]));
 
             controller.$onInit();
             $rootScope.$apply();
-            // reset initial call to load games
-            getGamesStub.resetHistory();
+            // reset initial call to cache games
+            cacheGamesStub.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(getGamesStub, expected);
-        });
-
-        it('should keep cached games when load games failed', () => {
-
-            controller.games = games;
-            const expected = controller.games.slice();
-            getGamesStub.returns($q.reject(new Error()));
-
-            controller.$onInit();
-            $rootScope.$apply();
-
-            expect(Array.isArray(controller.games)).to.be.true;
-            expect(controller.games).to.deep.equal(expected);
-        });
-
-        it('should update view count of cached games', () => {
-
-            controller.games = [{ id: 1, view_count: 2 }, { id: 2, view_count: 5 }];
-            const expected = [{ id: 1, view_count: 114 }, { id: 2, view_count: 1 }];
-            getGamesStub.returns($q.resolve(expected));
-
-            controller.$onInit();
-            $rootScope.$apply();
-
-            expect(controller.games).to.deep.equal(expected);
+            sinonExpect.callCount(cacheGamesStub, expected);
         });
     });
 
@@ -140,6 +117,17 @@ context('game component unit test', () => {
             sinonExpect.calledOnce(cancelStub);
             sinonExpect.calledWith(cancelStub, expected);
         });
+    });
+
+    describe('games', () => {
+
+        it('should reference cache from game service', inject($injector => {
+
+            const service = $injector.get('gameService');
+            service.games = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            expect(controller.games).to.deep.equal(service.games);
+        }));
     });
 
     describe('toChannelsView()', () => {

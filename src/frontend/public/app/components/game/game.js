@@ -4,53 +4,35 @@ export class GameController {
 
         $interval,
         $state,
-        gameHttpService,
         channelHttpService,
+        gameService,
         genericUtilityService
 
     ) {
         'ngInject';
         this.$interval = $interval;
         this.$state = $state;
-        this.gameService = gameHttpService;
         this.channelService = channelHttpService;
+        this.gameService = gameService;
         this.utilities = genericUtilityService;
 
         this.task = null;
-        this.games = [];
+    }
+
+    get games() {
+
+        return this.gameService.games;
     }
 
     $onInit() {
 
-        this._loadGames();
+        this.gameService.cacheGames();
 
-        const callback = this._loadGames.bind(this);
-        const time = 10 * 1000;
-        this.task = this.$interval(callback, time);
-    }
+        this.task = this.$interval(() => {
 
-    _syncGames(games) {
+            this.gameService.cacheGames();
 
-        for (let i = 0; i < games.length; i++) {
-
-            if (this.games[i] && this.games[i].id === games[i].id) {
-
-                this.games[i].view_count = games[i].view_count;
-
-                continue;
-            }
-
-            this.games[i] = games[i];
-        }
-    }
-
-    _loadGames() {
-
-        this.gameService.getGames().then(games => {
-
-            this._syncGames(games);
-        })
-        .catch(() => null);
+        }, 10 * 1000);
     }
 
     _changeRoute(game, channels) {
