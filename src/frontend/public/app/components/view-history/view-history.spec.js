@@ -1,7 +1,4 @@
-import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
-
-import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -13,30 +10,16 @@ context('view history component unit test', () => {
     let $rootScope;
     let controller;
 
-    let getHistoriesStub;
+    let cacheHistoriesStub;
     let deleteHistoryStub;
-    let deleteHistoriesStub;
+    let showClearHistoriesDialogStub;
+    let clearHistoriesStub;
     let getGameStub;
     let getChannelsByGameIdStub;
     let joinTextStub;
     let goStub;
 
-    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
-
-    beforeEach('mock view history http service setup', mockModule($provide => {
-
-        getHistoriesStub = stub();
-        deleteHistoryStub = stub();
-        deleteHistoriesStub = stub();
-
-        $provide.service('viewHistoryHttpService', () => ({
-
-            getHistories: getHistoriesStub,
-            deleteHistory: deleteHistoryStub,
-            deleteHistories: deleteHistoriesStub
-        }));
-    }));
 
     beforeEach('mock game http service setup', mockModule($provide => {
 
@@ -55,6 +38,22 @@ context('view history component unit test', () => {
         $provide.service('channelHttpService', () => ({
 
             getChannelsByGameId: getChannelsByGameIdStub
+        }));
+    }));
+
+    beforeEach('mock view history service setup', mockModule($provide => {
+
+        cacheHistoriesStub = stub();
+        deleteHistoryStub = stub();
+        showClearHistoriesDialogStub = stub();
+        clearHistoriesStub = stub();
+
+        $provide.service('viewHistoryService', () => ({
+
+            cacheHistories: cacheHistoriesStub,
+            deleteHistory: deleteHistoryStub,
+            showClearHistoriesDialog: showClearHistoriesDialogStub,
+            clearHistories: clearHistoriesStub
         }));
     }));
 
@@ -92,27 +91,12 @@ context('view history component unit test', () => {
 
     describe('$onInit()', () => {
 
-        it('should load view histories on initialization', () => {
-
-            const expected = [{ id: 1 }, { id: 2 }, { id: 4 }];
-            getHistoriesStub.returns($q.resolve(expected));
+        it('should cache view histories on initialization', () => {
 
             controller.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getHistoriesStub);
-            expect(controller.histories).to.deep.equal(expected);
-        });
-
-        it('should default to empty collection when load view histories failed', () => {
-
-            getHistoriesStub.returns($q.reject(new Error()));
-
-            controller.$onInit();
-            $rootScope.$apply();
-
-            expect(Array.isArray(controller.histories)).to.be.true;
-            expect(controller.histories).to.be.empty;
+            sinonExpect.calledOnce(cacheHistoriesStub);
         });
     });
 
@@ -190,89 +174,15 @@ context('view history component unit test', () => {
 
     describe('deleteHistory()', () => {
 
-        beforeEach('deleteHistory() test setup', () => {
+        const id = 55;
 
-            controller.histories = [{ id: 1 }, { id: 2 }, { id: 4 }];
-        });
-
-        it('should delete history when history is found', () => {
-
-            const index = 1;
-            const id = controller.histories[index].id;
-            const expected = excludeIndex(controller.histories, index);
-            deleteHistoryStub.returns($q.resolve({}));
+        it('should use view history service to delete view history', () => {
 
             controller.deleteHistory({ id });
             $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoryStub);
             sinonExpect.calledWith(deleteHistoryStub, id);
-            expect(controller.histories).to.deep.equal(expected);
-        });
-
-        it('should not delete history when history is not found', () => {
-
-            const id = -1;
-            const expected = controller.histories.slice();
-
-            controller.deleteHistory({ id });
-            $rootScope.$apply();
-
-            sinonExpect.notCalled(deleteHistoryStub);
-            expect(controller.histories).to.deep.equal(expected);
-        });
-
-        it('should not throw on deletion error', () => {
-
-            const id = controller.histories[1].id;
-            deleteHistoryStub.returns($q.reject(new Error()));
-
-            controller.deleteHistory({ id });
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(deleteHistoryStub);
-        });
-    });
-
-    describe('clearHistories()', () => {
-
-        beforeEach('clearHistories() test setup', () => {
-
-            controller.histories = [{ id: 1 }, { id: 2 }, { id: 4 }];
-        });
-
-        it('should use view history http service to delete histories', () => {
-
-            deleteHistoriesStub.returns($q.resolve({}));
-
-            controller.clearHistories();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(deleteHistoriesStub);
-        });
-
-        it('should clear cached histories when deletion is successful', () => {
-
-            const oldCache = controller.histories.slice();
-            deleteHistoriesStub.returns($q.resolve({}));
-
-            controller.clearHistories();
-            $rootScope.$apply();
-
-            expect(oldCache).is.not.empty;
-            expect(controller.histories).to.be.empty;
-        });
-
-        it('should not clear cached histories when deletion failed', () => {
-
-            const expected = controller.histories.slice();
-            deleteHistoriesStub.returns($q.reject(new Error()));
-
-            controller.clearHistories();
-            $rootScope.$apply();
-
-            expect(expected).is.not.empty;
-            expect(controller.histories).to.deep.equal(expected);
         });
     });
 
@@ -280,26 +190,45 @@ context('view history component unit test', () => {
 
         beforeEach('confirmClearHistories() test setup', () => {
 
-            deleteHistoriesStub.returns($q.resolve({}));
-            showStub.returns($q.resolve({}));
+            showClearHistoriesDialogStub.returns($q.resolve({}));
+            clearHistoriesStub.returns($q.resolve({}));
         });
 
-        it('should clear histories on confirmation', () => {
+        it('should show confirmation dialog', () => {
+
+            const expected = { payload: 'random_payload' };
+
+            controller.confirmClearHistories(expected);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(showClearHistoriesDialogStub);
+            sinonExpect.calledWith(showClearHistoriesDialogStub, expected);
+        });
+
+        it('should use view history service to delete view histories when user confirms deletion', () => {
 
             controller.confirmClearHistories({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(deleteHistoriesStub);
+            sinonExpect.calledOnce(clearHistoriesStub);
         });
 
-        it('should not clear histories on cancellation', () => {
+        it('should not delete view histories when user cancels deletion', () => {
 
-            showStub.returns($q.reject({}));
+            showClearHistoriesDialogStub.returns($q.reject(new Error()));
 
             controller.confirmClearHistories({});
             $rootScope.$apply();
 
-            sinonExpect.notCalled(deleteHistoriesStub);
+            sinonExpect.notCalled(clearHistoriesStub);
+        });
+
+        it('should not throw error when user cancels deletion', () => {
+
+            showClearHistoriesDialogStub.returns($q.reject(new Error()));
+
+            controller.confirmClearHistories({});
+            $rootScope.$apply();
         });
     });
 });
