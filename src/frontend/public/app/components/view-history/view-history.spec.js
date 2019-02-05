@@ -4,7 +4,6 @@ import ComponentsModule from '../components.module';
 import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;
-const spy = sinon.spy;
 const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
@@ -21,8 +20,6 @@ context('view history component unit test', () => {
     let getChannelsByGameIdStub;
     let joinTextStub;
     let goStub;
-    let confirmSpy;
-    let showStub;
 
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
@@ -81,24 +78,12 @@ context('view history component unit test', () => {
         }));
     }));
 
-    beforeEach('mock $mdDialog setup', inject($injector => {
-
-        const $mdDialog = $injector.get('$mdDialog');
-        confirmSpy = spy($mdDialog, 'confirm');
-        showStub = stub($mdDialog, 'show');
-    }));
-
     beforeEach('general test setup', inject(($injector, $controller) => {
 
         $q = $injector.get('$q');
         $rootScope = $injector.get('$rootScope');
         controller = $controller('ViewHistoryController');
     }));
-
-    afterEach('general test teardown', () => {
-
-        confirmSpy.restore();
-    });
 
     it('should resolve', () => {
 
@@ -297,27 +282,6 @@ context('view history component unit test', () => {
 
             deleteHistoriesStub.returns($q.resolve({}));
             showStub.returns($q.resolve({}));
-        });
-
-        it('should show confirmation dialog', () => {
-
-            controller.confirmClearHistories({});
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(confirmSpy);
-            sinonExpect.calledOnce(showStub);
-        });
-
-        it('should bind confirmation dialog to correct event', () => {
-
-            const expected = { payload: 'random_payload' };
-
-            controller.confirmClearHistories(expected);
-            $rootScope.$apply();
-
-            const result = showStub.args[0][0]._options.targetEvent;
-
-            expect(result).to.deep.equal(expected);
         });
 
         it('should clear histories on confirmation', () => {

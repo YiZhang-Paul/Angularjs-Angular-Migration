@@ -1,40 +1,32 @@
 export class ViewHistoryController {
-    // TODO: create service
+
     constructor(
 
         $q,
         $state,
-        $mdDialog,
         gameHttpService,
         channelHttpService,
-        viewHistoryHttpService,
+        viewHistoryService,
         genericUtilityService
 
     ) {
         'ngInject';
         this.$q = $q;
         this.$state = $state;
-        this.$mdDialog = $mdDialog;
         this.gameService = gameHttpService;
         this.channelService = channelHttpService;
-        this.historyService = viewHistoryHttpService;
+        this.historyService = viewHistoryService;
         this.utilities = genericUtilityService;
+    }
 
-        this.histories = [];
+    get histories() {
+
+        return this.historyService.histories;
     }
 
     $onInit() {
 
-        this._loadHistories();
-    }
-
-    _loadHistories() {
-
-        this.historyService.getHistories().then(histories => {
-
-            this.histories = histories;
-        })
-        .catch(error => console.log(error));
+        this.historyService.cacheHistories();
     }
 
     isStaticImage(url) {
@@ -53,8 +45,9 @@ export class ViewHistoryController {
 
         const gamePromise = this.gameService.getGame(id);
         const channelsPromise = this.channelService.getChannelsByGameId(id);
+        const promises = [gamePromise, channelsPromise];
 
-        this.$q.all([gamePromise, channelsPromise]).then(responses => {
+        this.$q.all(promises).then(responses => {
 
             this._changeRoute(...responses);
         })
@@ -63,43 +56,15 @@ export class ViewHistoryController {
 
     deleteHistory(history) {
 
-        const id = history.id;
-        const index = this.histories.findIndex(_ => _.id === id);
-
-        if (index !== -1) {
-
-            this.histories.splice(index, 1);
-            this.historyService.deleteHistory(id).catch(() => null);
-        }
-    }
-
-    clearHistories() {
-
-        this.historyService.deleteHistories().then(() => {
-
-            this.histories = [];
-        })
-        .catch(error => console.log(error));
-    }
-
-    _showConfirmationDialog(event) {
-
-        const options = this.$mdDialog.confirm()
-            .title('Clear all view histories?')
-            .textContent('All view histories will be permanently deleted.')
-            .targetEvent(event)
-            .ok('Ok')
-            .cancel('Cancel');
-
-        return this.$mdDialog.show(options);
+        this.historyService.deleteHistory(history.id);
     }
 
     confirmClearHistories(event) {
 
-        this._showConfirmationDialog(event).then(() => {
+        this.historyService.showClearHistoriesDialog(event).then(() => {
 
-            this.clearHistories();
+            return this.historyService.clearHistories();
         })
-        .catch(() => null);
+        .catch(error => console.log(error));
     }
 }

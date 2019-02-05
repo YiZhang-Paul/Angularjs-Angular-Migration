@@ -1,9 +1,12 @@
 export class ViewHistoryService {
 
-    constructor($rootScope, viewHistoryHttpService) {
+    constructor($rootScope, $mdDialog, viewHistoryHttpService) {
         'ngInject';
         this.$rootScope = $rootScope;
+        this.$mdDialog = $mdDialog;
         this.historyService = viewHistoryHttpService;
+
+        this.histories = [];
     }
 
     getHistories() {
@@ -16,29 +19,64 @@ export class ViewHistoryService {
         });
     }
 
+    cacheHistories() {
+
+        return this.getHistories().then(histories => {
+
+            this.histories = histories.length ? histories : this.histories;
+        });
+    }
+
     addHistory(channel) {
 
         return this.historyService.addHistory(channel).then(() => {
 
             this.$rootScope.$broadcast('historyUpdated');
+
+            return this.cacheHistories();
         })
         .catch(error => console.log(error));
     }
 
-    deleteHistory(history) {
+    _removeCached(id) {
 
-        const id = history.id;
+        const index = this.histories.findIndex(_ => _.id === id);
 
-        return this.historyService.deleteHistory(id).catch(error => {
+        if (index !== -1) {
 
-            console.log(error);
-        });
+            this.histories.splice(index, 1);
+        }
+    }
+
+    deleteHistory(id) {
+
+        this.historyService.deleteHistory(id).then(() => {
+
+            this._removeCached(id);
+            this.$rootScope.$broadcast('historyRemoved');
+        })
+        .catch(error => console.log(error));
+    }
+
+    showClearHistoriesDialog(event) {
+
+        const options = this.$mdDialog.confirm()
+            .title('Clear all view histories?')
+            .textContent('All view histories will be permanently deleted.')
+            .targetEvent(event)
+            .ok('Ok')
+            .cancel('Cancel');
+
+        return this.$mdDialog.show(options);
     }
 
     clearHistories() {
 
-        return this.historyService.deleteHistories()
-            .then(() => true)
-            .catch(() => false);
+        return this.historyService.deleteHistories().then(() => {
+
+            this.histories = [];
+            this.$rootScope.$broadcast('historyCleared');
+        })
+        .catch(error => console.log(error));
     }
 }
