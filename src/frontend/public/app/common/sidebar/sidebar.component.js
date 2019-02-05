@@ -17,16 +17,6 @@ export class Sidebar {
         this._loadBadges();
         this._registerEvents();
     }
-    // TODO: move to service
-    _addGameName(channels) {
-
-        return channels.map(_ => {
-
-            _.game_name = _.provider_game_name;
-
-            return _;
-        });
-    }
 
     _loadBookmarks(key) {
 
@@ -40,7 +30,7 @@ export class Sidebar {
 
         this.service.getFeaturedChannels().then(channels => {
 
-            this.badges.set(key, this._addGameName(channels.slice(0, 3)));
+            this.badges.set(key, channels.slice(0, 3));
         });
     }
 

@@ -115,34 +115,6 @@ context('sidebar component unit test', () => {
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
 
-        it('should add missing game name on featured channels', () => {
-
-            const channels = [
-
-                { id: 1, provider_game_name: 'name_1' },
-                { id: 2, provider_game_name: 'name_2' },
-                { id: 3, provider_game_name: 'name_3' },
-                { id: 4, provider_game_name: 'name_4' }
-            ];
-
-            const expected = [
-
-                { id: 1, provider_game_name: 'name_1', game_name: 'name_1' },
-                { id: 2, provider_game_name: 'name_2', game_name: 'name_2' },
-                { id: 3, provider_game_name: 'name_3', game_name: 'name_3' },
-                { id: 4, provider_game_name: 'name_4', game_name: 'name_4' }
-            ];
-
-            getFeaturedChannelsStub.returns($q.resolve(channels));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            const result = component.badges.get('Featured Channels');
-
-            expect(result).to.deep.equal(expected.slice(0, 3));
-        });
-
         it('should use sidebar service to fetch view history data', () => {
 
             component.$onInit();

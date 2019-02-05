@@ -17,9 +17,23 @@ export class SidebarService {
         });
     }
 
+    _addGameName(channels) {
+
+        return channels.map(_ => {
+
+            _.game_name = _.provider_game_name;
+
+            return _;
+        });
+    }
+
     getFeaturedChannels() {
 
-        return this.channelService.getChannels().catch(error => {
+        return this.channelService.getChannels().then(channels => {
+
+            return this._addGameName(channels);
+        })
+        .catch(error => {
 
             console.log(error);
 

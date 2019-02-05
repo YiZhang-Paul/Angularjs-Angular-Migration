@@ -1,4 +1,3 @@
-import SharedModule from '../../shared/shared.module';
 import CommonModule from '../common.module';
 
 const mockModule = angular.mock.module;
@@ -15,7 +14,6 @@ context('sidebar service unit test', () => {
     let $rootScope;
     let service;
 
-    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(CommonModule));
 
     beforeEach('mock bookmark http service setup', mockModule($provide => {
@@ -132,6 +130,32 @@ context('sidebar service unit test', () => {
             service.getFeaturedChannels().then(result => {
 
                 expect(result).is.not.empty;
+                expect(result).to.deep.equal(expected);
+            });
+
+            $rootScope.$apply();
+        });
+
+        it('should attach provider game name to game name property', () => {
+
+            const channels = [
+
+                { provider_game_name: 'name_1' },
+                { provider_game_name: 'name_2' },
+                { provider_game_name: 'name_3' }
+            ];
+
+            const expected = [
+
+                { provider_game_name: 'name_1', game_name: 'name_1' },
+                { provider_game_name: 'name_2', game_name: 'name_2' },
+                { provider_game_name: 'name_3', game_name: 'name_3' }
+            ];
+
+            getChannelsStub.returns($q.resolve(channels));
+
+            service.getFeaturedChannels().then(result => {
+
                 expect(result).to.deep.equal(expected);
             });
 
