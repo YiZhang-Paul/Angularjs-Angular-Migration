@@ -1,5 +1,5 @@
 export class GameController {
-    // TODO: create service
+
     constructor(
 
         $interval,
