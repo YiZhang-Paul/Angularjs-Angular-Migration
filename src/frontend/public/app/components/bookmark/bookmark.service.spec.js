@@ -211,7 +211,7 @@ context('bookmark service unit test', () => {
     });
 
     describe('follow()', () => {
-
+        // TODO: move to top
         beforeEach('follow() test setup', () => {
             // clear $locationChangeStart and $locationChangeSuccess broadcast
             $rootScope.$apply();

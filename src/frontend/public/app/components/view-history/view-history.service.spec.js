@@ -148,7 +148,7 @@ context('view history service unit test', () => {
     describe('addHistory()', () => {
 
         const channel = { id: 5 };
-
+        // TODO: move to top
         beforeEach('addHistory() test setup', () => {
             // clear $locationChangeStart and $locationChangeSuccess broadcast
             $rootScope.$apply();

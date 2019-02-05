@@ -1,7 +1,12 @@
 import ComponentsModule from '../components.module';
 
+import { mock$state } from '../../../testing/stubs/$state.stub';
+import { mockGameHttpService } from '../../../testing/stubs/game-http.stub';
+import { mockChannelHttpService } from '../../../testing/stubs/channel-http.stub';
+import { mockViewHistoryService } from '../../../testing/stubs/view-history.stub';
+import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.stub';
+
 const mockModule = angular.mock.module;
-const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('view history component unit test', () => {
@@ -10,72 +15,26 @@ context('view history component unit test', () => {
     let $rootScope;
     let component;
 
-    let cacheHistoriesStub;
-    let deleteHistoryStub;
-    let showClearHistoriesDialogStub;
-    let clearHistoriesStub;
-    let getGameStub;
-    let getChannelsByGameIdStub;
-    let joinTextStub;
-    let goStub;
+    let $stateStub;
+    let gameHttpServiceStub;
+    let channelHttpServiceStub;
+    let viewHistoryServiceStub;
+    let genericUtilityServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock game http service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        getGameStub = stub();
+        $stateStub = mock$state(mockModule);
+        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
+        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
+        genericUtilityServiceStub = mockGenericUtilityService(mockModule);
 
-        $provide.service('gameHttpService', () => ({
-
-            getGame: getGameStub
-        }));
-    }));
-
-    beforeEach('mock channel http service setup', mockModule($provide => {
-
-        getChannelsByGameIdStub = stub();
-
-        $provide.service('channelHttpService', () => ({
-
-            getChannelsByGameId: getChannelsByGameIdStub
-        }));
-    }));
-
-    beforeEach('mock view history service setup', mockModule($provide => {
-
-        cacheHistoriesStub = stub();
-        deleteHistoryStub = stub();
-        showClearHistoriesDialogStub = stub();
-        clearHistoriesStub = stub();
-
-        $provide.service('viewHistoryService', () => ({
-
-            cacheHistories: cacheHistoriesStub,
-            deleteHistory: deleteHistoryStub,
-            showClearHistoriesDialog: showClearHistoriesDialogStub,
-            clearHistories: clearHistoriesStub
-        }));
-    }));
-
-    beforeEach('mock generic utility service setup', mockModule($provide => {
-
-        joinTextStub = stub();
-
-        $provide.service('genericUtilityService', () => ({
-
-            joinText: joinTextStub
-        }));
-    }));
-
-    beforeEach('mock $state setup', mockModule($provide => {
-
-        goStub = stub();
-
-        $provide.service('$state', () => ({
-
-            go: goStub
-        }));
-    }));
+        gameHttpServiceStub.initializeMock();
+        channelHttpServiceStub.initializeMock();
+        viewHistoryServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
@@ -96,19 +55,19 @@ context('view history component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(cacheHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryServiceStub.cacheHistories);
         });
     });
 
     describe('histories', () => {
 
-        it('should reference cache from view history service', inject($injector => {
+        it('should reference cache from view history service', () => {
 
-            const service = $injector.get('viewHistoryService');
-            service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            viewHistoryServiceStub.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            const expected = viewHistoryServiceStub.histories.slice();
 
-            expect(component.histories).to.deep.equal(service.histories);
-        }));
+            expect(component.histories).to.deep.equal(expected);
+        });
     });
 
     describe('isStaticImage()', () => {
@@ -132,13 +91,13 @@ context('view history component unit test', () => {
     describe('toChannelsView()', () => {
 
         const id = 55;
-        const game = { name: 'random game name 5' };
+        let game;
 
         beforeEach('toChannelsView() test setup', () => {
 
-            getGameStub.returns($q.resolve(game));
-            getChannelsByGameIdStub.returns($q.resolve([]));
-            joinTextStub.returns('');
+            game = { name: 'random game name 5' };
+            gameHttpServiceStub.getGame.returns($q.resolve(game));
+            genericUtilityServiceStub.joinText.returns('');
         });
 
         it('should use game http service to fetch game data', () => {
@@ -146,7 +105,7 @@ context('view history component unit test', () => {
             component.toChannelsView(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGameStub);
+            sinonExpect.calledOnce(gameHttpServiceStub.getGame);
         });
 
         it('should use channel http service to fetch channel data', () => {
@@ -154,7 +113,7 @@ context('view history component unit test', () => {
             component.toChannelsView(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledOnce(channelHttpServiceStub.getChannelsByGameId);
         });
 
         it('should change route with correct route parameters', () => {
@@ -162,21 +121,21 @@ context('view history component unit test', () => {
             const name = 'random-game-name-5';
             const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = { game, name, channels };
-            getChannelsByGameIdStub.returns($q.resolve(channels));
-            joinTextStub.returns(name);
+            channelHttpServiceStub.getChannelsByGameId.returns($q.resolve(channels));
+            genericUtilityServiceStub.joinText.returns(name);
 
             component.toChannelsView(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(joinTextStub);
-            sinonExpect.calledOnce(goStub);
-            sinonExpect.calledWith(goStub, 'channels', expected);
+            sinonExpect.calledOnce(genericUtilityServiceStub.joinText);
+            sinonExpect.calledOnce($stateStub.go);
+            sinonExpect.calledWith($stateStub.go, 'channels', expected);
         });
 
         it('should not throw on error', () => {
 
-            getGameStub.returns($q.reject(new Error()));
-            getChannelsByGameIdStub.returns($q.reject(new Error()));
+            gameHttpServiceStub.getGame.returns($q.reject(new Error()));
+            channelHttpServiceStub.getChannelsByGameId.returns($q.reject(new Error()));
 
             component.toChannelsView(id);
             $rootScope.$apply();
@@ -192,18 +151,12 @@ context('view history component unit test', () => {
             component.deleteHistory({ id });
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(deleteHistoryStub);
-            sinonExpect.calledWith(deleteHistoryStub, id);
+            sinonExpect.calledOnce(viewHistoryServiceStub.deleteHistory);
+            sinonExpect.calledWith(viewHistoryServiceStub.deleteHistory, id);
         });
     });
 
     describe('confirmClearHistories()', () => {
-
-        beforeEach('confirmClearHistories() test setup', () => {
-
-            showClearHistoriesDialogStub.returns($q.resolve({}));
-            clearHistoriesStub.returns($q.resolve({}));
-        });
 
         it('should show confirmation dialog', () => {
 
@@ -212,8 +165,8 @@ context('view history component unit test', () => {
             component.confirmClearHistories(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(showClearHistoriesDialogStub);
-            sinonExpect.calledWith(showClearHistoriesDialogStub, expected);
+            sinonExpect.calledOnce(viewHistoryServiceStub.showClearHistoriesDialog);
+            sinonExpect.calledWith(viewHistoryServiceStub.showClearHistoriesDialog, expected);
         });
 
         it('should use view history service to delete view histories when user confirms deletion', () => {
@@ -221,22 +174,22 @@ context('view history component unit test', () => {
             component.confirmClearHistories({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(clearHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryServiceStub.clearHistories);
         });
 
         it('should not delete view histories when user cancels deletion', () => {
 
-            showClearHistoriesDialogStub.returns($q.reject(new Error()));
+            viewHistoryServiceStub.showClearHistoriesDialog.returns($q.reject(new Error()));
 
             component.confirmClearHistories({});
             $rootScope.$apply();
 
-            sinonExpect.notCalled(clearHistoriesStub);
+            sinonExpect.notCalled(viewHistoryServiceStub.clearHistories);
         });
 
         it('should not throw error when user cancels deletion', () => {
 
-            showClearHistoriesDialogStub.returns($q.reject(new Error()));
+            viewHistoryServiceStub.showClearHistoriesDialog.returns($q.reject(new Error()));
 
             component.confirmClearHistories({});
             $rootScope.$apply();
