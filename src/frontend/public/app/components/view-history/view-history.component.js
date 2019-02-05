@@ -1,4 +1,4 @@
-export class ViewHistoryController {
+export class ViewHistory {
 
     constructor(
 
@@ -68,3 +68,9 @@ export class ViewHistoryController {
         .catch(error => console.log(error));
     }
 }
+
+export const ViewHistoryComponent = {
+
+    templateUrl: './app/components/view-history/view-history.html',
+    controller: ViewHistory
+};

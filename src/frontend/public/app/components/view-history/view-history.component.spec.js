@@ -8,7 +8,7 @@ context('view history component unit test', () => {
 
     let $q;
     let $rootScope;
-    let controller;
+    let component;
 
     let cacheHistoriesStub;
     let deleteHistoryStub;
@@ -77,23 +77,23 @@ context('view history component unit test', () => {
         }));
     }));
 
-    beforeEach('general test setup', inject(($injector, $controller) => {
+    beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
         $rootScope = $injector.get('$rootScope');
-        controller = $controller('ViewHistoryController');
+        component = $componentController('viewHistory');
     }));
 
     it('should resolve', () => {
 
-        expect(controller).is.not.null;
+        expect(component).is.not.null;
     });
 
     describe('$onInit()', () => {
 
         it('should cache view histories on initialization', () => {
 
-            controller.$onInit();
+            component.$onInit();
             $rootScope.$apply();
 
             sinonExpect.calledOnce(cacheHistoriesStub);
@@ -107,7 +107,7 @@ context('view history component unit test', () => {
             const service = $injector.get('viewHistoryService');
             service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
-            expect(controller.histories).to.deep.equal(service.histories);
+            expect(component.histories).to.deep.equal(service.histories);
         }));
     });
 
@@ -115,17 +115,17 @@ context('view history component unit test', () => {
 
         it('should return true when file is not in mp4 or m4v format', () => {
 
-            expect(controller.isStaticImage('file.png')).to.be.true;
+            expect(component.isStaticImage('file.png')).to.be.true;
         });
 
         it('should return false for mp4 format', () => {
 
-            expect(controller.isStaticImage('file.mp4')).to.be.false;
+            expect(component.isStaticImage('file.mp4')).to.be.false;
         });
 
         it('should return false for m4v format', () => {
 
-            expect(controller.isStaticImage('file.m4v')).to.be.false;
+            expect(component.isStaticImage('file.m4v')).to.be.false;
         });
     });
 
@@ -143,7 +143,7 @@ context('view history component unit test', () => {
 
         it('should use game http service to fetch game data', () => {
 
-            controller.toChannelsView(id);
+            component.toChannelsView(id);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(getGameStub);
@@ -151,7 +151,7 @@ context('view history component unit test', () => {
 
         it('should use channel http service to fetch channel data', () => {
 
-            controller.toChannelsView(id);
+            component.toChannelsView(id);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(getChannelsByGameIdStub);
@@ -165,7 +165,7 @@ context('view history component unit test', () => {
             getChannelsByGameIdStub.returns($q.resolve(channels));
             joinTextStub.returns(name);
 
-            controller.toChannelsView(id);
+            component.toChannelsView(id);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(joinTextStub);
@@ -178,7 +178,7 @@ context('view history component unit test', () => {
             getGameStub.returns($q.reject(new Error()));
             getChannelsByGameIdStub.returns($q.reject(new Error()));
 
-            controller.toChannelsView(id);
+            component.toChannelsView(id);
             $rootScope.$apply();
         });
     });
@@ -189,7 +189,7 @@ context('view history component unit test', () => {
 
         it('should use view history service to delete view history', () => {
 
-            controller.deleteHistory({ id });
+            component.deleteHistory({ id });
             $rootScope.$apply();
 
             sinonExpect.calledOnce(deleteHistoryStub);
@@ -209,7 +209,7 @@ context('view history component unit test', () => {
 
             const expected = { payload: 'random_payload' };
 
-            controller.confirmClearHistories(expected);
+            component.confirmClearHistories(expected);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(showClearHistoriesDialogStub);
@@ -218,7 +218,7 @@ context('view history component unit test', () => {
 
         it('should use view history service to delete view histories when user confirms deletion', () => {
 
-            controller.confirmClearHistories({});
+            component.confirmClearHistories({});
             $rootScope.$apply();
 
             sinonExpect.calledOnce(clearHistoriesStub);
@@ -228,7 +228,7 @@ context('view history component unit test', () => {
 
             showClearHistoriesDialogStub.returns($q.reject(new Error()));
 
-            controller.confirmClearHistories({});
+            component.confirmClearHistories({});
             $rootScope.$apply();
 
             sinonExpect.notCalled(clearHistoriesStub);
@@ -238,7 +238,7 @@ context('view history component unit test', () => {
 
             showClearHistoriesDialogStub.returns($q.reject(new Error()));
 
-            controller.confirmClearHistories({});
+            component.confirmClearHistories({});
             $rootScope.$apply();
         });
     });

@@ -1,10 +1,10 @@
 import { BookmarkComponent } from './bookmark/bookmark.component';
 import { ChannelBadgeComponent } from './channel/channel-badge/channel-badge.component';
+import { ViewHistoryComponent } from './view-history/view-history.component';
 
 import { ChannelController } from './channel/channel';
 import { FeaturedChannelController } from './channel/featured-channel/featured-channel';
 import { GameController } from './game/game';
-import { ViewHistoryController } from './view-history/view-history';
 
 import { BookmarkService } from './bookmark/bookmark.service';
 import { ChannelService } from './channel/channel.service';
@@ -28,10 +28,10 @@ angular.module(moduleName, ['ui.router', 'ngMaterial'])
     .config(ViewHistoryRoute)
     .component('bookmark', BookmarkComponent)
     .component('channelBadge', ChannelBadgeComponent)
+    .component('viewHistory', ViewHistoryComponent)
     .controller('ChannelController', ChannelController)
     .controller('FeaturedChannelController', FeaturedChannelController)
     .controller('GameController', GameController)
-    .controller('ViewHistoryController', ViewHistoryController)
     .service('bookmarkService', BookmarkService)
     .service('channelService', ChannelService)
     .service('featuredChannelService', FeaturedChannelService)
