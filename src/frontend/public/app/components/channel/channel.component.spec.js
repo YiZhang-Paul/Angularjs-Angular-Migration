@@ -77,13 +77,13 @@ context('channel component unit test', () => {
         }));
     }));
 
-    beforeEach('general test setup', inject(($injector, $controller) => {
+    beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         $stateParams = $injector.get('$stateParams');
-        component = $controller('ChannelController');
+        component = $componentController('channel');
 
         cancelStub = stub($interval, 'cancel');
     }));

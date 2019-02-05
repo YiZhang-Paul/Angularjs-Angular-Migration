@@ -1,4 +1,4 @@
-export class ChannelController {
+export class Channel {
 
     constructor(
 
@@ -112,3 +112,9 @@ export class ChannelController {
         this.$interval.cancel(this.task);
     }
 }
+
+export const ChannelComponent = {
+
+    templateUrl: './app/components/channel/channel.html',
+    controller: Channel
+};
