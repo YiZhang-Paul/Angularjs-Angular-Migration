@@ -4,5 +4,5 @@ export const ChannelBadgeComponent = {
 
         badge: '<'
     },
-    templateUrl: './app/components/channel/channel-badge/channel-badge.html'
+    templateUrl: 'app/components/channel/channel-badge/channel-badge.html'
 };
