@@ -1,8 +1,8 @@
 import CommonModule from '../common.module';
 
-import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.stub';
-import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.stub';
+import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
+import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;

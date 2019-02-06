@@ -1,9 +1,9 @@
 import ComponentsModule from '../components.module';
 
-import { mockChannelService } from '../../../testing/stubs/channel.stub';
-import { mockGameHttpService } from '../../../testing/stubs/game-http.stub';
-import { mockViewHistoryService } from '../../../testing/stubs/view-history.stub';
-import { mockThumbnailPlayerService } from '../../../testing/stubs/thumbnail-player.stub';
+import { mockChannelService } from '../../../testing/stubs/channel.service.stub';
+import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
+import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
+import { mockThumbnailPlayerService } from '../../../testing/stubs/thumbnail-player.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;

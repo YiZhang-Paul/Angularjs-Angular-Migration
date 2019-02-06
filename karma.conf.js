@@ -36,7 +36,7 @@ module.exports = function (config) {
                             options: { esModules: true }
                         },
                         include: path.resolve('./src/frontend/public/'),
-                        exclude: /\.?specs?\.js$/
+                        exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
                     },
                     {
                         test: /\.m?js$/,

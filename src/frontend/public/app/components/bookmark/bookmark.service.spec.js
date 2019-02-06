@@ -1,7 +1,7 @@
 import ComponentsModule from '../components.module';
 
-import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.stub';
+import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
+import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;

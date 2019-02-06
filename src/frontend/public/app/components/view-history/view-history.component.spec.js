@@ -1,10 +1,10 @@
 import ComponentsModule from '../components.module';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameHttpService } from '../../../testing/stubs/game-http.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.stub';
-import { mockViewHistoryService } from '../../../testing/stubs/view-history.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.stub';
+import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
+import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
+import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;

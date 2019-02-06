@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module';
 
-import { mockGameHttpService } from '../../../testing/stubs/game-http.stub';
+import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;

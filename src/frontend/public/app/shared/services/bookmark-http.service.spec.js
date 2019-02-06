@@ -1,6 +1,6 @@
 import SharedModule from '../shared.module';
 
-import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.stub';
+import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.service.stub';
 import { hasAuthenticationToken } from '../utilities/test-verifications';
 
 const mockModule = angular.mock.module;

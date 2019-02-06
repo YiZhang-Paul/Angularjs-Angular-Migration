@@ -1,7 +1,7 @@
 import CommonModule from '../common.module';
 
 import { mockToastr } from '../../../testing/stubs/toastr.stub';
-import { mockSidebarService } from '../../../testing/stubs/sidebar.stub';
+import { mockSidebarService } from '../../../testing/stubs/sidebar.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;

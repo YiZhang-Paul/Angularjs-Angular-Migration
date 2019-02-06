@@ -1,9 +1,9 @@
 import ComponentsModule from '../components.module';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameService } from '../../../testing/stubs/game.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.stub';
+import { mockGameService } from '../../../testing/stubs/game.service.stub';
+import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;

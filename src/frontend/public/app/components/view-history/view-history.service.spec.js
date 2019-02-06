@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module';
 
-import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.stub';
+import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
 
 const mockModule = angular.mock.module;
 const spy = sinon.spy;

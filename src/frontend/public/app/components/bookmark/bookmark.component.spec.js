@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module';
 
-import { mockBookmarkService } from '../../../testing/stubs/bookmark.stub';
+import { mockBookmarkService } from '../../../testing/stubs/bookmark.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
