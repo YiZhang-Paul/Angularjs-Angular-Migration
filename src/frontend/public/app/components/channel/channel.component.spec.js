@@ -1,5 +1,10 @@
 import ComponentsModule from '../components.module';
 
+import { mockChannelService } from '../../../testing/stubs/channel.stub';
+import { mockGameHttpService } from '../../../testing/stubs/game-http.stub';
+import { mockViewHistoryService } from '../../../testing/stubs/view-history.stub';
+import { mockThumbnailPlayerService } from '../../../testing/stubs/thumbnail-player.stub';
+
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
 const sinonExpect = sinon.assert;
@@ -12,68 +17,24 @@ context('channel component unit test', () => {
     let $stateParams;
     let component;
 
-    let playStub;
-    let stopStub;
-    let getGameByNameStub;
-    let getChannelsByGameIdStub;
-    let refreshChannelsStub;
-    let isFollowedStub;
-    let followStub;
-    let unfollowStub;
-    let addHistoryStub;
-    let cancelStub;
+    let channelServiceStub;
+    let gameHttpServiceStub;
+    let viewHistoryServiceStub;
+    let thumbnailPlayerServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock thumbnail player service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        playStub = stub();
-        stopStub = stub();
+        channelServiceStub = mockChannelService(mockModule, inject);
+        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
+        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
+        thumbnailPlayerServiceStub = mockThumbnailPlayerService(mockModule);
 
-        $provide.service('thumbnailPlayerService', () => ({
-
-            play: playStub,
-            stop: stopStub
-        }));
-    }));
-
-    beforeEach('mock game http service setup', mockModule($provide => {
-
-        getGameByNameStub = stub();
-
-        $provide.service('gameHttpService', () => ({
-
-            getGameByName: getGameByNameStub
-        }));
-    }));
-
-    beforeEach('mock channel service setup', mockModule($provide => {
-
-        getChannelsByGameIdStub = stub();
-        refreshChannelsStub = stub();
-        isFollowedStub = stub();
-        followStub = stub();
-        unfollowStub = stub();
-
-        $provide.service('channelService', () => ({
-
-            getChannelsByGameId: getChannelsByGameIdStub,
-            refreshChannels: refreshChannelsStub,
-            isFollowed: isFollowedStub,
-            follow: followStub,
-            unfollow: unfollowStub
-        }));
-    }));
-
-    beforeEach('mock view history service setup', mockModule($provide => {
-
-        addHistoryStub = stub();
-
-        $provide.service('viewHistoryService', () => ({
-
-            addHistory: addHistoryStub
-        }));
-    }));
+        channelServiceStub.initializeMock();
+        gameHttpServiceStub.initializeMock();
+        viewHistoryServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
@@ -83,12 +44,12 @@ context('channel component unit test', () => {
         $stateParams = $injector.get('$stateParams');
         component = $componentController('channel');
 
-        cancelStub = stub($interval, 'cancel');
+        stub($interval, 'cancel');
     }));
 
     afterEach('general test teardown', () => {
 
-        cancelStub.restore();
+        $interval.cancel.restore();
     });
 
     it('should resolve', () => {
@@ -99,17 +60,19 @@ context('channel component unit test', () => {
     describe('$onInit()', () => {
 
         const name = 'some-game-5';
-        const game = { id: 15, name: 'some game 5' };
-        const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+        let game;
+        let channels;
 
         beforeEach('$onInit() test setup', () => {
 
+            game = { id: 15, name: 'some game 5' };
+            channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             $stateParams.name = name;
             $stateParams.game = game;
             $stateParams.channels = channels;
-            getGameByNameStub.returns($q.resolve(game));
-            getChannelsByGameIdStub.returns($q.resolve(channels));
-            refreshChannelsStub.callsFake((a, b) => a.push(...b));
+            gameHttpServiceStub.getGameByName.returns($q.resolve(game));
+            channelServiceStub.getChannelsByGameId.returns($q.resolve(channels));
+            channelServiceStub.refreshChannels.callsFake((a, b) => a.push(...b));
         });
 
         it('should load data from state parameters when both game and channels data exist', () => {
@@ -119,9 +82,9 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.notCalled(getGameByNameStub);
-            sinonExpect.notCalled(getChannelsByGameIdStub);
-            sinonExpect.notCalled(refreshChannelsStub);
+            sinonExpect.notCalled(gameHttpServiceStub.getGameByName);
+            sinonExpect.notCalled(channelServiceStub.getChannelsByGameId);
+            sinonExpect.notCalled(channelServiceStub.refreshChannels);
         });
 
         it('should fetch game and channels data from services when game data is missing from state parameters', () => {
@@ -133,11 +96,11 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(getGameByNameStub);
-            sinonExpect.calledWith(getGameByNameStub, game.name);
-            sinonExpect.calledOnce(getChannelsByGameIdStub);
-            sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
-            sinonExpect.calledOnce(refreshChannelsStub);
+            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
+            sinonExpect.calledWith(gameHttpServiceStub.getGameByName, game.name);
+            sinonExpect.calledOnce(channelServiceStub.getChannelsByGameId);
+            sinonExpect.calledWith(channelServiceStub.getChannelsByGameId, game.id);
+            sinonExpect.calledOnce(channelServiceStub.refreshChannels);
         });
 
         it('should fetch game and channels data from services when channels data is missing from state parameters', () => {
@@ -149,11 +112,11 @@ context('channel component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(getGameByNameStub);
-            sinonExpect.calledWith(getGameByNameStub, game.name);
-            sinonExpect.calledOnce(getChannelsByGameIdStub);
-            sinonExpect.calledWith(getChannelsByGameIdStub, game.id);
-            sinonExpect.calledOnce(refreshChannelsStub);
+            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
+            sinonExpect.calledWith(gameHttpServiceStub.getGameByName, game.name);
+            sinonExpect.calledOnce(channelServiceStub.getChannelsByGameId);
+            sinonExpect.calledWith(channelServiceStub.getChannelsByGameId, game.id);
+            sinonExpect.calledOnce(channelServiceStub.refreshChannels);
         });
 
         it('should load channels every 10 seconds', () => {
@@ -164,49 +127,49 @@ context('channel component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to load channels
-            getChannelsByGameIdStub.resetHistory();
-            refreshChannelsStub.resetHistory();
+            channelServiceStub.getChannelsByGameId.resetHistory();
+            channelServiceStub.refreshChannels.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(getChannelsByGameIdStub, expected);
-            sinonExpect.callCount(refreshChannelsStub, expected);
+            sinonExpect.callCount(channelServiceStub.getChannelsByGameId, expected);
+            sinonExpect.callCount(channelServiceStub.refreshChannels, expected);
         });
 
         it('should not load channel data when game data is not found', () => {
 
             $stateParams.game = null;
             $stateParams.channels = null;
-            getGameByNameStub.returns($q.resolve(null));
+            gameHttpServiceStub.getGameByName.returns($q.resolve(null));
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGameByNameStub);
-            sinonExpect.notCalled(getChannelsByGameIdStub);
+            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
+            sinonExpect.notCalled(channelServiceStub.getChannelsByGameId);
         });
 
         it('should not throw error when failed to fetch game data from service', () => {
 
             $stateParams.game = null;
             $stateParams.channels = null;
-            getGameByNameStub.returns($q.reject(new Error()));
+            gameHttpServiceStub.getGameByName.returns($q.reject(new Error()));
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getGameByNameStub);
+            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
         });
 
         it('should not throw error when failed to fetch channel data from service', () => {
 
             $stateParams.game = null;
             $stateParams.channels = null;
-            getChannelsByGameIdStub.returns($q.reject(new Error()));
+            channelServiceStub.getChannelsByGameId.returns($q.reject(new Error()));
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getChannelsByGameIdStub);
+            sinonExpect.calledOnce(channelServiceStub.getChannelsByGameId);
         });
     });
 
@@ -220,8 +183,8 @@ context('channel component unit test', () => {
             component.$onDestroy();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(cancelStub);
-            sinonExpect.calledWith(cancelStub, expected);
+            sinonExpect.calledOnce($interval.cancel);
+            sinonExpect.calledWith($interval.cancel, expected);
         });
     });
 
@@ -234,8 +197,8 @@ context('channel component unit test', () => {
             component.playThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(playStub);
-            sinonExpect.calledWith(playStub, thumbnail);
+            sinonExpect.calledOnce(thumbnailPlayerServiceStub.play);
+            sinonExpect.calledWith(thumbnailPlayerServiceStub.play, thumbnail);
         });
     });
 
@@ -248,8 +211,8 @@ context('channel component unit test', () => {
             component.stopThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(stopStub);
-            sinonExpect.calledWith(stopStub, thumbnail);
+            sinonExpect.calledOnce(thumbnailPlayerServiceStub.stop);
+            sinonExpect.calledWith(thumbnailPlayerServiceStub.stop, thumbnail);
         });
     });
 
@@ -258,14 +221,13 @@ context('channel component unit test', () => {
         it('should use channel service to check channel status', () => {
 
             const channel = { channel_id: 5 };
-            isFollowedStub.returns(true);
 
             const result = component.isFollowed(channel);
             $rootScope.$apply();
 
             expect(result).to.be.true;
-            sinonExpect.calledOnce(isFollowedStub);
-            sinonExpect.calledWith(isFollowedStub, channel);
+            sinonExpect.calledOnce(channelServiceStub.isFollowed);
+            sinonExpect.calledWith(channelServiceStub.isFollowed, channel);
         });
     });
 
@@ -274,13 +236,12 @@ context('channel component unit test', () => {
         it('should use channel service to follow channel', () => {
 
             const channel = { channel_id: 5 };
-            followStub.returns($q.resolve({}));
 
             component.follow(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(followStub);
-            sinonExpect.calledWith(followStub, channel);
+            sinonExpect.calledOnce(channelServiceStub.follow);
+            sinonExpect.calledWith(channelServiceStub.follow, channel);
         });
     });
 
@@ -289,13 +250,12 @@ context('channel component unit test', () => {
         it('should use channel service to unfollow channel', () => {
 
             const channel = { channel_id: 5 };
-            unfollowStub.returns($q.resolve({}));
 
             component.unfollow(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(unfollowStub);
-            sinonExpect.calledWith(unfollowStub, channel);
+            sinonExpect.calledOnce(channelServiceStub.unfollow);
+            sinonExpect.calledWith(channelServiceStub.unfollow, channel);
         });
     });
 
@@ -304,13 +264,12 @@ context('channel component unit test', () => {
         it('should use view history service to add view history', () => {
 
             const channel = { channel_id: 5 };
-            addHistoryStub.returns($q.resolve({}));
 
             component.addHistory(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(addHistoryStub);
-            sinonExpect.calledWith(addHistoryStub, channel);
+            sinonExpect.calledOnce(viewHistoryServiceStub.addHistory);
+            sinonExpect.calledWith(viewHistoryServiceStub.addHistory, channel);
         });
     });
 });
