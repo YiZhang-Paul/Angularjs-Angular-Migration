@@ -41,7 +41,12 @@ context('generic utility service unit test', () => {
 
     describe('excludeIndex()', () => {
 
-        const collection = [1, 2, 3, 4, 5];
+        let collection;
+
+        beforeEach('excludeIndex() test setup', () => {
+
+            collection = [1, 2, 3, 4, 5];
+        });
 
         it('should throw error when given index is smaller than 0', () => {
 
@@ -76,7 +81,12 @@ context('generic utility service unit test', () => {
 
     describe('hasMatchingValues()', () => {
 
-        const keys = ['key_1', 'key_2', 'key_3'];
+        let keys;
+
+        beforeEach('hasMatchingValues() test setup', () => {
+
+            keys = ['key_1', 'key_2', 'key_3'];
+        });
 
         it('should return true when value for every key matches', () => {
 
@@ -101,7 +111,12 @@ context('generic utility service unit test', () => {
 
     describe('hasOwnProperties()', () => {
 
-        const keys = ['key_1', 'key_2'];
+        let keys;
+
+        beforeEach('hasOwnProperties() test setup', () => {
+
+            keys = ['key_1', 'key_2'];
+        });
 
         it('should return true when all keys exist on object', () => {
 
@@ -124,8 +139,14 @@ context('generic utility service unit test', () => {
 
     describe('findByProperties()', () => {
 
-        const objects = [{ id: 1, age: 5, time: 2 }, { id: 3, age: 8, time: 5 }];
-        const object = { id: 1, age: 5, time: 110 };
+        let object;
+        let objects;
+
+        beforeEach('findByProperties() test setup', () => {
+
+            object = { id: 1, age: 5, time: 110 };
+            objects = [{ id: 1, age: 5, time: 2 }, { id: 3, age: 8, time: 5 }];
+        });
 
         it('should return object that matches values of all keys', () => {
 

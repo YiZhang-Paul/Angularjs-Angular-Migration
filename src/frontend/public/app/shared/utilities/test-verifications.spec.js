@@ -5,7 +5,12 @@ context('test verifications utilities unit test', () => {
     describe('hasMatchingValue()', () => {
 
         const key = 'given_key';
-        const object = { [key]: 2 };
+        let object;
+
+        beforeEach('hasMatchingValue() test setup', () => {
+
+            object = { [key]: 2 };
+        });
 
         it('should return true when value of given key matches at least one other object', () => {
 

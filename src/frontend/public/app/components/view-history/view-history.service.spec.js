@@ -34,10 +34,13 @@ context('view history service unit test', () => {
         spy($mdDialog, 'confirm');
         stub($mdDialog, 'show');
         stub($rootScope, '$broadcast').callThrough();
-        // clear $locationChangeStart and $locationChangeSuccess broadcast
+    }));
+
+    beforeEach('clear $locationChangeStart and $locationChangeSuccess broadcast', () => {
+
         $rootScope.$apply();
         $rootScope.$broadcast.resetHistory();
-    }));
+    });
 
     afterEach('general test teardown', () => {
 
@@ -107,6 +110,7 @@ context('view history service unit test', () => {
 
             service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = service.histories.slice();
+            viewHistoryHttpServiceStub.getHistories.returns($q.resolve([]));
 
             service.cacheHistories();
             $rootScope.$apply();

@@ -10,11 +10,11 @@ export function mockGenericUtilityService(module) {
         $provide.service(name, () => mock);
     });
 
-    mock.joinText = stub();
-    mock.excludeIndex = stub();
-    mock.hasMatchingValues = stub();
-    mock.hasOwnProperties = stub();
-    mock.findByProperties = stub();
+    mock.joinText = stub().returns('');
+    mock.excludeIndex = stub().returns([]);
+    mock.hasMatchingValues = stub().returns(true);
+    mock.hasOwnProperties = stub().returns(true);
+    mock.findByProperties = stub().returns({});
 
     return mock;
 }

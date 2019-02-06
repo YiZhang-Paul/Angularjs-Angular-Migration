@@ -34,10 +34,13 @@ context('bookmark service unit test', () => {
         service = $injector.get('bookmarkService');
 
         stub($rootScope, '$broadcast').callThrough();
-        // clear $locationChangeStart and $locationChangeSuccess broadcast
+    }));
+
+    beforeEach('clear $locationChangeStart and $locationChangeSuccess broadcast', () => {
+
         $rootScope.$apply();
         $rootScope.$broadcast.resetHistory();
-    }));
+    });
 
     afterEach('general test teardown', () => {
 
@@ -74,6 +77,8 @@ context('bookmark service unit test', () => {
         });
 
         it('should return empty collection when no bookmark found', () => {
+
+            bookmarkHttpServiceStub.getBookmarks.returns($q.resolve([]));
 
             service.getBookmarks().then(result => {
 
@@ -258,7 +263,6 @@ context('bookmark service unit test', () => {
 
         beforeEach('unfollow() test setup', () => {
 
-            genericUtilityServiceStub.hasOwnProperties.returns(true);
             genericUtilityServiceStub.findByProperties.returns({ id: 0 });
         });
 

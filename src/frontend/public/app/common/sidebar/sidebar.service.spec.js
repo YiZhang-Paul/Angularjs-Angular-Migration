@@ -67,6 +67,8 @@ context('sidebar service unit test', () => {
 
         it('should return empty collection when no bookmark found', () => {
 
+            bookmarkHttpServiceStub.getBookmarks.returns($q.resolve([]));
+
             service.getBookmarks().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
@@ -142,6 +144,8 @@ context('sidebar service unit test', () => {
 
         it('should return empty collection when no channel found', () => {
 
+            channelHttpServiceStub.getChannels.returns($q.resolve([]));
+
             service.getFeaturedChannels().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
@@ -189,6 +193,8 @@ context('sidebar service unit test', () => {
         });
 
         it('should return empty collection when no view history found', () => {
+
+            viewHistoryHttpServiceStub.getHistories.returns($q.resolve([]));
 
             service.getHistories().then(result => {
 

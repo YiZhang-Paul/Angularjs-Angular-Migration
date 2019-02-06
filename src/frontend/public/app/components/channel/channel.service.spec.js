@@ -53,6 +53,8 @@ context('channel service unit test', () => {
 
         it('should return empty collection when no channel is found', () => {
 
+            channelHttpServiceStub.getChannelsByGameId.returns($q.resolve([]));
+
             service.getChannelsByGameId(id).then(result => {
 
                 expect(Array.isArray(result)).to.be.true;

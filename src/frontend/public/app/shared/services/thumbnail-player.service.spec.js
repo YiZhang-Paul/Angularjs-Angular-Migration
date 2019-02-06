@@ -6,7 +6,7 @@ const sinonExpect = sinon.assert;
 
 context('thumbnail player service unit test', () => {
 
-    let thumbnailPlayerService;
+    let service;
 
     let domElementStub;
 
@@ -24,19 +24,19 @@ context('thumbnail player service unit test', () => {
 
     beforeEach('general test setup', inject($injector => {
 
-        thumbnailPlayerService = $injector.get('thumbnailPlayerService');
+        service = $injector.get('thumbnailPlayerService');
     }));
 
     it('should resolve', () => {
 
-        expect(thumbnailPlayerService).is.not.null;
+        expect(service).is.not.null;
     });
 
     describe('play()', () => {
 
         it('should play thumbnail', () => {
 
-            thumbnailPlayerService.play({ srcElement: domElementStub });
+            service.play({ srcElement: domElementStub });
 
             sinonExpect.calledOnce(domElementStub.play);
         });
@@ -46,14 +46,14 @@ context('thumbnail player service unit test', () => {
 
         it('should stop thumbnail', () => {
 
-            thumbnailPlayerService.stop({ srcElement: domElementStub });
+            service.stop({ srcElement: domElementStub });
 
             sinonExpect.calledOnce(domElementStub.pause);
         });
 
         it('should set current play time to 0', () => {
 
-            thumbnailPlayerService.stop({ srcElement: domElementStub });
+            service.stop({ srcElement: domElementStub });
 
             expect(domElementStub.currentTime).to.equal(0);
         });

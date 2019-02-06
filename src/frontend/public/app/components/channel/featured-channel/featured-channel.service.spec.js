@@ -60,6 +60,8 @@ context('featured channel service unit test', () => {
 
         it('should return empty collection when no channel found', () => {
 
+            channelHttpServiceStub.getChannels.returns($q.resolve([]));
+
             service.getFeaturedChannels().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
