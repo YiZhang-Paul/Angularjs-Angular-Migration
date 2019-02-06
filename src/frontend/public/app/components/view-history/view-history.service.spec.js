@@ -1,5 +1,7 @@
 import ComponentsModule from '../components.module';
 
+import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.stub';
+
 const mockModule = angular.mock.module;
 const spy = sinon.spy;
 const stub = sinon.stub;
@@ -8,55 +10,40 @@ const sinonExpect = sinon.assert;
 context('view history service unit test', () => {
 
     let $q;
+    let $mdDialog;
     let $rootScope;
     let service;
 
-    let getHistoriesStub;
-    let addHistoryStub;
-    let deleteHistoryStub;
-    let deleteHistoriesStub;
-    let confirmSpy;
-    let showStub;
-    let $broadcastStub;
+    let viewHistoryHttpServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock view history http service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        getHistoriesStub = stub();
-        addHistoryStub = stub();
-        deleteHistoryStub = stub();
-        deleteHistoriesStub = stub();
-
-        $provide.service('viewHistoryHttpService', () => ({
-
-            getHistories: getHistoriesStub,
-            addHistory: addHistoryStub,
-            deleteHistory: deleteHistoryStub,
-            deleteHistories: deleteHistoriesStub
-        }));
-    }));
-
-    beforeEach('mock $mdDialog setup', inject($injector => {
-
-        const $mdDialog = $injector.get('$mdDialog');
-        confirmSpy = spy($mdDialog, 'confirm');
-        showStub = stub($mdDialog, 'show');
-    }));
+        viewHistoryHttpServiceStub = mockViewHistoryHttpService(mockModule, inject);
+        viewHistoryHttpServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject($injector => {
 
         $q = $injector.get('$q');
+        $mdDialog = $injector.get('$mdDialog');
         $rootScope = $injector.get('$rootScope');
         service = $injector.get('viewHistoryService');
 
-        $broadcastStub = stub($rootScope, '$broadcast').callThrough();
+        spy($mdDialog, 'confirm');
+        stub($mdDialog, 'show');
+        stub($rootScope, '$broadcast').callThrough();
+        // clear $locationChangeStart and $locationChangeSuccess broadcast
+        $rootScope.$apply();
+        $rootScope.$broadcast.resetHistory();
     }));
 
     afterEach('general test teardown', () => {
 
-        $broadcastStub.restore();
-        confirmSpy.restore();
+        $mdDialog.confirm.restore();
+        $mdDialog.show.restore();
+        $rootScope.$broadcast.restore();
     });
 
     it('should resolve', () => {
@@ -68,18 +55,16 @@ context('view history service unit test', () => {
 
         it('should use view history http service to get view histories', () => {
 
-            getHistoriesStub.returns($q.resolve([]));
-
             service.getHistories();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.getHistories);
         });
 
         it('should return view histories found', () => {
 
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getHistoriesStub.returns($q.resolve(expected));
+            viewHistoryHttpServiceStub.getHistories.returns($q.resolve(expected));
 
             service.getHistories().then(result => {
 
@@ -92,7 +77,7 @@ context('view history service unit test', () => {
 
         it('should return empty collection when failed to get view histories', () => {
 
-            getHistoriesStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.getHistories.returns($q.reject(new Error()));
 
             service.getHistories().then(result => {
 
@@ -109,52 +94,48 @@ context('view history service unit test', () => {
         it('should cache view histories', () => {
 
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getHistoriesStub.returns($q.resolve(expected));
+            viewHistoryHttpServiceStub.getHistories.returns($q.resolve(expected));
 
             service.cacheHistories();
             $rootScope.$apply();
 
             expect(service.histories).to.deep.equal(expected);
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.getHistories);
         });
 
         it('should not overwrite cache when no view history found', () => {
 
             service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = service.histories.slice();
-            getHistoriesStub.returns($q.resolve([]));
 
             service.cacheHistories();
             $rootScope.$apply();
 
             expect(service.histories).to.deep.equal(expected);
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.getHistories);
         });
 
         it('should not overwrite cache when failed to get view histories', () => {
 
             service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = service.histories.slice();
-            getHistoriesStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.getHistories.returns($q.reject(new Error()));
 
             service.cacheHistories();
             $rootScope.$apply();
 
             expect(service.histories).to.deep.equal(expected);
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.getHistories);
         });
     });
 
     describe('addHistory()', () => {
 
-        const channel = { id: 5 };
-        // TODO: move to top
+        let channel;
+
         beforeEach('addHistory() test setup', () => {
-            // clear $locationChangeStart and $locationChangeSuccess broadcast
-            $rootScope.$apply();
-            $broadcastStub.resetHistory();
-            addHistoryStub.returns($q.resolve({}));
-            getHistoriesStub.returns($q.resolve([]));
+
+            channel = { id: 5 };
         });
 
         it('should use view history http service to add history', () => {
@@ -162,8 +143,8 @@ context('view history service unit test', () => {
             service.addHistory(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(addHistoryStub);
-            sinonExpect.calledWith(addHistoryStub, channel);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.addHistory);
+            sinonExpect.calledWith(viewHistoryHttpServiceStub.addHistory, channel);
         });
 
         it('should cache view histories on success', () => {
@@ -171,7 +152,7 @@ context('view history service unit test', () => {
             service.addHistory(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.getHistories);
         });
 
         it('should raise event when successfully added history', () => {
@@ -179,33 +160,33 @@ context('view history service unit test', () => {
             service.addHistory(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce($broadcastStub);
-            sinonExpect.calledWith($broadcastStub, 'historyUpdated');
+            sinonExpect.calledOnce($rootScope.$broadcast);
+            sinonExpect.calledWith($rootScope.$broadcast, 'historyUpdated');
         });
 
         it('should not cache view histories on failure', () => {
 
-            addHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.addHistory.returns($q.reject(new Error()));
 
             service.addHistory(channel);
             $rootScope.$apply();
 
-            sinonExpect.notCalled(getHistoriesStub);
+            sinonExpect.notCalled(viewHistoryHttpServiceStub.getHistories);
         });
 
         it('should not raise event when failed to add history', () => {
 
-            addHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.addHistory.returns($q.reject(new Error()));
 
             service.addHistory(channel).catch(() => null);
             $rootScope.$apply();
 
-            sinonExpect.notCalled($broadcastStub);
+            sinonExpect.notCalled($rootScope.$broadcast);
         });
 
         it('should not throw error when failed to add history', () => {
 
-            addHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.addHistory.returns($q.reject(new Error()));
 
             service.addHistory(channel);
             $rootScope.$apply();
@@ -216,20 +197,13 @@ context('view history service unit test', () => {
 
         const id = 102;
 
-        beforeEach('deleteHistory() test setup', () => {
-            // clear $locationChangeStart and $locationChangeSuccess broadcast
-            $rootScope.$apply();
-            $broadcastStub.resetHistory();
-            deleteHistoryStub.returns($q.resolve({}));
-        });
-
         it('should use view history http service to delete view history', () => {
 
             service.deleteHistory(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(deleteHistoryStub);
-            sinonExpect.calledWith(deleteHistoryStub, id);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.deleteHistory);
+            sinonExpect.calledWith(viewHistoryHttpServiceStub.deleteHistory, id);
         });
 
         it('should remove cached view history on success', () => {
@@ -249,13 +223,13 @@ context('view history service unit test', () => {
             service.deleteHistory(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce($broadcastStub);
-            sinonExpect.calledWith($broadcastStub, 'historyRemoved');
+            sinonExpect.calledOnce($rootScope.$broadcast);
+            sinonExpect.calledWith($rootScope.$broadcast, 'historyRemoved');
         });
 
         it('should not remove cached view history on failure', () => {
 
-            deleteHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistory.returns($q.reject(new Error()));
             service.histories = [{ id: 1 }, { id: 2 }, { id }];
             const expected = service.histories.slice();
 
@@ -268,17 +242,17 @@ context('view history service unit test', () => {
 
         it('should not raise event when failed to delete view history', () => {
 
-            deleteHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistory.returns($q.reject(new Error()));
 
             service.deleteHistory(id);
             $rootScope.$apply();
 
-            sinonExpect.notCalled($broadcastStub);
+            sinonExpect.notCalled($rootScope.$broadcast);
         });
 
         it('should not throw error when failed to delete view history', () => {
 
-            deleteHistoryStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistory.returns($q.reject(new Error()));
 
             service.deleteHistory(id);
             $rootScope.$apply();
@@ -292,8 +266,8 @@ context('view history service unit test', () => {
             service.showClearHistoriesDialog({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(confirmSpy);
-            sinonExpect.calledOnce(showStub);
+            sinonExpect.calledOnce($mdDialog.confirm);
+            sinonExpect.calledOnce($mdDialog.show);
         });
 
         it('should bind confirmation dialog to correct event', () => {
@@ -303,7 +277,7 @@ context('view history service unit test', () => {
             service.showClearHistoriesDialog(expected);
             $rootScope.$apply();
 
-            const result = showStub.args[0][0]._options.targetEvent;
+            const result = $mdDialog.show.args[0][0]._options.targetEvent;
 
             expect(result).to.deep.equal(expected);
         });
@@ -311,19 +285,12 @@ context('view history service unit test', () => {
 
     describe('clearHistories()', () => {
 
-        beforeEach('clearHistories() test setup', () => {
-            // clear $locationChangeStart and $locationChangeSuccess broadcast
-            $rootScope.$apply();
-            $broadcastStub.resetHistory();
-            deleteHistoriesStub.returns($q.resolve({}));
-        });
-
         it('should use view history http service to delete view histories', () => {
 
             service.clearHistories();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(deleteHistoriesStub);
+            sinonExpect.calledOnce(viewHistoryHttpServiceStub.deleteHistories);
         });
 
         it('should clear cache on success', () => {
@@ -342,15 +309,15 @@ context('view history service unit test', () => {
             service.clearHistories();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce($broadcastStub);
-            sinonExpect.calledWith($broadcastStub, 'historyCleared');
+            sinonExpect.calledOnce($rootScope.$broadcast);
+            sinonExpect.calledWith($rootScope.$broadcast, 'historyCleared');
         });
 
         it('should not clear cache on failure', () => {
 
             service.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = service.histories.slice();
-            deleteHistoriesStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistories.returns($q.reject(new Error()));
 
             service.clearHistories();
             $rootScope.$apply();
@@ -361,17 +328,17 @@ context('view history service unit test', () => {
 
         it('should not raise event on failure', () => {
 
-            deleteHistoriesStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistories.returns($q.reject(new Error()));
 
             service.clearHistories();
             $rootScope.$apply();
 
-            sinonExpect.notCalled($broadcastStub);
+            sinonExpect.notCalled($rootScope.$broadcast);
         });
 
         it('should not throw error when failed to delete histories', () => {
 
-            deleteHistoriesStub.returns($q.reject(new Error()));
+            viewHistoryHttpServiceStub.deleteHistories.returns($q.reject(new Error()));
 
             service.clearHistories();
             $rootScope.$apply();
