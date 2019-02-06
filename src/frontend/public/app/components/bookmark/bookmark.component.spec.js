@@ -1,7 +1,8 @@
 import ComponentsModule from '../components.module';
 
+import { mockBookmarkService } from '../../../testing/stubs/bookmark.stub';
+
 const mockModule = angular.mock.module;
-const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('bookmark component unit test', () => {
@@ -10,22 +11,16 @@ context('bookmark component unit test', () => {
     let $rootScope;
     let component;
 
-    let cacheBookmarksStub;
-    let unfollowStub;
+    let bookmarkServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock bookmark service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        cacheBookmarksStub = stub();
-        unfollowStub = stub();
+        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
 
-        $provide.service('bookmarkService', () => ({
-
-            cacheBookmarks: cacheBookmarksStub,
-            unfollow: unfollowStub
-        }));
-    }));
+        bookmarkServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
@@ -54,12 +49,10 @@ context('bookmark component unit test', () => {
 
         it('should use bookmark service to cache bookmarks on initialization', () => {
 
-            cacheBookmarksStub.returns($q.resolve({}));
-
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(cacheBookmarksStub);
+            sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
         });
     });
 
@@ -68,23 +61,22 @@ context('bookmark component unit test', () => {
         it('should use bookmark service to delete bookmark', () => {
 
             const expected = { id: 5 };
-            unfollowStub.returns($q.resolve({}));
 
             component.unfollow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(unfollowStub);
-            sinonExpect.calledWith(unfollowStub, expected);
+            sinonExpect.calledOnce(bookmarkServiceStub.unfollow);
+            sinonExpect.calledWith(bookmarkServiceStub.unfollow, expected);
         });
 
         it('should not throw error when failed to delete bookmark', () => {
 
-            unfollowStub.returns($q.reject(new Error()));
+            bookmarkServiceStub.unfollow.returns($q.reject(new Error()));
 
             component.unfollow({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(unfollowStub);
+            sinonExpect.calledOnce(bookmarkServiceStub.unfollow);
         });
     });
 });
