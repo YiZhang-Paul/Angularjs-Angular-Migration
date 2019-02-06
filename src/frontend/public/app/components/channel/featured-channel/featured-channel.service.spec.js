@@ -1,7 +1,8 @@
 import ComponentsModule from '../../components.module';
 
+import { mockChannelHttpService } from '../../../../testing/stubs/channel-http.stub';
+
 const mockModule = angular.mock.module;
-const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('featured channel service unit test', () => {
@@ -10,19 +11,16 @@ context('featured channel service unit test', () => {
     let $rootScope;
     let service;
 
-    let getChannelsStub;
+    let channelHttpServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock channel http service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        getChannelsStub = stub();
+        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
 
-        $provide.service('channelHttpService', () => ({
-
-            getChannels: getChannelsStub
-        }));
-    }));
+        channelHttpServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject($injector => {
 
@@ -40,18 +38,16 @@ context('featured channel service unit test', () => {
 
         it('should use channel http service to fetch data', () => {
 
-            getChannelsStub.returns($q.resolve([]));
-
             service.getFeaturedChannels();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getChannelsStub);
+            sinonExpect.calledOnce(channelHttpServiceStub.getChannels);
         });
 
         it('should return channels found', () => {
 
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            getChannelsStub.returns($q.resolve(expected));
+            channelHttpServiceStub.getChannels.returns($q.resolve(expected));
 
             service.getFeaturedChannels().then(result => {
 
@@ -64,8 +60,6 @@ context('featured channel service unit test', () => {
 
         it('should return empty collection when no channel found', () => {
 
-            getChannelsStub.returns($q.resolve([]));
-
             service.getFeaturedChannels().then(result => {
 
                 expect(Array.isArray(result)).to.be.true;
@@ -77,7 +71,7 @@ context('featured channel service unit test', () => {
 
         it('should return empty collection when failed to retrieve channels', () => {
 
-            getChannelsStub.returns($q.reject(new Error()));
+            channelHttpServiceStub.getChannels.returns($q.reject(new Error()));
 
             service.getFeaturedChannels().then(result => {
 
