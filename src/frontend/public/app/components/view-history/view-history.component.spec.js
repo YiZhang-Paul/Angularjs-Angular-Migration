@@ -11,9 +11,13 @@ const sinonExpect = sinon.assert;
 
 context('view history component unit test', () => {
 
+    const tag = '<view-history></view-history>';
+
     let $q;
+    let $compile;
     let $rootScope;
     let component;
+    let componentElement;
 
     let $stateStub;
     let gameHttpServiceStub;
@@ -22,6 +26,7 @@ context('view history component unit test', () => {
     let genericUtilityServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
+    beforeEach(mockModule('component-templates'));
 
     beforeEach('mocks setup', () => {
 
@@ -39,13 +44,18 @@ context('view history component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
         component = $componentController('viewHistory');
     }));
 
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {

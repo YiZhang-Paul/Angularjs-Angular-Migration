@@ -5,7 +5,7 @@ import { mockGameHttpService } from '../../../testing/stubs/game-http.service.st
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
 
-context('game service unit test', () => {
+context('game list service unit test', () => {
 
     let $q;
     let $rootScope;
@@ -26,7 +26,7 @@ context('game service unit test', () => {
 
         $q = $injector.get('$q');
         $rootScope = $injector.get('$rootScope');
-        service = $injector.get('gameService');
+        service = $injector.get('gameListService');
     }));
 
     it('should resolve', () => {

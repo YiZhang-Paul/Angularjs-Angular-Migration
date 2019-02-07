@@ -8,14 +8,19 @@ const sinonExpect = sinon.assert;
 
 context('sidebar component unit test', () => {
 
+    const tag = '<sidebar></sidebar>';
+
     let $q;
+    let $compile;
     let $rootScope;
     let component;
+    let componentElement;
 
     let toastrStub;
     let sidebarServiceStub;
 
     beforeEach(mockModule(CommonModule));
+    beforeEach(mockModule('component-templates'));
 
     beforeEach('mocks setup', () => {
 
@@ -28,13 +33,18 @@ context('sidebar component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
         component = $componentController('sidebar');
     }));
 
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {

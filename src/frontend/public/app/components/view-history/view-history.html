@@ -1,167 +1,64 @@
 <style>
-    .main-content.history-panel {
-        display: block;
-    }
 
-    .history-card {
-        font-weight: 400;
-        position: relative;
-        margin: 1vw;
-        margin-left: 10vw;
-        margin-right: 20vw;
-        background-color: rgba(240, 248, 255, 0.034);
-        height: 20vh;
-        overflow: hidden;
-        -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
-        -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
-        box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
-        border-radius: 6px;
-    }
+.view-history-container {
 
-    .history-thumbnail, .history-avatar {
+    padding: 10vh 0 0 1.5vw;
+}
 
-        background-repeat: no-repeat;
-        border-radius: 15px;
-    }
+.view-history-container .clear-view-history-button {
 
-    .history-thumbnail {
+    top: 4vh;
+    left: 13.5%;
+    width: 15%;
+    height: 4vh;
+    position: absolute;
+    line-height: 4vh;
+    text-align: center;
+    background-color: tomato;
+    border: 2px solid gold;
+    border-radius: 7px;
+}
 
-        background-size: cover;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 30%;
-        height: 100%;
-        object-fit: cover;
-    }
+.view-history-container .clear-view-history-button:hover {
 
-    .history-avatar {
-        background-size: cover;
-        position: absolute;
-        left: 32%;
-        top: 18px;
-        width: 4vw;
-        height: 4vw;
-    }
+    cursor: pointer;
+    background-color: rgb(168, 0, 0);
+    border: 2px solid gold;
+}
 
-    .history-details {
-        position: absolute;
-        left: 42%;
-        top: 18px;
-        width: 30vw;
-        height: 4vw;
-    }
+.view-history-container .clear-view-history-button:active {
 
-    .title {
+    background-color: rgb(196, 31, 31);
+    border: 2px solid gold;
+}
 
-        font-weight: 700;
-        font-size: 1.6em;
-    }
+.view-history-container .empty-view-history-message {
 
-    .streamer {
+    top: 50%;
+    left: 4%;
+    position: absolute;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+}
 
-        font-size: 1.15em;
-        font-weight: 600;
-        color: tomato;
-    }
-
-    .game-title {
-
-        text-decoration: underline;
-        font-size: 1.4em;
-        font-weight: 500;
-        color: rgb(77, 77, 77);
-    }
-
-    .game-title:hover {
-        cursor: pointer;
-        color: rgb(25, 151, 201);
-    }
-
-    .remove-history-icon {
-
-        background-image: url(https://cdn1.iconfinder.com/data/icons/perfect-flat-icons-2/512/Erase-2.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        position: absolute;
-        width: 3.5vh;
-        height: 3.5vh;
-        right: 32px;
-        bottom: 20px;
-        border: 4px solid white;
-    }
-
-    .remove-history-icon:hover {
-
-        -webkit-box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
-        -moz-box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
-        box-shadow: 0px -1px 72px 1px rgba(255,138,255,1);
-    }
-
-    .remove-history-icon:active {
-
-        -webkit-box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
-        -moz-box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
-        box-shadow: 0px -1px 81px 6px rgba(247,46,107,1);
-    }
-
-    .delete-all {
-
-        border: 2px solid gold;
-        position: absolute;
-        width: 15%;
-        height: 4vh;
-        top: 4vh;
-        left: 13.5%;
-        background-color: tomato;
-        border-radius: 7px;
-        text-align: center;
-        line-height: 4vh;
-    }
-
-    .delete-all:hover {
-
-        cursor: pointer;
-        border: 2px solid gold;
-        background-color: rgb(168, 0, 0);
-    }
-
-    .delete-all:active {
-
-        border: 2px solid gold;
-        background-color: rgb(196, 31, 31);
-    }
-
-    .empty-history-message {
-        display: block;
-        position: absolute;
-        font-weight: 600;
-        font-size: 1.2em;
-        left: 4%;
-        top: 50%;
-    }
 </style>
 
-<div class="container" position="relative" width="100%" height="100%">
-    <div class="top-nav">
-        <top-navbar></top-navbar>
+<div class="view-history-container non-selectable">
+    <div class="clear-view-history-button"
+        ng-show="$ctrl.histories.length"
+        ng-click="$ctrl.confirmClearHistories($event)">Clear History
     </div>
-    <div position="relative" width="100%" height="100%">
-        <sidebar class="side-bar" hide-options="['View History']"></sidebar>
-        <div class="main-content history-panel" ng-controller="ViewHistoryController as $ctrl">
-            <div class="delete-all non-selectable" ng-show="$ctrl.histories.length" ng-click="$ctrl.confirmClearHistories($event)">Clear History</div>
-            <span class="empty-history-message" ng-hide="$ctrl.histories.length">This place is so quiet...</span>
-            <div class="history-card" ng-repeat="history in $ctrl.histories">
-                <div ng-show="$ctrl.isStaticImage(history.thumbnail)" class="history-thumbnail" ng-style="history.thumbnail && { 'background-image': 'url(' + history.thumbnail + ')' }"></div>
-                <video ng-show="!$ctrl.isStaticImage(history.thumbnail)" class="history-thumbnail" ng-src="{{ history.thumbnail }}" type="video/mp4"></video>
-                <div class="history-avatar" ng-style="history.image && { 'background-image': 'url(' + history.image + ')' }"></div>
-                <div class="history-details">
-                    <span class="title">{{ history.title }}</span></br></br>
-                    <span class="streamer">{{ history.streamer_name }}</span> was playing:
-                    <span class="game-title" ng-click="$ctrl.toChannelsView(history.game_id)">{{ history.game_name | capitalize }}</span>
-                </div>
-                <div class="remove-history-icon" ng-click="$ctrl.deleteHistory(history)"></div>
-            </div>
-        </div>
-    </div>
+
+    <span class="empty-view-history-message"
+        ng-hide="$ctrl.histories.length">This place is so quiet...
+    </span>
+
+    <view-history-card
+        ng-repeat="history in $ctrl.histories"
+        is-static-thumbnail="$ctrl.isStaticImage(history.thumbnail)"
+        on-channel-navigation="$ctrl.toChannelsView(history.game_id)"
+        on-delete="$ctrl.deleteHistory(history)"
+        view-history="history">
+    </view-history-card>
 </div>

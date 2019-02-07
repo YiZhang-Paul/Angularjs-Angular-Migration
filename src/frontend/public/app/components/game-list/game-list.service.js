@@ -1,4 +1,4 @@
-export class GameService {
+export class GameListService {
 
     constructor(gameHttpService) {
         'ngInject';

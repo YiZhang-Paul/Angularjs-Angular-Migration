@@ -87,6 +87,6 @@ export const SidebarComponent = {
 
         hideOptions: '<'
     },
-    templateUrl: './app/common/sidebar/sidebar.html',
+    templateUrl: 'app/common/sidebar/sidebar.html',
     controller: Sidebar
 };

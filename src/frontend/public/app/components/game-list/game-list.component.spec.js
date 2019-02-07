@@ -1,7 +1,7 @@
 import ComponentsModule from '../components.module';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameService } from '../../../testing/stubs/game.service.stub';
+import { mockGameListService } from '../../../testing/stubs/game-list.service.stub';
 import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
 import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 
@@ -9,24 +9,29 @@ const mockModule = angular.mock.module;
 const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
-context('game component unit test', () => {
+context('game list component unit test', () => {
+
+    const tag = '<game-list></game-list>';
 
     let $q;
+    let $compile;
     let $interval;
     let $rootScope;
     let component;
+    let componentElement;
 
     let $stateStub;
-    let gameServiceStub;
+    let gameListServiceStub;
     let channelHttpServiceStub;
     let genericUtilityServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
+    beforeEach(mockModule('component-templates'));
 
     beforeEach('mocks setup', () => {
 
         $stateStub = mock$state(mockModule);
-        gameServiceStub = mockGameService(mockModule);
+        gameListServiceStub = mockGameListService(mockModule);
         channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
         genericUtilityServiceStub = mockGenericUtilityService(mockModule);
 
@@ -36,9 +41,10 @@ context('game component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
-        component = $componentController('game');
+        component = $componentController('gameList');
 
         stub($interval, 'cancel');
     }));
@@ -50,7 +56,11 @@ context('game component unit test', () => {
 
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {
@@ -60,7 +70,7 @@ context('game component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(gameServiceStub.cacheGames);
+            sinonExpect.calledOnce(gameListServiceStub.cacheGames);
         });
 
         it('should cache games every 10 seconds', () => {
@@ -71,10 +81,10 @@ context('game component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to cache games
-            gameServiceStub.cacheGames.resetHistory();
+            gameListServiceStub.cacheGames.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(gameServiceStub.cacheGames, expected);
+            sinonExpect.callCount(gameListServiceStub.cacheGames, expected);
         });
     });
 
@@ -95,9 +105,9 @@ context('game component unit test', () => {
 
     describe('games', () => {
 
-        it('should reference cache from game service', inject($injector => {
+        it('should reference cache from game list service', inject($injector => {
 
-            const service = $injector.get('gameService');
+            const service = $injector.get('gameListService');
             service.games = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
             expect(component.games).to.deep.equal(service.games);

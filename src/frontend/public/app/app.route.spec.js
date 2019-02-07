@@ -26,13 +26,13 @@ context('app route unit test', () => {
 
     describe('/', () => {
 
-        it('should redirect to games state at /games url', () => {
+        it('should redirect to game list state at /games url', () => {
 
             $location.url('/');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('games');
-            expect($state.current.url).to.equal('/games');
+            expect($state.current.name).to.equal('index.gameList');
+            expect($state.current.url).to.equal('^/games');
         });
     });
 
@@ -55,8 +55,8 @@ context('app route unit test', () => {
             $location.url('/bookmarks');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('bookmarks');
-            expect($state.current.url).to.equal('/bookmarks');
+            expect($state.current.name).to.equal('index.bookmarks');
+            expect($state.current.url).to.equal('^/bookmarks');
         });
     });
 
@@ -67,20 +67,20 @@ context('app route unit test', () => {
             $location.url('/featured');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('featured');
-            expect($state.current.url).to.equal('/featured');
+            expect($state.current.name).to.equal('index.featured');
+            expect($state.current.url).to.equal('^/featured');
         });
     });
 
     describe('/games', () => {
 
-        it('should navigate to games state at /games url', () => {
+        it('should navigate to game list state at /games url', () => {
 
             $location.url('/games');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('games');
-            expect($state.current.url).to.equal('/games');
+            expect($state.current.name).to.equal('index.gameList');
+            expect($state.current.url).to.equal('^/games');
         });
     });
 
@@ -91,8 +91,8 @@ context('app route unit test', () => {
             $location.url('/games/random-game-name');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('channels');
-            expect($state.current.url).to.equal('/games/:name');
+            expect($state.current.name).to.equal('index.channels');
+            expect($state.current.url).to.equal('^/games/:name');
         });
     });
 
@@ -103,8 +103,8 @@ context('app route unit test', () => {
             $location.url('/histories');
             $httpBackend.flush();
 
-            expect($state.current.name).to.equal('histories');
-            expect($state.current.url).to.equal('/histories');
+            expect($state.current.name).to.equal('index.histories');
+            expect($state.current.url).to.equal('^/histories');
         });
     });
 });

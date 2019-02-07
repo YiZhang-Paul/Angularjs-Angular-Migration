@@ -1,11 +1,11 @@
-export class Game {
+export class GameList {
 
     constructor(
 
         $interval,
         $state,
         channelHttpService,
-        gameService,
+        gameListService,
         genericUtilityService
 
     ) {
@@ -13,7 +13,7 @@ export class Game {
         this.$interval = $interval;
         this.$state = $state;
         this.channelService = channelHttpService;
-        this.gameService = gameService;
+        this.gameListService = gameListService;
         this.utilities = genericUtilityService;
 
         this.task = null;
@@ -21,16 +21,16 @@ export class Game {
 
     get games() {
 
-        return this.gameService.games;
+        return this.gameListService.games;
     }
 
     $onInit() {
 
-        this.gameService.cacheGames();
+        this.gameListService.cacheGames();
 
         this.task = this.$interval(() => {
 
-            this.gameService.cacheGames();
+            this.gameListService.cacheGames();
 
         }, 10 * 1000);
     }
@@ -57,8 +57,8 @@ export class Game {
     }
 }
 
-export const GameComponent = {
+export const GameListComponent = {
 
-    templateUrl: './app/app.html',
-    controller: Game
+    templateUrl: 'app/components/game-list/game-list.html',
+    controller: GameList
 };

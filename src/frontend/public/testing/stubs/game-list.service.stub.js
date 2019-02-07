@@ -1,7 +1,7 @@
 const stub = sinon.stub;
-const name = 'gameService';
+const name = 'gameListService';
 
-export function mockGameService(module) {
+export function mockGameListService(module) {
 
     const mock = { initializeMock: null };
 

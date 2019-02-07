@@ -23,6 +23,6 @@ export class Bookmark {
 
 export const BookmarkComponent = {
 
-    templateUrl: './app/components/bookmark/bookmark.html',
+    templateUrl: 'app/components/bookmark/bookmark.html',
     controller: Bookmark
 };

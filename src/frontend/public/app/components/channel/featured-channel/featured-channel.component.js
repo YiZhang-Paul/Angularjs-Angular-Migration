@@ -5,8 +5,7 @@ export class FeaturedChannel {
         $interval,
         channelService,
         featuredChannelService,
-        viewHistoryService,
-        thumbnailPlayerService
+        viewHistoryService
 
     ) {
         'ngInject';
@@ -14,7 +13,6 @@ export class FeaturedChannel {
         this.channelService = channelService;
         this.featuredChannelService = featuredChannelService;
         this.historyService = viewHistoryService;
-        this.thumbnailPlayer = thumbnailPlayerService;
 
         this.task = null;
         this.channels = [];
@@ -42,16 +40,6 @@ export class FeaturedChannel {
             this._loadChannels();
 
         }, 10 * 1000);
-    }
-
-    playThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.play(thumbnail);
-    }
-
-    stopThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.stop(thumbnail);
     }
 
     isFollowed(channel) {
@@ -82,6 +70,6 @@ export class FeaturedChannel {
 
 export const FeaturedChannelComponent = {
 
-    templateUrl: './app/components/channel/featured-channel/featured-channel.html',
+    templateUrl: 'app/components/channel/featured-channel/featured-channel.html',
     controller: FeaturedChannel
 };

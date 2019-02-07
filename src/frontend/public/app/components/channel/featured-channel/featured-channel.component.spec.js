@@ -3,7 +3,6 @@ import ComponentsModule from '../../components.module';
 import { mockChannelService } from '../../../../testing/stubs/channel.service.stub';
 import { mockFeaturedChannelService } from '../../../../testing/stubs/featured-channel.service.stub';
 import { mockViewHistoryService } from '../../../../testing/stubs/view-history.service.stub';
-import { mockThumbnailPlayerService } from '../../../../testing/stubs/thumbnail-player.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -11,24 +10,27 @@ const sinonExpect = sinon.assert;
 
 context('featured channel component unit test', () => {
 
+    const tag = '<featured-channel></featured-channel>';
+
     let $q;
+    let $compile;
     let $interval;
     let $rootScope;
     let component;
+    let componentElement;
 
     let channelServiceStub;
     let featuredChannelServiceStub;
     let viewHistoryServiceStub;
-    let thumbnailPlayerServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
+    beforeEach(mockModule('component-templates'));
 
     beforeEach('mocks setup', () => {
 
         channelServiceStub = mockChannelService(mockModule, inject);
         featuredChannelServiceStub = mockFeaturedChannelService(mockModule, inject);
         viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
-        thumbnailPlayerServiceStub = mockThumbnailPlayerService(mockModule);
 
         channelServiceStub.initializeMock();
         featuredChannelServiceStub.initializeMock();
@@ -38,6 +40,7 @@ context('featured channel component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         component = $componentController('featuredChannel');
@@ -52,7 +55,11 @@ context('featured channel component unit test', () => {
 
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {
@@ -124,34 +131,6 @@ context('featured channel component unit test', () => {
 
             sinonExpect.calledOnce($interval.cancel);
             sinonExpect.calledWith($interval.cancel, expected);
-        });
-    });
-
-    describe('playThumbnail()', () => {
-
-        it('should use thumbnail player service to play thumbnail', () => {
-
-            const thumbnail = { srcElement: { currentTime: 55 } };
-
-            component.playThumbnail(thumbnail);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.play);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.play, thumbnail);
-        });
-    });
-
-    describe('stopThumbnail()', () => {
-
-        it('should use thumbnail player service to stop thumbnail', () => {
-
-            const thumbnail = { srcElement: { currentTime: 55 } };
-
-            component.stopThumbnail(thumbnail);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.stop);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.stop, thumbnail);
         });
     });
 

@@ -1,10 +1,10 @@
-export default $stateProvider => {
+export const HistoriesState = {
 
-    const histories = {
+    name: 'histories',
 
-        url: '/histories',
-        templateUrl: './app/components/view-history/view-history.html'
-    };
+    state: {
 
-    $stateProvider.state('histories', histories);
-}
+        url: '^/histories',
+        component: 'viewHistory'
+    }
+};

@@ -1,0 +1,39 @@
+<style>
+
+.game-list-container {
+
+    padding: 10vh 0 0 1.5vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.game-list-container game-card {
+
+    width: 8vw;
+    height: 21.5vh;
+    margin: 1.5vw 0.7vw 1.5vw 0.6vw;
+}
+
+game-card.ng-enter {
+
+    opacity: 0;
+    transition: 0.4s;
+    -webkit-transition: 0.4s;
+}
+
+game-card.ng-enter-active {
+
+    opacity: 1;
+}
+
+</style>
+
+<div class="game-list-container non-selectable">
+    <game-card
+        ng-repeat="game in $ctrl.games"
+        ng-click="$ctrl.toChannelsView(game)"
+        game="game">
+    </game-card>
+</div>

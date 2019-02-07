@@ -7,11 +7,16 @@ const sinonExpect = sinon.assert;
 
 context('bookmark component unit test', () => {
 
+    const tag = '<bookmark></bookmark>';
+
     let $q;
+    let $compile;
     let $rootScope;
     let component;
+    let componentElement;
 
     let bookmarkServiceStub;
+    beforeEach(mockModule('component-templates'));
 
     beforeEach(mockModule(ComponentsModule));
 
@@ -25,13 +30,18 @@ context('bookmark component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
         component = $componentController('bookmark');
     }));
 
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('bookmarks', () => {

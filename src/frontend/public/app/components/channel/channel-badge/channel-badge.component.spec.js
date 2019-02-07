@@ -4,6 +4,9 @@ const mockModule = angular.mock.module;
 
 context('channel badge component unit test', () => {
 
+    const tag = '<channel-badge></channel-badge>';
+
+    let $compile;
     let $rootScope;
     let componentElement;
 
@@ -12,14 +15,14 @@ context('channel badge component unit test', () => {
 
     beforeEach('general test setup', inject($injector => {
 
-        const $compile = $injector.get('$compile');
+        $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
-        componentElement = $compile('<channel-badge></channel-badge>')($rootScope);
-
-        $rootScope.$apply();
     }));
 
     it('should resolve', () => {
+
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
 
         expect(componentElement.html()).is.not.empty;
     });

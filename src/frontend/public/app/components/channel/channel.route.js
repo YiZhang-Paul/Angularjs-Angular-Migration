@@ -1,21 +1,27 @@
-export default $stateProvider => {
+export const ChannelsState = {
 
-    const channels = {
+    name: 'channels',
 
-        url: '/games/:name',
-        templateUrl: './app/components/channel/channel.html',
+    state: {
+
+        url: '^/games/:name',
+        component: 'channel',
+
         params: {
+
             game: null,
             channels: null
         }
     }
+};
 
-    const featured = {
+export const FeaturedState = {
 
-        url: '/featured',
-        templateUrl: './app/components/channel/featured-channel/featured-channel.html'
-    };
+    name: 'featured',
 
-    $stateProvider.state('channels', channels);
-    $stateProvider.state('featured', featured);
-}
+    state: {
+
+        url: '^/featured',
+        component: 'featuredChannel'
+    }
+};

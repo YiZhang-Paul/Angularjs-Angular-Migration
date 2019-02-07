@@ -1,16 +1,16 @@
-import CommonModule from '../common.module';
+import ComponentsModule from '../../components.module';
 
 const mockModule = angular.mock.module;
 
-context('top navigation bar component unit test', () => {
+context('bookmark card component unit test', () => {
 
-    const tag = '<top-navbar></top-navbar>';
+    const tag = '<bookmark-card></bookmark-card>';
 
     let $compile;
     let $rootScope;
     let componentElement;
 
-    beforeEach(mockModule(CommonModule));
+    beforeEach(mockModule(ComponentsModule));
     beforeEach(mockModule('component-templates'));
 
     beforeEach('general test setup', inject($injector => {

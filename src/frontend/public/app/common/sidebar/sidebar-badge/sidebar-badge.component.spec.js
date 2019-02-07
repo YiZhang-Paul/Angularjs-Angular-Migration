@@ -1,10 +1,10 @@
-import CommonModule from '../common.module';
+import CommonModule from '../../common.module';
 
 const mockModule = angular.mock.module;
 
-context('top navigation bar component unit test', () => {
+context('sidebar badge component unit test', () => {
 
-    const tag = '<top-navbar></top-navbar>';
+    const tag = '<sidebar-badge></sidebar-badge>';
 
     let $compile;
     let $rootScope;

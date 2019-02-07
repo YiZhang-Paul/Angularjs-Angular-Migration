@@ -1,3 +1,4 @@
+import SharedModule from '../../shared/shared.module';
 import ComponentsModule from '../components.module';
 
 import { mockChannelService } from '../../../testing/stubs/channel.service.stub';
@@ -11,18 +12,24 @@ const sinonExpect = sinon.assert;
 
 context('channel component unit test', () => {
 
+    const tag = '<channel></channel>';
+
     let $q;
+    let $compile;
     let $interval;
     let $rootScope;
     let $stateParams;
     let component;
+    let componentElement;
 
     let channelServiceStub;
     let gameHttpServiceStub;
     let viewHistoryServiceStub;
     let thumbnailPlayerServiceStub;
 
+    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
+    beforeEach(mockModule('component-templates'));
 
     beforeEach('mocks setup', () => {
 
@@ -39,6 +46,7 @@ context('channel component unit test', () => {
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         $stateParams = $injector.get('$stateParams');
@@ -54,7 +62,12 @@ context('channel component unit test', () => {
 
     it('should resolve', () => {
 
+        $stateParams.name = 'some-game-5';
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {

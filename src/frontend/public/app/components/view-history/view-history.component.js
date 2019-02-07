@@ -13,8 +13,8 @@ export class ViewHistory {
         'ngInject';
         this.$q = $q;
         this.$state = $state;
-        this.gameService = gameHttpService;
-        this.channelService = channelHttpService;
+        this.gameHttpService = gameHttpService;
+        this.channelHttpService = channelHttpService;
         this.historyService = viewHistoryService;
         this.utilities = genericUtilityService;
     }
@@ -43,8 +43,8 @@ export class ViewHistory {
 
     toChannelsView(id) {
 
-        const gamePromise = this.gameService.getGame(id);
-        const channelsPromise = this.channelService.getChannelsByGameId(id);
+        const gamePromise = this.gameHttpService.getGame(id);
+        const channelsPromise = this.channelHttpService.getChannelsByGameId(id);
         const promises = [gamePromise, channelsPromise];
 
         this.$q.all(promises).then(responses => {
@@ -71,6 +71,6 @@ export class ViewHistory {
 
 export const ViewHistoryComponent = {
 
-    templateUrl: './app/components/view-history/view-history.html',
+    templateUrl: 'app/components/view-history/view-history.html',
     controller: ViewHistory
 };

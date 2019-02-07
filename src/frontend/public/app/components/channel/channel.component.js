@@ -13,7 +13,7 @@ export class Channel {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$interval = $interval;
-        this.gameService = gameHttpService;
+        this.gameHttpService = gameHttpService;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
         this.thumbnailPlayer = thumbnailPlayerService;
@@ -33,7 +33,7 @@ export class Channel {
 
         const name = this.$stateParams.name.replace(/-/g, ' ');
 
-        return this.gameService.getGameByName(name).then(game => {
+        return this.gameHttpService.getGameByName(name).then(game => {
 
             this.game = game;
         })
@@ -114,6 +114,6 @@ export class Channel {
 
 export const ChannelComponent = {
 
-    templateUrl: './app/components/channel/channel.html',
+    templateUrl: 'app/components/channel/channel.html',
     controller: Channel
 };
