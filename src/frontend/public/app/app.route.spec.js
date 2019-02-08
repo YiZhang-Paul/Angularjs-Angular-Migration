@@ -6,6 +6,7 @@ context('app route unit test', () => {
 
     let $state;
     let $location;
+    let $rootScope;
     let $httpBackend;
 
     beforeEach(mockModule(AppModule));
@@ -14,6 +15,7 @@ context('app route unit test', () => {
 
         $state = $injector.get('$state');
         $location = $injector.get('$location');
+        $rootScope = $injector.get('$rootScope');
         $httpBackend = $injector.get('$httpBackend');
 
         $httpBackend.whenGET(/.*/).respond(200);
@@ -29,7 +31,7 @@ context('app route unit test', () => {
         it('should redirect to game list state at /games url', () => {
 
             $location.url('/');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.gameList');
             expect($state.current.url).to.equal('^/games');
@@ -53,7 +55,7 @@ context('app route unit test', () => {
         it('should navigate to bookmarks state at /bookmarks url', () => {
 
             $location.url('/bookmarks');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.bookmarks');
             expect($state.current.url).to.equal('^/bookmarks');
@@ -65,7 +67,7 @@ context('app route unit test', () => {
         it('should navigate to featured state at /featured url', () => {
 
             $location.url('/featured');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.featured');
             expect($state.current.url).to.equal('^/featured');
@@ -77,7 +79,7 @@ context('app route unit test', () => {
         it('should navigate to game list state at /games url', () => {
 
             $location.url('/games');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.gameList');
             expect($state.current.url).to.equal('^/games');
@@ -89,7 +91,7 @@ context('app route unit test', () => {
         it('should navigate to channels state at /games/:name url', () => {
 
             $location.url('/games/random-game-name');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.channels');
             expect($state.current.url).to.equal('^/games/:name');
@@ -101,7 +103,7 @@ context('app route unit test', () => {
         it('should navigate to histories state at /histories url', () => {
 
             $location.url('/histories');
-            $httpBackend.flush();
+            $rootScope.$apply();
 
             expect($state.current.name).to.equal('index.histories');
             expect($state.current.url).to.equal('^/histories');
