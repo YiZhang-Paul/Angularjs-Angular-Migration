@@ -25,6 +25,14 @@
     position: absolute;
 }
 
+.channel-container game-card .game-card-container:hover {
+
+    cursor: initial;
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+}
+
 .channel-container game-card .game-image {
 
     height: 100%;
