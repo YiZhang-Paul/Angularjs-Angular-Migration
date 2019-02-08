@@ -2,21 +2,46 @@ import './sidebar.css';
 
 export class Sidebar {
 
-    constructor($scope, toastr, sidebarService) {
+    constructor($scope, toastr, sidebarService, authenticatorService) {
         'ngInject';
         this.$scope = $scope;
         this.toastr = toastr;
         this.service = sidebarService;
+        this.authenticator = authenticatorService;
 
-        this.options = ['Followed Channels', 'Featured Channels', 'View History'];
-        this.targetRoutes = ['index.bookmarks', 'index.featured', 'index.histories'];
+        this._options = ['Followed Channels', 'Featured Channels', 'View History'];
+        this._targetRoutes = ['index.bookmarks', 'index.featured', 'index.histories'];
 
         this.badges = new Map();
     }
 
+    get options() {
+
+        if (this.authenticator.isAuthenticated) {
+
+            return this._options;
+        }
+
+        return [this._options[1]];
+    }
+
+    get targetRoutes() {
+
+        if (this.authenticator.isAuthenticated) {
+
+            return this._targetRoutes;
+        }
+
+        return [this._targetRoutes[1]];
+    }
+
     $onInit() {
 
-        this._loadBadges();
+        if (this.authenticator.isAuthenticated) {
+
+            this._loadBadges();
+        }
+
         this._registerEvents();
     }
 
@@ -46,9 +71,9 @@ export class Sidebar {
 
     _loadBadges() {
 
-        this._loadBookmarks(this.options[0]);
-        this._loadFeaturedChannels(this.options[1]);
-        this._loadHistories(this.options[2]);
+        this._loadBookmarks(this._options[0]);
+        this._loadFeaturedChannels(this._options[1]);
+        this._loadHistories(this._options[2]);
     }
 
     _registerBookmarkEvents() {
@@ -57,13 +82,13 @@ export class Sidebar {
 
         this.$scope.$on('followedChannel', () => {
 
-            this._loadBookmarks(this.options[0]);
+            this._loadBookmarks(this._options[0]);
             this.toastr.success('You just followed a channel.', timeout);
         });
 
         this.$scope.$on('unfollowedChannel', () => {
 
-            this._loadBookmarks(this.options[0]);
+            this._loadBookmarks(this._options[0]);
             this.toastr.error('You just unfollowed a channel.', timeout);
         });
     }
@@ -76,7 +101,7 @@ export class Sidebar {
 
             this.$scope.$on(`history${event}`, () => {
 
-                this._loadHistories(this.options[2]);
+                this._loadHistories(this._options[2]);
             });
         }
     }

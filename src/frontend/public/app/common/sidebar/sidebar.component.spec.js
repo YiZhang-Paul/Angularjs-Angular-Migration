@@ -2,6 +2,7 @@ import CommonModule from '../common.module';
 
 import { mockToastr } from '../../../testing/stubs/toastr.stub';
 import { mockSidebarService } from '../../../testing/stubs/sidebar.service.stub';
+import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -18,6 +19,7 @@ context('sidebar component unit test', () => {
 
     let toastrStub;
     let sidebarServiceStub;
+    let authenticatorServiceStub;
 
     beforeEach(mockModule(CommonModule));
     beforeEach(mockModule('component-templates'));
@@ -26,6 +28,7 @@ context('sidebar component unit test', () => {
 
         toastrStub = mockToastr(mockModule);
         sidebarServiceStub = mockSidebarService(mockModule, inject);
+        authenticatorServiceStub = mockAuthenticatorService(mockModule);
 
         sidebarServiceStub.initializeMock();
     });
@@ -49,6 +52,11 @@ context('sidebar component unit test', () => {
 
     describe('$onInit()', () => {
 
+        beforeEach('$onInit() test setup', () => {
+
+            authenticatorServiceStub.isAuthenticated = true;
+        });
+
         it('should use sidebar service to fetch bookmark data', () => {
 
             component.$onInit();
@@ -68,6 +76,16 @@ context('sidebar component unit test', () => {
             const result = component.badges.get('Followed Channels');
 
             expect(result).to.deep.equal(expected.slice(0, 3));
+        });
+
+        it('should not load bookmarks when not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(sidebarServiceStub.getBookmarks);
         });
 
         it('should use sidebar service to fetch channel data', () => {
@@ -98,6 +116,16 @@ context('sidebar component unit test', () => {
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
 
+        it('should not load featured channels when not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(sidebarServiceStub.getFeaturedChannels);
+        });
+
         it('should use sidebar service to fetch view history data', () => {
 
             component.$onInit();
@@ -117,6 +145,16 @@ context('sidebar component unit test', () => {
             const result = component.badges.get('View History');
 
             expect(result).to.deep.equal(expected.slice(0, 3));
+        });
+
+        it('should not load view histories when not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(sidebarServiceStub.getHistories);
         });
 
         it('should register followed channel event on initialization', () => {
@@ -184,6 +222,41 @@ context('sidebar component unit test', () => {
             $rootScope.$broadcast('historyCleared');
 
             sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
+    });
+
+    describe('options', () => {
+
+        it('should return all options when authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = true;
+
+            expect(component.options.length).to.equal(3);
+        });
+
+        it('should return featured channel option only when not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            expect(component.options.length).to.equal(1);
+            expect(component.options[0]).to.equal('Featured Channels');
+        });
+    });
+
+    describe('targetRoutes', () => {
+
+        it('should return all routes when authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = true;
+
+            expect(component.targetRoutes.length).to.equal(3);
+        });
+
+        it('should return featured channel route only when not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            expect(component.targetRoutes[0]).to.equal('index.featured');
         });
     });
 });
