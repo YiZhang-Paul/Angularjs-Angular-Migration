@@ -8,13 +8,21 @@ export class ViewHistoryHttpService {
         this.api = 'http://127.0.0.1:4150/api/v1/user/histories';
     }
 
+    _sortByTimestamp(data) {
+
+        return data.slice().sort((a, b) => {
+
+            return b.timestamp - a.timestamp;
+        });
+    }
+
     getHistories() {
 
         const options = [this.api, this.authenticator.defaultOptions];
 
         return this.$http.get(...options).then(response => {
 
-            return sortByTimestamp(response.data);
+            return this._sortByTimestamp(response.data);
         });
     }
 
@@ -41,12 +49,4 @@ export class ViewHistoryHttpService {
 
         return this.$http.delete(...options).then(response => response.data);
     }
-}
-
-function sortByTimestamp(data) {
-
-    return data.slice().sort((a, b) => {
-
-        return b.timestamp - a.timestamp;
-    });
 }

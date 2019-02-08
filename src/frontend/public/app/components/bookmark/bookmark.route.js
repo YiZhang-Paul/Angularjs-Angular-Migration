@@ -1,10 +1,10 @@
-export default $stateProvider => {
+export const BookmarksState = {
 
-    const bookmarks = {
+    name: 'bookmarks',
 
-        url: '/bookmarks',
-        templateUrl: './app/components/bookmark/bookmark.html'
-    };
+    state: {
 
-    $stateProvider.state('bookmarks', bookmarks);
-}
+        url: '^/bookmarks',
+        component: 'bookmark'
+    }
+};

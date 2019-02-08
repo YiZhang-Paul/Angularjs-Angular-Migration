@@ -1,4 +1,6 @@
-export class ChannelController {
+import './channel.css';
+
+export class Channel {
 
     constructor(
 
@@ -6,17 +8,15 @@ export class ChannelController {
         $interval,
         gameHttpService,
         channelService,
-        viewHistoryService,
-        thumbnailPlayerService
+        viewHistoryService
 
     ) {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$interval = $interval;
-        this.gameService = gameHttpService;
+        this.gameHttpService = gameHttpService;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
-        this.thumbnailPlayer = thumbnailPlayerService;
 
         this.task = null;
         this.game = null;
@@ -31,14 +31,13 @@ export class ChannelController {
 
     _loadGame() {
 
-        return this.gameService.getGames().then(games => {
+        const name = this.$stateParams.name.replace(/-/g, ' ');
 
-            const name = this.$stateParams.name.replace(/-/g, ' ');
-            const game = games.find(_ => _.name === name);
+        return this.gameHttpService.getGameByName(name).then(game => {
 
-            this.game = game ? game : null;
+            this.game = game;
         })
-        .catch(error => console.log(error));
+        .catch(() => null);
     }
 
     _loadChannels() {
@@ -77,16 +76,6 @@ export class ChannelController {
         }, 10 * 1000);
     }
 
-    playThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.play(thumbnail);
-    }
-
-    stopThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.stop(thumbnail);
-    }
-
     isFollowed(channel) {
 
         return this.channelService.isFollowed(channel);
@@ -112,3 +101,9 @@ export class ChannelController {
         this.$interval.cancel(this.task);
     }
 }
+
+export const ChannelComponent = {
+
+    templateUrl: 'app/components/channel/channel.html',
+    controller: Channel
+};

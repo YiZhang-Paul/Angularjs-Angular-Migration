@@ -8,7 +8,19 @@ context('thumbnail player service unit test', () => {
 
     let service;
 
+    let domElementStub;
+
     beforeEach(mockModule(SharedModule));
+
+    beforeEach('mocks setup', () => {
+
+        domElementStub = {
+
+            play: stub(),
+            pause: stub(),
+            currentTime: 55
+        };
+    });
 
     beforeEach('general test setup', inject($injector => {
 
@@ -24,35 +36,26 @@ context('thumbnail player service unit test', () => {
 
         it('should play thumbnail', () => {
 
-            const domElement = { play: stub() };
+            service.play({ srcElement: domElementStub });
 
-            service.play({ srcElement: domElement });
-
-            sinonExpect.calledOnce(domElement.play);
+            sinonExpect.calledOnce(domElementStub.play);
         });
     });
 
     describe('stop()', () => {
 
-        let domElement;
-
-        beforeEach('stop() test setup', () => {
-
-            domElement = { pause: stub(), currentTime: 55 };
-        });
-
         it('should stop thumbnail', () => {
 
-            service.stop({ srcElement: domElement });
+            service.stop({ srcElement: domElementStub });
 
-            sinonExpect.calledOnce(domElement.pause);
+            sinonExpect.calledOnce(domElementStub.pause);
         });
 
         it('should set current play time to 0', () => {
 
-            service.stop({ srcElement: domElement });
+            service.stop({ srcElement: domElementStub });
 
-            expect(domElement.currentTime).to.equal(0);
+            expect(domElementStub.currentTime).to.equal(0);
         });
     });
 });

@@ -1,0 +1,20 @@
+.sidebar-badge-container .large-font {
+
+    font-size: 1.1em;
+}
+
+.sidebar-badge-container .view-all {
+
+    top: 3px;
+    right: 15px;
+    position: absolute;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-decoration: none;
+    color: rgb(202, 202, 202);
+}
+
+.sidebar-badge-container .view-all:hover {
+
+    color: lightskyblue;
+}

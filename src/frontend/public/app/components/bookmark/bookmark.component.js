@@ -1,4 +1,6 @@
-export class BookmarkController {
+import './bookmark.css';
+
+export class Bookmark {
 
     constructor(bookmarkService) {
         'ngInject';
@@ -20,3 +22,9 @@ export class BookmarkController {
         this.service.unfollow(bookmark).catch(error => console.log(error));
     }
 }
+
+export const BookmarkComponent = {
+
+    templateUrl: 'app/components/bookmark/bookmark.html',
+    controller: Bookmark
+};

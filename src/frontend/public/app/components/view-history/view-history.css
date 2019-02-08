@@ -1,0 +1,41 @@
+.view-history-container {
+
+    padding: 10vh 0 0 1.5vw;
+}
+
+.view-history-container .clear-view-history-button {
+
+    top: 4vh;
+    left: 13.5%;
+    width: 15%;
+    height: 4vh;
+    position: absolute;
+    line-height: 4vh;
+    text-align: center;
+    background-color: tomato;
+    border: 2px solid gold;
+    border-radius: 7px;
+}
+
+.view-history-container .clear-view-history-button:hover {
+
+    cursor: pointer;
+    background-color: rgb(168, 0, 0);
+    border: 2px solid gold;
+}
+
+.view-history-container .clear-view-history-button:active {
+
+    background-color: rgb(196, 31, 31);
+    border: 2px solid gold;
+}
+
+.view-history-container .empty-view-history-message {
+
+    top: 50%;
+    left: 4%;
+    position: absolute;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+}

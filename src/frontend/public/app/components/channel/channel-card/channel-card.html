@@ -1,0 +1,30 @@
+<div class="channel-card-container non-selectable">
+    <span class="view-counts">{{ $ctrl.channel.view_count }}</span>
+
+    <video class="stream-thumbnail"
+        ng-mouseover="$ctrl.playThumbnail($event)"
+        ng-mouseleave="$ctrl.stopThumbnail($event)"
+        ng-src="{{ $ctrl.channel.thumbnail }}"
+        type="video/mp4"
+        loop>
+    </video>
+
+    <div class="channel-image"
+        ng-style="$ctrl.channel.image && { 'background-image': 'url(' + $ctrl.channel.image + ')' }">
+    </div>
+
+    <div class="channel-details">
+        <span>{{ $ctrl.channel.title }}</span></br></br>
+        <span>{{ $ctrl.channel.streamer_name }}</span>
+
+        <div class="channel-follow-button channel-unfollowed"
+            ng-click="$ctrl.onFollow()"
+            ng-hide="$ctrl.isFollowed">follow
+        </div>
+
+        <div class="channel-follow-button channel-followed"
+            ng-click="$ctrl.onUnfollow()"
+            ng-show="$ctrl.isFollowed">unfollow
+        </div>
+    </div>
+</div>

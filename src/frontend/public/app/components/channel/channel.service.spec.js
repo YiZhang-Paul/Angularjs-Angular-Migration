@@ -1,7 +1,9 @@
 import ComponentsModule from '../components.module';
 
+import { mockBookmarkService } from '../../../testing/stubs/bookmark.service.stub';
+import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+
 const mockModule = angular.mock.module;
-const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('channel service unit test', () => {
@@ -10,36 +12,19 @@ context('channel service unit test', () => {
     let $rootScope;
     let service;
 
-    let getChannelsByGameIdStub;
-    let isFollowedStub;
-    let followStub;
-    let unfollowStub;
+    let bookmarkServiceStub;
+    let channelHttpServiceStub;
 
     beforeEach(mockModule(ComponentsModule));
 
-    beforeEach('mock channel http service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        getChannelsByGameIdStub = stub();
+        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
 
-        $provide.service('channelHttpService', () => ({
-
-            getChannelsByGameId: getChannelsByGameIdStub
-        }));
-    }));
-
-    beforeEach('mock bookmark service setup', mockModule($provide => {
-
-        isFollowedStub = stub();
-        followStub = stub();
-        unfollowStub = stub();
-
-        $provide.service('bookmarkService', () => ({
-
-            isFollowed: isFollowedStub,
-            follow: followStub,
-            unfollow: unfollowStub
-        }));
-    }));
+        bookmarkServiceStub.initializeMock();
+        channelHttpServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject($injector => {
 
@@ -59,18 +44,16 @@ context('channel service unit test', () => {
 
         it('should use channel http service to fetch channels', () => {
 
-            getChannelsByGameIdStub.returns($q.resolve([]));
-
             service.getChannelsByGameId(id);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getChannelsByGameIdStub);
-            sinonExpect.calledWith(getChannelsByGameIdStub, id);
+            sinonExpect.calledOnce(channelHttpServiceStub.getChannelsByGameId);
+            sinonExpect.calledWith(channelHttpServiceStub.getChannelsByGameId, id);
         });
 
         it('should return empty collection when no channel is found', () => {
 
-            getChannelsByGameIdStub.returns($q.resolve([]));
+            channelHttpServiceStub.getChannelsByGameId.returns($q.resolve([]));
 
             service.getChannelsByGameId(id).then(result => {
 
@@ -83,7 +66,7 @@ context('channel service unit test', () => {
 
         it('should return empty collection when failed to fetch channels', () => {
 
-            getChannelsByGameIdStub.returns($q.reject(new Error()));
+            channelHttpServiceStub.getChannelsByGameId.returns($q.reject(new Error()));
 
             service.getChannelsByGameId(id).then(result => {
 
@@ -194,66 +177,71 @@ context('channel service unit test', () => {
         it('should use bookmark service to check channel status', () => {
 
             const channel = { channel_id: 5 };
-            isFollowedStub.returns(true);
 
             const result = service.isFollowed(channel);
             $rootScope.$apply();
 
             expect(result).to.be.true;
-            sinonExpect.calledOnce(isFollowedStub);
-            sinonExpect.calledWith(isFollowedStub, channel);
+            sinonExpect.calledOnce(bookmarkServiceStub.isFollowed);
+            sinonExpect.calledWith(bookmarkServiceStub.isFollowed, channel);
         });
     });
 
     describe('follow()', () => {
 
-        const channel = { channel_id: 5 };
+        let channel;
+
+        beforeEach('follow() test setup', () => {
+
+            channel = { channel_id: 5 };
+        });
 
         it('should use bookmark service to follow channel', () => {
-
-            followStub.returns($q.resolve({}));
 
             service.follow(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(followStub);
-            sinonExpect.calledWith(followStub, channel);
+            sinonExpect.calledOnce(bookmarkServiceStub.follow);
+            sinonExpect.calledWith(bookmarkServiceStub.follow, channel);
         });
 
         it('should not throw error when failed to follow channel', () => {
 
-            followStub.returns($q.reject(new Error()));
+            bookmarkServiceStub.follow.returns($q.reject(new Error()));
 
             service.follow(channel).catch(() => { throw new Error(); });
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(followStub);
+            sinonExpect.calledOnce(bookmarkServiceStub.follow);
         });
     });
 
     describe('unfollow()', () => {
 
-        const channel = { channel_id: 5 };
+        let channel;
+
+        beforeEach('unfollow() test setup', () => {
+
+            channel = { channel_id: 5 };
+        });
 
         it('should use bookmark service to unfollow channel', () => {
-
-            unfollowStub.returns($q.resolve({}));
 
             service.unfollow(channel);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(unfollowStub);
-            sinonExpect.calledWith(unfollowStub, channel);
+            sinonExpect.calledOnce(bookmarkServiceStub.unfollow);
+            sinonExpect.calledWith(bookmarkServiceStub.unfollow, channel);
         });
 
         it('should not throw error when failed to unfollow channel', () => {
 
-            unfollowStub.returns($q.reject(new Error()));
+            bookmarkServiceStub.unfollow.returns($q.reject(new Error()));
 
             service.unfollow(channel).catch(() => { throw new Error(); });
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(unfollowStub);
+            sinonExpect.calledOnce(bookmarkServiceStub.unfollow);
         });
     });
 });

@@ -1,3 +1,5 @@
+import './sidebar.css';
+
 export class Sidebar {
 
     constructor($scope, toastr, sidebarService) {
@@ -7,25 +9,15 @@ export class Sidebar {
         this.service = sidebarService;
 
         this.options = ['Followed Channels', 'Featured Channels', 'View History'];
-        this.targetRoutes = ['bookmarks', 'featured', 'histories'];
+        this.targetRoutes = ['index.bookmarks', 'index.featured', 'index.histories'];
 
         this.badges = new Map();
     }
-    // TODO: research proper way/possibility of proper private methods
+
     $onInit() {
 
         this._loadBadges();
         this._registerEvents();
-    }
-
-    _addGameName(channels) {
-
-        return channels.map(_ => {
-
-            _.game_name = _.provider_game_name;
-
-            return _;
-        });
     }
 
     _loadBookmarks(key) {
@@ -40,7 +32,7 @@ export class Sidebar {
 
         this.service.getFeaturedChannels().then(channels => {
 
-            this.badges.set(key, this._addGameName(channels.slice(0, 3)));
+            this.badges.set(key, channels.slice(0, 3));
         });
     }
 
@@ -78,10 +70,15 @@ export class Sidebar {
 
     _registerViewHistoryEvents() {
 
-        this.$scope.$on('historyUpdated', () => {
+        const events = ['Updated', 'Removed', 'Cleared'];
 
-            this._loadHistories(this.options[2]);
-        });
+        for (const event of events) {
+
+            this.$scope.$on(`history${event}`, () => {
+
+                this._loadHistories(this.options[2]);
+            });
+        }
     }
 
     _registerEvents() {
@@ -97,6 +94,6 @@ export const SidebarComponent = {
 
         hideOptions: '<'
     },
-    templateUrl: './app/common/sidebar/sidebar.html',
+    templateUrl: 'app/common/sidebar/sidebar.html',
     controller: Sidebar
 };

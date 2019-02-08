@@ -1,83 +1,66 @@
 import CommonModule from '../common.module';
 
+import { mockToastr } from '../../../testing/stubs/toastr.stub';
+import { mockSidebarService } from '../../../testing/stubs/sidebar.service.stub';
+
 const mockModule = angular.mock.module;
-const stub = sinon.stub;
 const sinonExpect = sinon.assert;
 
 context('sidebar component unit test', () => {
 
+    const tag = '<sidebar></sidebar>';
+
     let $q;
+    let $compile;
     let $rootScope;
     let component;
+    let componentElement;
 
-    let getBookmarksStub;
-    let getFeaturedChannelsStub;
-    let getHistoriesStub;
-    let successStub;
-    let errorStub;
+    let toastrStub;
+    let sidebarServiceStub;
 
     beforeEach(mockModule(CommonModule));
+    beforeEach(mockModule('component-templates'));
 
-    beforeEach('mock sidebar service setup', mockModule($provide => {
+    beforeEach('mocks setup', () => {
 
-        getBookmarksStub = stub();
-        getFeaturedChannelsStub = stub();
-        getHistoriesStub = stub();
+        toastrStub = mockToastr(mockModule);
+        sidebarServiceStub = mockSidebarService(mockModule, inject);
 
-        $provide.service('sidebarService', () => ({
-
-            getBookmarks: getBookmarksStub,
-            getFeaturedChannels: getFeaturedChannelsStub,
-            getHistories: getHistoriesStub
-        }));
-    }));
-
-    beforeEach('mock toastr service setup', inject($injector => {
-
-        const toastr = $injector.get('toastr');
-        successStub = stub(toastr, 'success');
-        errorStub = stub(toastr, 'error');
-    }));
+        sidebarServiceStub.initializeMock();
+    });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
         $q = $injector.get('$q');
+        $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
         component = $componentController('sidebar');
     }));
 
-    afterEach('general test teardown', () => {
-
-        successStub.restore();
-        errorStub.restore();
-    });
-
     it('should resolve', () => {
 
+        componentElement = $compile(tag)($rootScope);
+        $rootScope.$apply();
+
         expect(component).is.not.null;
+        expect(componentElement.html()).is.not.empty;
     });
 
     describe('$onInit()', () => {
-
-        beforeEach('$onInit() test setup', () => {
-
-            getBookmarksStub.returns($q.resolve([]));
-            getFeaturedChannelsStub.returns($q.resolve([]));
-            getHistoriesStub.returns($q.resolve([]));
-        });
 
         it('should use sidebar service to fetch bookmark data', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getBookmarksStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getBookmarks);
         });
 
         it('should load bookmarks on initialization', () => {
 
             const expected = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
-            getBookmarksStub.returns($q.resolve(expected));
+            sidebarServiceStub.getBookmarks.returns($q.resolve(expected));
 
             component.$onInit();
             $rootScope.$apply();
@@ -92,7 +75,7 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getFeaturedChannelsStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getFeaturedChannels);
         });
 
         it('should load featured channels on initialization', () => {
@@ -105,35 +88,7 @@ context('sidebar component unit test', () => {
                 { id: 4, provider_game_name: 'name_4', game_name: 'name_4' }
             ];
 
-            getFeaturedChannelsStub.returns($q.resolve(expected));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            const result = component.badges.get('Featured Channels');
-
-            expect(result).to.deep.equal(expected.slice(0, 3));
-        });
-
-        it('should add missing game name on featured channels', () => {
-
-            const channels = [
-
-                { id: 1, provider_game_name: 'name_1' },
-                { id: 2, provider_game_name: 'name_2' },
-                { id: 3, provider_game_name: 'name_3' },
-                { id: 4, provider_game_name: 'name_4' }
-            ];
-
-            const expected = [
-
-                { id: 1, provider_game_name: 'name_1', game_name: 'name_1' },
-                { id: 2, provider_game_name: 'name_2', game_name: 'name_2' },
-                { id: 3, provider_game_name: 'name_3', game_name: 'name_3' },
-                { id: 4, provider_game_name: 'name_4', game_name: 'name_4' }
-            ];
-
-            getFeaturedChannelsStub.returns($q.resolve(channels));
+            sidebarServiceStub.getFeaturedChannels.returns($q.resolve(expected));
 
             component.$onInit();
             $rootScope.$apply();
@@ -148,13 +103,13 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
 
         it('should load view histories on initialization', () => {
 
             const expected = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
-            getHistoriesStub.returns($q.resolve(expected));
+            sidebarServiceStub.getHistories.returns($q.resolve(expected));
 
             component.$onInit();
             $rootScope.$apply();
@@ -169,13 +124,13 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            getBookmarksStub.reset();
-            getBookmarksStub.returns($q.resolve([]));
+            sidebarServiceStub.getBookmarks.reset();
+            sidebarServiceStub.getBookmarks.returns($q.resolve([]));
 
             $rootScope.$broadcast('followedChannel');
 
-            sinonExpect.calledOnce(getBookmarksStub);
-            sinonExpect.calledOnce(successStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getBookmarks);
+            sinonExpect.calledOnce(toastrStub.success);
         });
 
         it('should register unfollowed channel event on initialization', () => {
@@ -183,13 +138,13 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            getBookmarksStub.reset();
-            getBookmarksStub.returns($q.resolve([]));
+            sidebarServiceStub.getBookmarks.reset();
+            sidebarServiceStub.getBookmarks.returns($q.resolve([]));
 
             $rootScope.$broadcast('unfollowedChannel');
 
-            sinonExpect.calledOnce(getBookmarksStub);
-            sinonExpect.calledOnce(errorStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getBookmarks);
+            sinonExpect.calledOnce(toastrStub.error);
         });
 
         it('should register view history updated event on initialization', () => {
@@ -197,12 +152,38 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            getHistoriesStub.reset();
-            getHistoriesStub.returns($q.resolve([]));
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
 
             $rootScope.$broadcast('historyUpdated');
 
-            sinonExpect.calledOnce(getHistoriesStub);
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
+
+        it('should register view history removed event on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
+
+            $rootScope.$broadcast('historyRemoved');
+
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
+
+        it('should register view history cleared event on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
+
+            $rootScope.$broadcast('historyCleared');
+
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
     });
 });

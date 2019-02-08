@@ -1,4 +1,5 @@
 const path = require('path');
+const templates = './src/frontend/public/**/*.html';
 const entry = './src/frontend/public/specs.js';
 
 module.exports = function (config) {
@@ -12,10 +13,16 @@ module.exports = function (config) {
             './node_modules/angular-material/angular-material.js',
             './node_modules/@uirouter/angularjs/release/angular-ui-router.js',
             './node_modules/angular-toastr/dist/angular-toastr.js',
+            templates,
             entry
         ],
         preprocessors: {
-            [entry]: ['webpack', 'sourcemap']
+            [entry]: ['webpack', 'sourcemap'],
+            [templates]: ['ng-html2js']
+        },
+        ngHtml2JsPreprocessor: {
+            stripPrefix: 'src/frontend/public/',
+            moduleName: 'component-templates'
         },
         webpack: {
             devtool: 'inline-source-map',
@@ -29,7 +36,7 @@ module.exports = function (config) {
                             options: { esModules: true }
                         },
                         include: path.resolve('./src/frontend/public/'),
-                        exclude: /\.?specs?\.js$/
+                        exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
                     },
                     {
                         test: /\.m?js$/,
@@ -37,6 +44,14 @@ module.exports = function (config) {
                         use: {
                             loader: 'babel-loader'
                         }
+                    },
+                    {
+                        test: /\.css$/,
+                        use: ['style-loader', 'css-loader']
+                    },
+                    {
+                        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+                        use: ['url-loader']
                     }
                 ],
             }
@@ -74,7 +89,8 @@ module.exports = function (config) {
             'karma-sourcemap-loader',
             'karma-coverage',
             'karma-remap-coverage',
-            'karma-coverage-istanbul-reporter'
+            'karma-coverage-istanbul-reporter',
+            'karma-ng-html2js-preprocessor'
         ],
         webpackMiddleware: {
             noInfo: true,

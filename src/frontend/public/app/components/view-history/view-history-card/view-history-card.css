@@ -1,0 +1,97 @@
+.view-history-card-container {
+
+    margin: 1vw 20vw 1vw 10vw;
+    height: 20vh;
+    position: relative;
+    font-weight: 400;
+    overflow: hidden;
+    background-color: rgba(240, 248, 255, 0.034);
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+    box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+    border-radius: 6px;
+}
+
+.view-history-card-container .channel-thumbnail {
+
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+}
+
+.view-history-card-container .avatar {
+
+    top: 18px;
+    left: 32%;
+    width: 4vw;
+    height: 4vw;
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+}
+
+.view-history-card-container .view-history-details {
+
+    top: 18px;
+    left: 42%;
+    width: 30vw;
+    height: 4vw;
+    position: absolute;
+}
+
+.view-history-card-container .title {
+
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.view-history-card-container .streamer {
+
+    font-size: 1.15em;
+    font-weight: 600;
+    color: tomato;
+}
+
+.view-history-card-container .game-name {
+
+    font-size: 1.4em;
+    font-weight: 500;
+    text-decoration: underline;
+    color: rgb(77, 77, 77);
+}
+
+.view-history-card-container .game-name:hover {
+
+    cursor: pointer;
+    color: rgb(25, 151, 201);
+}
+
+.view-history-card-container .remove-button {
+
+    right: 32px;
+    bottom: 20px;
+    width: 3.5vh;
+    height: 3.5vh;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: rgba(240, 248, 255, 0.034);
+    background-image: url(../../../../assets/delete-button-dark.png);
+}
+
+.view-history-card-container .remove-button:hover {
+
+    background-image: url(../../../../assets/delete-button-purple.png);
+}
+
+.view-history-card-container .remove-button:active {
+
+    background-image: url(../../../../assets/delete-button-pink.png);
+}

@@ -1,0 +1,13 @@
+<div class="bookmark-card-container"
+    ng-style="$ctrl.bookmark.banner && { 'background-image': 'url(' + $ctrl.bookmark.banner + ')' }">
+
+    <div class="bookmark-image"
+        ng-style="$ctrl.bookmark.image && { 'background-image': 'url(' + $ctrl.bookmark.image + ')' }">
+    </div>
+
+    <span class="bookmark-name">{{ $ctrl.bookmark.streamer_name }}</span>
+
+    <div class="bookmark-unfollow-button"
+        ng-click="$ctrl.onUnfollow()">unfollow
+    </div>
+</div>
