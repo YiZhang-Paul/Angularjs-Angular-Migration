@@ -41,7 +41,7 @@ export class GameList {
 
         const name = this.utilities.joinText(game.name);
 
-        this.$state.go('channels', { game, name, channels });
+        this.$state.go('index.channels', { game, name, channels });
     }
 
     toChannelsView(game) {

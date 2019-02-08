@@ -9,7 +9,7 @@ export class Sidebar {
         this.service = sidebarService;
 
         this.options = ['Followed Channels', 'Featured Channels', 'View History'];
-        this.targetRoutes = ['bookmarks', 'featured', 'histories'];
+        this.targetRoutes = ['index.bookmarks', 'index.featured', 'index.histories'];
 
         this.badges = new Map();
     }
