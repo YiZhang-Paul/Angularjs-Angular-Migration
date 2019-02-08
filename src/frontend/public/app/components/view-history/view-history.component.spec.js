@@ -139,7 +139,7 @@ context('view history component unit test', () => {
 
             sinonExpect.calledOnce(genericUtilityServiceStub.joinText);
             sinonExpect.calledOnce($stateStub.go);
-            sinonExpect.calledWith($stateStub.go, 'channels', expected);
+            sinonExpect.calledWith($stateStub.go, 'index.channels', expected);
         });
 
         it('should not throw on error', () => {
