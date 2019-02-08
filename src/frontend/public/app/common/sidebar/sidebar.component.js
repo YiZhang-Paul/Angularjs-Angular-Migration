@@ -69,11 +69,16 @@ export class Sidebar {
     }
 
     _registerViewHistoryEvents() {
+        // TODO: need test
+        const events = ['Updated', 'Removed', 'Cleared'];
 
-        this.$scope.$on('historyUpdated', () => {
+        for (const event of events) {
 
-            this._loadHistories(this.options[2]);
-        });
+            this.$scope.$on(`history${event}`, () => {
+
+                this._loadHistories(this.options[2]);
+            });
+        }
     }
 
     _registerEvents() {
