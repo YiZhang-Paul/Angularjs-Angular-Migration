@@ -3,6 +3,8 @@ import { Request, RequestHandler, Response } from 'express';
 import UserRepositoryFactory from '../../../shared/repositories/user-repository/user-repository.factory';
 import IUserRepository from '../../../shared/repositories/user-repository/user-repository.interface';
 
+const expectedUsername = 'john doe';
+const expectedPassword = 'password';
 const header = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 const payload = 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ';
 const signature = 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
@@ -56,6 +58,16 @@ export default class FakeAuthenticator {
 
 const repository = new UserRepositoryFactory().createRepository();
 const authenticator = new FakeAuthenticator(repository);
+
+export function isValidCredential(username: string, password: string): boolean {
+
+    return username === expectedUsername && password === expectedPassword;
+}
+
+export function issueAccessToken(): string {
+
+    return expectedToken;
+}
 
 export function authenticate(key: string): RequestHandler {
 
