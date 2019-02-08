@@ -11,7 +11,6 @@ export default ($stateProvider, $urlRouterProvider) => {
         .state('index', {
 
             url: '/',
-            templateUrl: './app/app.html',
             redirectTo: `index.${GameListState.name}`
         })
         .state('error', {

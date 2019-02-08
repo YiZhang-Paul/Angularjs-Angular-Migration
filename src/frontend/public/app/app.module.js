@@ -1,9 +1,10 @@
 import "@babel/polyfill";
-import '../style.css';
 
 import ComponentModule from './components/components.module';
 import CommonModule from './common/common.module';
 import SharedModule from './shared/shared.module';
+
+import { AppComponent } from './app.component';
 
 import AppConfig from './app.config';
 import AppRoute from './app.route';
@@ -25,3 +26,4 @@ const app = angular.module(moduleName, [
 
 app.config(AppConfig);
 app.config(AppRoute);
+app.component('app', AppComponent);
