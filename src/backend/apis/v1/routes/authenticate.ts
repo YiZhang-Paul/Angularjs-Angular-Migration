@@ -8,8 +8,8 @@ const router = Router();
 
 router.post('/', [
 
-    body('username').not().isEmpty().isLength({ min: 3 }).trim().escape(),
-    body('password').not().isEmpty().isLength({ min: 5 }).trim().escape(),
+    body('username').not().isEmpty().trim().escape().isLength({ min: 3 }),
+    body('password').not().isEmpty().trim().escape().isLength({ min: 5 }),
     checkBadRequest(401)
 
 ], async (req: Request, res: Response) => {
@@ -27,6 +27,3 @@ router.post('/', [
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));
 
 export default router;
-
-// (1). POST - authenticate user credentials (200 OK/401 Unauthorized)
-// (2). otherwise - 405 Method Not Allowed
