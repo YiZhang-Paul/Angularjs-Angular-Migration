@@ -39,13 +39,17 @@ export class Sidebar {
 
         if (this.authenticator.isAuthenticated) {
 
-            this._loadBadges();
+            this._loadBookmarks();
+            this._loadHistories();
         }
 
+        this._loadFeaturedChannels();
         this._registerEvents();
     }
 
-    _loadBookmarks(key) {
+    _loadBookmarks() {
+
+        const key = this._options[0];
 
         this.service.getBookmarks().then(bookmarks => {
 
@@ -53,7 +57,9 @@ export class Sidebar {
         });
     }
 
-    _loadFeaturedChannels(key) {
+    _loadFeaturedChannels() {
+
+        const key = this._options[1];
 
         this.service.getFeaturedChannels().then(channels => {
 
@@ -61,7 +67,9 @@ export class Sidebar {
         });
     }
 
-    _loadHistories(key) {
+    _loadHistories() {
+
+        const key = this._options[2];
 
         this.service.getHistories().then(histories => {
 
@@ -71,9 +79,9 @@ export class Sidebar {
 
     _loadBadges() {
 
-        this._loadBookmarks(this._options[0]);
-        this._loadFeaturedChannels(this._options[1]);
-        this._loadHistories(this._options[2]);
+        this._loadBookmarks();
+        this._loadFeaturedChannels();
+        this._loadHistories();
     }
 
     _registerBookmarkEvents() {
@@ -82,26 +90,37 @@ export class Sidebar {
 
         this.$scope.$on('followedChannel', () => {
 
-            this._loadBookmarks(this._options[0]);
+            this._loadBookmarks();
             this.toastr.success('You just followed a channel.', timeout);
         });
 
         this.$scope.$on('unfollowedChannel', () => {
 
-            this._loadBookmarks(this._options[0]);
+            this._loadBookmarks();
             this.toastr.error('You just unfollowed a channel.', timeout);
+        });
+        // TODO: need tests
+        this.$scope.$on('userAuthenticated', () => {
+
+            this._loadBookmarks();
         });
     }
 
     _registerViewHistoryEvents() {
+        // TODO: need tests
+        const events = [
 
-        const events = ['Updated', 'Removed', 'Cleared'];
+            'historyUpdated',
+            'historyRemoved',
+            'historyCleared',
+            'userAuthenticated'
+        ];
 
         for (const event of events) {
 
-            this.$scope.$on(`history${event}`, () => {
+            this.$scope.$on(event, () => {
 
-                this._loadHistories(this._options[2]);
+                this._loadHistories();
             });
         }
     }

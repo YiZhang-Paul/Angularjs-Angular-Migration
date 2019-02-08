@@ -116,16 +116,6 @@ context('sidebar component unit test', () => {
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
 
-        it('should not load featured channels when not authenticated', () => {
-
-            authenticatorServiceStub.isAuthenticated = false;
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.notCalled(sidebarServiceStub.getFeaturedChannels);
-        });
-
         it('should use sidebar service to fetch view history data', () => {
 
             component.$onInit();
