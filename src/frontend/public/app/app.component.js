@@ -8,7 +8,7 @@ export class App {
     }
 
     $onInit() {
-        // TODO: need test
+
         this.service.cacheBookmarks();
     }
 }
