@@ -21,7 +21,7 @@ router.post('/', [
         return res.sendStatus(401);
     }
 
-    res.status(200).send(issueAccessToken());
+    res.status(200).send({ token: issueAccessToken() });
 });
 
 router.all('/', (_: Request, res: Response) => res.sendStatus(405));

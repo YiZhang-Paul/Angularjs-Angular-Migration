@@ -1,20 +1,19 @@
 export class AuthenticatorService {
 
-    constructor() {
+    constructor($http) {
+        'ngInject';
+        this.$http = $http;
 
-        this._token = {
+        this._header = '';
+        this._payload = '';
+        this._signature = '';
 
-            header: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-            payload: 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ',
-            signature: 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-        };
+        this.api = 'http://127.0.0.1:4150/api/v1/authenticate';
     }
 
     get token() {
 
-        const { header, payload, signature } = this._token;
-
-        return `${header}.${payload}.${signature}`;
+        return `${this._header}.${this._payload}.${this._signature}`;
     }
 
     get defaultHeaders() {
@@ -25,5 +24,22 @@ export class AuthenticatorService {
     get defaultOptions() {
 
         return ({ headers: this.defaultHeaders });
+    }
+
+    get isAuthenticated() {
+
+        return !!(this._header && this._payload && this._signature);
+    }
+
+    requestToken(username, password) {
+
+        const data = { username, password };
+        const options = [this.api, data];
+
+        return this.$http.post(...options).then(response => {
+
+            const token = response.data.token;
+            [this._header, this._payload, this._signature] = token.split('.');
+        });
     }
 }
