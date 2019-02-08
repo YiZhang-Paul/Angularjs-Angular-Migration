@@ -1,3 +1,5 @@
+import './game-list.css';
+
 export class GameList {
 
     constructor(

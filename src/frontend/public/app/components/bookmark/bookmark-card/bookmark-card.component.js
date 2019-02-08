@@ -1,3 +1,5 @@
+import './bookmark-card.css';
+
 export const BookmarkCardComponent = {
 
     bindings: {

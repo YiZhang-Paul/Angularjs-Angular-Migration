@@ -1,3 +1,5 @@
+import './view-history.css';
+
 export class ViewHistory {
 
     constructor(

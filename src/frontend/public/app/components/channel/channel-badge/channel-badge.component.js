@@ -1,3 +1,5 @@
+import './channel-badge.css';
+
 export const ChannelBadgeComponent = {
 
     bindings: {

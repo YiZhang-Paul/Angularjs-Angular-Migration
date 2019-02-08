@@ -1,0 +1,32 @@
+.bookmark-container {
+
+    padding: 10vh 0 0 1vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+bookmark-card.ng-enter {
+
+    opacity: 0;
+    transition: 0.4s;
+    -webkit-transition: 0.4s;
+}
+
+bookmark-card.ng-enter-active {
+
+    opacity: 1;
+}
+
+bookmark-card.ng-leave {
+
+    opacity: 1;
+    transition: 0.2s;
+    -webkit-transition: 0.2s;
+}
+
+bookmark-card.ng-leave-active {
+
+    opacity: 0;
+}

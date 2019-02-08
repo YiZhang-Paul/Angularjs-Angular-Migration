@@ -1,0 +1,75 @@
+.game-card-container {
+
+    width: inherit;
+    height: inherit;
+    position: relative;
+    font-size: 0.9em;
+    font-weight: 500;
+    overflow: hidden;
+    border-radius: 6px;
+    color: white;
+    background-color: rgb(68, 68, 68);
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+}
+
+.game-card-container:hover {
+
+    cursor: pointer;
+    color: rgb(180, 180, 180);
+    -webkit-box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+    box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+}
+
+.game-card-container .game-image {
+
+    width: 100%;
+    height: 80%;
+    position: absolute;
+    background-size: contain;
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+.game-card-container .game-details {
+
+    bottom: 0;
+    width: 100%;
+    height: 22%;
+    position: absolute;
+}
+
+.game-card-container .game-details span {
+
+    left: 11px;
+    width: 90%;
+    display: block;
+    position: absolute;
+    font-size: 1.1em;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.game-card-container .view-counts:before {
+
+    content: "";
+    width: 16px;
+    height: 15px;
+    float: left;
+    display: block;
+    margin: 1px 4px 0 0;
+    background: url(https://au.kg/images/eye.png) no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.game-card-container .view-counts {
+
+    left: 10px;
+    bottom: 5px;
+    font-size: 0.85em;
+}

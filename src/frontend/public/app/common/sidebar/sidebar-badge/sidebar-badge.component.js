@@ -1,3 +1,5 @@
+import './sidebar-badge.css';
+
 export const SidebarBadgeComponent = {
 
     bindings: {

@@ -1,3 +1,5 @@
+import './view-history-card.css';
+
 export const ViewHistoryCardComponent = {
 
     bindings: {

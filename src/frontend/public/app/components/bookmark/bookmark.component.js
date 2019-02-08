@@ -1,3 +1,5 @@
+import './bookmark.css';
+
 export class Bookmark {
 
     constructor(bookmarkService) {

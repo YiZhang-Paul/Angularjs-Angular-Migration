@@ -1,0 +1,106 @@
+.bookmark-card-container {
+
+    width: 16vw;
+    height: 19vh;
+    padding: 0;
+    margin: 1.5vh 1vw 0 0;
+    position: relative;
+    font-size: 0.9em;
+    font-weight: 500;
+    overflow: hidden;
+    color: white;
+    border-radius: 6px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.329);
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+}
+
+.bookmark-card-container:before {
+
+    content: '';
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.bookmark-card-container:hover {
+
+    -webkit-box-shadow: 2px 3px 14px 3px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 3px 14px 3px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 3px 14px 3px rgba(0, 0, 0, 0.75);
+}
+
+.bookmark-card-container:hover .bookmark-unfollow-button {
+
+    display: block;
+}
+
+.bookmark-card-container .bookmark-image {
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 15%;
+    margin: auto;
+    width: 2.8vw;
+    height: 2.8vw;
+    z-index: 2;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+
+.bookmark-card-container .bookmark-name {
+
+    top: 30%;
+    left: 11px;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 9vw;
+    height: 1vw;
+    z-index: 2;
+    position: absolute;
+    display: block;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bookmark-card-container .bookmark-unfollow-button {
+
+    left: 0;
+    right: 0;
+    bottom: 2vh;
+    margin: 0 auto;
+    width: 4vw;
+    height: 1.5vw;
+    z-index: 2;
+    position: absolute;
+    display: none;
+    font-size: 1.05em;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.5vw;
+    border-radius: 3px;
+    background-color: rgb(177, 36, 18);
+}
+
+.bookmark-card-container .bookmark-unfollow-button:hover {
+
+    cursor: pointer;
+    background-color: rgb(216, 49, 27);
+}

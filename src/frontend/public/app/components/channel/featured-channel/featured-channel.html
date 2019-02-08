@@ -1,28 +1,3 @@
-<style>
-
-.featured-channel-container {
-
-    padding: 10vh 0 0 1vw;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-}
-
-channel-card.ng-enter {
-
-    opacity: 0;
-    transition: 0.4s;
-    -webkit-transition: 0.4s;
-}
-
-channel-card.ng-enter-active {
-
-    opacity: 1;
-}
-
-</style>
-
 <div class="featured-channel-container non-selectable">
     <channel-card
         ng-repeat="channel in $ctrl.channels"

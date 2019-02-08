@@ -1,3 +1,5 @@
+import './game-card.css';
+
 export const GameCardComponent = {
 
     bindings: {

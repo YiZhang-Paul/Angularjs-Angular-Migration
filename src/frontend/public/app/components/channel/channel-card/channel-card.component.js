@@ -1,3 +1,5 @@
+import './channel-card.css';
+
 export class ChannelCard {
 
     constructor(thumbnailPlayerService) {

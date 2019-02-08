@@ -1,3 +1,5 @@
+import './featured-channel.css';
+
 export class FeaturedChannel {
 
     constructor(

@@ -1,3 +1,5 @@
+import './channel.css';
+
 export class Channel {
 
     constructor(

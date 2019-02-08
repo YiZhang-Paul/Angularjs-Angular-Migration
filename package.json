@@ -100,6 +100,8 @@
         "chai": "^4.2.0",
         "chai-http": "^4.2.1",
         "copyfiles": "^2.1.0",
+        "css-loader": "^2.1.0",
+        "file-loader": "^3.0.1",
         "istanbul-instrumenter-loader": "^3.0.1",
         "karma": "^4.0.0",
         "karma-chai": "^0.1.0",
@@ -120,10 +122,12 @@
         "nyc": "^13.1.0",
         "sinon": "^7.2.3",
         "source-map-support": "^0.5.10",
+        "style-loader": "^0.23.1",
         "ts-node": "^7.0.1",
         "tslint": "^5.12.1",
         "tslint-microsoft-contrib": "^6.0.0",
         "typescript": "^3.3.1",
+        "url-loader": "^1.1.2",
         "webpack": "^4.29.0",
         "webpack-cli": "^3.2.1"
     }

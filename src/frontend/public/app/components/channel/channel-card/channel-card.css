@@ -1,0 +1,146 @@
+.channel-card-container {
+
+    width: 16vw;
+    height: 24vh;
+    padding: 0;
+    margin: 0.5vh 1vw 1.5vw 0;
+    overflow: hidden;
+    position: relative;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: white;
+    background-color: rgb(68, 68, 68);
+    -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    border-radius: 6px;
+}
+
+.channel-card-container:hover {
+
+    color: rgb(180, 180, 180);
+    -webkit-box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+    box-shadow: 2px 3px 12px 2px rgba(0, 0, 0, 0.85);
+}
+
+.channel-card-container .stream-thumbnail {
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    position: absolute;
+}
+
+.channel-card-container .stream-thumbnail:hover {
+
+    cursor: pointer;
+}
+
+.channel-card-container .channel-image {
+
+    left: 6px;
+    bottom: 6px;
+    width: 2.5vw;
+    height: 2.5vw;
+    position: absolute;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: aliceblue;
+    border-radius: 5px;
+}
+
+.channel-card-container .channel-details {
+
+    left: 2.8vw;
+    bottom: 0;
+    width: 13vw;
+    height: 24%;
+    position: absolute;
+    font-size: 0.85em;
+}
+
+.channel-card-container .channel-details span {
+
+    left: 11px;
+    width: 90%;
+    position: absolute;
+    display: block;
+    font-size: 1.1em;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.channel-card-container .view-counts {
+
+    top: 5px;
+    left: 10px;
+    z-index: 1;
+    position: absolute;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: tomato;
+}
+
+.channel-card-container .view-counts:before {
+
+    content: "";
+    width: 16px;
+    height: 15px;
+    float: left;
+    margin: 3px 3px 0 0;
+    display: block;
+    background: url(https://au.kg/images/eye.png) no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.channel-card-container .channel-follow-button {
+
+    right: 2px;
+    bottom: 5px;
+    width: 4vw;
+    height: 1.5vw;
+    z-index: 2;
+    position: absolute;
+    display: none;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.5vw;
+    text-align: center;
+    background-color: rgb(112, 77, 177);
+    border-radius: 3px;
+}
+
+.channel-card-container .channel-followed {
+
+    background-color: rgb(177, 36, 18);
+}
+
+.channel-card-container:hover .channel-follow-button {
+
+    display: block;
+}
+
+.channel-card-container .channel-follow-button:hover {
+
+    cursor: pointer;
+}
+
+.channel-card-container .channel-unfollowed:hover {
+
+    color: white;
+    background-color: rgb(137, 90, 223);
+}
+
+.channel-card-container .channel-followed:hover {
+
+    color: white;
+    background-color: rgb(216, 49, 27);
+}

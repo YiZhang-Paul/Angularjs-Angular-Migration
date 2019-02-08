@@ -1,3 +1,5 @@
+import './sidebar.css';
+
 export class Sidebar {
 
     constructor($scope, toastr, sidebarService) {
