@@ -6,8 +6,7 @@ export class Channel {
         $interval,
         gameHttpService,
         channelService,
-        viewHistoryService,
-        thumbnailPlayerService
+        viewHistoryService
 
     ) {
         'ngInject';
@@ -16,7 +15,6 @@ export class Channel {
         this.gameHttpService = gameHttpService;
         this.channelService = channelService;
         this.historyService = viewHistoryService;
-        this.thumbnailPlayer = thumbnailPlayerService;
 
         this.task = null;
         this.game = null;
@@ -74,16 +72,6 @@ export class Channel {
             this._loadChannels();
 
         }, 10 * 1000);
-    }
-
-    playThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.play(thumbnail);
-    }
-
-    stopThumbnail(thumbnail) {
-
-        this.thumbnailPlayer.stop(thumbnail);
     }
 
     isFollowed(channel) {

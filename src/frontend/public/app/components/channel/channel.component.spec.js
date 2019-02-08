@@ -4,7 +4,6 @@ import ComponentsModule from '../components.module';
 import { mockChannelService } from '../../../testing/stubs/channel.service.stub';
 import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
 import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
-import { mockThumbnailPlayerService } from '../../../testing/stubs/thumbnail-player.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -25,7 +24,6 @@ context('channel component unit test', () => {
     let channelServiceStub;
     let gameHttpServiceStub;
     let viewHistoryServiceStub;
-    let thumbnailPlayerServiceStub;
 
     beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
@@ -36,7 +34,6 @@ context('channel component unit test', () => {
         channelServiceStub = mockChannelService(mockModule, inject);
         gameHttpServiceStub = mockGameHttpService(mockModule, inject);
         viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
-        thumbnailPlayerServiceStub = mockThumbnailPlayerService(mockModule);
 
         channelServiceStub.initializeMock();
         gameHttpServiceStub.initializeMock();
@@ -198,34 +195,6 @@ context('channel component unit test', () => {
 
             sinonExpect.calledOnce($interval.cancel);
             sinonExpect.calledWith($interval.cancel, expected);
-        });
-    });
-
-    describe('playThumbnail()', () => {
-
-        it('should use thumbnail player service to play thumbnail', () => {
-
-            const thumbnail = { srcElement: { currentTime: 55 } };
-
-            component.playThumbnail(thumbnail);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.play);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.play, thumbnail);
-        });
-    });
-
-    describe('stopThumbnail()', () => {
-
-        it('should use thumbnail player service to stop thumbnail', () => {
-
-            const thumbnail = { srcElement: { currentTime: 55 } };
-
-            component.stopThumbnail(thumbnail);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.stop);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.stop, thumbnail);
         });
     });
 
