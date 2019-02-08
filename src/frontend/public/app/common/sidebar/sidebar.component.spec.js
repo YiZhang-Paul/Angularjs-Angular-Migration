@@ -159,5 +159,31 @@ context('sidebar component unit test', () => {
 
             sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
+
+        it('should register view history removed event on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
+
+            $rootScope.$broadcast('historyRemoved');
+
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
+
+        it('should register view history cleared event on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
+
+            $rootScope.$broadcast('historyCleared');
+
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
     });
 });

@@ -69,7 +69,7 @@ export class Sidebar {
     }
 
     _registerViewHistoryEvents() {
-        // TODO: need test
+
         const events = ['Updated', 'Removed', 'Cleared'];
 
         for (const event of events) {
