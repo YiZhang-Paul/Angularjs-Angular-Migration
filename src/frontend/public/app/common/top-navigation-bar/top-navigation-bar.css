@@ -21,3 +21,12 @@
     height: 100%;
     position: absolute;
 }
+
+.top-navbar-container user-widget {
+
+    right: 0;
+    bottom: 0;
+    width: 11.5vw;
+    height: 100%;
+    position: absolute;
+}

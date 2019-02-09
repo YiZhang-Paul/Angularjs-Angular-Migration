@@ -3,5 +3,6 @@
         <img class="site-logo" src="../../assets/logo.png" alt="site-logo">
     </a>
 
-    <login></login>
+    <login ng-hide="$ctrl.isAuthenticated"></login>
+    <user-widget ng-show="$ctrl.isAuthenticated"></user-widget>
 </div>

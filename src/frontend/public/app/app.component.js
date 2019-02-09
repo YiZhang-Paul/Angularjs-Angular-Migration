@@ -8,7 +8,7 @@ export class App {
     }
 
     $onInit() {
-
+        // TODO: only when authenticated
         this.service.cacheBookmarks();
     }
 }
