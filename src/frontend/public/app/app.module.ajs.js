@@ -1,6 +1,6 @@
 import ComponentModule from './components/components.module.ajs';
 import CommonModule from './common/common.module';
-import SharedModule from './shared/shared.module';
+import SharedModule from './shared/shared.module.ajs';
 
 import { AppComponent } from './app.component';
 

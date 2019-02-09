@@ -1,4 +1,4 @@
-import ComponentsModule from '../../components.module';
+import ComponentsModule from '../../components.module.ajs';
 
 import { mockThumbnailPlayerService } from '../../../../testing/stubs/thumbnail-player.service.stub';
 
