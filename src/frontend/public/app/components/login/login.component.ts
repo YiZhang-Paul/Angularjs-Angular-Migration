@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { $rootScope } from '../../shared/upgraded-providers/$rootScope.provider';
 import { $state } from '../../shared/upgraded-providers/$state.provider';
 import { Authenticator } from '../../shared/upgraded-providers/authenticator.provider';
-
+// TODO: need tests
 @Component({
     selector: 'login',
     styles: [`${require('./login.component.css')}`],
-    template: `${require('./login.component.html')}`
+    template: require('./login.component.html')
 })
 export class LoginComponent {
 
