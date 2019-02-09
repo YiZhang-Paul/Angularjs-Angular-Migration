@@ -5,7 +5,7 @@ module.exports = {
     entry: {
         vendor: './src/frontend/public/vendor.js',
         polyfills: './src/frontend/public/polyfills.js',
-        app: './src/frontend/public/app/app.module.js'
+        app: './src/frontend/public/main.ts'
     },
     output: {
         filename: '[name].bundle.js',
@@ -19,6 +19,11 @@ module.exports = {
     ],
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+            },
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
@@ -35,5 +40,8 @@ module.exports = {
                 use: ['url-loader']
             }
         ]
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
     }
 };
