@@ -147,6 +147,22 @@ context('sidebar component unit test', () => {
             sinonExpect.notCalled(sidebarServiceStub.getHistories);
         });
 
+        it('should register user authenticated event on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sidebarServiceStub.getBookmarks.reset();
+            sidebarServiceStub.getHistories.reset();
+            sidebarServiceStub.getBookmarks.returns($q.resolve([]));
+            sidebarServiceStub.getHistories.returns($q.resolve([]));
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(sidebarServiceStub.getBookmarks);
+            sinonExpect.calledOnce(sidebarServiceStub.getHistories);
+        });
+
         it('should register followed channel event on initialization', () => {
 
             component.$onInit();

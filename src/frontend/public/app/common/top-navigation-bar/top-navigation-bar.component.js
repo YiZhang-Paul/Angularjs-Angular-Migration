@@ -1,24 +1,17 @@
 import './top-navigation-bar.css';
 
 export class TopNavigationBar {
+    // TODO: move to login component
+    // login() {
 
-    constructor($state, $rootScope, authenticatorService) {
-        'ngInject';
-        this.$state = $state;
-        this.$rootScope = $rootScope;
-        this.authenticator = authenticatorService;
-    }
+    //     const credentials = ['john doe', 'password'];
 
-    login() {
+    //     this.authenticator.requestToken(...credentials).then(() => {
 
-        const credentials = ['john doe', 'password'];
-
-        this.authenticator.requestToken(...credentials).then(() => {
-
-            this.$state.reload();
-            this.$rootScope.$broadcast('userAuthenticated');
-        });
-    }
+    //         this.$state.reload();
+    //         this.$rootScope.$broadcast('userAuthenticated');
+    //     });
+    // }
 }
 
 export const TopNavigationBarComponent = {

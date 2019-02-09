@@ -57,16 +57,6 @@ export class Sidebar {
         });
     }
 
-    _loadFeaturedChannels() {
-
-        const key = this._options[1];
-
-        this.service.getFeaturedChannels().then(channels => {
-
-            this.badges.set(key, channels.slice(0, 3));
-        });
-    }
-
     _loadHistories() {
 
         const key = this._options[2];
@@ -77,11 +67,23 @@ export class Sidebar {
         });
     }
 
-    _loadBadges() {
+    _loadFeaturedChannels() {
 
-        this._loadBookmarks();
-        this._loadFeaturedChannels();
-        this._loadHistories();
+        const key = this._options[1];
+
+        this.service.getFeaturedChannels().then(channels => {
+
+            this.badges.set(key, channels.slice(0, 3));
+        });
+    }
+
+    _registerAuthenticationEvents() {
+
+        this.$scope.$on('userAuthenticated', () => {
+
+            this._loadBookmarks();
+            this._loadHistories();
+        });
     }
 
     _registerBookmarkEvents() {
@@ -99,26 +101,15 @@ export class Sidebar {
             this._loadBookmarks();
             this.toastr.error('You just unfollowed a channel.', timeout);
         });
-        // TODO: need tests
-        this.$scope.$on('userAuthenticated', () => {
-
-            this._loadBookmarks();
-        });
     }
 
     _registerViewHistoryEvents() {
-        // TODO: need tests
-        const events = [
 
-            'historyUpdated',
-            'historyRemoved',
-            'historyCleared',
-            'userAuthenticated'
-        ];
+        const events = ['Updated', 'Removed', 'Cleared'];
 
         for (const event of events) {
 
-            this.$scope.$on(event, () => {
+            this.$scope.$on(`history${event}`, () => {
 
                 this._loadHistories();
             });
@@ -127,6 +118,7 @@ export class Sidebar {
 
     _registerEvents() {
 
+        this._registerAuthenticationEvents();
         this._registerBookmarkEvents();
         this._registerViewHistoryEvents();
     }
