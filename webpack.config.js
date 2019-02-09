@@ -2,9 +2,13 @@ const path = require('path');
 const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
-    entry: './src/frontend/public/app/app.module.js',
+    entry: {
+        vendor: './src/frontend/public/vendor.js',
+        polyfills: './src/frontend/public/polyfills.js',
+        app: './src/frontend/public/app/app.module.js'
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist/frontend/public')
     },
     mode: 'production',

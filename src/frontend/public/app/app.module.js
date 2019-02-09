@@ -1,5 +1,3 @@
-import "@babel/polyfill";
-
 import ComponentModule from './components/components.module';
 import CommonModule from './common/common.module';
 import SharedModule from './shared/shared.module';
