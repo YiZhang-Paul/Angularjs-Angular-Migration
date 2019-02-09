@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 
-import './app.module.js';
+import './app.module.ajs.js';
+import { ComponentsModule } from './components/components.module';
 
 @NgModule({
     imports: [
         BrowserModule,
-        UpgradeModule
+        UpgradeModule,
+        ComponentsModule
     ]
 })
 export class AppModule {
