@@ -1,4 +1,4 @@
-import AppModule from './app.module';
+import AppModule from './app.module.ajs';
 
 const mockModule = angular.mock.module;
 
