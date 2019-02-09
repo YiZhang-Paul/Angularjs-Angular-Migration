@@ -4,12 +4,14 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import './app.module.ajs.js';
 import { ComponentsModule } from './components/components.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
     imports: [
         BrowserModule,
         UpgradeModule,
-        ComponentsModule
+        ComponentsModule,
+        SharedModule
     ]
 })
 export class AppModule {
