@@ -1,4 +1,4 @@
-import ComponentsModule from '../components.module';
+import ComponentsModule from '../components.module.ajs';
 
 import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
 import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';

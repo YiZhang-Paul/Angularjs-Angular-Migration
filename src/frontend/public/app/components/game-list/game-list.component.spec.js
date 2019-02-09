@@ -1,4 +1,4 @@
-import ComponentsModule from '../components.module';
+import ComponentsModule from '../components.module.ajs';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
 import { mockGameListService } from '../../../testing/stubs/game-list.service.stub';

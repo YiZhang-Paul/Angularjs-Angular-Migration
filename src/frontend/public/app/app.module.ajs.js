@@ -1,4 +1,4 @@
-import ComponentModule from './components/components.module';
+import ComponentModule from './components/components.module.ajs';
 import CommonModule from './common/common.module';
 import SharedModule from './shared/shared.module';
 

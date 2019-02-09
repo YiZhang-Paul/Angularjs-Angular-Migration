@@ -1,4 +1,4 @@
-import ComponentsModule from '../components.module';
+import ComponentsModule from '../components.module.ajs';
 
 import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
 
