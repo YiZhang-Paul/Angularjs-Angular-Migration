@@ -6,7 +6,7 @@ export class TopNavigationBar {
         'ngInject';
         this.authenticator = authenticatorService;
     }
-    // TODO: need tests
+
     get isAuthenticated() {
 
         return this.authenticator.isAuthenticated;
