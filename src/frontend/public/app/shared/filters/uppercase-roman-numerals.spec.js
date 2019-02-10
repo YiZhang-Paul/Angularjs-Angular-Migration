@@ -20,6 +20,23 @@ context('uppercase roman numerals filter unit test', () => {
 
     describe('uppercaseRomanNumerals()', () => {
 
+        it('should return empty string when input is null', () => {
+
+            expect(filter(null)).to.equal('');
+        });
+
+        it('should return empty string when input is undefined', () => {
+
+            expect(filter(undefined)).to.equal('');
+        });
+
+        it('should return empty string when input contains spaces only', () => {
+
+            const input = ''.repeat(10);
+
+            expect(filter(input)).to.equal('');
+        });
+
         it('1 ~ 3', () => {
 
             expect(filter('ax i biv')).to.equal('ax I biv');
