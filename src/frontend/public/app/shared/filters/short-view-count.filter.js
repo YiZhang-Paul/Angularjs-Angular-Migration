@@ -7,6 +7,6 @@ export const shortViewCountFilter = numberFilter => {
             return viewCount;
         }
 
-        return `${numberFilter(viewCount / 1000, 0)}k`;
+        return `${numberFilter(viewCount / 1000, 1)}k`;
     }
 }

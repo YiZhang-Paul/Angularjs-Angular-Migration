@@ -1,5 +1,5 @@
 <div class="channel-card-container non-selectable">
-    <span class="view-counts">{{ $ctrl.channel.view_count }}</span>
+    <span class="view-counts">{{ $ctrl.channel.view_count | shortViewCount }}</span>
 
     <video class="stream-thumbnail"
         ng-mouseover="$ctrl.playThumbnail($event)"

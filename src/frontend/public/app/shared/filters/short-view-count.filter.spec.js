@@ -29,9 +29,9 @@ context('short view count filter unit test', () => {
 
         it('should append letter k and add comma separator when applicable', () => {
 
-            const expected = '1,115,124k';
+            const expected = '1,115,123.9k';
 
-            expect(filter(1115123968)).to.equal(expected);
+            expect(filter(1115123868)).to.equal(expected);
         });
     });
 });
