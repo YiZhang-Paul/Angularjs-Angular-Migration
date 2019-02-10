@@ -11,7 +11,6 @@ module.exports = function (config) {
             './node_modules/angular-aria/angular-aria.js',
             './node_modules/angular-animate/angular-animate.js',
             './node_modules/angular-material/angular-material.js',
-            './node_modules/@uirouter/angularjs/release/angular-ui-router.js',
             './node_modules/angular-toastr/dist/angular-toastr.js',
             templates,
             entry
@@ -30,6 +29,16 @@ module.exports = function (config) {
             module: {
                 rules: [
                     {
+                        test: /\.m?js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        use: {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['@babel/preset-env']
+                            }
+                        }
+                    },
+                    {
                         test: /\.js$/,
                         use: {
                             loader: 'istanbul-instrumenter-loader',
@@ -37,13 +46,6 @@ module.exports = function (config) {
                         },
                         include: path.resolve('./src/frontend/public/'),
                         exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
-                    },
-                    {
-                        test: /\.m?js$/,
-                        exclude: /(node_modules|bower_components)/,
-                        use: {
-                            loader: 'babel-loader'
-                        }
                     },
                     {
                         test: /\.css$/,
@@ -60,7 +62,7 @@ module.exports = function (config) {
         autoWatch: false,
         singleRun: true,
         frameworks: ['mocha', 'chai', 'sinon'],
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
         coverageIstanbulReporter: {
             reports: ['text', 'text-summary'],
             fixWebpackSourcePaths: true
@@ -80,7 +82,7 @@ module.exports = function (config) {
             }
         },
         plugins: [
-            'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
             'karma-mocha',
             'karma-mocha-reporter',
             'karma-chai',
