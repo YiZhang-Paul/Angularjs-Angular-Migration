@@ -1,4 +1,4 @@
-import SharedModule from '../shared.module';
+import SharedModule from '../shared.module.ajs';
 
 import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.service.stub';
 import { hasAuthenticationToken } from '../utilities/test-verifications';

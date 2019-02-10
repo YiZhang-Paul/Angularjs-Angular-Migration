@@ -12,3 +12,21 @@
     margin: 5px 0 0 10px;
     position: absolute;
 }
+
+.top-navbar-container login {
+
+    right: 0;
+    bottom: 0;
+    width: 4vw;
+    height: 100%;
+    position: absolute;
+}
+
+.top-navbar-container user-widget {
+
+    right: 0;
+    bottom: 0;
+    width: 11.5vw;
+    height: 100%;
+    position: absolute;
+}

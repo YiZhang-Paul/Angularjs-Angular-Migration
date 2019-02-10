@@ -1,5 +1,5 @@
-import SharedModule from '../../shared/shared.module';
-import ComponentsModule from '../components.module';
+import SharedModule from '../../shared/shared.module.ajs';
+import ComponentsModule from '../components.module.ajs';
 
 import { mockChannelService } from '../../../testing/stubs/channel.service.stub';
 import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';

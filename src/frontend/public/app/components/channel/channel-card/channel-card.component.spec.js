@@ -1,4 +1,5 @@
-import ComponentsModule from '../../components.module';
+import SharedModule from '../../../shared/shared.module.ajs';
+import ComponentsModule from '../../components.module.ajs';
 
 import { mockThumbnailPlayerService } from '../../../../testing/stubs/thumbnail-player.service.stub';
 
@@ -16,6 +17,7 @@ context('channel card component unit test', () => {
 
     let thumbnailPlayerServiceStub;
 
+    beforeEach(mockModule(SharedModule));
     beforeEach(mockModule(ComponentsModule));
     beforeEach(mockModule('component-templates'));
 

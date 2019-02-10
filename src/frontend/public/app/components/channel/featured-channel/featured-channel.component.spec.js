@@ -1,4 +1,4 @@
-import ComponentsModule from '../../components.module';
+import ComponentsModule from '../../components.module.ajs';
 
 import { mockChannelService } from '../../../../testing/stubs/channel.service.stub';
 import { mockFeaturedChannelService } from '../../../../testing/stubs/featured-channel.service.stub';

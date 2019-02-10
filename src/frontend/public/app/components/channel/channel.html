@@ -3,8 +3,8 @@
         <game-card game="$ctrl.game"></game-card>
 
         <div class="game-details">
-            <span class="game-title">{{ $ctrl.game.name | capitalize }}</span></br></br>
-            <div class="game-view-counts">{{ $ctrl.game.view_count + ' watching' }}</div>
+            <span class="game-title">{{ $ctrl.game.name | capitalize | uppercaseRomanNumerals }}</span></br></br>
+            <div class="game-view-counts">{{ $ctrl.game.view_count | shortViewCount }} {{ 'watching' }}</div>
         </div>
     </div>
 

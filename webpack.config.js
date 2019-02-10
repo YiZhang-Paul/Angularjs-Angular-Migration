@@ -2,9 +2,13 @@ const path = require('path');
 const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
-    entry: './src/frontend/public/app/app.module.js',
+    entry: {
+        vendor: './src/frontend/public/vendor.js',
+        polyfills: './src/frontend/public/polyfills.js',
+        app: './src/frontend/public/main.ts'
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist/frontend/public')
     },
     mode: 'production',
@@ -16,10 +20,21 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+            },
+            {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'babel-loader'
+                }
+            },
+            {
+                test: /\.(html)$/,
+                use: {
+                    loader: 'html-loader'
                 }
             },
             {
@@ -31,5 +46,8 @@ module.exports = {
                 use: ['url-loader']
             }
         ]
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
     }
 };

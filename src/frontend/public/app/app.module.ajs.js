@@ -1,8 +1,6 @@
-import "@babel/polyfill";
-
-import ComponentModule from './components/components.module';
+import ComponentModule from './components/components.module.ajs';
 import CommonModule from './common/common.module';
-import SharedModule from './shared/shared.module';
+import SharedModule from './shared/shared.module.ajs';
 
 import { AppComponent } from './app.component';
 
@@ -16,6 +14,7 @@ export default moduleName;
 const app = angular.module(moduleName, [
 
     'ui.router',
+    'ui.router.upgrade',
     'ngAnimate',
     'ngMaterial',
     'toastr',

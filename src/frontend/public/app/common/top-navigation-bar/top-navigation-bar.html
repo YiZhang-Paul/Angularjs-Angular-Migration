@@ -1,5 +1,8 @@
-<div class="top-navbar-container">
+<div class="top-navbar-container non-selectable">
     <a ui-sref="index">
         <img class="site-logo" src="../../assets/logo.png" alt="site-logo">
     </a>
+
+    <login ng-hide="$ctrl.isAuthenticated"></login>
+    <user-widget ng-show="$ctrl.isAuthenticated"></user-widget>
 </div>

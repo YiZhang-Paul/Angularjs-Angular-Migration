@@ -1,4 +1,4 @@
-import SharedModule from '../shared.module';
+import SharedModule from '../shared.module.ajs';
 
 const mockModule = angular.mock.module;
 

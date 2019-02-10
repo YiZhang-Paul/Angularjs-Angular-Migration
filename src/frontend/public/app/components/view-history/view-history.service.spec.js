@@ -1,4 +1,4 @@
-import ComponentsModule from '../components.module';
+import ComponentsModule from '../components.module.ajs';
 
 import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
 

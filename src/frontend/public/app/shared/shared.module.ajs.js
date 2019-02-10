@@ -7,6 +7,8 @@ import { ThumbnailPlayerService } from './services/thumbnail-player.service';
 import { GenericUtilityService } from './services/generic-utility.service';
 
 import { capitalizeFilter } from './filters/capitalize.filter';
+import { shortViewCountFilter } from './filters/short-view-count.filter';
+import { uppercaseRomanNumeralsFilter } from './filters/uppercase-roman-numerals.filter';
 
 const moduleName = 'sample-app-shared';
 
@@ -20,4 +22,6 @@ angular.module(moduleName, [])
     .service('viewHistoryHttpService', ViewHistoryHttpService)
     .service('thumbnailPlayerService', ThumbnailPlayerService)
     .service('genericUtilityService', GenericUtilityService)
-    .filter('capitalize', capitalizeFilter);
+    .filter('capitalize', capitalizeFilter)
+    .filter('shortViewCount', shortViewCountFilter)
+    .filter('uppercaseRomanNumerals', uppercaseRomanNumeralsFilter);

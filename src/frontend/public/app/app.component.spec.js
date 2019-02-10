@@ -1,4 +1,4 @@
-import AppModule from './app.module';
+import AppModule from './app.module.ajs';
 
 import { mockComponent } from '../testing/stubs/mockComponent.stub';
 import { mockBookmarkService } from '../testing/stubs/bookmark.service.stub';

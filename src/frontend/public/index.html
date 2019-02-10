@@ -4,21 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.12/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
     <link rel="stylesheet" href="https://unpkg.com/angular-toastr/dist/angular-toastr.css">
     <title>Angular Migration Sample App</title>
 </head>
-<body ng-app="migration-sample-app">
-
+<body>
     <app></app>
-    <!-- vendors -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.js"></script>
-    <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
-    <script src="https://unpkg.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
     <!-- entry points -->
-    <script src="bundle.js"></script>
+    <script src="vendor.bundle.js"></script>
+    <script src="polyfills.bundle.js"></script>
+    <script src="app.bundle.js"></script>
 </body>
 </html>
