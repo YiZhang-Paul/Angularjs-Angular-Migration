@@ -11,17 +11,12 @@ export const capitalizeFilter = () => {
             return '';
         }
 
-        const words = toLowerCase(getWords(text));
         const ignored = new Set(toLowerCase(whitelist));
 
-        for (let i = 0; i < words.length; i++) {
+        return toLowerCase(getWords(text)).map(word => {
 
-            if (!ignored.has(words[i])) {
+            return ignored.has(word) ? word : capitalize(word);
 
-                words[i] = capitalize(words[i]);
-            }
-        }
-
-        return words.join(' ');
+        }).join(' ');
     }
 }
