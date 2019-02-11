@@ -13,15 +13,3 @@
     height: 21.5vh;
     margin: 1.5vw 0.7vw 1.5vw 0.6vw;
 }
-
-game-card.ng-enter {
-
-    opacity: 0;
-    transition: 0.4s;
-    -webkit-transition: 0.4s;
-}
-
-game-card.ng-enter-active {
-
-    opacity: 1;
-}

@@ -68,15 +68,3 @@
     background-color: rgb(19, 104, 231);
     border-radius: 5px;
 }
-
-channel-card.ng-enter {
-
-    opacity: 0;
-    transition: 0.4s;
-    -webkit-transition: 0.4s;
-}
-
-channel-card.ng-enter-active {
-
-    opacity: 1;
-}
