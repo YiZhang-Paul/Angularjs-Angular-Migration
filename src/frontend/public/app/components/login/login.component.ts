@@ -8,7 +8,7 @@ import { LoginService } from './login.service.provider';
 // TODO: need tests
 @Component({
     selector: 'login',
-    styles: [`${require('./login.component.css')}`],
+    styles: [`${require('./login.component.scss')}`],
     template: require('./login.component.html')
 })
 export class LoginComponent {

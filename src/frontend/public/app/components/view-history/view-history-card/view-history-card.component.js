@@ -1,4 +1,4 @@
-import './view-history-card.css';
+import './view-history-card.scss';
 
 export const ViewHistoryCardComponent = {
 

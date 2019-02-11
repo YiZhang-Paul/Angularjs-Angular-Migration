@@ -1,4 +1,4 @@
-import './game-list.css';
+import './game-list.scss';
 
 export class GameList {
 

@@ -48,6 +48,10 @@ module.exports = function (config) {
                         exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
                     },
                     {
+                        test:  /\.scss$/,
+                        use: ['style-loader', 'css-loader', 'sass-loader']
+                    },
+                    {
                         test: /\.css$/,
                         use: ['style-loader', 'css-loader']
                     },

@@ -1,4 +1,4 @@
-import './top-navigation-bar.css';
+import './top-navigation-bar.scss';
 
 export class TopNavigationBar {
 

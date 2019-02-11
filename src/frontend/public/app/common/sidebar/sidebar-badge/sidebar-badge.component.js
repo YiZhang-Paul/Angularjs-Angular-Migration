@@ -1,4 +1,4 @@
-import './sidebar-badge.css';
+import './sidebar-badge.scss';
 
 export const SidebarBadgeComponent = {
 

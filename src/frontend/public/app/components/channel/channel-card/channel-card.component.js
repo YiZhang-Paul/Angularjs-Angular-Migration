@@ -1,4 +1,4 @@
-import './channel-card.css';
+import './channel-card.scss';
 
 export class ChannelCard {
 

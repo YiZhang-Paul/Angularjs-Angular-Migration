@@ -1,4 +1,4 @@
-import './bookmark.css';
+import './bookmark.scss';
 
 export class Bookmark {
 

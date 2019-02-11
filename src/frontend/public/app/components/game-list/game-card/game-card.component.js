@@ -1,4 +1,4 @@
-import './game-card.css';
+import './game-card.scss';
 
 export const GameCardComponent = {
 

@@ -1,4 +1,4 @@
-import './login-panel.css';
+import './login-panel.scss';
 
 export class LoginPanel {
 

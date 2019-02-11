@@ -1,4 +1,4 @@
-import './featured-channel.css';
+import './featured-channel.scss';
 
 export class FeaturedChannel {
 
