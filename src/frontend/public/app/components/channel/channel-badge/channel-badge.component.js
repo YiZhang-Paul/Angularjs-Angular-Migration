@@ -1,4 +1,4 @@
-import './channel-badge.css';
+import './channel-badge.scss';
 
 export const ChannelBadgeComponent = {
 

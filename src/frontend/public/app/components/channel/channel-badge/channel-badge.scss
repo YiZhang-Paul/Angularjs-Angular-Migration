@@ -1,0 +1,52 @@
+.channel-badge-container {
+
+    $vertical-padding: 0.5vh;
+
+    width: 100%;
+    height: 3.5vh;
+    padding: $vertical-padding 0 $vertical-padding 0;
+    color: inherit;
+
+    .avatar {
+
+        $avatar-width: 3vh;
+        $vertical-margin: 0.25vh;
+
+        width: $avatar-width;
+        height: $avatar-width;
+        margin: $vertical-margin 0 $vertical-margin 1vh;
+        position: absolute;
+        background-color: white;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 5px;
+    }
+
+    .badge-details {
+
+        left: 5.1vh;
+        text-align: left;
+        position: absolute;
+    }
+
+    .badge-details span {
+
+        width: 9.5vw;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .badge-details span:last-child {
+
+        font-size: 0.8em;
+    }
+}
+
+.channel-badge-container:hover {
+
+    cursor: pointer;
+    background-color: rgba(80, 72, 82, 0.521);
+}

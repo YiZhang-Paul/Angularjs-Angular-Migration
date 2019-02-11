@@ -6,7 +6,7 @@ import { UserWidgetService } from './user-widget.service';
 // TODO: need tests
 @Component({
     selector: 'user-widget',
-    styles: [`${require('./user-widget.css')}`],
+    styles: [`${require('./user-widget.scss')}`],
     template: require('./user-widget.html')
 })
 export class UserWidgetComponent implements OnInit {

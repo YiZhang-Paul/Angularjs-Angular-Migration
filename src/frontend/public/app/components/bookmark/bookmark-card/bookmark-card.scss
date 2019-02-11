@@ -1,0 +1,119 @@
+$box-shadow-color: rgba(0, 0, 0, 0.75);
+$overlay-z-index: 1;
+
+@mixin centerImage() {
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@mixin setBoxShadow($spreads, $color) {
+
+    -webkit-box-shadow: #{ $spreads } $color;
+    -moz-box-shadow: #{ $spreads } $color;
+    box-shadow: #{ $spreads } $color;
+}
+
+.bookmark-card-container {
+
+    width: 16vw;
+    height: 19vh;
+    padding: 0;
+    margin: 1.5vh 1vw 0 0;
+    position: relative;
+    font-size: 0.9em;
+    font-weight: 500;
+    overflow: hidden;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.329);
+    border-radius: 6px;
+    @include centerImage();
+    @include setBoxShadow('2px 3px 12px 1px', $box-shadow-color);
+
+    .bookmark-image {
+
+        $image-width: 2.8vw;
+
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 15%;
+        margin: auto;
+        width: $image-width;
+        height: $image-width;
+        z-index: $overlay-z-index + 1;
+        position: absolute;
+        @include centerImage();
+        border-radius: 5px;
+    }
+
+    .bookmark-name {
+
+        top: 30%;
+        left: 11px;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 9vw;
+        height: 1vw;
+        z-index: $overlay-z-index + 1;
+        position: absolute;
+        display: block;
+        font-size: 1.1em;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .bookmark-unfollow-button {
+
+        $unfollow-button-height: 1.5vw;
+
+        left: 0;
+        right: 0;
+        bottom: 2vh;
+        margin: 0 auto;
+        width: 4vw;
+        height: $unfollow-button-height;
+        z-index: $overlay-z-index + 1;
+        position: absolute;
+        display: none;
+        font-size: 1.05em;
+        font-weight: 600;
+        text-align: center;
+        line-height: $unfollow-button-height;
+        border-radius: 3px;
+        background-color: rgb(177, 36, 18);
+    }
+
+    .bookmark-unfollow-button:hover {
+
+        cursor: pointer;
+        background-color: rgb(216, 49, 27);
+    }
+}
+
+.bookmark-card-container:before {
+
+    content: '';
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: $overlay-z-index;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.bookmark-card-container:hover {
+
+    @include setBoxShadow('2px 3px 14px 3px', $box-shadow-color);
+
+    .bookmark-unfollow-button {
+
+        display: block;
+    }
+}

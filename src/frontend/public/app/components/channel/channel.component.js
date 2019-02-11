@@ -1,4 +1,4 @@
-import './channel.css';
+import './channel.scss';
 
 export class Channel {
 

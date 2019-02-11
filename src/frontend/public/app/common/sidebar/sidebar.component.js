@@ -1,4 +1,4 @@
-import './sidebar.css';
+import './sidebar.scss';
 
 export class Sidebar {
 

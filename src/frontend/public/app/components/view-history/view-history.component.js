@@ -1,4 +1,4 @@
-import './view-history.css';
+import './view-history.scss';
 
 export class ViewHistory {
 

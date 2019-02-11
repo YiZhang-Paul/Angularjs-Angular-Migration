@@ -1,4 +1,4 @@
-import './bookmark-card.css';
+import './bookmark-card.scss';
 
 export const BookmarkCardComponent = {
 
