@@ -1,4 +1,5 @@
-<div class="login-panel-container">
+<div class="login-panel-container non-selectable"
+    ng-keyup="$ctrl.onKeyup($event)">
     <div class="header">
         <h2>User Log In</h2>
     </div>
@@ -8,7 +9,7 @@
         <input ng-model="$ctrl.username"></br>
 
         <label>Password</label></br>
-        <input ng-model="$ctrl.password"></br>
+        <input type="password" ng-model="$ctrl.password"></br>
     </div>
 
     <div class="button" ng-click="$ctrl.onLogin()">Log In</div>

@@ -10,6 +10,14 @@ export class LoginPanel {
         this.password = '';
     }
 
+    onKeyup($event) {
+
+        if ($event.keyCode === 13) {
+
+            this.onLogin();
+        }
+    }
+
     onLogin() {
 
         const data = { username: this.username, password: this.password };
