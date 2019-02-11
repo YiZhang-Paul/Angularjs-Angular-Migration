@@ -5,6 +5,10 @@
     </div>
 
     <div class="content">
+        <span class="error-message"
+            ng-class="{ hide: $ctrl.noError }">* Invalid credentials. Please try again.
+        </span></br></br>
+
         <label>Username</label></br>
         <input ng-model="$ctrl.username"></br>
 

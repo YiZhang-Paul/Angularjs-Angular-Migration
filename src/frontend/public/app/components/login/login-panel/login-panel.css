@@ -19,6 +19,16 @@
     font-size: 0.65em;
 }
 
+.login-panel-container .error-message {
+
+    color: tomato;
+}
+
+.login-panel-container .hide {
+
+    display: none;
+}
+
 .login-panel-container .content {
 
     width: 88%;

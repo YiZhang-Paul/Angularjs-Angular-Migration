@@ -8,6 +8,7 @@ export class LoginPanel {
 
         this.username = '';
         this.password = '';
+        this.noError = true;
     }
 
     onKeyup($event) {
@@ -25,7 +26,7 @@ export class LoginPanel {
         this.loginCallback(data)
             .then(() => this.panel.close())
             .then(() => this.panel.destroy())
-            .catch(error => console.log(error));
+            .catch(() => this.noError = false);
     }
 }
 
