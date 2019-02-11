@@ -11,7 +11,7 @@ module.exports = {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist/frontend/public')
     },
-    mode: 'production',
+    mode: 'development',
     plugins: [
         new ngAnnotatePlugin({
             add: true
