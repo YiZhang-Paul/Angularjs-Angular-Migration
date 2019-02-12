@@ -8,4 +8,10 @@ import { Component, Input } from '@angular/core';
 export class UserWidgetComponent {
 
     @Input() public user: any;
+
+    public statusOptions = ['Online', 'Invisible'];
+    public channelOptions = ['Channel', 'Video Producer', 'Dashboard'];
+    public userOptions = ['Friends', 'Subscriptions', 'Inventory', 'Payments'];
+
+    public statusText = this.statusOptions[1];
 }

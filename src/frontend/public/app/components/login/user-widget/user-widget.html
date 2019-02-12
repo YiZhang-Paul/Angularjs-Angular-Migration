@@ -1,7 +1,37 @@
 <div class="user-widget-container">
-    <div class="avatar"></div>
+    <mat-expansion-panel [hideToggle]="true" #menu>
+        <mat-expansion-panel-header>
+            <div class="avatar"></div>
 
-    <div class="user-details">
-        <span class="user-name">{{ user?.name }}</span>
-    </div>
+            <div class="user-details">
+                <span class="user-name">{{ user?.name }}</span><br/>
+                <span class="user-status-text">{{ statusText }}</span>
+            </div>
+
+            <mat-icon class="expand-arrow"
+                [ngClass]="{ 'expanded-arrow': menu.expanded }"
+                >arrow_drop_down
+            </mat-icon>
+        </mat-expansion-panel-header>
+
+        <div class="option"
+            [ngClass]="{ 'active-status': statusText === statusOption }"
+            *ngFor="let statusOption of statusOptions"
+            (click)="statusText = statusOption">{{ statusOption }}
+        </div>
+        <div class="section-split"></div>
+
+        <div class="option dummy-option"
+            *ngFor="let channelOption of channelOptions">{{ channelOption }}
+        </div>
+        <div class="section-split"></div>
+
+        <div class="option dummy-option"
+            *ngFor="let userOption of userOptions">{{ userOption }}
+        </div>
+        <div class="section-split"></div>
+
+        <div class="option dummy-option">Settings</div>
+        <div class="option">Log Out</div>
+    </mat-expansion-panel>
 </div>
