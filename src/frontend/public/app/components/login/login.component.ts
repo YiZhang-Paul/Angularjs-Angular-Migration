@@ -44,4 +44,9 @@ export class LoginComponent {
         const onLogin = this.onLogin.bind(this);
         this._loginService.openLoginPanel(onLogin);
     }
+
+    public logout(): void {
+
+        this._loginService.logout();
+    }
 }

@@ -4,5 +4,8 @@
         (click)="tryLogin()">Log in
     </div>
 
-    <user-widget *ngIf="isAuthenticated" [user]="user"></user-widget>
+    <user-widget *ngIf="isAuthenticated"
+        [user]="user"
+        (onLogout)="logout()">
+    </user-widget>
 </div>

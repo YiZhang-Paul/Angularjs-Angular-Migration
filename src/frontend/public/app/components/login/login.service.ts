@@ -3,7 +3,6 @@ import * as angular from 'angular';
 
 import { $mdPanel } from '../../shared/upgraded-providers/$mdPanel.provider';
 import { $rootScope } from '../../shared/upgraded-providers/$rootScope.provider';
-import { $state } from '../../shared/upgraded-providers/$state.provider';
 import { Authenticator } from '../../shared/upgraded-providers/authenticator.provider';
 import { UserHttpService } from '../../shared/services/user-http.service';
 
@@ -15,7 +14,6 @@ import { LoginPanelComponent } from './login-panel/login-panel.component.js';
 export class LoginService {
 
     private _$mdPanel: $mdPanel;
-    private _$state: $state;
     private _$rootScope: $rootScope;
     private _authenticator: Authenticator;
     private _userHttpService: UserHttpService;
@@ -23,7 +21,6 @@ export class LoginService {
     constructor(
 
         $mdPanel: $mdPanel,
-        $state: $state,
         $rootScope: $rootScope,
         authenticator: Authenticator,
         userHttpService: UserHttpService
@@ -31,7 +28,6 @@ export class LoginService {
     ) {
 
         this._$mdPanel = $mdPanel;
-        this._$state = $state;
         this._$rootScope = $rootScope;
         this._authenticator = authenticator;
         this._userHttpService = userHttpService;
@@ -53,11 +49,16 @@ export class LoginService {
 
         return this._authenticator.requestToken(username, password).then(() => {
 
-            this._$state.reload();
             this._$rootScope.$broadcast('userAuthenticated');
 
             return this.getUser();
         });
+    }
+
+    public logout(): void {
+
+        this._authenticator.clearToken();
+        this._$rootScope.$broadcast('userLoggedOut');
     }
 
     public openLoginPanel(loginCallback: Function): Promise<any> {

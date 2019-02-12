@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { $mdPanelProvider } from './upgraded-providers/$mdPanel.provider';
 import { $rootScopeProvider } from './upgraded-providers/$rootScope.provider';
-import { $stateProvider } from './upgraded-providers/$state.provider';
 import { authenticatorProvider } from './upgraded-providers/authenticator.provider';
 
 @NgModule({
@@ -19,7 +18,6 @@ import { authenticatorProvider } from './upgraded-providers/authenticator.provid
     providers: [
         $mdPanelProvider,
         $rootScopeProvider,
-        $stateProvider,
         authenticatorProvider
     ],
     exports: [

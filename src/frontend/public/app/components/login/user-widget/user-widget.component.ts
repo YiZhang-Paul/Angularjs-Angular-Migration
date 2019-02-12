@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 // TODO: need tests
 @Component({
     selector: 'user-widget',
@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
 export class UserWidgetComponent {
 
     @Input() public user: any;
+    @Output() public onLogout = new EventEmitter();
 
     public statusOptions = ['Online', 'Invisible'];
     public channelOptions = ['Channel', 'Video Producer', 'Dashboard'];
