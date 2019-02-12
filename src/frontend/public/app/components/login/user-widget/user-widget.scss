@@ -21,7 +21,11 @@
         height: $avatar-width;
         margin-left: 10px;
         position: absolute;
-        background-color: whitesmoke;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: rgba(240, 248, 255, 0.034);
+        background-image: url(https://i.paigeeworld.com/user-media/1455667200000/54d32fcc6da2ff3656d6bfac_56c4165412184afb79a467d1_320.jpg);
         border-radius: 5px;
         @include verticalAlign();
     }
@@ -38,5 +42,5 @@
 .user-widget-container:hover {
 
     cursor: pointer;
-    background-color: rgba(129, 93, 196, 0.548)
+    background-color: rgba(125, 103, 167, 0.548)
 }

@@ -4,7 +4,7 @@ import { downgradeComponent } from '@angular/upgrade/static';
 import * as angular from 'angular';
 
 import { LoginComponent } from './login/login.component';
-import { UserWidgetComponent } from './user-widget/user-widget.component';
+import { UserWidgetComponent } from './login/user-widget/user-widget.component';
 
 @NgModule({
     imports: [CommonModule],
