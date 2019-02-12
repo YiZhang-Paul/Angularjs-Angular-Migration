@@ -14,7 +14,6 @@ import { BookmarkService } from './bookmark/bookmark.service';
 import { ChannelService } from './channel/channel.service';
 import { FeaturedChannelService } from './channel/featured-channel/featured-channel.service';
 import { GameListService } from './game-list/game-list.service';
-import { LoginService } from './login/login.service';
 import { ViewHistoryService } from './view-history/view-history.service';
 
 const moduleName = 'sample-app-components';
@@ -37,5 +36,4 @@ angular.module(moduleName, ['ui.router', 'ngMaterial'])
     .service('channelService', ChannelService)
     .service('featuredChannelService', FeaturedChannelService)
     .service('gameListService', GameListService)
-    .service('loginService', LoginService)
     .service('viewHistoryService', ViewHistoryService);
