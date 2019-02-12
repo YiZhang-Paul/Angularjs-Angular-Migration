@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { downgradeComponent } from '@angular/upgrade/static';
 import * as angular from 'angular';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { LoginComponent } from './login/login.component';
 import { UserWidgetComponent } from './login/user-widget/user-widget.component';
 
 @NgModule({
-    imports: [CommonModule],
+    imports: [CommonModule, SharedModule],
     declarations: [LoginComponent, UserWidgetComponent],
     entryComponents: [LoginComponent, UserWidgetComponent]
 })
