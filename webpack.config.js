@@ -3,8 +3,8 @@ const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     entry: {
-        vendor: './src/frontend/public/vendor.js',
-        polyfills: './src/frontend/public/polyfills.js',
+        vendor: './src/frontend/public/assets/libraries/vendor.js',
+        polyfills: './src/frontend/public/assets/libraries/polyfills.js',
         app: './src/frontend/public/main.ts'
     },
     output: {
