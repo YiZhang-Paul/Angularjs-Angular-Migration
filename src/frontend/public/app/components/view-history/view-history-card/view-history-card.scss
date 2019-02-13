@@ -89,16 +89,16 @@
         background-size: contain;
         background-repeat: no-repeat;
         background-color: rgba(240, 248, 255, 0.034);
-        background-image: url(../../../../assets/delete-button-dark.png);
+        background-image: url(../../../../assets/images/delete-button-dark.png);
     }
 
     .remove-button:hover {
 
-        background-image: url(../../../../assets/delete-button-purple.png);
+        background-image: url(../../../../assets/images/delete-button-purple.png);
     }
 
     .remove-button:active {
 
-        background-image: url(../../../../assets/delete-button-pink.png);
+        background-image: url(../../../../assets/images/delete-button-pink.png);
     }
 }
