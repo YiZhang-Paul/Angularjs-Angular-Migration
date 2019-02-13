@@ -148,7 +148,6 @@
         "node-sass": "^4.11.0",
         "nodemon": "^1.18.9",
         "nyc": "^13.2.0",
-        "phantomjs": "^2.1.7",
         "sass-loader": "^7.1.0",
         "sinon": "^7.2.3",
         "source-map-support": "^0.5.10",

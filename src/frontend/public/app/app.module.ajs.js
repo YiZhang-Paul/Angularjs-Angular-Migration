@@ -11,7 +11,7 @@ const moduleName = 'migration-sample-app';
 
 export default moduleName;
 
-const app = angular.module(moduleName, [
+export const app = angular.module(moduleName, [
 
     'ui.router',
     'ui.router.upgrade',

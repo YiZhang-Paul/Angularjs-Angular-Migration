@@ -6,12 +6,26 @@ module.exports = function (config) {
     config.set({
         basePath: '',
         files: [
+            // rxjs
+            './node_modules/rxjs/bundles/rxjs.umd.js',
+            // angularjs
             './node_modules/angular/angular.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/angular-aria/angular-aria.js',
             './node_modules/angular-animate/angular-animate.js',
             './node_modules/angular-material/angular-material.js',
             './node_modules/angular-toastr/dist/angular-toastr.js',
+            // angular
+            './node_modules/@angular/core/bundles/core.umd.js',
+            './node_modules/@angular/common/bundles/common.umd.js',
+            './node_modules/@angular/upgrade/bundles/upgrade-static.umd.js',
+            // ui-router
+            './node_modules/@uirouter/core/_bundles/ui-router-core.js',
+            './node_modules/@uirouter/rx/_bundles/ui-router-rx.js',
+            './node_modules/@uirouter/angularjs/release/ui-router-angularjs.js',
+            './node_modules/@uirouter/angular/_bundles/ui-router-ng2.js',
+            './node_modules/@uirouter/angular-hybrid/_bundles/ui-router-angular-hybrid.js',
+            // test files
             templates,
             entry
         ],
@@ -66,7 +80,7 @@ module.exports = function (config) {
         autoWatch: false,
         singleRun: true,
         frameworks: ['mocha', 'chai', 'sinon'],
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         coverageIstanbulReporter: {
             reports: ['text', 'text-summary'],
             fixWebpackSourcePaths: true
@@ -86,7 +100,7 @@ module.exports = function (config) {
             }
         },
         plugins: [
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
             'karma-mocha',
             'karma-mocha-reporter',
             'karma-chai',
