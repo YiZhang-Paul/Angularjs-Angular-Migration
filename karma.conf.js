@@ -5,7 +5,11 @@ const entry = './src/frontend/public/specs.js';
 module.exports = function (config) {
     config.set({
         basePath: '',
+        customContextFile: './src/frontend/public/context.html',
+        customDebugFile: './src/frontend/public/debug.html',
         files: [
+            // polyfills
+            './node_modules/reflect-metadata/Reflect.js',
             // rxjs
             './node_modules/rxjs/bundles/rxjs.umd.js',
             // angularjs
@@ -40,8 +44,16 @@ module.exports = function (config) {
         webpack: {
             devtool: 'inline-source-map',
             mode: 'development',
+            resolve: {
+                extensions: ['.tsx', '.js', '.ts']
+            },
             module: {
                 rules: [
+                    {
+                        test: /\.tsx?$/,
+                        use: 'ts-loader',
+                        exclude: /node_modules/
+                    },
                     {
                         test: /\.m?js$/,
                         exclude: /(node_modules|bower_components)/,
@@ -62,7 +74,13 @@ module.exports = function (config) {
                         exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
                     },
                     {
-                        test:  /\.scss$/,
+                        test: /\.(html)$/,
+                        use: {
+                            loader: 'html-loader'
+                        }
+                    },
+                    {
+                        test: /\.scss$/,
                         use: ['style-loader', 'css-loader', 'sass-loader']
                     },
                     {
@@ -77,8 +95,8 @@ module.exports = function (config) {
             }
         },
         reporters: ['mocha', 'coverage-istanbul', 'remap-coverage'],
-        autoWatch: false,
-        singleRun: true,
+        autoWatch: true,
+        singleRun: false,
         frameworks: ['mocha', 'chai', 'sinon'],
         browsers: ['Chrome'],
         coverageIstanbulReporter: {

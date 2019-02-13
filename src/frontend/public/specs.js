@@ -10,6 +10,6 @@ after('global test teardown', () => {
     logStub.restore();
 });
 
-const context = require.context('.', true, /\.js/);
+const context = require.context('.', true, /\.(t|j)s/);
 
 context.keys().forEach(context);
