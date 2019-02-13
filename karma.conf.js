@@ -65,13 +65,14 @@ module.exports = function (config) {
                         }
                     },
                     {
-                        test: /\.js$/,
+                        test: /\.(t|j)s$/,
+                        enforce: 'post',
                         use: {
                             loader: 'istanbul-instrumenter-loader',
                             options: { esModules: true }
                         },
                         include: path.resolve('./src/frontend/public/'),
-                        exclude: [/\.?specs?\.js$/, /\.stub\.js$/, /assets/]
+                        exclude: [/\.?(stub|specs?)\.(t|j)s$/, /assets|node_modules/]
                     },
                     {
                         test: /\.(html)$/,
