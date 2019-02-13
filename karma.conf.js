@@ -5,8 +5,8 @@ const entry = './src/frontend/public/specs.js';
 module.exports = function (config) {
     config.set({
         basePath: '',
-        customContextFile: './src/frontend/public/context.html',
-        customDebugFile: './src/frontend/public/debug.html',
+        customContextFile: './src/frontend/public/testing/karma-test-pages/context.html',
+        customDebugFile: './src/frontend/public/testing/karma-test-pages/debug.html',
         files: [
             // polyfills
             './node_modules/reflect-metadata/Reflect.js',
