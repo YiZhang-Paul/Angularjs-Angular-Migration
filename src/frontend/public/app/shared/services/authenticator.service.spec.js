@@ -154,4 +154,20 @@ context('authenticator service unit test', () => {
             $httpBackend.flush();
         });
     });
+
+    describe('clearToken()', () => {
+
+        it('should clear all token data', () => {
+
+            service._header = 'xxx';
+            service._payload = 'xxxx';
+            service._signature = 'xxx';
+
+            service.clearToken();
+
+            expect(service._header).to.be.empty;
+            expect(service._payload).to.be.empty;
+            expect(service._signature).to.be.empty;
+        });
+    });
 });
