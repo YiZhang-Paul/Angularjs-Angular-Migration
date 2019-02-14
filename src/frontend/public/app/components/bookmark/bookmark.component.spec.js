@@ -64,6 +64,29 @@ context('bookmark component unit test', () => {
 
             sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
         });
+
+        it('should register user authenticated event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkServiceStub.cacheBookmarks.resetHistory();
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
+        });
+
+        it('should register user logged out event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkServiceStub.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(bookmarkServiceStub.bookmarks).to.be.empty;
+            expect(component.bookmarks).to.be.empty;
+        });
     });
 
     describe('unfollow()', () => {
