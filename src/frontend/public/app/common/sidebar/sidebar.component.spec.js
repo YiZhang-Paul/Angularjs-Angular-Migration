@@ -10,6 +10,9 @@ const sinonExpect = sinon.assert;
 context('sidebar component unit test', () => {
 
     const tag = '<sidebar></sidebar>';
+    const followedChannelsKey = 'Followed Channels';
+    const featuredChannelsKey = 'Featured Channels';
+    const viewHistoryKey = 'View History';
 
     let $q;
     let $compile;
@@ -73,7 +76,7 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            const result = component.badges.get('Followed Channels');
+            const result = component.badges.get(followedChannelsKey);
 
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
@@ -111,7 +114,7 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            const result = component.badges.get('Featured Channels');
+            const result = component.badges.get(featuredChannelsKey);
 
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
@@ -132,7 +135,7 @@ context('sidebar component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            const result = component.badges.get('View History');
+            const result = component.badges.get(viewHistoryKey);
 
             expect(result).to.deep.equal(expected.slice(0, 3));
         });
@@ -147,7 +150,7 @@ context('sidebar component unit test', () => {
             sinonExpect.notCalled(sidebarServiceStub.getHistories);
         });
 
-        it('should register user authenticated event on initialization', () => {
+        it('should register user authenticated event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -163,7 +166,20 @@ context('sidebar component unit test', () => {
             sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
 
-        it('should register followed channel event on initialization', () => {
+        it('should register user logged out event listener on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            component.badges.set(followedChannelsKey, []);
+            component.badges.set(viewHistoryKey, []);
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(component.badges.has(followedChannelsKey)).to.be.false;
+            expect(component.badges.has(viewHistoryKey)).to.be.false;
+        });
+
+        it('should register followed channel event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -177,7 +193,7 @@ context('sidebar component unit test', () => {
             sinonExpect.calledOnce(toastrStub.success);
         });
 
-        it('should register unfollowed channel event on initialization', () => {
+        it('should register unfollowed channel event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -191,7 +207,7 @@ context('sidebar component unit test', () => {
             sinonExpect.calledOnce(toastrStub.error);
         });
 
-        it('should register view history updated event on initialization', () => {
+        it('should register view history updated event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -204,7 +220,7 @@ context('sidebar component unit test', () => {
             sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
 
-        it('should register view history removed event on initialization', () => {
+        it('should register view history removed event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -217,7 +233,7 @@ context('sidebar component unit test', () => {
             sinonExpect.calledOnce(sidebarServiceStub.getHistories);
         });
 
-        it('should register view history cleared event on initialization', () => {
+        it('should register view history cleared event listener on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
@@ -245,7 +261,7 @@ context('sidebar component unit test', () => {
             authenticatorServiceStub.isAuthenticated = false;
 
             expect(component.options.length).to.equal(1);
-            expect(component.options[0]).to.equal('Featured Channels');
+            expect(component.options[0]).to.equal(featuredChannelsKey);
         });
     });
 
