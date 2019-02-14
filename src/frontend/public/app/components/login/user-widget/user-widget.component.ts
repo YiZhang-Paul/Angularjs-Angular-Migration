@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-// TODO: need tests
+
 @Component({
     selector: 'user-widget',
     styles: [`${require('./user-widget.scss')}`],
