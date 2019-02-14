@@ -67,6 +67,29 @@ context('view history component unit test', () => {
 
             sinonExpect.calledOnce(viewHistoryServiceStub.cacheHistories);
         });
+
+        it('should register user authenticated event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            viewHistoryServiceStub.cacheHistories.resetHistory();
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(viewHistoryServiceStub.cacheHistories);
+        });
+
+        it('should register user logged out event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            viewHistoryServiceStub.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(viewHistoryServiceStub.histories).to.be.empty;
+            expect(component.histories).to.be.empty;
+        });
     });
 
     describe('histories', () => {
