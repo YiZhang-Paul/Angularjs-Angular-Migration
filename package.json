@@ -106,6 +106,7 @@
         "@babel/polyfill": "^7.2.5",
         "@babel/preset-env": "^7.3.1",
         "@types/angular": "^1.6.54",
+        "@types/angular-mocks": "^1.7.0",
         "@types/axios": "^0.14.0",
         "@types/chai": "^4.1.7",
         "@types/config": "0.0.34",
