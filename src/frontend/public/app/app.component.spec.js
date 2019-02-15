@@ -1,6 +1,6 @@
 import AppModule from './app.module.ajs';
 
-import { mockComponentNg1 } from '../testing/stubs/mockComponent.stub';
+import { mockComponentNg1 } from '../testing/stubs/mock-component.stub';
 import { mockBookmarkServiceNg1 } from '../testing/stubs/bookmark.service.stub';
 
 const mockModule = angular.mock.module;
