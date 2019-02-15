@@ -1,7 +1,7 @@
 import CommonModule from '../common.module';
 
 import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
 import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
 
 const mockModule = angular.mock.module;
@@ -22,11 +22,11 @@ context('sidebar service unit test', () => {
     beforeEach('mocks setup', () => {
 
         bookmarkHttpServiceStub = mockBookmarkHttpService(mockModule, inject);
-        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
         viewHistoryHttpServiceStub = mockViewHistoryHttpService(mockModule, inject);
 
         bookmarkHttpServiceStub.initializeMock();
-        channelHttpServiceStub.initializeMock();
+        channelHttpServiceStub.setupMock();
         viewHistoryHttpServiceStub.initializeMock();
     });
 

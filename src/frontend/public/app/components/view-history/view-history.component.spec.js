@@ -2,7 +2,7 @@ import ComponentsModule from '../components.module.ajs';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
 import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
 import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
 import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 
@@ -32,12 +32,12 @@ context('view history component unit test', () => {
 
         $stateStub = mock$state(mockModule);
         gameHttpServiceStub = mockGameHttpService(mockModule, inject);
-        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
         viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
         genericUtilityServiceStub = mockGenericUtilityService(mockModule);
 
         gameHttpServiceStub.initializeMock();
-        channelHttpServiceStub.initializeMock();
+        channelHttpServiceStub.setupMock();
         viewHistoryServiceStub.initializeMock();
     });
 

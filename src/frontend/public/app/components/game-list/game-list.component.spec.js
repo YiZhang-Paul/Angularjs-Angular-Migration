@@ -2,7 +2,7 @@ import ComponentsModule from '../components.module.ajs';
 
 import { mock$state } from '../../../testing/stubs/$state.stub';
 import { mockGameListService } from '../../../testing/stubs/game-list.service.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
 import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
@@ -32,10 +32,10 @@ context('game list component unit test', () => {
 
         $stateStub = mock$state(mockModule);
         gameListServiceStub = mockGameListService(mockModule);
-        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
         genericUtilityServiceStub = mockGenericUtilityService(mockModule);
 
-        channelHttpServiceStub.initializeMock();
+        channelHttpServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

@@ -1,21 +1,29 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'channelHttpService';
 
-export function mockChannelHttpService(module, inject) {
+export function mockChannelHttpService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: null,
+        getChannels: stub(),
+        getChannelsByGameId: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
-
-        const $q = $injector.get('$q');
-        mock.getChannels = stub().returns($q.resolve([]));
-        mock.getChannelsByGameId = stub().returns($q.resolve([]));
-    });
+        mock.getChannels.returns(promise.resolve([]));
+        mock.getChannelsByGameId.returns(promise.resolve([]));
+    };
 
     return mock;
+}
+
+export function mockChannelHttpServiceNg1(module, inject) {
+
+    const mock = mockChannelHttpService();
+    const name = 'channelHttpService';
+
+    return toNg1Mock(mock, name, module, inject);
 }
