@@ -11,6 +11,18 @@ export function mock$mdPanel() {
         open: stub()
     };
 
+    mock.setupMock = (promise = Promise) => {
+
+        const position = {
+
+            absolute: () => position,
+            center: () => position
+        };
+
+        mock.newPanelPosition.returns(position);
+        mock.open.returns(promise.resolve({}));
+    };
+
     return mock;
 }
 

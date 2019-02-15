@@ -1,16 +1,21 @@
 import { toNg1Mock } from './mock-converter-ng1';
 
+const stub = sinon.stub;
+
 export function mockAuthenticatorService() {
 
     const mock = {
 
         setupMock: () => { },
-        defaultOptions: null
+        defaultOptions: null,
+        requestToken: stub(),
+        clearToken: stub()
     }
 
-    mock.setupMock = () => {
+    mock.setupMock = (promise = Promise) => {
 
         mock.defaultOptions = { headers: { Authorization: 'bearer xxx.xxxx.xxx' } };
+        mock.requestToken.returns(promise.resolve({}));
     }
 
     return mock;
