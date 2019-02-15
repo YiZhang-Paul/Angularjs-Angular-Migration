@@ -5,6 +5,7 @@ export class ViewHistory {
     constructor(
 
         $q,
+        $scope,
         $state,
         gameHttpService,
         channelHttpService,
@@ -14,6 +15,7 @@ export class ViewHistory {
     ) {
         'ngInject';
         this.$q = $q;
+        this.$scope = $scope;
         this.$state = $state;
         this.gameHttpService = gameHttpService;
         this.channelHttpService = channelHttpService;
@@ -29,6 +31,20 @@ export class ViewHistory {
     $onInit() {
 
         this.historyService.cacheHistories();
+        this._registerAuthenticationEvents();
+    }
+
+    _registerAuthenticationEvents() {
+
+        this.$scope.$on('userAuthenticated', () => {
+
+            this.historyService.cacheHistories();
+        });
+
+        this.$scope.$on('userLoggedOut', () => {
+
+            this.historyService.histories = [];
+        });
     }
 
     isStaticImage(url) {

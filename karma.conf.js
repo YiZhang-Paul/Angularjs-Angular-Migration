@@ -1,17 +1,14 @@
 const path = require('path');
 const templates = './src/frontend/public/**/*.html';
-const entry = './src/frontend/public/specs.js';
+const entry = './src/frontend/public/specs.ts';
 
 module.exports = function (config) {
     config.set({
         basePath: '',
+        customContextFile: './src/frontend/public/testing/karma-test-pages/context.html',
+        customDebugFile: './src/frontend/public/testing/karma-test-pages/debug.html',
         files: [
             './node_modules/angular/angular.js',
-            './node_modules/angular-mocks/angular-mocks.js',
-            './node_modules/angular-aria/angular-aria.js',
-            './node_modules/angular-animate/angular-animate.js',
-            './node_modules/angular-material/angular-material.js',
-            './node_modules/angular-toastr/dist/angular-toastr.js',
             templates,
             entry
         ],
@@ -26,8 +23,16 @@ module.exports = function (config) {
         webpack: {
             devtool: 'inline-source-map',
             mode: 'development',
+            resolve: {
+                extensions: ['.tsx', '.js', '.ts']
+            },
             module: {
                 rules: [
+                    {
+                        test: /\.tsx?$/,
+                        use: 'ts-loader',
+                        exclude: /node_modules/
+                    },
                     {
                         test: /\.m?js$/,
                         exclude: /(node_modules|bower_components)/,
@@ -39,16 +44,23 @@ module.exports = function (config) {
                         }
                     },
                     {
-                        test: /\.js$/,
+                        test: /\.(t|j)s$/,
+                        enforce: 'post',
                         use: {
                             loader: 'istanbul-instrumenter-loader',
                             options: { esModules: true }
                         },
                         include: path.resolve('./src/frontend/public/'),
-                        exclude: [/\.?specs?\.js$/, /\.stub\.js$/]
+                        exclude: [/\.?(main|app.module|stub|specs?)\.(t|j)s$/, /assets|node_modules/]
                     },
                     {
-                        test:  /\.scss$/,
+                        test: /\.(html)$/,
+                        use: {
+                            loader: 'html-loader'
+                        }
+                    },
+                    {
+                        test: /\.scss$/,
                         use: ['style-loader', 'css-loader', 'sass-loader']
                     },
                     {
@@ -63,10 +75,10 @@ module.exports = function (config) {
             }
         },
         reporters: ['mocha', 'coverage-istanbul', 'remap-coverage'],
-        autoWatch: false,
-        singleRun: true,
+        autoWatch: true,
+        singleRun: false,
         frameworks: ['mocha', 'chai', 'sinon'],
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         coverageIstanbulReporter: {
             reports: ['text', 'text-summary'],
             fixWebpackSourcePaths: true
@@ -86,7 +98,7 @@ module.exports = function (config) {
             }
         },
         plugins: [
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
             'karma-mocha',
             'karma-mocha-reporter',
             'karma-chai',

@@ -1,7 +1,7 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockBookmarkService } from '../../../testing/stubs/bookmark.service.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
+import { mockBookmarkServiceNg1 } from '../../../testing/stubs/bookmark.service.stub';
+import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -19,11 +19,11 @@ context('channel service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
-        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
+        bookmarkServiceStub = mockBookmarkServiceNg1(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
 
-        bookmarkServiceStub.initializeMock();
-        channelHttpServiceStub.initializeMock();
+        bookmarkServiceStub.setupMock();
+        channelHttpServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject($injector => {

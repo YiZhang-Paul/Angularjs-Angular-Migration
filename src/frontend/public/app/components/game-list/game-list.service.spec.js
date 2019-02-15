@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
+import { mockGameHttpServiceNg1 } from '../../../testing/stubs/game-http.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -17,9 +17,9 @@ context('game list service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
+        gameHttpServiceStub = mockGameHttpServiceNg1(mockModule, inject);
 
-        gameHttpServiceStub.initializeMock();
+        gameHttpServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject($injector => {

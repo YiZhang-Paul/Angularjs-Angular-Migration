@@ -3,8 +3,8 @@ const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     entry: {
-        vendor: './src/frontend/public/vendor.js',
-        polyfills: './src/frontend/public/polyfills.js',
+        vendor: './src/frontend/public/assets/libraries/vendor.js',
+        polyfills: './src/frontend/public/assets/libraries/polyfills.js',
         app: './src/frontend/public/main.ts'
     },
     output: {
@@ -17,6 +17,9 @@ module.exports = {
             add: true
         })
     ],
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
+    },
     module: {
         rules: [
             {
@@ -28,7 +31,10 @@ module.exports = {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
                 }
             },
             {
@@ -50,8 +56,5 @@ module.exports = {
                 use: ['url-loader']
             }
         ]
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js']
     }
 };

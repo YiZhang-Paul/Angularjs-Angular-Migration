@@ -1,25 +1,39 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'viewHistoryService';
 
-export function mockViewHistoryService(module, inject) {
+export function mockViewHistoryService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        getHistories: stub(),
+        cacheHistories: stub(),
+        addHistory: stub(),
+        deleteHistory: stub(),
+        showClearHistoriesDialog: stub(),
+        clearHistories: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
+        mock.getHistories.returns(promise.resolve([]));
+        mock.cacheHistories.returns(promise.resolve({}));
+        mock.addHistory.returns(promise.resolve({}));
+        mock.deleteHistory.returns(promise.resolve({}));
+        mock.showClearHistoriesDialog.returns(promise.resolve({}));
+        mock.clearHistories.returns(promise.resolve({}));
 
-        const $q = $injector.get('$q');
-        mock.getHistories = stub().returns($q.resolve([]));
-        mock.cacheHistories = stub().returns($q.resolve({}));
-        mock.addHistory = stub().returns($q.resolve({}));
-        mock.deleteHistory = stub().returns($q.resolve({}));
-        mock.showClearHistoriesDialog = stub().returns($q.resolve({}));
-        mock.clearHistories = stub().returns($q.resolve({}));
-    });
+        return mock;
+    };
 
-    return mock;
+    return mock.setupMock();
+}
+
+export function mockViewHistoryServiceNg1(module, inject) {
+
+    const mock = mockViewHistoryService();
+    const name = 'viewHistoryService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

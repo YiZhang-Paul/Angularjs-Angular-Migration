@@ -1,4 +1,4 @@
-export function mockComponent(module, name, template = '<div></div>') {
+export function mockComponentNg1(module, name, template = '<div></div>') {
 
     module($compileProvider => {
 

@@ -1,17 +1,23 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'toastr';
 
-export function mockToastr(module) {
+export function mockToastr() {
 
-    const mock = {};
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        success: stub(),
+        error: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    return mock.setupMock();
+}
 
-    mock.success = stub();
-    mock.error = stub();
+export function mockToastrNg1(module, inject) {
 
-    return mock;
+    const mock = mockToastr();
+    const name = 'toastr';
+
+    return toNg1Mock(mock, name, module, inject);
 }

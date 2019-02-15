@@ -1,0 +1,124 @@
+@mixin verticalAlign() {
+
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user-widget-container {
+
+    $avatar-width: 3vh;
+    $background-color: rgb(76, 48, 129);
+    $option-vertical-padding: 5px;
+    $option-horizontal-padding: 20px;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    position: relative;
+    font-size: 0.9em;
+    color: rgb(211, 211, 211);
+    background-color: $background-color;
+
+    .mat-expansion-panel {
+
+        width: 100%;
+        color: inherit !important;
+        background-color: transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+
+        .mat-expansion-panel-header {
+
+            padding: 0;
+            height: 100% !important;
+        }
+
+        .mat-expansion-panel-header:hover {
+
+            cursor: pointer;
+            background-color: rgba(141, 122, 177, 0.301) !important;
+        }
+
+        .expand-arrow {
+
+            right: 15px;
+            @include verticalAlign();
+            position: absolute;
+            -webkit-transition: -webkit-transform 0.2s ease-in-out;
+            -ms-transition: -ms-transform 0.2s ease-in-out;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .expanded-arrow {
+
+            -webkit-transform: translateY(-50%) rotate(180deg);
+            -ms-transform: translateY(-50%) rotate(180deg) ;
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .mat-expansion-panel-body {
+
+            padding: 10px 0 !important;
+            background-color: rgb(17, 17, 17) !important;
+            border-bottom-left-radius: 6px !important;
+        }
+
+        .option {
+
+            width: 100%;
+            padding: $option-vertical-padding $option-horizontal-padding;
+            font-size: 0.95em;
+            font-weight: 600px;
+        }
+
+        .option:hover {
+
+            cursor: pointer;
+            background-color: $background-color;
+        }
+
+        .dummy-option:hover {
+
+            cursor: not-allowed;
+        }
+
+        .active-status {
+
+            background-color: $background-color;
+        }
+
+        .section-split {
+
+            margin: $option-vertical-padding $option-horizontal-padding;
+            border-bottom: 1px solid rgb(44, 44, 44);
+        }
+
+        .avatar {
+
+            width: $avatar-width;
+            height: $avatar-width;
+            margin-left: 10px;
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: rgba(240, 248, 255, 0.034);
+            background-image: url(https://i.paigeeworld.com/user-media/1455667200000/54d32fcc6da2ff3656d6bfac_56c4165412184afb79a467d1_320.jpg);
+            border-radius: 5px;
+            @include verticalAlign();
+        }
+
+        .user-details {
+
+            height: $avatar-width;
+            margin-left: 5vh;
+            position: absolute;
+            @include verticalAlign();
+
+            .user-status-text {
+
+                font-size: 0.75em;
+            }
+        }
+    }
+}

@@ -2,8 +2,9 @@ import './bookmark.scss';
 
 export class Bookmark {
 
-    constructor(bookmarkService) {
+    constructor($scope, bookmarkService) {
         'ngInject';
+        this.$scope = $scope;
         this.service = bookmarkService;
     }
 
@@ -15,6 +16,20 @@ export class Bookmark {
     $onInit() {
 
         this.service.cacheBookmarks();
+        this._registerAuthenticationEvents();
+    }
+
+    _registerAuthenticationEvents() {
+
+        this.$scope.$on('userAuthenticated', () => {
+
+            this.service.cacheBookmarks();
+        });
+
+        this.$scope.$on('userLoggedOut', () => {
+
+            this.service.bookmarks = [];
+        });
     }
 
     unfollow(bookmark) {

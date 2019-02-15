@@ -84,6 +84,12 @@ export class Sidebar {
             this._loadBookmarks();
             this._loadHistories();
         });
+
+        this.$scope.$on('userLoggedOut', () => {
+
+            this.badges.delete(this._options[0]);
+            this.badges.delete(this._options[2]);
+        });
     }
 
     _registerBookmarkEvents() {

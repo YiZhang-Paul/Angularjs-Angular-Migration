@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockBookmarkService } from '../../../testing/stubs/bookmark.service.stub';
+import { mockBookmarkServiceNg1 } from '../../../testing/stubs/bookmark.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -22,9 +22,9 @@ context('bookmark component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
+        bookmarkServiceStub = mockBookmarkServiceNg1(mockModule, inject);
 
-        bookmarkServiceStub.initializeMock();
+        bookmarkServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -63,6 +63,29 @@ context('bookmark component unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
+        });
+
+        it('should register user authenticated event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkServiceStub.cacheBookmarks.resetHistory();
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
+        });
+
+        it('should register user logged out event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkServiceStub.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(bookmarkServiceStub.bookmarks).to.be.empty;
+            expect(component.bookmarks).to.be.empty;
         });
     });
 

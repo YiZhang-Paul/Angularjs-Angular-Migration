@@ -1,16 +1,22 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = '$state';
 
-export function mock$state(module) {
+export function mock$state() {
 
-    const mock = {};
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        go: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    return mock.setupMock();
+}
 
-    mock.go = stub();
+export function mock$stateNg1(module, inject) {
 
-    return mock;
+    const mock = mock$state();
+    const name = '$state';
+
+    return toNg1Mock(mock, name, module, inject);
 }

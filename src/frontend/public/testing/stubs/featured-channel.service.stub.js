@@ -1,20 +1,29 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'featuredChannelService';
 
-export function mockFeaturedChannelService(module, inject) {
+export function mockFeaturedChannelService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        getFeaturedChannels: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
+        mock.getFeaturedChannels.returns(promise.resolve([]));
 
-        const $q = $injector.get('$q');
-        mock.getFeaturedChannels = stub().returns($q.resolve([]));
-    });
+        return mock;
+    };
 
-    return mock;
+    return mock.setupMock();
+}
+
+export function mockFeaturedChannelServiceNg1(module, inject) {
+
+    const mock = mockFeaturedChannelService();
+    const name = 'featuredChannelService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

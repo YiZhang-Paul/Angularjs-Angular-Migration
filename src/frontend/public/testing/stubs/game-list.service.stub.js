@@ -1,16 +1,22 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'gameListService';
 
-export function mockGameListService(module) {
+export function mockGameListService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        cacheGames: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    return mock.setupMock();
+}
 
-    mock.cacheGames = stub();
+export function mockGameListServiceNg1(module, inject) {
 
-    return mock;
+    const mock = mockGameListService();
+    const name = 'gameListService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

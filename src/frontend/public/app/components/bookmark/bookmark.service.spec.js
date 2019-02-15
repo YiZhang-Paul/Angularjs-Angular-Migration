@@ -1,7 +1,7 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
+import { mockBookmarkHttpServiceNg1 } from '../../../testing/stubs/bookmark-http.service.stub';
+import { mockGenericUtilityServiceNg1 } from '../../../testing/stubs/generic-utility.service.stub';
 import { excludeIndex } from '../../shared/services/generic-utility.service';
 
 const mockModule = angular.mock.module;
@@ -21,10 +21,11 @@ context('bookmark service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        bookmarkHttpServiceStub = mockBookmarkHttpService(mockModule, inject);
-        genericUtilityServiceStub = mockGenericUtilityService(mockModule);
+        bookmarkHttpServiceStub = mockBookmarkHttpServiceNg1(mockModule, inject);
+        genericUtilityServiceStub = mockGenericUtilityServiceNg1(mockModule, inject);
 
-        bookmarkHttpServiceStub.initializeMock();
+        bookmarkHttpServiceStub.setupMock();
+        genericUtilityServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject($injector => {

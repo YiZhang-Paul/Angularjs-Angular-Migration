@@ -1,22 +1,33 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'gameHttpService';
 
-export function mockGameHttpService(module, inject) {
+export function mockGameHttpService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        getGame: stub(),
+        getGameByName: stub(),
+        getGames: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
+        mock.getGame.returns(promise.resolve({}));
+        mock.getGameByName.returns(promise.resolve({}));
+        mock.getGames.returns(promise.resolve([]));
 
-        const $q = $injector.get('$q');
-        mock.getGame = stub().returns($q.resolve({}));
-        mock.getGameByName = stub().returns($q.resolve({}));
-        mock.getGames = stub().returns($q.resolve([]));
-    });
+        return mock;
+    };
 
-    return mock;
+    return mock.setupMock();
+}
+
+export function mockGameHttpServiceNg1(module, inject) {
+
+    const mock = mockGameHttpService();
+    const name = 'gameHttpService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

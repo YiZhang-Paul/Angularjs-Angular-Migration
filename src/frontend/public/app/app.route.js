@@ -16,7 +16,7 @@ export default ($stateProvider, $urlRouterProvider) => {
         .state('error', {
 
             url: '/error',
-            templateUrl: './app/error.html'
+            template: '<h1 class="page-not-found">Page Not Found</h1>'
         })
         .state(`index.${GameListState.name}`, GameListState.state)
         .state(`index.${ChannelsState.name}`, ChannelsState.state)

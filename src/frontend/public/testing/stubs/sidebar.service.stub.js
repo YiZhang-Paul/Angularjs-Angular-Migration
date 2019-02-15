@@ -1,22 +1,33 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'sidebarService';
 
-export function mockSidebarService(module, inject) {
+export function mockSidebarService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => mock,
+        getBookmarks: stub(),
+        getFeaturedChannels: stub(),
+        getHistories: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
+        mock.getBookmarks.returns(promise.resolve([]));
+        mock.getFeaturedChannels.returns(promise.resolve([]));
+        mock.getHistories.returns(promise.resolve([]));
 
-        const $q = $injector.get('$q');
-        mock.getBookmarks = stub().returns($q.resolve([]));
-        mock.getFeaturedChannels = stub().returns($q.resolve([]));
-        mock.getHistories = stub().returns($q.resolve([]));
-    });
+        return mock;
+    };
 
-    return mock;
+    return mock.setupMock();
+}
+
+export function mockSidebarServiceNg1(module, inject) {
+
+    const mock = mockSidebarService();
+    const name = 'sidebarService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

@@ -42,4 +42,11 @@ export class AuthenticatorService {
             [this._header, this._payload, this._signature] = token.split('.');
         });
     }
+
+    clearToken() {
+
+        this._header = '';
+        this._payload = '';
+        this._signature = '';
+    }
 }

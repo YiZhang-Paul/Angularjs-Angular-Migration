@@ -1,10 +1,10 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
-import { mockChannelHttpService } from '../../../testing/stubs/channel-http.service.stub';
-import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
+import { mock$stateNg1 } from '../../../testing/stubs/$state.stub';
+import { mockGameHttpServiceNg1 } from '../../../testing/stubs/game-http.service.stub';
+import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
+import { mockViewHistoryServiceNg1 } from '../../../testing/stubs/view-history.service.stub';
+import { mockGenericUtilityServiceNg1 } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -30,15 +30,17 @@ context('view history component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        $stateStub = mock$state(mockModule);
-        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
-        channelHttpServiceStub = mockChannelHttpService(mockModule, inject);
-        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
-        genericUtilityServiceStub = mockGenericUtilityService(mockModule);
+        $stateStub = mock$stateNg1(mockModule, inject);
+        gameHttpServiceStub = mockGameHttpServiceNg1(mockModule, inject);
+        channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
+        viewHistoryServiceStub = mockViewHistoryServiceNg1(mockModule, inject);
+        genericUtilityServiceStub = mockGenericUtilityServiceNg1(mockModule, inject);
 
-        gameHttpServiceStub.initializeMock();
-        channelHttpServiceStub.initializeMock();
-        viewHistoryServiceStub.initializeMock();
+        $stateStub.setupMock();
+        gameHttpServiceStub.setupMock();
+        channelHttpServiceStub.setupMock();
+        viewHistoryServiceStub.setupMock();
+        genericUtilityServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -66,6 +68,29 @@ context('view history component unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.calledOnce(viewHistoryServiceStub.cacheHistories);
+        });
+
+        it('should register user authenticated event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            viewHistoryServiceStub.cacheHistories.resetHistory();
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(viewHistoryServiceStub.cacheHistories);
+        });
+
+        it('should register user logged out event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            viewHistoryServiceStub.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(viewHistoryServiceStub.histories).to.be.empty;
+            expect(component.histories).to.be.empty;
         });
     });
 
