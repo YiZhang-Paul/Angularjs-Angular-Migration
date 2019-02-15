@@ -25,14 +25,8 @@ context('login service unit test', () => {
     beforeEach('mocks setup', () => {
 
         $mdPanelStub = mock$mdPanel();
-        $mdPanelStub.setupMock();
-
         $rootScopeStub = mock$rootScope();
-        $rootScopeStub.setupMock();
-
         authenticatorServiceStub = mockAuthenticatorService();
-        authenticatorServiceStub.setupMock();
-
         userHttpServiceStub = mockUserHttpService();
     });
 

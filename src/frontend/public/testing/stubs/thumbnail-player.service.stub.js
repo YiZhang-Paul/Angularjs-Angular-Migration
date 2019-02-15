@@ -6,12 +6,12 @@ export function mockThumbnailPlayerService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         play: stub(),
         stop: stub()
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockThumbnailPlayerServiceNg1(module, inject) {

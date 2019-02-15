@@ -6,7 +6,7 @@ export function mockChannelHttpService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getChannels: stub(),
         getChannelsByGameId: stub()
     };
@@ -15,9 +15,11 @@ export function mockChannelHttpService() {
 
         mock.getChannels.returns(promise.resolve([]));
         mock.getChannelsByGameId.returns(promise.resolve([]));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockChannelHttpServiceNg1(module, inject) {

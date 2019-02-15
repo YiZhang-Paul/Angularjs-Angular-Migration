@@ -6,7 +6,7 @@ export function mockGenericUtilityService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         joinText: stub(),
         excludeIndex: stub(),
         hasMatchingValues: stub(),
@@ -21,9 +21,11 @@ export function mockGenericUtilityService() {
         mock.hasMatchingValues.returns(true);
         mock.hasOwnProperties.returns(true);
         mock.findByProperties.returns({});
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockGenericUtilityServiceNg1(module, inject) {

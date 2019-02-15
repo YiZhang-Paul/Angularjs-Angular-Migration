@@ -6,7 +6,7 @@ export function mockBookmarkHttpService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getBookmarks: stub(),
         addBookmark: stub(),
         deleteBookmark: stub()
@@ -17,9 +17,11 @@ export function mockBookmarkHttpService() {
         mock.getBookmarks.returns(promise.resolve([]));
         mock.addBookmark.returns(promise.resolve({}));
         mock.deleteBookmark.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockBookmarkHttpServiceNg1(module, inject) {

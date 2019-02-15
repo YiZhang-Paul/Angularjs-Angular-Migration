@@ -6,7 +6,7 @@ export function mockSidebarService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getBookmarks: stub(),
         getFeaturedChannels: stub(),
         getHistories: stub()
@@ -17,9 +17,11 @@ export function mockSidebarService() {
         mock.getBookmarks.returns(promise.resolve([]));
         mock.getFeaturedChannels.returns(promise.resolve([]));
         mock.getHistories.returns(promise.resolve([]));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockSidebarServiceNg1(module, inject) {

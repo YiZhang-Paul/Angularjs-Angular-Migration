@@ -6,7 +6,7 @@ export function mockBookmarkService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getBookmarks: stub(),
         cacheBookmarks: stub(),
         isFollowed: stub(),
@@ -21,9 +21,11 @@ export function mockBookmarkService() {
         mock.isFollowed.returns(true);
         mock.follow.returns(promise.resolve({}));
         mock.unfollow.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockBookmarkServiceNg1(module, inject) {

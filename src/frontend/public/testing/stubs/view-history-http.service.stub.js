@@ -6,7 +6,7 @@ export function mockViewHistoryHttpService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getHistories: stub(),
         addHistory: stub(),
         deleteHistory: stub(),
@@ -19,9 +19,11 @@ export function mockViewHistoryHttpService() {
         mock.addHistory.returns(promise.resolve({}));
         mock.deleteHistory.returns(promise.resolve({}));
         mock.deleteHistories.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockViewHistoryHttpServiceNg1(module, inject) {

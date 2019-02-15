@@ -6,12 +6,12 @@ export function mockToastr() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         success: stub(),
         error: stub()
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockToastrNg1(module, inject) {

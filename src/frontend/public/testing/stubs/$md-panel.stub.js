@@ -6,7 +6,7 @@ export function mock$mdPanel() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         newPanelPosition: stub(),
         open: stub()
     };
@@ -21,9 +21,11 @@ export function mock$mdPanel() {
 
         mock.newPanelPosition.returns(position);
         mock.open.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mock$mdPanelNg1(module, inject) {

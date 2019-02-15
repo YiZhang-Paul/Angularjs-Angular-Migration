@@ -6,7 +6,7 @@ export function mockAuthenticatorService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         defaultOptions: null,
         requestToken: stub(),
         clearToken: stub()
@@ -16,9 +16,11 @@ export function mockAuthenticatorService() {
 
         mock.defaultOptions = { headers: { Authorization: 'bearer xxx.xxxx.xxx' } };
         mock.requestToken.returns(promise.resolve({}));
+
+        return mock;
     }
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockAuthenticatorServiceNg1(module, inject) {

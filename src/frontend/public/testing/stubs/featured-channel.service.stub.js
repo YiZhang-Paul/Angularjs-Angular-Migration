@@ -6,16 +6,18 @@ export function mockFeaturedChannelService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getFeaturedChannels: stub()
     };
 
     mock.setupMock = (promise = Promise) => {
 
         mock.getFeaturedChannels.returns(promise.resolve([]));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockFeaturedChannelServiceNg1(module, inject) {

@@ -6,11 +6,11 @@ export function mock$state() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         go: stub()
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mock$stateNg1(module, inject) {

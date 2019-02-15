@@ -20,7 +20,6 @@ context('user http service unit test', () => {
     beforeEach('general test setup', () => {
 
         authenticatorServiceStub = mockAuthenticatorService();
-        authenticatorServiceStub.setupMock();
 
         TestBed.configureTestingModule({
 

@@ -6,11 +6,11 @@ export function mockGameListService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         cacheGames: stub()
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockGameListServiceNg1(module, inject) {

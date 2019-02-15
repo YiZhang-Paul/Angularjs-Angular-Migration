@@ -4,9 +4,9 @@ export function mock$rootScope() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         $broadcast: stub()
     };
 
-    return mock;
+    return mock.setupMock();
 }

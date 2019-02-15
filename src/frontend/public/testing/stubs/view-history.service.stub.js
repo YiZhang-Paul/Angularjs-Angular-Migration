@@ -6,7 +6,7 @@ export function mockViewHistoryService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getHistories: stub(),
         cacheHistories: stub(),
         addHistory: stub(),
@@ -23,9 +23,11 @@ export function mockViewHistoryService() {
         mock.deleteHistory.returns(promise.resolve({}));
         mock.showClearHistoriesDialog.returns(promise.resolve({}));
         mock.clearHistories.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockViewHistoryServiceNg1(module, inject) {

@@ -6,7 +6,7 @@ export function mockMdPanelRef() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         close: stub(),
         destroy: stub()
     };
@@ -15,9 +15,11 @@ export function mockMdPanelRef() {
 
         mock.close.returns(promise.resolve({}));
         mock.destroy.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockMdPanelRefNg1(module, inject) {

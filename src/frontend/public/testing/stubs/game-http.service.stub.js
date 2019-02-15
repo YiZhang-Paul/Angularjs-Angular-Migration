@@ -6,7 +6,7 @@ export function mockGameHttpService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getGame: stub(),
         getGameByName: stub(),
         getGames: stub()
@@ -17,9 +17,11 @@ export function mockGameHttpService() {
         mock.getGame.returns(promise.resolve({}));
         mock.getGameByName.returns(promise.resolve({}));
         mock.getGames.returns(promise.resolve([]));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockGameHttpServiceNg1(module, inject) {

@@ -6,7 +6,7 @@ export function mockChannelService() {
 
     const mock = {
 
-        setupMock: () => { },
+        setupMock: () => mock,
         getChannelsByGameId: stub(),
         refreshChannels: stub(),
         isFollowed: stub(),
@@ -20,9 +20,11 @@ export function mockChannelService() {
         mock.isFollowed.returns(true);
         mock.follow.returns(promise.resolve({}));
         mock.unfollow.returns(promise.resolve({}));
+
+        return mock;
     };
 
-    return mock;
+    return mock.setupMock();
 }
 
 export function mockChannelServiceNg1(module, inject) {
