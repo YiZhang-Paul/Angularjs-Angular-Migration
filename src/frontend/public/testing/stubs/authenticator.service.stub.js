@@ -8,6 +8,7 @@ export function mockAuthenticatorService() {
 
         setupMock: () => mock,
         defaultOptions: null,
+        isAuthenticated: null,
         requestToken: stub(),
         clearToken: stub()
     }
@@ -15,6 +16,7 @@ export function mockAuthenticatorService() {
     mock.setupMock = (promise = Promise) => {
 
         mock.defaultOptions = { headers: { Authorization: 'bearer xxx.xxxx.xxx' } };
+        mock.isAuthenticated = true;
         mock.requestToken.returns(promise.resolve({}));
 
         return mock;

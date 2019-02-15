@@ -1,4 +1,3 @@
-// tslint:disable:no-empty
 import { stub } from 'sinon';
 
 import { UserHttpService } from '../../app/shared/services/user-http.service';
