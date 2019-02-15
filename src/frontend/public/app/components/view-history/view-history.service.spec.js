@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
+import { mockViewHistoryHttpServiceNg1 } from '../../../testing/stubs/view-history-http.service.stub';
 
 const mockModule = angular.mock.module;
 const spy = sinon.spy;
@@ -20,8 +20,9 @@ context('view history service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        viewHistoryHttpServiceStub = mockViewHistoryHttpService(mockModule, inject);
-        viewHistoryHttpServiceStub.initializeMock();
+        viewHistoryHttpServiceStub = mockViewHistoryHttpServiceNg1(mockModule, inject);
+
+        viewHistoryHttpServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject($injector => {

@@ -1,24 +1,35 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'bookmarkService';
 
-export function mockBookmarkService(module, inject) {
+export function mockBookmarkService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        getBookmarks: stub(),
+        cacheBookmarks: stub(),
+        isFollowed: stub(),
+        follow: stub(),
+        unfollow: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
-
-        const $q = $injector.get('$q');
-        mock.getBookmarks = stub().returns($q.resolve([]));
-        mock.cacheBookmarks = stub().returns($q.resolve({}));
-        mock.isFollowed = stub().returns(true);
-        mock.follow = stub().returns($q.resolve({}));
-        mock.unfollow = stub().returns($q.resolve({}));
-    });
+        mock.getBookmarks.returns(promise.resolve([]));
+        mock.cacheBookmarks.returns(promise.resolve({}));
+        mock.isFollowed.returns(true);
+        mock.follow.returns(promise.resolve({}));
+        mock.unfollow.returns(promise.resolve({}));
+    };
 
     return mock;
+}
+
+export function mockBookmarkServiceNg1(module, inject) {
+
+    const mock = mockBookmarkService();
+    const name = 'bookmarkService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

@@ -6,7 +6,7 @@ export function mockChannelHttpService() {
 
     const mock = {
 
-        setupMock: null,
+        setupMock: () => { },
         getChannels: stub(),
         getChannelsByGameId: stub()
     };

@@ -1,17 +1,23 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'thumbnailPlayerService';
 
-export function mockThumbnailPlayerService(module) {
+export function mockThumbnailPlayerService() {
 
-    const mock = {};
+    const mock = {
 
-    module($provide => {
-
-        $provide.service(name, () => mock);
-    });
-
-    mock.play = stub();
-    mock.stop = stub();
+        setupMock: () => { },
+        play: stub(),
+        stop: stub()
+    };
 
     return mock;
+}
+
+export function mockThumbnailPlayerServiceNg1(module, inject) {
+
+    const mock = mockThumbnailPlayerService();
+    const name = 'thumbnailPlayerService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

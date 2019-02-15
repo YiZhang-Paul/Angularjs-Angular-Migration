@@ -1,8 +1,8 @@
 import CommonModule from '../common.module';
 
-import { mockBookmarkHttpService } from '../../../testing/stubs/bookmark-http.service.stub';
+import { mockBookmarkHttpServiceNg1 } from '../../../testing/stubs/bookmark-http.service.stub';
 import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
-import { mockViewHistoryHttpService } from '../../../testing/stubs/view-history-http.service.stub';
+import { mockViewHistoryHttpServiceNg1 } from '../../../testing/stubs/view-history-http.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -21,13 +21,13 @@ context('sidebar service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        bookmarkHttpServiceStub = mockBookmarkHttpService(mockModule, inject);
+        bookmarkHttpServiceStub = mockBookmarkHttpServiceNg1(mockModule, inject);
         channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
-        viewHistoryHttpServiceStub = mockViewHistoryHttpService(mockModule, inject);
+        viewHistoryHttpServiceStub = mockViewHistoryHttpServiceNg1(mockModule, inject);
 
-        bookmarkHttpServiceStub.initializeMock();
+        bookmarkHttpServiceStub.setupMock();
         channelHttpServiceStub.setupMock();
-        viewHistoryHttpServiceStub.initializeMock();
+        viewHistoryHttpServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject($injector => {

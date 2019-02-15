@@ -1,22 +1,31 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'bookmarkHttpService';
 
-export function mockBookmarkHttpService(module, inject) {
+export function mockBookmarkHttpService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        getBookmarks: stub(),
+        addBookmark: stub(),
+        deleteBookmark: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
-
-        const $q = $injector.get('$q');
-        mock.getBookmarks = stub().returns($q.resolve([]));
-        mock.addBookmark = stub().returns($q.resolve({}));
-        mock.deleteBookmark = stub().returns($q.resolve({}));
-    });
+        mock.getBookmarks.returns(promise.resolve([]));
+        mock.addBookmark.returns(promise.resolve({}));
+        mock.deleteBookmark.returns(promise.resolve({}));
+    };
 
     return mock;
+}
+
+export function mockBookmarkHttpServiceNg1(module, inject) {
+
+    const mock = mockBookmarkHttpService();
+    const name = 'bookmarkHttpService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

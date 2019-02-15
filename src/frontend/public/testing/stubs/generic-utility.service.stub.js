@@ -1,20 +1,35 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'genericUtilityService';
 
-export function mockGenericUtilityService(module) {
+export function mockGenericUtilityService() {
 
-    const mock = {};
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        joinText: stub(),
+        excludeIndex: stub(),
+        hasMatchingValues: stub(),
+        hasOwnProperties: stub(),
+        findByProperties: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.joinText = stub().returns('');
-    mock.excludeIndex = stub().returns([]);
-    mock.hasMatchingValues = stub().returns(true);
-    mock.hasOwnProperties = stub().returns(true);
-    mock.findByProperties = stub().returns({});
+        mock.joinText.returns('');
+        mock.excludeIndex.returns([]);
+        mock.hasMatchingValues.returns(true);
+        mock.hasOwnProperties.returns(true);
+        mock.findByProperties.returns({});
+    };
 
     return mock;
+}
+
+export function mockGenericUtilityServiceNg1(module, inject) {
+
+    const mock = mockGenericUtilityService();
+    const name = 'genericUtilityService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

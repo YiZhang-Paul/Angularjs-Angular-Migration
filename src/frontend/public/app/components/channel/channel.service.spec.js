@@ -1,6 +1,6 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mockBookmarkService } from '../../../testing/stubs/bookmark.service.stub';
+import { mockBookmarkServiceNg1 } from '../../../testing/stubs/bookmark.service.stub';
 import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
 
 const mockModule = angular.mock.module;
@@ -19,10 +19,10 @@ context('channel service unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
+        bookmarkServiceStub = mockBookmarkServiceNg1(mockModule, inject);
         channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
 
-        bookmarkServiceStub.initializeMock();
+        bookmarkServiceStub.setupMock();
         channelHttpServiceStub.setupMock();
     });
 

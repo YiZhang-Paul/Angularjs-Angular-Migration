@@ -1,8 +1,8 @@
 import CommonModule from '../common.module';
 
-import { mockToastr } from '../../../testing/stubs/toastr.stub';
-import { mockSidebarService } from '../../../testing/stubs/sidebar.service.stub';
-import { mockAuthenticatorService } from '../../../testing/stubs/authenticator.service.stub';
+import { mockToastrNg1 } from '../../../testing/stubs/toastr.stub';
+import { mockSidebarServiceNg1 } from '../../../testing/stubs/sidebar.service.stub';
+import { mockAuthenticatorServiceNg1 } from '../../../testing/stubs/authenticator.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -29,11 +29,13 @@ context('sidebar component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        toastrStub = mockToastr(mockModule);
-        sidebarServiceStub = mockSidebarService(mockModule, inject);
-        authenticatorServiceStub = mockAuthenticatorService(mockModule);
+        toastrStub = mockToastrNg1(mockModule, inject);
+        sidebarServiceStub = mockSidebarServiceNg1(mockModule, inject);
+        authenticatorServiceStub = mockAuthenticatorServiceNg1(mockModule, inject);
 
-        sidebarServiceStub.initializeMock();
+        toastrStub.setupMock();
+        sidebarServiceStub.setupMock();
+        authenticatorServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

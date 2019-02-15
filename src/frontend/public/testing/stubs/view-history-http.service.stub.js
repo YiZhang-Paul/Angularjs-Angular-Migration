@@ -1,23 +1,33 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'viewHistoryHttpService';
 
-export function mockViewHistoryHttpService(module, inject) {
+export function mockViewHistoryHttpService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        getHistories: stub(),
+        addHistory: stub(),
+        deleteHistory: stub(),
+        deleteHistories: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
-
-        const $q = $injector.get('$q');
-        mock.getHistories = stub().returns($q.resolve([]));
-        mock.addHistory = stub().returns($q.resolve({}));
-        mock.deleteHistory = stub().returns($q.resolve({}));
-        mock.deleteHistories = stub().returns($q.resolve({}));
-    });
+        mock.getHistories.returns(promise.resolve([]));
+        mock.addHistory.returns(promise.resolve({}));
+        mock.deleteHistory.returns(promise.resolve({}));
+        mock.deleteHistories.returns(promise.resolve({}));
+    };
 
     return mock;
+}
+
+export function mockViewHistoryHttpServiceNg1(module, inject) {
+
+    const mock = mockViewHistoryHttpService();
+    const name = 'viewHistoryHttpService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

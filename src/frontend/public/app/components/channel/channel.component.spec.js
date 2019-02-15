@@ -1,9 +1,9 @@
 import SharedModule from '../../shared/shared.module.ajs';
 import ComponentsModule from '../components.module.ajs';
 
-import { mockChannelService } from '../../../testing/stubs/channel.service.stub';
-import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
-import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
+import { mockChannelServiceNg1 } from '../../../testing/stubs/channel.service.stub';
+import { mockGameHttpServiceNg1 } from '../../../testing/stubs/game-http.service.stub';
+import { mockViewHistoryServiceNg1 } from '../../../testing/stubs/view-history.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -31,13 +31,13 @@ context('channel component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        channelServiceStub = mockChannelService(mockModule, inject);
-        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
-        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
+        channelServiceStub = mockChannelServiceNg1(mockModule, inject);
+        gameHttpServiceStub = mockGameHttpServiceNg1(mockModule, inject);
+        viewHistoryServiceStub = mockViewHistoryServiceNg1(mockModule, inject);
 
-        channelServiceStub.initializeMock();
-        gameHttpServiceStub.initializeMock();
-        viewHistoryServiceStub.initializeMock();
+        channelServiceStub.setupMock();
+        gameHttpServiceStub.setupMock();
+        viewHistoryServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

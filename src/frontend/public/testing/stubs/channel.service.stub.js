@@ -1,24 +1,34 @@
+import { toNg1Mock } from './mock-converter-ng1';
+
 const stub = sinon.stub;
-const name = 'channelService';
 
-export function mockChannelService(module, inject) {
+export function mockChannelService() {
 
-    const mock = { initializeMock: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        getChannelsByGameId: stub(),
+        refreshChannels: stub(),
+        isFollowed: stub(),
+        follow: stub(),
+        unfollow: stub()
+    };
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = (promise = Promise) => {
 
-    mock.initializeMock = () => inject($injector => {
-
-        const $q = $injector.get('$q');
-        mock.getChannelsByGameId = stub().returns($q.resolve([]));
-        mock.refreshChannels = stub();
-        mock.isFollowed = stub().returns(true);
-        mock.follow = stub().returns($q.resolve({}));
-        mock.unfollow = stub().returns($q.resolve({}));
-    });
+        mock.getChannelsByGameId.returns(promise.resolve([]));
+        mock.isFollowed.returns(true);
+        mock.follow.returns(promise.resolve({}));
+        mock.unfollow.returns(promise.resolve({}));
+    };
 
     return mock;
+}
+
+export function mockChannelServiceNg1(module, inject) {
+
+    const mock = mockChannelService();
+    const name = 'channelService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

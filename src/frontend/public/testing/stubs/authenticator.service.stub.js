@@ -1,17 +1,25 @@
-const stub = sinon.stub;
-const name = 'authenticatorService';
+import { toNg1Mock } from './mock-converter-ng1';
 
-export function mockAuthenticatorService(module) {
+export function mockAuthenticatorService() {
 
-    const mock = { defaultOptions: null };
+    const mock = {
 
-    module($provide => {
+        setupMock: () => { },
+        defaultOptions: null
+    }
 
-        $provide.service(name, () => mock);
-    });
+    mock.setupMock = () => {
 
-    const headers = { Authorization: 'bearer xxx.xxxx.xxx' };
-    stub(mock, 'defaultOptions').get(() => ({ headers }));
+        mock.defaultOptions = { headers: { Authorization: 'bearer xxx.xxxx.xxx' } };
+    }
 
     return mock;
+}
+
+export function mockAuthenticatorServiceNg1(module, inject) {
+
+    const mock = mockAuthenticatorService();
+    const name = 'authenticatorService';
+
+    return toNg1Mock(mock, name, module, inject);
 }

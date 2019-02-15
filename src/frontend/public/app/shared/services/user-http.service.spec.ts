@@ -15,7 +15,12 @@ context('user http service unit test', () => {
     let httpController: HttpTestingController;
     let service: UserHttpService;
 
+    let authenticatorServiceStub;
+
     beforeEach('general test setup', () => {
+
+        authenticatorServiceStub = mockAuthenticatorService();
+        authenticatorServiceStub.setupMock();
 
         TestBed.configureTestingModule({
 
@@ -24,7 +29,7 @@ context('user http service unit test', () => {
             providers: [
 
                 UserHttpService,
-                { provide: Authenticator, useValue: mockAuthenticatorService() }
+                { provide: Authenticator, useValue: authenticatorServiceStub }
             ]
         });
 

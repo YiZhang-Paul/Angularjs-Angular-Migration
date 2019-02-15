@@ -1,9 +1,9 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameListService } from '../../../testing/stubs/game-list.service.stub';
+import { mock$stateNg1 } from '../../../testing/stubs/$state.stub';
+import { mockGameListServiceNg1 } from '../../../testing/stubs/game-list.service.stub';
 import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
+import { mockGenericUtilityServiceNg1 } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -30,12 +30,15 @@ context('game list component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        $stateStub = mock$state(mockModule);
-        gameListServiceStub = mockGameListService(mockModule);
+        $stateStub = mock$stateNg1(mockModule, inject);
+        gameListServiceStub = mockGameListServiceNg1(mockModule, inject);
         channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
-        genericUtilityServiceStub = mockGenericUtilityService(mockModule);
+        genericUtilityServiceStub = mockGenericUtilityServiceNg1(mockModule, inject);
 
+        $stateStub.setupMock();
+        gameListServiceStub.setupMock();
         channelHttpServiceStub.setupMock();
+        genericUtilityServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

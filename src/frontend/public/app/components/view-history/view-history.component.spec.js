@@ -1,10 +1,10 @@
 import ComponentsModule from '../components.module.ajs';
 
-import { mock$state } from '../../../testing/stubs/$state.stub';
-import { mockGameHttpService } from '../../../testing/stubs/game-http.service.stub';
+import { mock$stateNg1 } from '../../../testing/stubs/$state.stub';
+import { mockGameHttpServiceNg1 } from '../../../testing/stubs/game-http.service.stub';
 import { mockChannelHttpServiceNg1 } from '../../../testing/stubs/channel-http.service.stub';
-import { mockViewHistoryService } from '../../../testing/stubs/view-history.service.stub';
-import { mockGenericUtilityService } from '../../../testing/stubs/generic-utility.service.stub';
+import { mockViewHistoryServiceNg1 } from '../../../testing/stubs/view-history.service.stub';
+import { mockGenericUtilityServiceNg1 } from '../../../testing/stubs/generic-utility.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -30,15 +30,17 @@ context('view history component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        $stateStub = mock$state(mockModule);
-        gameHttpServiceStub = mockGameHttpService(mockModule, inject);
+        $stateStub = mock$stateNg1(mockModule, inject);
+        gameHttpServiceStub = mockGameHttpServiceNg1(mockModule, inject);
         channelHttpServiceStub = mockChannelHttpServiceNg1(mockModule, inject);
-        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
-        genericUtilityServiceStub = mockGenericUtilityService(mockModule);
+        viewHistoryServiceStub = mockViewHistoryServiceNg1(mockModule, inject);
+        genericUtilityServiceStub = mockGenericUtilityServiceNg1(mockModule, inject);
 
-        gameHttpServiceStub.initializeMock();
+        $stateStub.setupMock();
+        gameHttpServiceStub.setupMock();
         channelHttpServiceStub.setupMock();
-        viewHistoryServiceStub.initializeMock();
+        viewHistoryServiceStub.setupMock();
+        genericUtilityServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

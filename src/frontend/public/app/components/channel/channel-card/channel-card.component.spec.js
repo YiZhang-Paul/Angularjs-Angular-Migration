@@ -1,7 +1,7 @@
 import SharedModule from '../../../shared/shared.module.ajs';
 import ComponentsModule from '../../components.module.ajs';
 
-import { mockThumbnailPlayerService } from '../../../../testing/stubs/thumbnail-player.service.stub';
+import { mockThumbnailPlayerServiceNg1 } from '../../../../testing/stubs/thumbnail-player.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -23,7 +23,9 @@ context('channel card component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        thumbnailPlayerServiceStub = mockThumbnailPlayerService(mockModule);
+        thumbnailPlayerServiceStub = mockThumbnailPlayerServiceNg1(mockModule, inject);
+
+        thumbnailPlayerServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

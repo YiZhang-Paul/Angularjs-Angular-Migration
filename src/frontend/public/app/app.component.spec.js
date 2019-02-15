@@ -1,7 +1,7 @@
 import AppModule from './app.module.ajs';
 
-import { mockComponent } from '../testing/stubs/mockComponent.stub';
-import { mockBookmarkService } from '../testing/stubs/bookmark.service.stub';
+import { mockComponentNg1 } from '../testing/stubs/mockComponent.stub';
+import { mockBookmarkServiceNg1 } from '../testing/stubs/bookmark.service.stub';
 
 const mockModule = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -22,12 +22,12 @@ context('app component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        mockComponent(mockModule, 'sidebar');
-        mockComponent(mockModule, 'topNavbar');
-        mockComponent(mockModule, 'gameList');
-        bookmarkServiceStub = mockBookmarkService(mockModule, inject);
+        mockComponentNg1(mockModule, 'sidebar');
+        mockComponentNg1(mockModule, 'topNavbar');
+        mockComponentNg1(mockModule, 'gameList');
+        bookmarkServiceStub = mockBookmarkServiceNg1(mockModule, inject);
 
-        bookmarkServiceStub.initializeMock();
+        bookmarkServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {

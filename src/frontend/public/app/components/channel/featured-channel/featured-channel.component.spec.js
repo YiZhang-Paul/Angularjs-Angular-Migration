@@ -1,8 +1,8 @@
 import ComponentsModule from '../../components.module.ajs';
 
-import { mockChannelService } from '../../../../testing/stubs/channel.service.stub';
-import { mockFeaturedChannelService } from '../../../../testing/stubs/featured-channel.service.stub';
-import { mockViewHistoryService } from '../../../../testing/stubs/view-history.service.stub';
+import { mockChannelServiceNg1 } from '../../../../testing/stubs/channel.service.stub';
+import { mockFeaturedChannelServiceNg1 } from '../../../../testing/stubs/featured-channel.service.stub';
+import { mockViewHistoryServiceNg1 } from '../../../../testing/stubs/view-history.service.stub';
 
 const mockModule = angular.mock.module;
 const stub = sinon.stub;
@@ -28,13 +28,13 @@ context('featured channel component unit test', () => {
 
     beforeEach('mocks setup', () => {
 
-        channelServiceStub = mockChannelService(mockModule, inject);
-        featuredChannelServiceStub = mockFeaturedChannelService(mockModule, inject);
-        viewHistoryServiceStub = mockViewHistoryService(mockModule, inject);
+        channelServiceStub = mockChannelServiceNg1(mockModule, inject);
+        featuredChannelServiceStub = mockFeaturedChannelServiceNg1(mockModule, inject);
+        viewHistoryServiceStub = mockViewHistoryServiceNg1(mockModule, inject);
 
-        channelServiceStub.initializeMock();
-        featuredChannelServiceStub.initializeMock();
-        viewHistoryServiceStub.initializeMock();
+        channelServiceStub.setupMock();
+        featuredChannelServiceStub.setupMock();
+        viewHistoryServiceStub.setupMock();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
