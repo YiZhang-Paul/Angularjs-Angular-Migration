@@ -1,4 +1,3 @@
-// tslint:disable:ordered-imports
 import 'zone.js';
 import 'reflect-metadata';
 import { NgZone } from '@angular/core';

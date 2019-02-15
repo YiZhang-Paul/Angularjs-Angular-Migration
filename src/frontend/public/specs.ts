@@ -1,5 +1,3 @@
-// tslint:disable:ordered-imports
-
 // polyfills
 import 'reflect-metadata';
 // core.js
@@ -35,11 +33,9 @@ import '@angular/router';
 import '@angular/upgrade';
 // ui-router
 import '@uirouter/angular-hybrid';
-
-import { stub } from 'sinon';
-
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { stub } from 'sinon';
 
 TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 
