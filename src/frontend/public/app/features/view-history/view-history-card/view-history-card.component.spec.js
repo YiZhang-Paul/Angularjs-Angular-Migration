@@ -1,4 +1,4 @@
-import SharedModule from '../../../shared/shared.module';
+import SharedModule from '../../../shared/shared.module.ajs';
 import ViewHistoryModule from '../view-history.module.ajs';
 
 const module = angular.mock.module;

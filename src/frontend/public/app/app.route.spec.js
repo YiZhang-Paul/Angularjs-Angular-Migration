@@ -1,4 +1,3 @@
-// TODO: try url approach
 import AppModule from './app.module.ajs';
 
 const module = angular.mock.module;
@@ -71,9 +70,9 @@ context('app route unit test', () => {
 
     describe('/games', () => {
 
-        it('should navigate to game list state at /games url', () => {
+        it('should navigate to game state at /games url', () => {
 
-            $state.go('index.gameList');
+            $state.go('index.game');
             $rootScope.$apply();
 
             expect($state.current.url).to.equal('^/games');

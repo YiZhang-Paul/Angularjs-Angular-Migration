@@ -48,7 +48,7 @@ context('view history list component unit test', () => {
         $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
-        component = $componentController('viewHistory');
+        component = $componentController('viewHistoryList');
     }));
 
     it('should resolve', () => {

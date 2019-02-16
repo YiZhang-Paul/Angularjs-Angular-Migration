@@ -25,6 +25,7 @@ context('game channel list component unit test', () => {
     let gameHttpServiceStub;
     let viewHistoryManagerServiceStub;
 
+    beforeEach(module('ui.router'));
     beforeEach(module(SharedModule));
     beforeEach(module(ChannelModule));
     beforeEach(module('component-templates'));
@@ -47,7 +48,7 @@ context('game channel list component unit test', () => {
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
         $stateParams = $injector.get('$stateParams');
-        component = $componentController('channel');
+        component = $componentController('gameChannelList');
 
         stub($interval, 'cancel');
     }));

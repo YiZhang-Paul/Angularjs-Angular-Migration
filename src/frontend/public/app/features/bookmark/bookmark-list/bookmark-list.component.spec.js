@@ -32,7 +32,7 @@ context('bookmark list component unit test', () => {
         $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $rootScope = $injector.get('$rootScope');
-        component = $componentController('bookmark');
+        component = $componentController('bookmarkList');
     }));
 
     it('should resolve', () => {

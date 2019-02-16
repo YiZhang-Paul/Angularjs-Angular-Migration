@@ -43,7 +43,7 @@ context('featured channel list component unit test', () => {
         $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
-        component = $componentController('featuredChannel');
+        component = $componentController('featuredChannelList');
 
         stub($interval, 'cancel');
     }));

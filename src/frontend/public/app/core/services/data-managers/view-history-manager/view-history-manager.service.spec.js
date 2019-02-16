@@ -16,6 +16,7 @@ context('view history manager service unit test', () => {
 
     let viewHistoryHttpServiceStub;
 
+    beforeEach(module('ngMaterial'));
     beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {

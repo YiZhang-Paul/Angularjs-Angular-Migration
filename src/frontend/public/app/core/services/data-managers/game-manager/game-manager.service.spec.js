@@ -1,4 +1,4 @@
-import CoreModule from '../../../core.module';
+import CoreModule from '../../../core.module.ajs';
 
 import { stubGameHttpServiceNg1 } from '../../../../testing/stubs/custom/game-http.service.stub';
 

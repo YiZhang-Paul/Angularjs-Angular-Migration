@@ -1,6 +1,7 @@
 import AppModule from './app.module.ajs';
 
 import { stubComponentNg1 } from './testing/stubs/custom/components.stub';
+import { stubAuthenticatorServiceNg1 } from './testing/stubs/custom/authenticator.service.stub';
 import { stubBookmarkManagerServiceNg1 } from './testing/stubs/custom/bookmark-manager.service.stub';
 
 const module = angular.mock.module;
@@ -15,6 +16,7 @@ context('app component unit test', () => {
     let component;
     let componentElement;
 
+    let authenticatorServiceStub;
     let bookmarkManagerServiceStub;
 
     beforeEach(module(AppModule));
@@ -26,8 +28,10 @@ context('app component unit test', () => {
         stubComponentNg1(module, 'topNavbar');
         stubComponentNg1(module, 'gameList');
 
+        authenticatorServiceStub = stubAuthenticatorServiceNg1(module, inject);
         bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
 
+        authenticatorServiceStub.setupStub();
         bookmarkManagerServiceStub.setupStub();
     });
 
@@ -49,12 +53,22 @@ context('app component unit test', () => {
 
     describe('$onInit()', () => {
 
-        it('should use bookmark manager service to cache bookmarks on initialization', () => {
+        it('should cache bookmarks on initialization when user is authenticated', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
             sinonExpect.calledOnce(bookmarkManagerServiceStub.cacheBookmarks);
+        });
+
+        it('should not cache bookmarks on initialization when user is not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(bookmarkManagerServiceStub.cacheBookmarks);
         });
     });
 });
