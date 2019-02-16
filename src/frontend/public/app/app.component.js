@@ -1,20 +1,24 @@
 import '../style.scss';
 
-export class App {
+export class AppController {
 
-    constructor(bookmarkService) {
+    constructor(authenticatorService, bookmarkManagerService) {
         'ngInject';
-        this.service = bookmarkService;
+        this.authenticator = authenticatorService;
+        this.bookmarkService = bookmarkManagerService;
     }
 
     $onInit() {
-        // TODO: only when authenticated
-        this.service.cacheBookmarks();
+
+        if (this.authenticator.isAuthenticated) {
+
+            this.bookmarkService.cacheBookmarks();
+        }
     }
 }
 
 export const AppComponent = {
 
     templateUrl: 'app/app.html',
-    controller: App
+    controller: AppController
 };

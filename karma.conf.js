@@ -5,8 +5,8 @@ const entry = './src/frontend/public/specs.ts';
 module.exports = function (config) {
     config.set({
         basePath: '',
-        customContextFile: './src/frontend/public/testing/karma-test-pages/context.html',
-        customDebugFile: './src/frontend/public/testing/karma-test-pages/debug.html',
+        customContextFile: './src/frontend/public/app/testing/karma-test-pages/context.html',
+        customDebugFile: './src/frontend/public/app/testing/karma-test-pages/debug.html',
         files: [
             './node_modules/angular/angular.js',
             templates,

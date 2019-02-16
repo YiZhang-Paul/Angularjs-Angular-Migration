@@ -1,9 +1,9 @@
 import AppModule from './app.module.ajs';
 
-import { mockComponentNg1 } from '../testing/stubs/mock-component.stub';
-import { mockBookmarkServiceNg1 } from '../testing/stubs/bookmark.service.stub';
+import { stubComponentNg1 } from './testing/stubs/custom/components.stub';
+import { stubBookmarkManagerServiceNg1 } from './testing/stubs/custom/bookmark-manager.service.stub';
 
-const mockModule = angular.mock.module;
+const module = angular.mock.module;
 const sinonExpect = sinon.assert;
 
 context('app component unit test', () => {
@@ -15,19 +15,20 @@ context('app component unit test', () => {
     let component;
     let componentElement;
 
-    let bookmarkServiceStub;
+    let bookmarkManagerServiceStub;
 
-    beforeEach(mockModule(AppModule));
-    beforeEach(mockModule('component-templates'));
+    beforeEach(module(AppModule));
+    beforeEach(module('component-templates'));
 
-    beforeEach('mocks setup', () => {
+    beforeEach('stubs setup', () => {
 
-        mockComponentNg1(mockModule, 'sidebar');
-        mockComponentNg1(mockModule, 'topNavbar');
-        mockComponentNg1(mockModule, 'gameList');
-        bookmarkServiceStub = mockBookmarkServiceNg1(mockModule, inject);
+        stubComponentNg1(module, 'sidebar');
+        stubComponentNg1(module, 'topNavbar');
+        stubComponentNg1(module, 'gameList');
 
-        bookmarkServiceStub.setupMock();
+        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
+
+        bookmarkManagerServiceStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -48,12 +49,12 @@ context('app component unit test', () => {
 
     describe('$onInit()', () => {
 
-        it('should use bookmark service to cache bookmarks on initialization', () => {
+        it('should use bookmark manager service to cache bookmarks on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkServiceStub.cacheBookmarks);
+            sinonExpect.calledOnce(bookmarkManagerServiceStub.cacheBookmarks);
         });
     });
 });

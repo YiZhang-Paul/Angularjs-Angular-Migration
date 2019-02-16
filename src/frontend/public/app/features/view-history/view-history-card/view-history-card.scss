@@ -1,0 +1,104 @@
+.view-history-card-container {
+
+    $vertical-margin: 1vw;
+    $box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.082);
+
+    margin: $vertical-margin 12.5vw $vertical-margin 10vw;
+    height: 20vh;
+    position: relative;
+    font-weight: 400;
+    overflow: hidden;
+    background-color: rgba(240, 248, 255, 0.034);
+    -webkit-box-shadow: $box-shadow;
+    -moz-box-shadow: $box-shadow;
+    box-shadow: $box-shadow;
+    border-radius: 6px;
+
+    .channel-thumbnail {
+
+        top: 0;
+        left: 0;
+        width: 30%;
+        height: 100%;
+        position: absolute;
+        object-fit: cover;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 15px;
+    }
+
+    .avatar {
+
+        $avatar-width: 4vw;
+
+        top: 18px;
+        left: 32%;
+        width: $avatar-width;
+        height: $avatar-width;
+        position: absolute;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 15px;
+    }
+
+    .view-history-details {
+
+        top: 18px;
+        left: 42%;
+        width: 30vw;
+        height: 4vw;
+        position: absolute;
+    }
+
+    .title {
+
+        font-size: 1.6em;
+        font-weight: 700;
+    }
+
+    .streamer {
+
+        font-size: 1.15em;
+        font-weight: 600;
+        color: tomato;
+    }
+
+    .game-name {
+
+        font-size: 1.4em;
+        font-weight: 500;
+        text-decoration: underline;
+        color: rgb(77, 77, 77);
+    }
+
+    .game-name:hover {
+
+        cursor: pointer;
+        color: rgb(25, 151, 201);
+    }
+
+    .remove-button {
+
+        $button-width: 3.5vh;
+
+        right: 32px;
+        bottom: 20px;
+        width: $button-width;
+        height: $button-width;
+        position: absolute;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: rgba(240, 248, 255, 0.034);
+        background-image: url(../../../assets/images/delete-button-dark.png);
+    }
+
+    .remove-button:hover {
+
+        background-image: url(../../../assets/images/delete-button-purple.png);
+    }
+
+    .remove-button:active {
+
+        background-image: url(../../../assets/images/delete-button-pink.png);
+    }
+}
