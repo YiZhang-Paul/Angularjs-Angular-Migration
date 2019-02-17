@@ -4,56 +4,31 @@ export class GameChannelListController {
 
     constructor(
 
-        $stateParams,
         $interval,
-        gameHttpService,
+        $stateParams,
+        channelService,
         bookmarkManagerService,
-        channelManagerService,
         viewHistoryManagerService
 
     ) {
         'ngInject';
-        this.$stateParams = $stateParams;
         this.$interval = $interval;
-        this.gameHttp = gameHttpService;
+        this.$stateParams = $stateParams;
+        this.channelService = channelService;
         this.bookmarkManager = bookmarkManagerService;
-        this.channelManager = channelManagerService;
         this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
         this.game = null;
+        this.name = null;
         this.channels = [];
     }
 
     $onInit() {
 
+        this.name = this.$stateParams.name.replace(/-/g, ' ');
         this._loadComponent();
         this._setupChannelLoading();
-    }
-    // TODO: move to shared channel service (in channel module)
-    _loadGame() {
-
-        const name = this.$stateParams.name.replace(/-/g, ' ');
-
-        return this.gameHttp.getGameByName(name).then(game => {
-
-            this.game = game;
-        })
-        .catch(() => null);
-    }
-    // TODO: move to shared channel service (in channel module)
-    _loadChannels() {
-
-        if (!this.game) {
-
-            return;
-        }
-
-        this.channelManager.getChannelsByGameId(this.game.id).then(channels => {
-
-            this.channelManager.refreshChannels(this.channels, channels);
-        })
-        .catch(error => console.log(error));
     }
 
     _loadComponent() {
@@ -66,14 +41,14 @@ export class GameChannelListController {
             return;
         }
 
-        this._loadGame().then(() => this._loadChannels());
+        this.channelService.loadGameChannels(this.channels, this.name);
     }
 
     _setupChannelLoading() {
 
         this.task = this.$interval(() => {
 
-            this._loadChannels();
+            this.channelService.loadGameChannels(this.channels, this.name);
 
         }, 10 * 1000);
     }

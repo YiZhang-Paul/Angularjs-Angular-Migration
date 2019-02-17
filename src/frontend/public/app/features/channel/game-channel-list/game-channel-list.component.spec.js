@@ -1,9 +1,8 @@
 import SharedModule from '../../../shared/shared.module.ajs';
 import ChannelModule from '../channel.module.ajs';
 
+import { stubChannelServiceNg1 } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
-import { stubChannelManagerServiceNg1 } from '../../../testing/stubs/custom/channel-manager.service.stub';
-import { stubGameHttpServiceNg1 } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 
 const module = angular.mock.module;
@@ -14,7 +13,6 @@ context('game channel list component unit test', () => {
 
     const tag = '<game-channel-list></game-channel-list>';
 
-    let $q;
     let $compile;
     let $interval;
     let $rootScope;
@@ -22,10 +20,9 @@ context('game channel list component unit test', () => {
     let component;
     let componentElement;
 
-    let bookmarkManagerServiceStub;
-    let channelManagerServiceStub;
-    let gameHttpServiceStub;
-    let viewHistoryManagerServiceStub;
+    let channelServiceStub;
+    let bookmarkManagerStub;
+    let viewHistoryManagerStub;
 
     beforeEach(module('ui.router'));
     beforeEach(module(SharedModule));
@@ -34,20 +31,17 @@ context('game channel list component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
-        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
-        channelManagerServiceStub = stubChannelManagerServiceNg1(module, inject);
-        gameHttpServiceStub = stubGameHttpServiceNg1(module, inject);
-        viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
+        channelServiceStub = stubChannelServiceNg1(module, inject);
+        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
+        viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
 
-        bookmarkManagerServiceStub.setupStub();
-        channelManagerServiceStub.setupStub();
-        gameHttpServiceStub.setupStub();
-        viewHistoryManagerServiceStub.setupStub();
+        channelServiceStub.setupStub();
+        bookmarkManagerStub.setupStub();
+        viewHistoryManagerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
-        $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
@@ -85,9 +79,14 @@ context('game channel list component unit test', () => {
             $stateParams.name = name;
             $stateParams.game = game;
             $stateParams.channels = channels;
-            gameHttpServiceStub.getGameByName.returns($q.resolve(game));
-            channelManagerServiceStub.getChannelsByGameId.returns($q.resolve(channels));
-            channelManagerServiceStub.refreshChannels.callsFake((a, b) => a.push(...b));
+        });
+
+        it('should set name value with all dashes removed', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            expect(component.name).to.equal('some game 5');
         });
 
         it('should load data from state parameters when both game and channels data exist', () => {
@@ -97,41 +96,29 @@ context('game channel list component unit test', () => {
 
             expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.notCalled(gameHttpServiceStub.getGameByName);
-            sinonExpect.notCalled(channelManagerServiceStub.getChannelsByGameId);
-            sinonExpect.notCalled(channelManagerServiceStub.refreshChannels);
+            sinonExpect.notCalled(channelServiceStub.loadGameChannels);
         });
 
-        it('should fetch game and channels data from services when game data is missing from state parameters', () => {
+        it('should fetch game channels from channel service when game data is missing from state parameters', () => {
 
             $stateParams.game = null;
 
             component.$onInit();
             $rootScope.$apply();
 
-            expect(component.game).to.deep.equal(game);
-            expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
-            sinonExpect.calledWith(gameHttpServiceStub.getGameByName, game.name);
-            sinonExpect.calledOnce(channelManagerServiceStub.getChannelsByGameId);
-            sinonExpect.calledWith(channelManagerServiceStub.getChannelsByGameId, game.id);
-            sinonExpect.calledOnce(channelManagerServiceStub.refreshChannels);
+            sinonExpect.calledOnce(channelServiceStub.loadGameChannels);
+            sinonExpect.calledWith(channelServiceStub.loadGameChannels, component.channels, component.name);
         });
 
-        it('should fetch game and channels data from services when channels data is missing from state parameters', () => {
+        it('should fetch game channels from channel service when channels data is missing from state parameters', () => {
 
             $stateParams.channels = null;
 
             component.$onInit();
             $rootScope.$apply();
 
-            expect(component.game).to.deep.equal(game);
-            expect(component.channels).to.deep.equal(channels);
-            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
-            sinonExpect.calledWith(gameHttpServiceStub.getGameByName, game.name);
-            sinonExpect.calledOnce(channelManagerServiceStub.getChannelsByGameId);
-            sinonExpect.calledWith(channelManagerServiceStub.getChannelsByGameId, game.id);
-            sinonExpect.calledOnce(channelManagerServiceStub.refreshChannels);
+            sinonExpect.calledOnce(channelServiceStub.loadGameChannels);
+            sinonExpect.calledWith(channelServiceStub.loadGameChannels, component.channels, component.name);
         });
 
         it('should load channels every 10 seconds', () => {
@@ -142,49 +129,10 @@ context('game channel list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to load channels
-            channelManagerServiceStub.getChannelsByGameId.resetHistory();
-            channelManagerServiceStub.refreshChannels.resetHistory();
+            channelServiceStub.loadGameChannels.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(channelManagerServiceStub.getChannelsByGameId, expected);
-            sinonExpect.callCount(channelManagerServiceStub.refreshChannels, expected);
-        });
-
-        it('should not load channel data when game data is not found', () => {
-
-            $stateParams.game = null;
-            $stateParams.channels = null;
-            gameHttpServiceStub.getGameByName.returns($q.resolve(null));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
-            sinonExpect.notCalled(channelManagerServiceStub.getChannelsByGameId);
-        });
-
-        it('should not throw error when failed to fetch game data from service', () => {
-
-            $stateParams.game = null;
-            $stateParams.channels = null;
-            gameHttpServiceStub.getGameByName.returns($q.reject(new Error()));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(gameHttpServiceStub.getGameByName);
-        });
-
-        it('should not throw error when failed to fetch channel data from service', () => {
-
-            $stateParams.game = null;
-            $stateParams.channels = null;
-            channelManagerServiceStub.getChannelsByGameId.returns($q.reject(new Error()));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(channelManagerServiceStub.getChannelsByGameId);
+            sinonExpect.callCount(channelServiceStub.loadGameChannels, expected);
         });
     });
 
@@ -213,8 +161,8 @@ context('game channel list component unit test', () => {
             $rootScope.$apply();
 
             expect(result).to.be.true;
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.isFollowed);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.isFollowed, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.isFollowed);
+            sinonExpect.calledWith(bookmarkManagerStub.isFollowed, expected);
         });
     });
 
@@ -227,8 +175,8 @@ context('game channel list component unit test', () => {
             component.follow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.follow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.follow, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.follow);
+            sinonExpect.calledWith(bookmarkManagerStub.follow, expected);
         });
     });
 
@@ -241,8 +189,8 @@ context('game channel list component unit test', () => {
             component.unfollow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.unfollow, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.unfollow);
+            sinonExpect.calledWith(bookmarkManagerStub.unfollow, expected);
         });
     });
 
@@ -255,8 +203,8 @@ context('game channel list component unit test', () => {
             component.addHistory(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(viewHistoryManagerServiceStub.addHistory);
-            sinonExpect.calledWith(viewHistoryManagerServiceStub.addHistory, expected);
+            sinonExpect.calledOnce(viewHistoryManagerStub.addHistory);
+            sinonExpect.calledWith(viewHistoryManagerStub.addHistory, expected);
         });
     });
 });

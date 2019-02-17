@@ -177,59 +177,13 @@ context('channel service unit test', () => {
 
     describe('loadGameChannels()', () => {
 
-        it('should use channel http service to fetch channel data', () => {
-
-            const expected = 17;
-
-            service.loadGameChannels([], expected);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(channelHttpStub.getChannelsByGameId);
-            sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expected);
-        });
-
-        it('should load game channels', () => {
-
-            const cache = [];
-            const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            channelHttpStub.getChannelsByGameId.returns($q.resolve(expected));
-
-            service.loadGameChannels(cache, 17);
-            $rootScope.$apply();
-
-            expect(cache).to.deep.equal(expected);
-        });
-
-        it('should preserve original channels when failed to fetch game channel data', () => {
-
-            const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            const expected = cache.slice();
-            channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
-
-            service.loadGameChannels(cache, 17).catch(() => null);
-            $rootScope.$apply();
-
-            expect(cache).to.deep.equal(expected);
-        });
-
-        it('should not throw error when failed to fetch game channel data', () => {
-
-            channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
-
-            service.loadGameChannels([], 17);
-            $rootScope.$apply();
-        });
-    });
-
-    describe('loadGameChannelsByName()', () => {
-
         it('should use game http service and channel http service to fetch data', () => {
 
             const expectedName = 'some game name';
             const expectedId = 17;
             gameHttpStub.getGameByName.returns($q.resolve({ id: expectedId }));
 
-            service.loadGameChannelsByName([], expectedName);
+            service.loadGameChannels([], expectedName);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(gameHttpStub.getGameByName);
@@ -244,7 +198,7 @@ context('channel service unit test', () => {
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
             channelHttpStub.getChannelsByGameId.returns($q.resolve(expected));
 
-            service.loadGameChannelsByName(cache, '');
+            service.loadGameChannels(cache, '');
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -256,7 +210,7 @@ context('channel service unit test', () => {
             const expected = cache.slice();
             gameHttpStub.getGameByName.returns($q.resolve(null));
 
-            service.loadGameChannelsByName(cache, '').catch(() => null);
+            service.loadGameChannels(cache, '').catch(() => null);
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -268,7 +222,7 @@ context('channel service unit test', () => {
             const expected = cache.slice();
             gameHttpStub.getGameByName.returns($q.reject(new Error()));
 
-            service.loadGameChannelsByName(cache, '').catch(() => null);
+            service.loadGameChannels(cache, '').catch(() => null);
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -280,7 +234,7 @@ context('channel service unit test', () => {
             const expected = cache.slice();
             channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
 
-            service.loadGameChannelsByName(cache, '').catch(() => null);
+            service.loadGameChannels(cache, '').catch(() => null);
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -290,7 +244,7 @@ context('channel service unit test', () => {
 
             gameHttpStub.getGameByName.returns($q.reject(new Error()));
 
-            service.loadGameChannelsByName([], '');
+            service.loadGameChannels([], '');
             $rootScope.$apply();
         });
     });

@@ -42,26 +42,18 @@ export class ChannelService {
         .catch(error => console.log(error));
     }
 
-    loadGameChannels(cache, id) {
-
-        return this.channelHttp.getChannelsByGameId(id).then(channels => {
-
-            this.refreshChannels(cache, channels);
-        })
-        .catch(error => console.log(error));
-    }
-
-    loadGameChannelsByName(cache, name) {
+    loadGameChannels(cache, name) {
 
         return this.gameHttp.getGameByName(name).then(game => {
 
             if (!game) {
 
-                throw new Error();
+                return [];
             }
 
-            return this.loadGameChannels(cache, game.id);
+            return this.channelHttp.getChannelsByGameId(game.id);
         })
+        .then(channels => this.refreshChannels(cache, channels))
         .catch(error => console.log(error));
     }
 }

@@ -2,7 +2,6 @@ import { AuthenticatorService } from './services/authentication/authenticator/au
 import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http.service';
 import { BookmarkManagerService } from './services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
-import { ChannelManagerService } from './services/data-managers/channel-manager/channel-manager.service';
 import { CustomRoutingService } from './services/custom-routing/custom-routing.service';
 import { GameHttpService } from './services/http/game-http/game-http.service';
 import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
@@ -20,7 +19,6 @@ angular.module(moduleName, [])
     .service('bookmarkHttpService', BookmarkHttpService)
     .service('bookmarkManagerService', BookmarkManagerService)
     .service('channelHttpService', ChannelHttpService)
-    .service('channelManagerService', ChannelManagerService)
     .service('customRoutingService', CustomRoutingService)
     .service('gameHttpService', GameHttpService)
     .service('gameManagerService', GameManagerService)
