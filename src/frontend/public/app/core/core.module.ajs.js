@@ -3,6 +3,7 @@ import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http
 import { BookmarkManagerService } from './services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
 import { ChannelManagerService } from './services/data-managers/channel-manager/channel-manager.service';
+import { CustomRoutingService } from './services/custom-routing/custom-routing.service';
 import { FeaturedChannelManagerService } from './services/data-managers/channel-manager/featured-channel-manager.service';
 import { GameHttpService } from './services/http/game-http/game-http.service';
 import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
@@ -21,6 +22,7 @@ angular.module(moduleName, [])
     .service('bookmarkManagerService', BookmarkManagerService)
     .service('channelHttpService', ChannelHttpService)
     .service('channelManagerService', ChannelManagerService)
+    .service('customRoutingService', CustomRoutingService)
     .service('featuredChannelManagerService', FeaturedChannelManagerService)
     .service('gameHttpService', GameHttpService)
     .service('gameManagerService', GameManagerService)
