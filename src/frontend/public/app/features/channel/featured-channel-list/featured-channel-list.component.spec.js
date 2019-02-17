@@ -1,8 +1,7 @@
 import ChannelModule from '../channel.module.ajs';
 
+import { stubChannelServiceNg1 } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
-import { stubChannelManagerServiceNg1 } from '../../../testing/stubs/custom/channel-manager.service.stub';
-import { stubFeaturedChannelManagerServiceNg1 } from '../../../testing/stubs/custom/featured-channel-manager.service.stub';
 import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 
 const module = angular.mock.module;
@@ -13,16 +12,14 @@ context('featured channel list component unit test', () => {
 
     const tag = '<featured-channel-list></featured-channel-list>';
 
-    let $q;
     let $compile;
     let $interval;
     let $rootScope;
     let component;
     let componentElement;
 
+    let channelServiceStub;
     let bookmarkManagerServiceStub;
-    let channelManagerServiceStub;
-    let featuredChannelManagerServiceStub;
     let viewHistoryManagerServiceStub;
 
     beforeEach(module(ChannelModule));
@@ -30,20 +27,17 @@ context('featured channel list component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
+        channelServiceStub = stubChannelServiceNg1(module, inject);
         bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
-        channelManagerServiceStub = stubChannelManagerServiceNg1(module, inject);
-        featuredChannelManagerServiceStub = stubFeaturedChannelManagerServiceNg1(module, inject);
         viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
 
+        channelServiceStub.setupStub();
         bookmarkManagerServiceStub.setupStub();
-        channelManagerServiceStub.setupStub();
-        featuredChannelManagerServiceStub.setupStub();
         viewHistoryManagerServiceStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
-        $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
@@ -68,34 +62,12 @@ context('featured channel list component unit test', () => {
 
     describe('$onInit()', () => {
 
-        let channels;
-
-        beforeEach('$onInit() test setup', () => {
-
-            channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            featuredChannelManagerServiceStub.getFeaturedChannels.returns($q.resolve(channels));
-        });
-
-        it('should use featured channel manager service and channel manager service to load channels on initialization', () => {
+        it('should use channel service to load channels on initialization', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(featuredChannelManagerServiceStub.getFeaturedChannels);
-            sinonExpect.calledOnce(channelManagerServiceStub.refreshChannels);
-            sinonExpect.calledWith(channelManagerServiceStub.refreshChannels, [], channels);
-        });
-
-        it('should load channels on initialization', () => {
-
-            const expected = channels.slice();
-            channelManagerServiceStub.refreshChannels.callsFake((a, b) => a.push(...b));
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(channelManagerServiceStub.refreshChannels);
-            expect(component.channels).to.deep.equal(expected);
+            sinonExpect.calledOnce(channelServiceStub.loadFeaturedChannels);
         });
 
         it('should load channels every 10 seconds', () => {
@@ -106,20 +78,10 @@ context('featured channel list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to load channels
-            featuredChannelManagerServiceStub.getFeaturedChannels.resetHistory();
-            channelManagerServiceStub.refreshChannels.resetHistory();
+            channelServiceStub.loadFeaturedChannels.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(featuredChannelManagerServiceStub.getFeaturedChannels, expected);
-            sinonExpect.callCount(channelManagerServiceStub.refreshChannels, expected);
-        });
-
-        it('should not throw error when failed to load featured channels', () => {
-
-            featuredChannelManagerServiceStub.getFeaturedChannels.returns($q.reject(new Error()));
-
-            component.$onInit();
-            $rootScope.$apply();
+            sinonExpect.callCount(channelServiceStub.loadFeaturedChannels, expected);
         });
     });
 

@@ -5,17 +5,15 @@ export class FeaturedChannelListController {
     constructor(
 
         $interval,
+        channelService,
         bookmarkManagerService,
-        channelManagerService,
-        featuredChannelManagerService,
         viewHistoryManagerService
 
     ) {
         'ngInject';
         this.$interval = $interval;
+        this.channelService = channelService;
         this.bookmarkManager = bookmarkManagerService;
-        this.channelManager = channelManagerService;
-        this.featuredChannelManager = featuredChannelManagerService;
         this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
@@ -24,24 +22,15 @@ export class FeaturedChannelListController {
 
     $onInit() {
 
-        this._loadChannels();
+        this.channelService.loadFeaturedChannels(this.channels);
         this._setupChannelLoading();
-    }
-    // TODO: move to shared channel service (in channel module)
-    _loadChannels() {
-
-        this.featuredChannelManager.getFeaturedChannels().then(channels => {
-
-            this.channelManager.refreshChannels(this.channels, channels);
-        })
-        .catch(error => console.log(error));
     }
 
     _setupChannelLoading() {
 
         this.task = this.$interval(() => {
 
-            this._loadChannels();
+            this.channelService.loadFeaturedChannels(this.channels);
 
         }, 10 * 1000);
     }
