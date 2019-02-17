@@ -7,7 +7,6 @@ export function stubBookmarkManagerService() {
     const stubbed = {
 
         setupStub: () => stubbed,
-        getBookmarks: stub(),
         cacheBookmarks: stub(),
         isFollowed: stub(),
         follow: stub(),
@@ -16,7 +15,6 @@ export function stubBookmarkManagerService() {
 
     stubbed.setupStub = (promise = Promise) => {
 
-        stubbed.getBookmarks.returns(promise.resolve([]));
         stubbed.cacheBookmarks.returns(promise.resolve({}));
         stubbed.isFollowed.returns(true);
         stubbed.follow.returns(promise.resolve({}));
