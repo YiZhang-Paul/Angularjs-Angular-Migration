@@ -7,21 +7,17 @@ export function stubViewHistoryManagerService() {
     const stubbed = {
 
         setupStub: () => stubbed,
-        getHistories: stub(),
         cacheHistories: stub(),
         addHistory: stub(),
         deleteHistory: stub(),
-        showClearHistoriesDialog: stub(),
         clearHistories: stub()
     };
 
     stubbed.setupStub = (promise = Promise) => {
 
-        stubbed.getHistories.returns(promise.resolve([]));
         stubbed.cacheHistories.returns(promise.resolve({}));
         stubbed.addHistory.returns(promise.resolve({}));
         stubbed.deleteHistory.returns(promise.resolve({}));
-        stubbed.showClearHistoriesDialog.returns(promise.resolve({}));
         stubbed.clearHistories.returns(promise.resolve({}));
 
         return stubbed;

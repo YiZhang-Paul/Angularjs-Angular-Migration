@@ -1,6 +1,7 @@
 import ViewHistoryModule from '../view-history.module.ajs';
 
 import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
+import { stubViewHistoryListServiceNg1 } from '../../../testing/stubs/custom/view-history-list.service.stub';
 import { stubCustomRoutingServiceNg1 } from '../../../testing/stubs/custom/custom-routing.service.stub';
 
 const module = angular.mock.module;
@@ -17,6 +18,7 @@ context('view history list component unit test', () => {
     let componentElement;
 
     let viewHistoryManagerStub;
+    let viewHistoryListServiceStub;
     let customRoutingStub;
 
     beforeEach(module(ViewHistoryModule));
@@ -25,9 +27,11 @@ context('view history list component unit test', () => {
     beforeEach('stubs setup', () => {
 
         viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
+        viewHistoryListServiceStub = stubViewHistoryListServiceNg1(module, inject);
         customRoutingStub = stubCustomRoutingServiceNg1(module, inject);
 
         viewHistoryManagerStub.setupStub();
+        viewHistoryListServiceStub.setupStub();
         customRoutingStub.setupStub();
     });
 
@@ -147,8 +151,8 @@ context('view history list component unit test', () => {
             component.confirmClearHistories(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(viewHistoryManagerStub.showClearHistoriesDialog);
-            sinonExpect.calledWith(viewHistoryManagerStub.showClearHistoriesDialog, expected);
+            sinonExpect.calledOnce(viewHistoryListServiceStub.showClearHistoriesDialog);
+            sinonExpect.calledWith(viewHistoryListServiceStub.showClearHistoriesDialog, expected);
         });
 
         it('should use view history manager service to delete view histories when user confirms deletion', () => {
@@ -161,7 +165,7 @@ context('view history list component unit test', () => {
 
         it('should not delete view histories when user cancels deletion', () => {
 
-            viewHistoryManagerStub.showClearHistoriesDialog.returns($q.reject(new Error()));
+            viewHistoryListServiceStub.showClearHistoriesDialog.returns($q.reject(new Error()));
 
             component.confirmClearHistories({});
             $rootScope.$apply();
@@ -171,7 +175,7 @@ context('view history list component unit test', () => {
 
         it('should not throw error when user cancels deletion', () => {
 
-            viewHistoryManagerStub.showClearHistoriesDialog.returns($q.reject(new Error()));
+            viewHistoryListServiceStub.showClearHistoriesDialog.returns($q.reject(new Error()));
 
             component.confirmClearHistories({});
             $rootScope.$apply();

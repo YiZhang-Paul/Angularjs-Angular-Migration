@@ -6,12 +6,14 @@ export class ViewHistoryListController {
 
         $scope,
         viewHistoryManagerService,
+        viewHistoryListService,
         customRoutingService
 
     ) {
         'ngInject';
         this.$scope = $scope;
         this.viewHistoryManager = viewHistoryManagerService;
+        this.viewHistoryListService = viewHistoryListService;
         this.customRouting = customRoutingService;
     }
 
@@ -56,7 +58,7 @@ export class ViewHistoryListController {
 
     confirmClearHistories(event) {
 
-        this.viewHistoryManager.showClearHistoriesDialog(event).then(() => {
+        this.viewHistoryListService.showClearHistoriesDialog(event).then(() => {
 
             return this.viewHistoryManager.clearHistories();
         })
