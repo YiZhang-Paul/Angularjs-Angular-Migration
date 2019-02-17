@@ -5,52 +5,37 @@ export class GameListController {
     constructor(
 
         $interval,
-        $state,
-        channelHttpService,
         gameManagerService,
-        genericUtilitiesService
+        customRoutingService
 
     ) {
         'ngInject';
         this.$interval = $interval;
-        this.$state = $state;
-        this.channelService = channelHttpService;
-        this.gameListService = gameManagerService;
-        this.utilities = genericUtilitiesService;
+        this.gameManager = gameManagerService;
+        this.customRouting = customRoutingService;
 
         this.task = null;
     }
 
     get games() {
 
-        return this.gameListService.games;
+        return this.gameManager.games;
     }
 
     $onInit() {
 
-        this.gameListService.cacheGames();
+        this.gameManager.cacheGames();
 
         this.task = this.$interval(() => {
 
-            this.gameListService.cacheGames();
+            this.gameManager.cacheGames();
 
         }, 10 * 1000);
     }
 
-    _changeRoute(game, channels) {
-
-        const name = this.utilities.joinText(game.name);
-
-        this.$state.go('index.channels', { game, name, channels });
-    }
-
     toChannelsView(game) {
 
-        this.channelService.getChannelsByGameId(game.id).then(channels => {
-
-            this._changeRoute(game, channels);
-        })
-        .catch(error => console.log(error));
+        this.customRouting.toChannelsView(game.id);
     }
 
     $onDestroy() {

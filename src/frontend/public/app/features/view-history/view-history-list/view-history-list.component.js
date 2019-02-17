@@ -4,33 +4,25 @@ export class ViewHistoryListController {
 
     constructor(
 
-        $q,
         $scope,
-        $state,
-        gameHttpService,
-        channelHttpService,
         viewHistoryManagerService,
-        genericUtilitiesService
+        customRoutingService
 
     ) {
         'ngInject';
-        this.$q = $q;
         this.$scope = $scope;
-        this.$state = $state;
-        this.gameHttpService = gameHttpService;
-        this.channelHttpService = channelHttpService;
-        this.historyService = viewHistoryManagerService;
-        this.utilities = genericUtilitiesService;
+        this.viewHistoryManager = viewHistoryManagerService;
+        this.customRouting = customRoutingService;
     }
 
     get histories() {
 
-        return this.historyService.histories;
+        return this.viewHistoryManager.histories;
     }
 
     $onInit() {
 
-        this.historyService.cacheHistories();
+        this.viewHistoryManager.cacheHistories();
         this._registerAuthenticationEvents();
     }
 
@@ -38,12 +30,12 @@ export class ViewHistoryListController {
 
         this.$scope.$on('userAuthenticated', () => {
 
-            this.historyService.cacheHistories();
+            this.viewHistoryManager.cacheHistories();
         });
 
         this.$scope.$on('userLoggedOut', () => {
 
-            this.historyService.histories = [];
+            this.viewHistoryManager.histories = [];
         });
     }
 
@@ -52,36 +44,21 @@ export class ViewHistoryListController {
         return !/(mp4|m4v)$/i.test(url);
     }
 
-    _changeRoute(game, channels) {
-
-        const name = this.utilities.joinText(game.name);
-
-        this.$state.go('index.channels', { game, name, channels });
-    }
-
     toChannelsView(id) {
 
-        const gamePromise = this.gameHttpService.getGame(id);
-        const channelsPromise = this.channelHttpService.getChannelsByGameId(id);
-        const promises = [gamePromise, channelsPromise];
-
-        this.$q.all(promises).then(responses => {
-
-            this._changeRoute(...responses);
-        })
-        .catch(error => console.log(error));
+        this.customRouting.toChannelsView(id);
     }
 
     deleteHistory(history) {
 
-        this.historyService.deleteHistory(history.id);
+        this.viewHistoryManager.deleteHistory(history.id);
     }
 
     confirmClearHistories(event) {
 
-        this.historyService.showClearHistoriesDialog(event).then(() => {
+        this.viewHistoryManager.showClearHistoriesDialog(event).then(() => {
 
-            return this.historyService.clearHistories();
+            return this.viewHistoryManager.clearHistories();
         })
         .catch(error => console.log(error));
     }

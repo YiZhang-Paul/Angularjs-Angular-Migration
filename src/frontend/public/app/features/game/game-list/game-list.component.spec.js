@@ -2,8 +2,7 @@ import GameModule from '../game.module.ajs';
 
 import { stub$stateNg1 } from '../../../testing/stubs/third-party/$state.stub';
 import { stubGameManagerServiceNg1 } from '../../../testing/stubs/custom/game-manager.service.stub';
-import { stubChannelHttpServiceNg1 } from '../../../testing/stubs/custom/channel-http.service.stub';
-import { stubGenericUtilitiesServiceNg1 } from '../../../testing/stubs/custom/generic-utilities.service.stub';
+import { stubCustomRoutingServiceNg1 } from '../../../testing/stubs/custom/custom-routing.service.stub';
 
 const module = angular.mock.module;
 const stub = sinon.stub;
@@ -13,7 +12,6 @@ context('game list component unit test', () => {
 
     const tag = '<game-list></game-list>';
 
-    let $q;
     let $compile;
     let $interval;
     let $rootScope;
@@ -22,8 +20,7 @@ context('game list component unit test', () => {
 
     let $stateStub;
     let gameManagerServiceStub;
-    let channelHttpServiceStub;
-    let genericUtilitiesServiceStub;
+    let customRoutingServiceStub;
 
     beforeEach(module(GameModule));
     beforeEach(module('component-templates'));
@@ -32,18 +29,15 @@ context('game list component unit test', () => {
 
         $stateStub = stub$stateNg1(module, inject);
         gameManagerServiceStub = stubGameManagerServiceNg1(module, inject);
-        channelHttpServiceStub = stubChannelHttpServiceNg1(module, inject);
-        genericUtilitiesServiceStub = stubGenericUtilitiesServiceNg1(module, inject);
+        customRoutingServiceStub = stubCustomRoutingServiceNg1(module, inject);
 
         $stateStub.setupStub();
         gameManagerServiceStub.setupStub();
-        channelHttpServiceStub.setupStub();
-        genericUtilitiesServiceStub.setupStub();
+        customRoutingServiceStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
-        $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
@@ -119,44 +113,14 @@ context('game list component unit test', () => {
 
     describe('toChannelsView()', () => {
 
-        let game;
+        it('should use custom routing service to change route', () => {
 
-        beforeEach('toChannelsView() test setup', () => {
+            const expected = 17;
 
-            game = { id: 55, name: 'random game name 5' };
-            genericUtilitiesServiceStub.joinText.returns('');
-        });
+            component.toChannelsView({ id: expected });
 
-        it('should use channel http service to fetch data', () => {
-
-            component.toChannelsView(game);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(channelHttpServiceStub.getChannelsByGameId);
-        });
-
-        it('should change route with correct route parameters', () => {
-
-            const name = 'random-game-name-5';
-            const channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            const expected = { game, name, channels };
-            channelHttpServiceStub.getChannelsByGameId.returns($q.resolve(channels));
-            genericUtilitiesServiceStub.joinText.returns(name);
-
-            component.toChannelsView(game);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(genericUtilitiesServiceStub.joinText);
-            sinonExpect.calledOnce($stateStub.go);
-            sinonExpect.calledWith($stateStub.go, 'index.channels', expected);
-        });
-
-        it('should not throw on error', () => {
-
-            channelHttpServiceStub.getChannelsByGameId.returns($q.reject(new Error()));
-
-            component.toChannelsView(game);
-            $rootScope.$apply();
+            sinonExpect.calledOnce(customRoutingServiceStub.toChannelsView);
+            sinonExpect.calledWith(customRoutingServiceStub.toChannelsView, expected);
         });
     });
 });
