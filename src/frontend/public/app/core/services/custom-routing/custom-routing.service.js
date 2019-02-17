@@ -27,7 +27,7 @@ export class CustomRoutingService {
             const [game, channels] = responses;
             const name = this.utilities.joinText(game.name);
 
-            this.$state.go('index.channels', { game, name, channels });
+            this.$state.go('index.channels', { name, channels });
         })
         .catch(error => console.log(error));
     }

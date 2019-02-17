@@ -77,16 +77,16 @@ context('custom routing service unit test', () => {
 
         it('should route to correct state along with route data', () => {
 
+            const game = { id, name: 'name_1' };
             const expectedState = 'index.channels';
 
             const expectedData = {
 
-                game: { id: 1 },
                 name: 'name_1',
                 channels: [{ id: 1 }, { id: 4 }]
             };
 
-            gameHttpStub.getGame.returns($q.resolve(expectedData.game));
+            gameHttpStub.getGame.returns($q.resolve(game));
             channelHttpStub.getChannelsByGameId.returns($q.resolve(expectedData.channels));
             genericUtilitiesStub.joinText.returns(expectedData.name);
 

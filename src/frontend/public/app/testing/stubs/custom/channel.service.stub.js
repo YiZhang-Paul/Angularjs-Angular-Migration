@@ -9,15 +9,13 @@ export function stubChannelService() {
         setupStub: () => stubbed,
         refreshChannels: stub(),
         loadFeaturedChannels: stub(),
-        loadGameChannels: stub(),
-        loadGameChannelsByName: stub()
+        loadGameChannels: stub()
     };
 
     stubbed.setupStub = (promise = Promise) => {
 
         stubbed.loadFeaturedChannels.returns(promise.resolve({}));
         stubbed.loadGameChannels.returns(promise.resolve({}));
-        stubbed.loadGameChannelsByName.returns(promise.resolve({}));
 
         return stubbed;
     };

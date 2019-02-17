@@ -69,15 +69,12 @@ context('game channel list component unit test', () => {
     describe('$onInit()', () => {
 
         const name = 'some-game-5';
-        let game;
         let channels;
 
         beforeEach('$onInit() test setup', () => {
 
-            game = { id: 15, name: 'some game 5' };
             channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             $stateParams.name = name;
-            $stateParams.game = game;
             $stateParams.channels = channels;
         });
 
@@ -89,25 +86,13 @@ context('game channel list component unit test', () => {
             expect(component.name).to.equal('some game 5');
         });
 
-        it('should load data from state parameters when both game and channels data exist', () => {
+        it('should load data from state parameters when channels data exist', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
-            expect(component.game).to.deep.equal(game);
             expect(component.channels).to.deep.equal(channels);
             sinonExpect.notCalled(channelServiceStub.loadGameChannels);
-        });
-
-        it('should fetch game channels from channel service when game data is missing from state parameters', () => {
-
-            $stateParams.game = null;
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(channelServiceStub.loadGameChannels);
-            sinonExpect.calledWith(channelServiceStub.loadGameChannels, component.channels, component.name);
         });
 
         it('should fetch game channels from channel service when channels data is missing from state parameters', () => {

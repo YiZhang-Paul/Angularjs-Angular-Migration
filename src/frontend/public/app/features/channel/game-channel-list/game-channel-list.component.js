@@ -19,7 +19,6 @@ export class GameChannelListController {
         this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
-        this.game = null;
         this.name = null;
         this.channels = [];
     }
@@ -33,9 +32,8 @@ export class GameChannelListController {
 
     _loadComponent() {
 
-        if (this.$stateParams.game && this.$stateParams.channels) {
+        if (this.$stateParams.channels) {
 
-            this.game = this.$stateParams.game;
             this.channels = this.$stateParams.channels;
 
             return;

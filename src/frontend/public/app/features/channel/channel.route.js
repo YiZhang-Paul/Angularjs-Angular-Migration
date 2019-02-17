@@ -6,12 +6,7 @@ export const ChannelsState = {
 
         url: '^/games/:name',
         component: 'gameChannelList',
-
-        params: {
-
-            game: null,
-            channels: null
-        }
+        params: { channels: null }
     }
 };
 
