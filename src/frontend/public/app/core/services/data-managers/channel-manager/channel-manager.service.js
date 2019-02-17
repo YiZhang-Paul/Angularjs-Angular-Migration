@@ -1,11 +1,10 @@
 export class ChannelManagerService {
 
-    constructor(bookmarkManagerService, channelHttpService) {
+    constructor(channelHttpService) {
         'ngInject';
-        this.bookmarkService = bookmarkManagerService;
         this.channelService = channelHttpService;
     }
-
+    // TODO: remove this and use channel http service instead
     getChannelsByGameId(id) {
 
         return this.channelService.getChannelsByGameId(id).catch(error => {
@@ -15,7 +14,7 @@ export class ChannelManagerService {
             return [];
         });
     }
-
+    // TODO: move to shared channel service (in channel module)
     _isSameChannel(a, b) {
 
         if (!a || !b || a.provider_id !== b.provider_id) {
@@ -25,14 +24,14 @@ export class ChannelManagerService {
 
         return a.provider_channel_id === b.provider_channel_id;
     }
-
+    // TODO: move to shared channel service (in channel module)
     _syncChannel(outdated, updated) {
 
         outdated.streamer_name = updated.streamer_name;
         outdated.title = updated.title;
         outdated.view_count = updated.view_count;
     }
-
+    // TODO: move to shared channel service (in channel module)
     refreshChannels(outdated, updated) {
 
         for (let i = 0; i < updated.length; i++) {
@@ -46,26 +45,5 @@ export class ChannelManagerService {
 
             this._syncChannel(outdated[i], updated[i]);
         }
-    }
-
-    isFollowed(channel) {
-
-        return this.bookmarkService.isFollowed(channel);
-    }
-
-    follow(channel) {
-
-        return this.bookmarkService.follow(channel).catch(error => {
-
-            console.log(error);
-        });
-    }
-
-    unfollow(channel) {
-
-        return this.bookmarkService.unfollow(channel).catch(error => {
-
-            console.log(error);
-        });
     }
 }

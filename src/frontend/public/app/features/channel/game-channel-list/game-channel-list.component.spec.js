@@ -1,6 +1,7 @@
 import SharedModule from '../../../shared/shared.module.ajs';
 import ChannelModule from '../channel.module.ajs';
 
+import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { stubChannelManagerServiceNg1 } from '../../../testing/stubs/custom/channel-manager.service.stub';
 import { stubGameHttpServiceNg1 } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
@@ -21,6 +22,7 @@ context('game channel list component unit test', () => {
     let component;
     let componentElement;
 
+    let bookmarkManagerServiceStub;
     let channelManagerServiceStub;
     let gameHttpServiceStub;
     let viewHistoryManagerServiceStub;
@@ -32,10 +34,12 @@ context('game channel list component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
+        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
         channelManagerServiceStub = stubChannelManagerServiceNg1(module, inject);
         gameHttpServiceStub = stubGameHttpServiceNg1(module, inject);
         viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
 
+        bookmarkManagerServiceStub.setupStub();
         channelManagerServiceStub.setupStub();
         gameHttpServiceStub.setupStub();
         viewHistoryManagerServiceStub.setupStub();
@@ -201,44 +205,44 @@ context('game channel list component unit test', () => {
 
     describe('isFollowed()', () => {
 
-        it('should use channel manager service to check channel status', () => {
+        it('should use bookmark manager service to check channel status', () => {
 
-            const channel = { channel_id: 5 };
+            const expected = { channel_id: 5 };
 
-            const result = component.isFollowed(channel);
+            const result = component.isFollowed(expected);
             $rootScope.$apply();
 
             expect(result).to.be.true;
-            sinonExpect.calledOnce(channelManagerServiceStub.isFollowed);
-            sinonExpect.calledWith(channelManagerServiceStub.isFollowed, channel);
+            sinonExpect.calledOnce(bookmarkManagerServiceStub.isFollowed);
+            sinonExpect.calledWith(bookmarkManagerServiceStub.isFollowed, expected);
         });
     });
 
     describe('follow()', () => {
 
-        it('should use channel manager service to follow channel', () => {
+        it('should use bookmark manager service to follow channel', () => {
 
-            const channel = { channel_id: 5 };
+            const expected = { channel_id: 5 };
 
-            component.follow(channel);
+            component.follow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(channelManagerServiceStub.follow);
-            sinonExpect.calledWith(channelManagerServiceStub.follow, channel);
+            sinonExpect.calledOnce(bookmarkManagerServiceStub.follow);
+            sinonExpect.calledWith(bookmarkManagerServiceStub.follow, expected);
         });
     });
 
     describe('unfollow()', () => {
 
-        it('should use channel manager service to unfollow channel', () => {
+        it('should use bookmark manager service to unfollow channel', () => {
 
-            const channel = { channel_id: 5 };
+            const expected = { channel_id: 5 };
 
-            component.unfollow(channel);
+            component.unfollow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(channelManagerServiceStub.unfollow);
-            sinonExpect.calledWith(channelManagerServiceStub.unfollow, channel);
+            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
+            sinonExpect.calledWith(bookmarkManagerServiceStub.unfollow, expected);
         });
     });
 
@@ -246,13 +250,13 @@ context('game channel list component unit test', () => {
 
         it('should use view history manager service to add view history', () => {
 
-            const channel = { channel_id: 5 };
+            const expected = { channel_id: 5 };
 
-            component.addHistory(channel);
+            component.addHistory(expected);
             $rootScope.$apply();
 
             sinonExpect.calledOnce(viewHistoryManagerServiceStub.addHistory);
-            sinonExpect.calledWith(viewHistoryManagerServiceStub.addHistory, channel);
+            sinonExpect.calledWith(viewHistoryManagerServiceStub.addHistory, expected);
         });
     });
 });

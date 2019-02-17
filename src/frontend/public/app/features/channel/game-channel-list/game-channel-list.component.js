@@ -7,6 +7,7 @@ export class GameChannelListController {
         $stateParams,
         $interval,
         gameHttpService,
+        bookmarkManagerService,
         channelManagerService,
         viewHistoryManagerService
 
@@ -14,9 +15,10 @@ export class GameChannelListController {
         'ngInject';
         this.$stateParams = $stateParams;
         this.$interval = $interval;
-        this.gameHttpService = gameHttpService;
-        this.channelService = channelManagerService;
-        this.historyService = viewHistoryManagerService;
+        this.gameHttp = gameHttpService;
+        this.bookmarkManager = bookmarkManagerService;
+        this.channelManager = channelManagerService;
+        this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
         this.game = null;
@@ -28,18 +30,18 @@ export class GameChannelListController {
         this._loadComponent();
         this._setupChannelLoading();
     }
-
+    // TODO: move to shared channel service (in channel module)
     _loadGame() {
 
         const name = this.$stateParams.name.replace(/-/g, ' ');
 
-        return this.gameHttpService.getGameByName(name).then(game => {
+        return this.gameHttp.getGameByName(name).then(game => {
 
             this.game = game;
         })
         .catch(() => null);
     }
-
+    // TODO: move to shared channel service (in channel module)
     _loadChannels() {
 
         if (!this.game) {
@@ -47,9 +49,9 @@ export class GameChannelListController {
             return;
         }
 
-        this.channelService.getChannelsByGameId(this.game.id).then(channels => {
+        this.channelManager.getChannelsByGameId(this.game.id).then(channels => {
 
-            this.channelService.refreshChannels(this.channels, channels);
+            this.channelManager.refreshChannels(this.channels, channels);
         })
         .catch(error => console.log(error));
     }
@@ -78,22 +80,22 @@ export class GameChannelListController {
 
     isFollowed(channel) {
 
-        return this.channelService.isFollowed(channel);
+        return this.bookmarkManager.isFollowed(channel);
     }
 
     follow(channel) {
 
-        this.channelService.follow(channel);
+        this.bookmarkManager.follow(channel);
     }
 
     unfollow(channel) {
 
-        this.channelService.unfollow(channel);
+        this.bookmarkManager.unfollow(channel);
     }
 
     addHistory(channel) {
 
-        this.historyService.addHistory(channel);
+        this.viewHistoryManager.addHistory(channel);
     }
 
     $onDestroy() {

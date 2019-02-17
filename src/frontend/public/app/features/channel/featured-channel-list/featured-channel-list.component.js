@@ -5,6 +5,7 @@ export class FeaturedChannelListController {
     constructor(
 
         $interval,
+        bookmarkManagerService,
         channelManagerService,
         featuredChannelManagerService,
         viewHistoryManagerService
@@ -12,9 +13,10 @@ export class FeaturedChannelListController {
     ) {
         'ngInject';
         this.$interval = $interval;
-        this.channelService = channelManagerService;
-        this.featuredChannelService = featuredChannelManagerService;
-        this.historyService = viewHistoryManagerService;
+        this.bookmarkManager = bookmarkManagerService;
+        this.channelManager = channelManagerService;
+        this.featuredChannelManager = featuredChannelManagerService;
+        this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
         this.channels = [];
@@ -25,12 +27,12 @@ export class FeaturedChannelListController {
         this._loadChannels();
         this._setupChannelLoading();
     }
-
+    // TODO: move to shared channel service (in channel module)
     _loadChannels() {
 
-        this.featuredChannelService.getFeaturedChannels().then(channels => {
+        this.featuredChannelManager.getFeaturedChannels().then(channels => {
 
-            this.channelService.refreshChannels(this.channels, channels);
+            this.channelManager.refreshChannels(this.channels, channels);
         })
         .catch(error => console.log(error));
     }
@@ -46,22 +48,22 @@ export class FeaturedChannelListController {
 
     isFollowed(channel) {
 
-        return this.channelService.isFollowed(channel);
+        return this.bookmarkManager.isFollowed(channel);
     }
 
     follow(channel) {
 
-        this.channelService.follow(channel);
+        this.bookmarkManager.follow(channel);
     }
 
     unfollow(channel) {
 
-        this.channelService.unfollow(channel);
+        this.bookmarkManager.unfollow(channel);
     }
 
     addHistory(channel) {
 
-        this.historyService.addHistory(channel);
+        this.viewHistoryManager.addHistory(channel);
     }
 
     $onDestroy() {

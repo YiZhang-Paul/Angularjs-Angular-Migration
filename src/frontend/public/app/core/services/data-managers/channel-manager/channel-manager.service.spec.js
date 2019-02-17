@@ -1,6 +1,5 @@
 import CoreModule from '../../../core.module.ajs';
 
-import { stubBookmarkManagerServiceNg1 } from '../../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { stubChannelHttpServiceNg1 } from '../../../../testing/stubs/custom/channel-http.service.stub';
 
 const module = angular.mock.module;
@@ -12,17 +11,14 @@ context('channel manager service unit test', () => {
     let $rootScope;
     let service;
 
-    let bookmarkManagerServiceStub;
     let channelHttpServiceStub;
 
     beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {
 
-        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
         channelHttpServiceStub = stubChannelHttpServiceNg1(module, inject);
 
-        bookmarkManagerServiceStub.setupStub();
         channelHttpServiceStub.setupStub();
     });
 
@@ -169,79 +165,6 @@ context('channel manager service unit test', () => {
             service.refreshChannels(oldChannels, newChannels);
 
             expect(oldChannels).to.deep.equal(expected);
-        });
-    });
-
-    describe('isFollowed()', () => {
-
-        it('should use bookmark manager service to check channel status', () => {
-
-            const channel = { channel_id: 5 };
-
-            const result = service.isFollowed(channel);
-            $rootScope.$apply();
-
-            expect(result).to.be.true;
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.isFollowed);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.isFollowed, channel);
-        });
-    });
-
-    describe('follow()', () => {
-
-        let channel;
-
-        beforeEach('follow() test setup', () => {
-
-            channel = { channel_id: 5 };
-        });
-
-        it('should use bookmark manager service to follow channel', () => {
-
-            service.follow(channel);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.follow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.follow, channel);
-        });
-
-        it('should not throw error when failed to follow channel', () => {
-
-            bookmarkManagerServiceStub.follow.returns($q.reject(new Error()));
-
-            service.follow(channel).catch(() => { throw new Error(); });
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.follow);
-        });
-    });
-
-    describe('unfollow()', () => {
-
-        let channel;
-
-        beforeEach('unfollow() test setup', () => {
-
-            channel = { channel_id: 5 };
-        });
-
-        it('should use bookmark manager service to unfollow channel', () => {
-
-            service.unfollow(channel);
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.unfollow, channel);
-        });
-
-        it('should not throw error when failed to unfollow channel', () => {
-
-            bookmarkManagerServiceStub.unfollow.returns($q.reject(new Error()));
-
-            service.unfollow(channel).catch(() => { throw new Error(); });
-            $rootScope.$apply();
-
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
         });
     });
 });
