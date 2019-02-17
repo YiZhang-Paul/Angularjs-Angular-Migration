@@ -2,10 +2,17 @@ import '../style.scss';
 
 export class AppController {
 
-    constructor(authenticatorService, bookmarkManagerService) {
+    constructor(
+
+        authenticatorService,
+        bookmarkManagerService,
+        viewHistoryManagerService
+
+    ) {
         'ngInject';
         this.authenticator = authenticatorService;
         this.bookmarkService = bookmarkManagerService;
+        this.historyService = viewHistoryManagerService;
     }
 
     $onInit() {
@@ -13,6 +20,7 @@ export class AppController {
         if (this.authenticator.isAuthenticated) {
 
             this.bookmarkService.cacheBookmarks();
+            this.historyService.cacheHistories();
         }
     }
 }

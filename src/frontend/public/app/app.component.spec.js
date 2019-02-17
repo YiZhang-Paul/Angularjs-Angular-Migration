@@ -3,6 +3,7 @@ import AppModule from './app.module.ajs';
 import { stubComponentNg1 } from './testing/stubs/custom/components.stub';
 import { stubAuthenticatorServiceNg1 } from './testing/stubs/custom/authenticator.service.stub';
 import { stubBookmarkManagerServiceNg1 } from './testing/stubs/custom/bookmark-manager.service.stub';
+import { stubViewHistoryManagerServiceNg1 } from './testing/stubs/custom/view-history-manager.service.stub';
 
 const module = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -18,6 +19,7 @@ context('app component unit test', () => {
 
     let authenticatorServiceStub;
     let bookmarkManagerServiceStub;
+    let viewHistoryManagerServiceStub;
 
     beforeEach(module(AppModule));
     beforeEach(module('component-templates'));
@@ -30,9 +32,11 @@ context('app component unit test', () => {
 
         authenticatorServiceStub = stubAuthenticatorServiceNg1(module, inject);
         bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
+        viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
 
         authenticatorServiceStub.setupStub();
         bookmarkManagerServiceStub.setupStub();
+        viewHistoryManagerServiceStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -69,6 +73,24 @@ context('app component unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.notCalled(bookmarkManagerServiceStub.cacheBookmarks);
+        });
+
+        it('should cache view histories on initialization when user is authenticated', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(viewHistoryManagerServiceStub.cacheHistories);
+        });
+
+        it('should not cache view histories on initialization when user is not authenticated', () => {
+
+            authenticatorServiceStub.isAuthenticated = false;
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(viewHistoryManagerServiceStub.cacheHistories);
         });
     });
 });
