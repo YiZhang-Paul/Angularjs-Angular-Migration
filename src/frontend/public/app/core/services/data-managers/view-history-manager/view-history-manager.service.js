@@ -1,35 +1,25 @@
 export class ViewHistoryManagerService {
 
-    constructor($rootScope, $mdDialog, viewHistoryHttpService) {
+    constructor($rootScope, viewHistoryHttpService) {
         'ngInject';
         this.$rootScope = $rootScope;
-        this.$mdDialog = $mdDialog;
-        this.historyService = viewHistoryHttpService;
+        this.viewHistoryHttp = viewHistoryHttpService;
 
         this.histories = [];
     }
 
-    getHistories() {
-
-        return this.historyService.getHistories().catch(error => {
-
-            console.log(error);
-
-            return [];
-        });
-    }
-
     cacheHistories() {
 
-        return this.getHistories().then(histories => {
+        return this.viewHistoryHttp.getHistories().then(histories => {
 
             this.histories = histories.length ? histories : this.histories;
-        });
+        })
+        .catch(error => console.log(error));
     }
 
     addHistory(channel) {
 
-        return this.historyService.addHistory(channel).then(() => {
+        return this.viewHistoryHttp.addHistory(channel).then(() => {
 
             this.$rootScope.$broadcast('historyUpdated');
 
@@ -50,7 +40,7 @@ export class ViewHistoryManagerService {
 
     deleteHistory(id) {
 
-        this.historyService.deleteHistory(id).then(() => {
+        this.viewHistoryHttp.deleteHistory(id).then(() => {
 
             this._removeCached(id);
             this.$rootScope.$broadcast('historyRemoved');
@@ -58,21 +48,9 @@ export class ViewHistoryManagerService {
         .catch(error => console.log(error));
     }
 
-    showClearHistoriesDialog(event) {
-
-        const options = this.$mdDialog.confirm()
-            .title('Clear all view histories?')
-            .textContent('All view histories will be permanently deleted.')
-            .targetEvent(event)
-            .ok('Ok')
-            .cancel('Cancel');
-
-        return this.$mdDialog.show(options);
-    }
-
     clearHistories() {
 
-        return this.historyService.deleteHistories().then(() => {
+        return this.viewHistoryHttp.deleteHistories().then(() => {
 
             this.histories = [];
             this.$rootScope.$broadcast('historyCleared');
