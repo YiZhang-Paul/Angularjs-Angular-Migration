@@ -8,7 +8,6 @@ export function stubUserLoginService() {
 
     stubbed.login = stub().returns(Promise.resolve({}));
     stubbed.logout = stub();
-    stubbed.openLoginPanel = stub().returns(Promise.resolve({}));
 
     return stubbed;
 }

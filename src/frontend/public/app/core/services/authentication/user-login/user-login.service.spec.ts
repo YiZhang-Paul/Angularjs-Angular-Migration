@@ -2,11 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
-import { $mdPanel } from '../../../upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { Authenticator } from '../../../upgraded-providers/authenticator-provider/authenticator-provider';
 import { UserHttpService } from '../../http/user-http/user-http.service';
-import { stub$mdPanel } from '../../../../testing/stubs/built-in/$md-panel.stub.js';
 import { stub$rootScope } from '../../../../testing/stubs/built-in/$root-scope.stub.js';
 import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
 import { stubUserHttpService } from '../../../../testing/stubs/custom/user-http.service.stub';
@@ -17,14 +15,12 @@ context('user login service unit test', () => {
 
     let service: UserLoginService;
 
-    let $mdPanelStub;
     let $rootScopeStub;
     let authenticatorServiceStub;
     let userHttpServiceStub;
 
     beforeEach('stubs setup', () => {
 
-        $mdPanelStub = stub$mdPanel();
         $rootScopeStub = stub$rootScope();
         authenticatorServiceStub = stubAuthenticatorService();
         userHttpServiceStub = stubUserHttpService();
@@ -37,7 +33,6 @@ context('user login service unit test', () => {
             providers: [
 
                 UserLoginService,
-                { provide: $mdPanel, useValue: $mdPanelStub },
                 { provide: $rootScope, useValue: $rootScopeStub },
                 { provide: Authenticator, useValue: authenticatorServiceStub },
                 { provide: UserHttpService, useValue: userHttpServiceStub }
@@ -120,27 +115,6 @@ context('user login service unit test', () => {
 
             sinonExpect.calledOnce($rootScopeStub.$broadcast);
             sinonExpect.calledWith($rootScopeStub.$broadcast, 'userLoggedOut');
-        });
-    });
-
-    describe('openLoginPanel()', () => {
-
-        it('should open new $mdPanel', () => {
-
-            service.openLoginPanel(null);
-
-            sinonExpect.calledOnce($mdPanelStub.open);
-        });
-
-        it('should set login callback on opened panel', () => {
-
-            const expected = () => true;
-
-            service.openLoginPanel(expected);
-
-            const argument = $mdPanelStub.open.getCall(0).args[0];
-
-            expect(argument.locals.loginCallback).to.deep.equal(expected);
         });
     });
 });

@@ -3,8 +3,10 @@ import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
 import { SharedModule } from '../../shared.module';
+import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
+import { stub$mdPanel } from '../../../testing/stubs/built-in/$md-panel.stub.js';
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub.js';
 import { stubUserLoginService } from '../../../testing/stubs/custom/user-login.service.stub';
 
@@ -15,11 +17,13 @@ context('user login component unit test', () => {
     let fixture: ComponentFixture<UserLoginComponent>;
     let component: UserLoginComponent;
 
+    let $mdPanelStub;
     let authenticatorServiceStub;
     let userLoginServiceStub;
 
     beforeEach('stubs setup', () => {
 
+        $mdPanelStub = stub$mdPanel();
         authenticatorServiceStub = stubAuthenticatorService();
         userLoginServiceStub = stubUserLoginService();
     });
@@ -31,6 +35,7 @@ context('user login component unit test', () => {
             imports: [SharedModule],
             providers: [
 
+                { provide: $mdPanel, useValue: $mdPanelStub },
                 { provide: Authenticator, useValue: authenticatorServiceStub },
                 { provide: UserLoginService, useValue: userLoginServiceStub }
             ]
@@ -62,7 +67,7 @@ context('user login component unit test', () => {
 
             component.tryLogin();
 
-            sinonExpect.calledOnce(userLoginServiceStub.openLoginPanel);
+            sinonExpect.calledOnce($mdPanelStub.open);
         });
 
         it('should use login service to log in', async () => {
@@ -70,7 +75,8 @@ context('user login component unit test', () => {
             const expected = { username: 'username_1', password: 'password_1' };
 
             component.tryLogin();
-            const callback = userLoginServiceStub.openLoginPanel.getCall(0).args[0];
+            const argument = $mdPanelStub.open.getCall(0).args[0];
+            const callback = argument.locals.loginCallback;
 
             await callback(expected);
 
@@ -84,7 +90,8 @@ context('user login component unit test', () => {
             userLoginServiceStub.login.returns(Promise.resolve(expected));
 
             component.tryLogin();
-            const callback = userLoginServiceStub.openLoginPanel.getCall(0).args[0];
+            const argument = $mdPanelStub.open.getCall(0).args[0];
+            const callback = argument.locals.loginCallback;
 
             await callback({});
 
