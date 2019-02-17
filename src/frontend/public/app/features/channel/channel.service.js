@@ -1,7 +1,8 @@
 export class ChannelService {
 
-    constructor(channelHttpService) {
+    constructor(gameHttpService, channelHttpService) {
         'ngInject';
+        this.gameHttp = gameHttpService;
         this.channelHttp = channelHttpService;
     }
 
@@ -37,6 +38,29 @@ export class ChannelService {
         return this.channelHttp.getChannels().then(channels => {
 
             this.refreshChannels(cache, channels);
+        })
+        .catch(error => console.log(error));
+    }
+
+    loadGameChannels(cache, id) {
+
+        return this.channelHttp.getChannelsByGameId(id).then(channels => {
+
+            this.refreshChannels(cache, channels);
+        })
+        .catch(error => console.log(error));
+    }
+
+    loadGameChannelsByName(cache, name) {
+
+        return this.gameHttp.getGameByName(name).then(game => {
+
+            if (!game) {
+
+                throw new Error();
+            }
+
+            return this.loadGameChannels(cache, game.id);
         })
         .catch(error => console.log(error));
     }
