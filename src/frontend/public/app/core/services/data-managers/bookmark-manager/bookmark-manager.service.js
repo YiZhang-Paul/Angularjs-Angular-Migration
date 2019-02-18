@@ -1,8 +1,9 @@
 export class BookmarkManagerService {
 
-    constructor($rootScope, bookmarkHttpService) {
+    constructor($rootScope, toastr, bookmarkHttpService) {
         'ngInject';
         this.$rootScope = $rootScope;
+        this.toastr = toastr;
         this.bookmarkHttp = bookmarkHttpService;
 
         this.providerKeys = ['provider_id', 'provider_channel_id'];
@@ -63,9 +64,12 @@ export class BookmarkManagerService {
 
     follow(data) {
 
+        const message = 'You just followed a channel.';
+
         return this.bookmarkHttp.addBookmark(data)
             .then(() => this.cacheBookmarks())
             .then(() => this.$rootScope.$broadcast('followedChannel'))
+            .then(() => this.toastr.success(message, { timeOut: 2500 }))
             .catch(error => console.log(error));
     }
 
@@ -78,11 +82,13 @@ export class BookmarkManagerService {
     unfollow(data) {
 
         const id = this._getBookmarkId(data);
+        const message = 'You just unfollowed a channel.';
 
         return this.bookmarkHttp.deleteBookmark(id).then(() => {
 
             this._removeCached(id);
             this.$rootScope.$broadcast('unfollowedChannel');
+            this.toastr.error(message, { timeOut: 2500 });
         })
         .catch(error => console.log(error));
     }

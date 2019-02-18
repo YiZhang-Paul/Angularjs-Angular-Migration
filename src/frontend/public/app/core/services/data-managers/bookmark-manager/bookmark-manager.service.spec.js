@@ -1,5 +1,6 @@
 import CoreModule from '../../../core.module.ajs';
 
+import { stubToastrNg1 } from '../../../../testing/stubs/third-party/toastr.stub';
 import { stubBookmarkHttpServiceNg1 } from '../../../../testing/stubs/custom/bookmark-http.service.stub';
 
 const module = angular.mock.module;
@@ -12,14 +13,17 @@ context('bookmark manager service unit test', () => {
     let $rootScope;
     let service;
 
+    let toastrStub;
     let bookmarkHttpServiceStub;
 
     beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {
 
+        toastrStub = stubToastrNg1(module, inject);
         bookmarkHttpServiceStub = stubBookmarkHttpServiceNg1(module, inject);
 
+        toastrStub.setupStub();
         bookmarkHttpServiceStub.setupStub();
     });
 
@@ -180,6 +184,14 @@ context('bookmark manager service unit test', () => {
             sinonExpect.calledWith($rootScope.$broadcast, 'followedChannel');
         });
 
+        it('should display notification when successfully added bookmark', () => {
+
+            service.follow({});
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(toastrStub.success);
+        });
+
         it('should not cache bookmarks when failed to add bookmark', () => {
 
             const expected = { status: 400 };
@@ -255,6 +267,14 @@ context('bookmark manager service unit test', () => {
 
             sinonExpect.calledOnce($rootScope.$broadcast);
             sinonExpect.calledWith($rootScope.$broadcast, 'unfollowedChannel');
+        });
+
+        it('should display notification when successfully deleted bookmark', () => {
+
+            service.unfollow(data);
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(toastrStub.error);
         });
 
         it('should not remove bookmark from cache when failed to delete bookmark', () => {

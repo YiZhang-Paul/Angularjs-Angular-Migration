@@ -5,7 +5,6 @@ export class SidebarController {
     constructor(
 
         $scope,
-        toastr,
         authenticatorService,
         channelHttpService,
         bookmarkManagerService,
@@ -14,7 +13,6 @@ export class SidebarController {
     ) {
         'ngInject';
         this.$scope = $scope;
-        this.toastr = toastr;
         this.authenticator = authenticatorService;
         this.channelHttp = channelHttpService;
         this.bookmarkManager = bookmarkManagerService;
@@ -77,15 +75,8 @@ export class SidebarController {
 
         this.$scope.$on('userAuthenticated', () => {
 
-            this.bookmarkManager.cacheBookmarks().then(() => {
-
-                this._loadBookmarks();
-            });
-
-            this.viewHistoryManager.cacheHistories().then(() => {
-
-                this._loadHistories();
-            });
+            this.bookmarkManager.cacheBookmarks().then(() => this._loadBookmarks());
+            this.viewHistoryManager.cacheHistories().then(() => this._loadHistories());
         });
 
         this.$scope.$on('userLoggedOut', () => {
@@ -96,22 +87,9 @@ export class SidebarController {
     }
 
     _registerBookmarkEvents() {
-        // TODO: should move into bookmark manager
-        const timeout = { timeOut: 2500 };
 
-        this.$scope.$on('followedChannel', () => {
-
-            this._loadBookmarks();
-            // TODO: should move into bookmark manager
-            this.toastr.success('You just followed a channel.', timeout);
-        });
-
-        this.$scope.$on('unfollowedChannel', () => {
-
-            this._loadBookmarks();
-            // TODO: should move into bookmark manager
-            this.toastr.error('You just unfollowed a channel.', timeout);
-        });
+        this.$scope.$on('followedChannel', () => this._loadBookmarks());
+        this.$scope.$on('unfollowedChannel', () => this._loadBookmarks());
     }
 
     _registerViewHistoryEvents() {

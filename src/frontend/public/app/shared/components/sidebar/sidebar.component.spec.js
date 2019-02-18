@@ -1,6 +1,5 @@
 import SharedModule from '../../shared.module.ajs';
 
-import { stubToastrNg1 } from '../../../testing/stubs/third-party/toastr.stub';
 import { stubAuthenticatorServiceNg1 } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { stubChannelHttpServiceNg1 } from '../../../testing/stubs/custom/channel-http.service.stub';
 import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
@@ -22,7 +21,6 @@ context('sidebar component unit test', () => {
     let component;
     let componentElement;
 
-    let toastrStub;
     let authenticatorStub;
     let channelHttpStub;
     let bookmarkManagerStub;
@@ -33,13 +31,11 @@ context('sidebar component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
-        toastrStub = stubToastrNg1(module, inject);
         authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
         channelHttpStub = stubChannelHttpServiceNg1(module, inject);
         bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
         viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
 
-        toastrStub.setupStub();
         authenticatorStub.setupStub();
         channelHttpStub.setupStub();
         bookmarkManagerStub.setupStub();
