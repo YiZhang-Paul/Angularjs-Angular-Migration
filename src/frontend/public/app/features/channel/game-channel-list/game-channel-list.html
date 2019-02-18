@@ -1,0 +1,19 @@
+<div class="game-channel-list-container non-selectable" ng-show="$ctrl.game">
+    <div class="game-cover">
+        <game-card game="$ctrl.game"></game-card>
+
+        <div class="game-details">
+            <span class="game-title">{{ $ctrl.game.name | capitalize | uppercaseRomanNumerals }}</span></br></br>
+            <div class="game-view-counts">{{ $ctrl.game.view_count | shortViewCount }} {{ 'watching' }}</div>
+        </div>
+    </div>
+
+    <channel-card
+        ng-repeat="channel in $ctrl.channels"
+        ng-click="$ctrl.addHistory(channel)"
+        on-follow="$ctrl.follow(channel)"
+        on-unfollow="$ctrl.unfollow(channel)"
+        is-followed="$ctrl.isFollowed(channel)"
+        channel="channel">
+    </channel-card>
+</div>

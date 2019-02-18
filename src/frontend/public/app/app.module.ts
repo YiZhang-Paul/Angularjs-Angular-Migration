@@ -4,7 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import './app.module.ajs.js';
-import { ComponentsModule } from './components/components.module';
+import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { SharedModule } from './shared/shared.module';
         BrowserModule,
         UpgradeModule,
         UIRouterUpgradeModule.forRoot(),
-        ComponentsModule,
+        CoreModule,
         SharedModule
     ]
 })

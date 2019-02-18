@@ -1,27 +1,23 @@
-import { AuthenticatorService } from './services/authenticator.service';
-import { BookmarkHttpService } from './services/bookmark-http.service';
-import { ChannelHttpService } from './services/channel-http.service';
-import { GameHttpService } from './services/game-http.service';
-import { ViewHistoryHttpService } from './services/view-history-http.service';
-import { ThumbnailPlayerService } from './services/thumbnail-player.service';
-import { GenericUtilityService } from './services/generic-utility.service';
+import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
+import { LoginPanelComponent } from './components/user-login/login-panel/login-panel.component';
+import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar-badge.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 
-import { capitalizeFilter } from './filters/capitalize.filter';
-import { shortViewCountFilter } from './filters/short-view-count.filter';
-import { uppercaseRomanNumeralsFilter } from './filters/uppercase-roman-numerals.filter';
+import { capitalizeFilter } from './filters/capitalize/capitalize.filter';
+import { shortViewCountFilter } from './filters/short-view-count/short-view-count.filter';
+import { uppercaseRomanNumeralsFilter } from './filters/uppercase-roman-numerals/uppercase-roman-numerals.filter';
 
 const moduleName = 'sample-app-shared';
 
 export default moduleName;
 
 angular.module(moduleName, [])
-    .service('authenticatorService', AuthenticatorService)
-    .service('bookmarkHttpService', BookmarkHttpService)
-    .service('channelHttpService', ChannelHttpService)
-    .service('gameHttpService', GameHttpService)
-    .service('viewHistoryHttpService', ViewHistoryHttpService)
-    .service('thumbnailPlayerService', ThumbnailPlayerService)
-    .service('genericUtilityService', GenericUtilityService)
+    .component('channelBadge', ChannelBadgeComponent)
+    .component('loginPanel', LoginPanelComponent)
+    .component('sidebarBadge', SidebarBadgeComponent)
+    .component('sidebar', SidebarComponent)
+    .component('topNavbar', TopNavigationBarComponent)
     .filter('capitalize', capitalizeFilter)
     .filter('shortViewCount', shortViewCountFilter)
     .filter('uppercaseRomanNumerals', uppercaseRomanNumeralsFilter);

@@ -1,0 +1,20 @@
+.bookmark-list-container {
+
+    padding: 10vh 0 0 1vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    bookmark-card.ng-leave {
+
+        opacity: 1;
+        transition: 0.2s;
+        -webkit-transition: 0.2s;
+    }
+
+    bookmark-card.ng-leave-active {
+
+        opacity: 0;
+    }
+}

@@ -1,0 +1,70 @@
+.game-channel-list-container {
+
+    padding: 0.5% 0 0 1vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    .game-cover {
+
+        width: 100vw;
+        height: 27vh;
+        margin: 2.5vh 0 3.5vh 0.2vh;
+        position: relative;
+        flex-basis: 100%;
+    }
+
+    game-card {
+
+        left: 0;
+        width: 12vw;
+        height: 24.5vh;
+        margin: 0;
+        position: absolute;
+    }
+
+    game-card .game-card-container:hover {
+
+        cursor: initial;
+        -webkit-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+        box-shadow: 2px 3px 12px 1px rgba(0, 0, 0, 0.75);
+    }
+
+    game-card .game-image {
+
+        height: 100%;
+        background-size: cover;
+    }
+
+    game-card .game-details {
+
+        display: none;
+    }
+
+    .game-details {
+
+        top: 10.5%;
+        left: 15.5%;
+        position: absolute;
+        color: black;
+    }
+
+    .game-title {
+
+        font-size: 2.3em;
+        font-weight: 700;
+    }
+
+    .game-view-counts {
+
+        padding: 4px 12px 4px 12px;
+        display: inline-block;
+        text-align: center;
+        font-size: 0.85em;
+        color: white;
+        background-color: rgb(19, 104, 231);
+        border-radius: 5px;
+    }
+}

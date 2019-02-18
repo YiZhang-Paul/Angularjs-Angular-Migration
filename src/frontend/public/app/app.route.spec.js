@@ -1,6 +1,6 @@
 import AppModule from './app.module.ajs';
 
-const mockModule = angular.mock.module;
+const module = angular.mock.module;
 
 context('app route unit test', () => {
 
@@ -8,8 +8,8 @@ context('app route unit test', () => {
     let $location;
     let $rootScope;
 
-    beforeEach(mockModule(AppModule));
-    beforeEach(mockModule('component-templates'));
+    beforeEach(module(AppModule));
+    beforeEach(module('component-templates'));
 
     beforeEach('general test setup', inject($injector => {
 
@@ -25,12 +25,12 @@ context('app route unit test', () => {
 
     describe('/', () => {
 
-        it('should redirect to game list state at /games url', () => {
+        it('should redirect to game state at /games url', () => {
 
             $state.go('index');
             $rootScope.$apply();
 
-            expect($state.current.name).to.equal('index.gameList');
+            expect($state.current.name).to.equal('index.game');
             expect($state.current.url).to.equal('^/games');
         });
     });
@@ -70,9 +70,9 @@ context('app route unit test', () => {
 
     describe('/games', () => {
 
-        it('should navigate to game list state at /games url', () => {
+        it('should navigate to game state at /games url', () => {
 
-            $state.go('index.gameList');
+            $state.go('index.game');
             $rootScope.$apply();
 
             expect($state.current.url).to.equal('^/games');

@@ -1,0 +1,44 @@
+.view-history-list-container {
+
+    $button-color: rgb(99, 63, 167);
+    $hover-button-color: rgb(144, 102, 223);
+    $active-button-color: rgb(125, 87, 194);
+
+    padding: 10vh 0 0 1.5vw;
+
+    .clear-view-history-button {
+
+        top: 4vh;
+        left: 13.5%;
+        width: 15%;
+        height: 4vh;
+        position: absolute;
+        line-height: 4vh;
+        text-align: center;
+        background-color: $button-color;
+        color: white;
+        border: 2px solid $button-color;
+        border-radius: 7px;
+    }
+
+    .clear-view-history-button:hover {
+
+        cursor: pointer;
+        background-color: $hover-button-color;
+    }
+
+    .clear-view-history-button:active {
+
+        background-color: $active-button-color;
+    }
+
+    .empty-view-history-message {
+
+        top: 50%;
+        left: 4%;
+        position: absolute;
+        display: block;
+        font-size: 1.2em;
+        font-weight: 600;
+    }
+}
