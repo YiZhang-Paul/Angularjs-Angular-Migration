@@ -7,6 +7,7 @@ export class GameChannelListController {
         $interval,
         $stateParams,
         channelService,
+        gameHttpService,
         bookmarkManagerService,
         viewHistoryManagerService
 
@@ -15,10 +16,12 @@ export class GameChannelListController {
         this.$interval = $interval;
         this.$stateParams = $stateParams;
         this.channelService = channelService;
+        this.gameHttp = gameHttpService;
         this.bookmarkManager = bookmarkManagerService;
         this.viewHistoryManager = viewHistoryManagerService;
 
         this.task = null;
+        this.game = null;
         this.name = null;
         this.channels = [];
     }
@@ -30,6 +33,23 @@ export class GameChannelListController {
         this._setupChannelLoading();
     }
 
+    _loadGame() {
+
+        return this.gameHttp.getGameByName(this.name).then(game => {
+
+            this.game = game;
+        })
+        .catch(error => console.log(error));
+    }
+
+    _loadChannels() {
+
+        if (this.game) {
+
+            this.channelService.loadGameChannels(this.channels, this.game.id);
+        }
+    }
+
     _loadComponent() {
 
         if (this.$stateParams.channels) {
@@ -39,16 +59,12 @@ export class GameChannelListController {
             return;
         }
 
-        this.channelService.loadGameChannels(this.channels, this.name);
+        this._loadGame().then(() => this._loadChannels());
     }
 
     _setupChannelLoading() {
 
-        this.task = this.$interval(() => {
-
-            this.channelService.loadGameChannels(this.channels, this.name);
-
-        }, 10 * 1000);
+        this.task = this.$interval(() => this._loadChannels(), 10 * 1000);
     }
 
     isFollowed(channel) {

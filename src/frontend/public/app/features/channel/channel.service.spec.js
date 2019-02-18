@@ -1,6 +1,5 @@
 import ChannelModule from './channel.module.ajs';
 
-import { stubGameHttpServiceNg1 } from '../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelHttpServiceNg1 } from '../../testing/stubs/custom/channel-http.service.stub';
 
 const module = angular.mock.module;
@@ -12,17 +11,14 @@ context('channel service unit test', () => {
     let $rootScope;
     let service;
 
-    let gameHttpStub;
     let channelHttpStub;
 
     beforeEach(module(ChannelModule));
 
     beforeEach('stubs setup', () => {
 
-        gameHttpStub = stubGameHttpServiceNg1(module, inject);
         channelHttpStub = stubChannelHttpServiceNg1(module, inject);
 
-        gameHttpStub.setupStub();
         channelHttpStub.setupStub();
     });
 
@@ -177,19 +173,15 @@ context('channel service unit test', () => {
 
     describe('loadGameChannels()', () => {
 
-        it('should use game http service and channel http service to fetch data', () => {
+        it('should use channel http service to fetch channel data', () => {
 
-            const expectedName = 'some game name';
-            const expectedId = 17;
-            gameHttpStub.getGameByName.returns($q.resolve({ id: expectedId }));
+            const expected = 17;
 
-            service.loadGameChannels([], expectedName);
+            service.loadGameChannels([], expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(gameHttpStub.getGameByName);
-            sinonExpect.calledWith(gameHttpStub.getGameByName, expectedName);
             sinonExpect.calledOnce(channelHttpStub.getChannelsByGameId);
-            sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expectedId);
+            sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expected);
         });
 
         it('should load game channels', () => {
@@ -198,31 +190,7 @@ context('channel service unit test', () => {
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
             channelHttpStub.getChannelsByGameId.returns($q.resolve(expected));
 
-            service.loadGameChannels(cache, '');
-            $rootScope.$apply();
-
-            expect(cache).to.deep.equal(expected);
-        });
-
-        it('should preserve original channels when no game data found', () => {
-
-            const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            const expected = cache.slice();
-            gameHttpStub.getGameByName.returns($q.resolve(null));
-
-            service.loadGameChannels(cache, '').catch(() => null);
-            $rootScope.$apply();
-
-            expect(cache).to.deep.equal(expected);
-        });
-
-        it('should preserve original channels when failed to fetch game data', () => {
-
-            const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            const expected = cache.slice();
-            gameHttpStub.getGameByName.returns($q.reject(new Error()));
-
-            service.loadGameChannels(cache, '').catch(() => null);
+            service.loadGameChannels(cache, 17);
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -234,7 +202,7 @@ context('channel service unit test', () => {
             const expected = cache.slice();
             channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
 
-            service.loadGameChannels(cache, '').catch(() => null);
+            service.loadGameChannels(cache, 17).catch(() => null);
             $rootScope.$apply();
 
             expect(cache).to.deep.equal(expected);
@@ -242,9 +210,9 @@ context('channel service unit test', () => {
 
         it('should not throw error when failed to fetch game channel data', () => {
 
-            gameHttpStub.getGameByName.returns($q.reject(new Error()));
+            channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
 
-            service.loadGameChannels([], '');
+            service.loadGameChannels([], 17);
             $rootScope.$apply();
         });
     });

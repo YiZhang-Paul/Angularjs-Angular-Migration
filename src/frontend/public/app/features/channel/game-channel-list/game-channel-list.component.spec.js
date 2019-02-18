@@ -1,6 +1,7 @@
 import SharedModule from '../../../shared/shared.module.ajs';
 import ChannelModule from '../channel.module.ajs';
 
+import { stubGameHttpServiceNg1 } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelServiceNg1 } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
@@ -13,6 +14,7 @@ context('game channel list component unit test', () => {
 
     const tag = '<game-channel-list></game-channel-list>';
 
+    let $q;
     let $compile;
     let $interval;
     let $rootScope;
@@ -20,6 +22,7 @@ context('game channel list component unit test', () => {
     let component;
     let componentElement;
 
+    let gameHttpStub;
     let channelServiceStub;
     let bookmarkManagerStub;
     let viewHistoryManagerStub;
@@ -31,10 +34,12 @@ context('game channel list component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
+        gameHttpStub = stubGameHttpServiceNg1(module, inject);
         channelServiceStub = stubChannelServiceNg1(module, inject);
         bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
         viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
 
+        gameHttpStub.setupStub();
         channelServiceStub.setupStub();
         bookmarkManagerStub.setupStub();
         viewHistoryManagerStub.setupStub();
@@ -42,6 +47,7 @@ context('game channel list component unit test', () => {
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
 
+        $q = $injector.get('$q');
         $compile = $injector.get('$compile');
         $interval = $injector.get('$interval');
         $rootScope = $injector.get('$rootScope');
@@ -68,6 +74,7 @@ context('game channel list component unit test', () => {
 
     describe('$onInit()', () => {
 
+        const gameId = 17;
         const name = 'some-game-5';
         let channels;
 
@@ -76,6 +83,7 @@ context('game channel list component unit test', () => {
             channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             $stateParams.name = name;
             $stateParams.channels = channels;
+            gameHttpStub.getGameByName.returns($q.resolve({ id: gameId }));
         });
 
         it('should set name value with all dashes removed', () => {
@@ -92,31 +100,49 @@ context('game channel list component unit test', () => {
             $rootScope.$apply();
 
             expect(component.channels).to.deep.equal(channels);
+            sinonExpect.notCalled(gameHttpStub.getGameByName);
             sinonExpect.notCalled(channelServiceStub.loadGameChannels);
         });
 
-        it('should fetch game channels from channel service when channels data is missing from state parameters', () => {
+        it('should fetch game channels from game http service and channel service when channels data is missing from state parameters', () => {
 
+            const expected = gameId;
             $stateParams.channels = null;
 
             component.$onInit();
             $rootScope.$apply();
 
+            sinonExpect.calledOnce(gameHttpStub.getGameByName);
+            sinonExpect.calledWith(gameHttpStub.getGameByName, component.name);
             sinonExpect.calledOnce(channelServiceStub.loadGameChannels);
-            sinonExpect.calledWith(channelServiceStub.loadGameChannels, component.channels, component.name);
+            sinonExpect.calledWith(channelServiceStub.loadGameChannels, [], expected);
+        });
+
+        it('should not load game channels when failed to load game data', () => {
+
+            $stateParams.channels = null;
+            gameHttpStub.getGameByName.returns($q.reject(new Error()));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(channelServiceStub.loadGameChannels);
         });
 
         it('should load channels every 10 seconds', () => {
 
             const seconds = 60;
             const expected = Math.floor(seconds / 10);
+            $stateParams.channels = null;
 
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to load channels
+            gameHttpStub.getGameByName.resetHistory();
             channelServiceStub.loadGameChannels.resetHistory();
             $interval.flush(seconds * 1000);
 
+            sinonExpect.notCalled(gameHttpStub.getGameByName);
             sinonExpect.callCount(channelServiceStub.loadGameChannels, expected);
         });
     });
