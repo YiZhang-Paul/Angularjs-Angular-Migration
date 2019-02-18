@@ -16,20 +16,6 @@ export class BookmarkListController {
     $onInit() {
 
         this.bookmarkManager.cacheBookmarks();
-        this._registerAuthenticationEvents();
-    }
-
-    _registerAuthenticationEvents() {
-
-        this.$scope.$on('userAuthenticated', () => {
-
-            this.bookmarkManager.cacheBookmarks();
-        });
-
-        this.$scope.$on('userLoggedOut', () => {
-
-            this.bookmarkManager.bookmarks = [];
-        });
     }
 
     unfollow(bookmark) {

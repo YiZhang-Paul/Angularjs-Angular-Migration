@@ -92,5 +92,31 @@ context('app component unit test', () => {
 
             sinonExpect.notCalled(viewHistoryManagerStub.cacheHistories);
         });
+
+        it('should register user authenticated event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkManagerStub.cacheBookmarks.resetHistory();
+            viewHistoryManagerStub.cacheHistories.resetHistory();
+
+            $rootScope.$broadcast('userAuthenticated');
+
+            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
+            sinonExpect.calledOnce(viewHistoryManagerStub.cacheHistories);
+        });
+
+        it('should register user logged out event listener', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+            bookmarkManagerStub.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            viewHistoryManagerStub.histories = [{ id: 1 }, { id: 4 }, { id: 7 }];
+
+            $rootScope.$broadcast('userLoggedOut');
+
+            expect(bookmarkManagerStub.bookmarks).to.be.empty;
+            expect(viewHistoryManagerStub.histories).to.be.empty;
+        });
     });
 });
