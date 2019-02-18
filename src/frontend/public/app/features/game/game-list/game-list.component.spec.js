@@ -19,8 +19,8 @@ context('game list component unit test', () => {
     let componentElement;
 
     let $stateStub;
-    let gameManagerServiceStub;
-    let customRoutingServiceStub;
+    let gameManagerStub;
+    let customRoutingStub;
 
     beforeEach(module(GameModule));
     beforeEach(module('component-templates'));
@@ -28,12 +28,12 @@ context('game list component unit test', () => {
     beforeEach('stubs setup', () => {
 
         $stateStub = stub$stateNg1(module, inject);
-        gameManagerServiceStub = stubGameManagerServiceNg1(module, inject);
-        customRoutingServiceStub = stubCustomRoutingServiceNg1(module, inject);
+        gameManagerStub = stubGameManagerServiceNg1(module, inject);
+        customRoutingStub = stubCustomRoutingServiceNg1(module, inject);
 
         $stateStub.setupStub();
-        gameManagerServiceStub.setupStub();
-        customRoutingServiceStub.setupStub();
+        gameManagerStub.setupStub();
+        customRoutingStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -67,7 +67,7 @@ context('game list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(gameManagerServiceStub.cacheGames);
+            sinonExpect.calledOnce(gameManagerStub.cacheGames);
         });
 
         it('should cache games every 10 seconds', () => {
@@ -78,10 +78,10 @@ context('game list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
             // reset initial call to cache games
-            gameManagerServiceStub.cacheGames.resetHistory();
+            gameManagerStub.cacheGames.resetHistory();
             $interval.flush(seconds * 1000);
 
-            sinonExpect.callCount(gameManagerServiceStub.cacheGames, expected);
+            sinonExpect.callCount(gameManagerStub.cacheGames, expected);
         });
     });
 
@@ -119,8 +119,8 @@ context('game list component unit test', () => {
 
             component.toChannelsView({ id: expected });
 
-            sinonExpect.calledOnce(customRoutingServiceStub.toChannelsView);
-            sinonExpect.calledWith(customRoutingServiceStub.toChannelsView, expected);
+            sinonExpect.calledOnce(customRoutingStub.toChannelsView);
+            sinonExpect.calledWith(customRoutingStub.toChannelsView, expected);
         });
     });
 });

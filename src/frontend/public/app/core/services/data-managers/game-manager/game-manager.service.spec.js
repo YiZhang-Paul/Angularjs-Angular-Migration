@@ -11,15 +11,15 @@ context('game manager service unit test', () => {
     let $rootScope;
     let service;
 
-    let gameHttpServiceStub;
+    let gameHttpStub;
 
     beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {
 
-        gameHttpServiceStub = stubGameHttpServiceNg1(module, inject);
+        gameHttpStub = stubGameHttpServiceNg1(module, inject);
 
-        gameHttpServiceStub.setupStub();
+        gameHttpStub.setupStub();
     });
 
     beforeEach('general test setup', inject($injector => {
@@ -51,7 +51,7 @@ context('game manager service unit test', () => {
             service.cacheGames();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(gameHttpServiceStub.getGames);
+            sinonExpect.calledOnce(gameHttpStub.getGames);
         });
 
         it('should overwrite old game data when new game data is from different game', () => {
@@ -63,7 +63,7 @@ context('game manager service unit test', () => {
                 { id: 4, view_count: 8 }
             ];
 
-            gameHttpServiceStub.getGames.returns($q.resolve(expected));
+            gameHttpStub.getGames.returns($q.resolve(expected));
 
             service.cacheGames();
             $rootScope.$apply();
@@ -80,7 +80,7 @@ context('game manager service unit test', () => {
                 { id: service.games[2].id, view_count: 342 }
             ];
 
-            gameHttpServiceStub.getGames.returns($q.resolve(expected));
+            gameHttpStub.getGames.returns($q.resolve(expected));
 
             service.cacheGames();
             $rootScope.$apply();
@@ -92,7 +92,7 @@ context('game manager service unit test', () => {
 
             const newGame = { id: 5, view_count: 9 };
             const expected = [...service.games, newGame];
-            gameHttpServiceStub.getGames.returns($q.resolve(expected));
+            gameHttpStub.getGames.returns($q.resolve(expected));
 
             service.cacheGames();
             $rootScope.$apply();
@@ -104,7 +104,7 @@ context('game manager service unit test', () => {
 
             const expected = service.games.slice();
             const newGames = service.games.slice(0, 1);
-            gameHttpServiceStub.getGames.returns($q.resolve(newGames));
+            gameHttpStub.getGames.returns($q.resolve(newGames));
 
             service.cacheGames();
             $rootScope.$apply();
@@ -114,7 +114,7 @@ context('game manager service unit test', () => {
 
         it('should not throw error when failed to fetch games', () => {
 
-            gameHttpServiceStub.getGames.returns($q.reject(new Error()));
+            gameHttpStub.getGames.returns($q.reject(new Error()));
 
             service.cacheGames();
             $rootScope.$apply();

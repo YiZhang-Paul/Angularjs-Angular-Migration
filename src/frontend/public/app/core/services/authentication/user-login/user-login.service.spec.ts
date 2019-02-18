@@ -16,14 +16,14 @@ context('user login service unit test', () => {
     let service: UserLoginService;
 
     let $rootScopeStub;
-    let authenticatorServiceStub;
-    let userHttpServiceStub;
+    let authenticatorStub;
+    let userHttpStub;
 
     beforeEach('stubs setup', () => {
 
         $rootScopeStub = stub$rootScope();
-        authenticatorServiceStub = stubAuthenticatorService();
-        userHttpServiceStub = stubUserHttpService();
+        authenticatorStub = stubAuthenticatorService();
+        userHttpStub = stubUserHttpService();
     });
 
     beforeEach('general test setup', () => {
@@ -34,8 +34,8 @@ context('user login service unit test', () => {
 
                 UserLoginService,
                 { provide: $rootScope, useValue: $rootScopeStub },
-                { provide: Authenticator, useValue: authenticatorServiceStub },
-                { provide: UserHttpService, useValue: userHttpServiceStub }
+                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: UserHttpService, useValue: userHttpStub }
             ]
         });
 
@@ -56,8 +56,8 @@ context('user login service unit test', () => {
 
             service.login(expected);
 
-            sinonExpect.calledOnce(authenticatorServiceStub.requestToken);
-            sinonExpect.calledWith(authenticatorServiceStub.requestToken, expected.username, expected.password);
+            sinonExpect.calledOnce(authenticatorStub.requestToken);
+            sinonExpect.calledWith(authenticatorStub.requestToken, expected.username, expected.password);
         });
 
         it('should raise user authenticated event on successful login', async () => {
@@ -71,7 +71,7 @@ context('user login service unit test', () => {
         it('should throw error when login failed', async () => {
 
             const expected = { status: 400 };
-            authenticatorServiceStub.requestToken.returns(Promise.reject(expected));
+            authenticatorStub.requestToken.returns(Promise.reject(expected));
 
             await service.login({}).catch(result => {
 
@@ -82,17 +82,17 @@ context('user login service unit test', () => {
         it('should fetch user data using user http service on successful login', async () => {
 
             const expected = { id: 1, name: 'name_1' };
-            userHttpServiceStub.getUser.returns(Promise.resolve(expected));
+            userHttpStub.getUser.returns(Promise.resolve(expected));
 
             const result = await service.login({});
 
             expect(result).to.deep.equal(expected);
-            sinonExpect.calledOnce(userHttpServiceStub.getUser);
+            sinonExpect.calledOnce(userHttpStub.getUser);
         });
 
         it('should set user to null when failed to fetch user data', async () => {
 
-            userHttpServiceStub.getUser.returns(Promise.reject(new Error()));
+            userHttpStub.getUser.returns(Promise.reject(new Error()));
 
             const result = await service.login({});
 
@@ -106,7 +106,7 @@ context('user login service unit test', () => {
 
             service.logout();
 
-            sinonExpect.calledOnce(authenticatorServiceStub.clearToken);
+            sinonExpect.calledOnce(authenticatorStub.clearToken);
         });
 
         it('should raise user logged out event', () => {

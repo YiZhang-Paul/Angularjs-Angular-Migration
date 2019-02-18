@@ -18,14 +18,14 @@ context('user login component unit test', () => {
     let component: UserLoginComponent;
 
     let $mdPanelStub;
-    let authenticatorServiceStub;
-    let userLoginServiceStub;
+    let authenticatorStub;
+    let userLoginStub;
 
     beforeEach('stubs setup', () => {
 
         $mdPanelStub = stub$mdPanel();
-        authenticatorServiceStub = stubAuthenticatorService();
-        userLoginServiceStub = stubUserLoginService();
+        authenticatorStub = stubAuthenticatorService();
+        userLoginStub = stubUserLoginService();
     });
 
     beforeEach('general test setup', () => {
@@ -36,8 +36,8 @@ context('user login component unit test', () => {
             providers: [
 
                 { provide: $mdPanel, useValue: $mdPanelStub },
-                { provide: Authenticator, useValue: authenticatorServiceStub },
-                { provide: UserLoginService, useValue: userLoginServiceStub }
+                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: UserLoginService, useValue: userLoginStub }
             ]
         });
 
@@ -55,7 +55,7 @@ context('user login component unit test', () => {
 
         it('should use authenticator service to check user authentication status', () => {
 
-            const expected = authenticatorServiceStub.isAuthenticated;
+            const expected = authenticatorStub.isAuthenticated;
 
             expect(component.isAuthenticated).to.equal(expected);
         });
@@ -80,14 +80,14 @@ context('user login component unit test', () => {
 
             await callback(expected);
 
-            sinonExpect.calledOnce(userLoginServiceStub.login);
-            sinonExpect.calledWith(userLoginServiceStub.login, expected);
+            sinonExpect.calledOnce(userLoginStub.login);
+            sinonExpect.calledWith(userLoginStub.login, expected);
         });
 
         it('should set user data after login attempt', async () => {
 
             const expected = { id: 1, name: 'name_1' };
-            userLoginServiceStub.login.returns(Promise.resolve(expected));
+            userLoginStub.login.returns(Promise.resolve(expected));
 
             component.tryLogin();
             const argument = $mdPanelStub.open.getCall(0).args[0];
@@ -105,7 +105,7 @@ context('user login component unit test', () => {
 
             component.logout();
 
-            sinonExpect.calledOnce(userLoginServiceStub.logout);
+            sinonExpect.calledOnce(userLoginStub.logout);
         });
     });
 });

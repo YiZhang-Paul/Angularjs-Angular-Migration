@@ -15,16 +15,16 @@ context('bookmark list component unit test', () => {
     let component;
     let componentElement;
 
-    let bookmarkManagerServiceStub;
+    let bookmarkManagerStub;
 
     beforeEach(module(BookmarkModule));
     beforeEach(module('component-templates'));
 
     beforeEach('stubs setup', () => {
 
-        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
+        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
 
-        bookmarkManagerServiceStub.setupStub();
+        bookmarkManagerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -62,29 +62,29 @@ context('bookmark list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.cacheBookmarks);
+            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
         });
 
         it('should register user authenticated event listener', () => {
 
             component.$onInit();
             $rootScope.$apply();
-            bookmarkManagerServiceStub.cacheBookmarks.resetHistory();
+            bookmarkManagerStub.cacheBookmarks.resetHistory();
 
             $rootScope.$broadcast('userAuthenticated');
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.cacheBookmarks);
+            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
         });
 
         it('should register user logged out event listener', () => {
 
             component.$onInit();
             $rootScope.$apply();
-            bookmarkManagerServiceStub.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            bookmarkManagerStub.bookmarks = [{ id: 1 }, { id: 4 }, { id: 7 }];
 
             $rootScope.$broadcast('userLoggedOut');
 
-            expect(bookmarkManagerServiceStub.bookmarks).to.be.empty;
+            expect(bookmarkManagerStub.bookmarks).to.be.empty;
             expect(component.bookmarks).to.be.empty;
         });
     });
@@ -98,18 +98,18 @@ context('bookmark list component unit test', () => {
             component.unfollow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.unfollow, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.unfollow);
+            sinonExpect.calledWith(bookmarkManagerStub.unfollow, expected);
         });
 
         it('should not throw error when failed to delete bookmark', () => {
 
-            bookmarkManagerServiceStub.unfollow.returns($q.reject(new Error()));
+            bookmarkManagerStub.unfollow.returns($q.reject(new Error()));
 
             component.unfollow({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
+            sinonExpect.calledOnce(bookmarkManagerStub.unfollow);
         });
     });
 });

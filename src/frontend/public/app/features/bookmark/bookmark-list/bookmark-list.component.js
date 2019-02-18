@@ -5,17 +5,17 @@ export class BookmarkListController {
     constructor($scope, bookmarkManagerService) {
         'ngInject';
         this.$scope = $scope;
-        this.service = bookmarkManagerService;
+        this.bookmarkManager = bookmarkManagerService;
     }
 
     get bookmarks() {
 
-        return this.service.bookmarks;
+        return this.bookmarkManager.bookmarks;
     }
 
     $onInit() {
 
-        this.service.cacheBookmarks();
+        this.bookmarkManager.cacheBookmarks();
         this._registerAuthenticationEvents();
     }
 
@@ -23,18 +23,18 @@ export class BookmarkListController {
 
         this.$scope.$on('userAuthenticated', () => {
 
-            this.service.cacheBookmarks();
+            this.bookmarkManager.cacheBookmarks();
         });
 
         this.$scope.$on('userLoggedOut', () => {
 
-            this.service.bookmarks = [];
+            this.bookmarkManager.bookmarks = [];
         });
     }
 
     unfollow(bookmark) {
 
-        this.service.unfollow(bookmark).catch(error => console.log(error));
+        this.bookmarkManager.unfollow(bookmark).catch(error => console.log(error));
     }
 }
 

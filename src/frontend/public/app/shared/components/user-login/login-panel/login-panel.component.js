@@ -4,7 +4,7 @@ export class LoginPanelController {
 
     constructor(mdPanelRef) {
         'ngInject';
-        this.panel = mdPanelRef;
+        this.mdPanelRef = mdPanelRef;
 
         this.username = '';
         this.password = '';
@@ -24,8 +24,8 @@ export class LoginPanelController {
         const data = { username: this.username, password: this.password };
 
         this.loginCallback(data)
-            .then(() => this.panel.close())
-            .then(() => this.panel.destroy())
+            .then(() => this.mdPanelRef.close())
+            .then(() => this.mdPanelRef.destroy())
             .catch(() => this.noError = false);
     }
 }

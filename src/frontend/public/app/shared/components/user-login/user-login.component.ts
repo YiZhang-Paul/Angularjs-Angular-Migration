@@ -17,19 +17,19 @@ export class UserLoginComponent {
     private _user: any = null;
     private _$mdPanel: $mdPanel;
     private _authenticator: Authenticator;
-    private _loginService: UserLoginService;
+    private _userLogin: UserLoginService;
 
     constructor(
 
         $mdPanel: $mdPanel,
         authenticator: Authenticator,
-        loginService: UserLoginService
+        userLogin: UserLoginService
 
     ) {
 
         this._$mdPanel = $mdPanel;
         this._authenticator = authenticator;
-        this._loginService = loginService;
+        this._userLogin = userLogin;
     }
 
     get user(): any {
@@ -44,7 +44,7 @@ export class UserLoginComponent {
 
     private async onLogin(credentials: any): Promise<any> {
 
-        this._user = await this._loginService.login(credentials);
+        this._user = await this._userLogin.login(credentials);
     }
 
     private openLoginPanel(loginCallback: Function): Promise<any> {
@@ -78,6 +78,6 @@ export class UserLoginComponent {
 
     public logout(): void {
 
-        this._loginService.logout();
+        this._userLogin.logout();
     }
 }

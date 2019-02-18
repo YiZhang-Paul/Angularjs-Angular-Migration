@@ -2,7 +2,7 @@ export class GameManagerService {
 
     constructor(gameHttpService) {
         'ngInject';
-        this.service = gameHttpService;
+        this.gameHttp = gameHttpService;
 
         this.games = [];
     }
@@ -24,7 +24,7 @@ export class GameManagerService {
 
     cacheGames() {
 
-        this.service.getGames().then(games => {
+        this.gameHttp.getGames().then(games => {
 
             this._syncGames(games);
         })

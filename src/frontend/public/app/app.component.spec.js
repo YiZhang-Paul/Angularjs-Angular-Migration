@@ -17,9 +17,9 @@ context('app component unit test', () => {
     let component;
     let componentElement;
 
-    let authenticatorServiceStub;
-    let bookmarkManagerServiceStub;
-    let viewHistoryManagerServiceStub;
+    let authenticatorStub;
+    let bookmarkManagerStub;
+    let viewHistoryManagerStub;
 
     beforeEach(module(AppModule));
     beforeEach(module('component-templates'));
@@ -30,13 +30,13 @@ context('app component unit test', () => {
         stubComponentNg1(module, 'topNavbar');
         stubComponentNg1(module, 'gameList');
 
-        authenticatorServiceStub = stubAuthenticatorServiceNg1(module, inject);
-        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
-        viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
+        authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
+        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
+        viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
 
-        authenticatorServiceStub.setupStub();
-        bookmarkManagerServiceStub.setupStub();
-        viewHistoryManagerServiceStub.setupStub();
+        authenticatorStub.setupStub();
+        bookmarkManagerStub.setupStub();
+        viewHistoryManagerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -62,17 +62,17 @@ context('app component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.cacheBookmarks);
+            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
         });
 
         it('should not cache bookmarks on initialization when user is not authenticated', () => {
 
-            authenticatorServiceStub.isAuthenticated = false;
+            authenticatorStub.isAuthenticated = false;
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.notCalled(bookmarkManagerServiceStub.cacheBookmarks);
+            sinonExpect.notCalled(bookmarkManagerStub.cacheBookmarks);
         });
 
         it('should cache view histories on initialization when user is authenticated', () => {
@@ -80,17 +80,17 @@ context('app component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(viewHistoryManagerServiceStub.cacheHistories);
+            sinonExpect.calledOnce(viewHistoryManagerStub.cacheHistories);
         });
 
         it('should not cache view histories on initialization when user is not authenticated', () => {
 
-            authenticatorServiceStub.isAuthenticated = false;
+            authenticatorStub.isAuthenticated = false;
 
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.notCalled(viewHistoryManagerServiceStub.cacheHistories);
+            sinonExpect.notCalled(viewHistoryManagerStub.cacheHistories);
         });
     });
 });

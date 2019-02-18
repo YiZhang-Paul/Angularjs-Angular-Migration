@@ -11,16 +11,16 @@ export class AppController {
     ) {
         'ngInject';
         this.authenticator = authenticatorService;
-        this.bookmarkService = bookmarkManagerService;
-        this.historyService = viewHistoryManagerService;
+        this.bookmarkManager = bookmarkManagerService;
+        this.viewHistoryManager = viewHistoryManagerService;
     }
 
     $onInit() {
 
         if (this.authenticator.isAuthenticated) {
 
-            this.bookmarkService.cacheBookmarks();
-            this.historyService.cacheHistories();
+            this.bookmarkManager.cacheBookmarks();
+            this.viewHistoryManager.cacheHistories();
         }
     }
 }

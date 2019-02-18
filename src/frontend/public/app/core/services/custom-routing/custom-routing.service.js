@@ -14,7 +14,7 @@ export class CustomRoutingService {
         this.$state = $state;
         this.gameHttp = gameHttpService;
         this.channelHttp = channelHttpService;
-        this.utilities = genericUtilitiesService;
+        this.genericUtilities = genericUtilitiesService;
     }
 
     toChannelsView(id) {
@@ -25,7 +25,7 @@ export class CustomRoutingService {
         this.$q.all([gamePromise, channelsPromise]).then(responses => {
 
             const [game, channels] = responses;
-            const name = this.utilities.joinText(game.name);
+            const name = this.genericUtilities.joinText(game.name);
 
             this.$state.go('index.channels', { name, channels });
         })

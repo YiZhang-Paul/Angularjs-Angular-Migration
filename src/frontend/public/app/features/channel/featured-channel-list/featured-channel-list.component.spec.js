@@ -19,8 +19,8 @@ context('featured channel list component unit test', () => {
     let componentElement;
 
     let channelServiceStub;
-    let bookmarkManagerServiceStub;
-    let viewHistoryManagerServiceStub;
+    let bookmarkManagerStub;
+    let viewHistoryManagerStub;
 
     beforeEach(module(ChannelModule));
     beforeEach(module('component-templates'));
@@ -28,12 +28,12 @@ context('featured channel list component unit test', () => {
     beforeEach('stubs setup', () => {
 
         channelServiceStub = stubChannelServiceNg1(module, inject);
-        bookmarkManagerServiceStub = stubBookmarkManagerServiceNg1(module, inject);
-        viewHistoryManagerServiceStub = stubViewHistoryManagerServiceNg1(module, inject);
+        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
+        viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
 
         channelServiceStub.setupStub();
-        bookmarkManagerServiceStub.setupStub();
-        viewHistoryManagerServiceStub.setupStub();
+        bookmarkManagerStub.setupStub();
+        viewHistoryManagerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -110,8 +110,8 @@ context('featured channel list component unit test', () => {
             $rootScope.$apply();
 
             expect(result).to.be.true;
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.isFollowed);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.isFollowed, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.isFollowed);
+            sinonExpect.calledWith(bookmarkManagerStub.isFollowed, expected);
         });
     });
 
@@ -124,8 +124,8 @@ context('featured channel list component unit test', () => {
             component.follow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.follow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.follow, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.follow);
+            sinonExpect.calledWith(bookmarkManagerStub.follow, expected);
         });
     });
 
@@ -138,8 +138,8 @@ context('featured channel list component unit test', () => {
             component.unfollow(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkManagerServiceStub.unfollow);
-            sinonExpect.calledWith(bookmarkManagerServiceStub.unfollow, expected);
+            sinonExpect.calledOnce(bookmarkManagerStub.unfollow);
+            sinonExpect.calledWith(bookmarkManagerStub.unfollow, expected);
         });
     });
 
@@ -152,8 +152,8 @@ context('featured channel list component unit test', () => {
             component.addHistory(expected);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(viewHistoryManagerServiceStub.addHistory);
-            sinonExpect.calledWith(viewHistoryManagerServiceStub.addHistory, expected);
+            sinonExpect.calledOnce(viewHistoryManagerStub.addHistory);
+            sinonExpect.calledWith(viewHistoryManagerStub.addHistory, expected);
         });
     });
 });

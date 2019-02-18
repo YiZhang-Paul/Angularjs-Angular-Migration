@@ -15,7 +15,7 @@ context('channel card component unit test', () => {
     let component;
     let componentElement;
 
-    let thumbnailPlayerServiceStub;
+    let thumbnailPlayerStub;
 
     beforeEach(module(SharedModule));
     beforeEach(module(ChannelModule));
@@ -23,9 +23,9 @@ context('channel card component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
-        thumbnailPlayerServiceStub = stubThumbnailPlayerServiceNg1(module, inject);
+        thumbnailPlayerStub = stubThumbnailPlayerServiceNg1(module, inject);
 
-        thumbnailPlayerServiceStub.setupStub();
+        thumbnailPlayerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -52,8 +52,8 @@ context('channel card component unit test', () => {
             component.playThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.play);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.play, thumbnail);
+            sinonExpect.calledOnce(thumbnailPlayerStub.play);
+            sinonExpect.calledWith(thumbnailPlayerStub.play, thumbnail);
         });
     });
 
@@ -66,8 +66,8 @@ context('channel card component unit test', () => {
             component.stopThumbnail(thumbnail);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(thumbnailPlayerServiceStub.stop);
-            sinonExpect.calledWith(thumbnailPlayerServiceStub.stop, thumbnail);
+            sinonExpect.calledOnce(thumbnailPlayerStub.stop);
+            sinonExpect.calledWith(thumbnailPlayerStub.stop, thumbnail);
         });
     });
 });

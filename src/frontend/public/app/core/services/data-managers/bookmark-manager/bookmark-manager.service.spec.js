@@ -14,17 +14,17 @@ context('bookmark manager service unit test', () => {
     let service;
 
     let toastrStub;
-    let bookmarkHttpServiceStub;
+    let bookmarkHttpStub;
 
     beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {
 
         toastrStub = stubToastrNg1(module, inject);
-        bookmarkHttpServiceStub = stubBookmarkHttpServiceNg1(module, inject);
+        bookmarkHttpStub = stubBookmarkHttpServiceNg1(module, inject);
 
         toastrStub.setupStub();
-        bookmarkHttpServiceStub.setupStub();
+        bookmarkHttpStub.setupStub();
     });
 
     beforeEach('general test setup', inject($injector => {
@@ -59,13 +59,13 @@ context('bookmark manager service unit test', () => {
             service.cacheBookmarks();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkHttpServiceStub.getBookmarks);
+            sinonExpect.calledOnce(bookmarkHttpStub.getBookmarks);
         });
 
         it('should cache bookmarks on success', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            bookmarkHttpServiceStub.getBookmarks.returns($q.resolve(expected));
+            bookmarkHttpStub.getBookmarks.returns($q.resolve(expected));
 
             service.cacheBookmarks();
             $rootScope.$apply();
@@ -76,7 +76,7 @@ context('bookmark manager service unit test', () => {
 
         it('should default to empty collection on failure', () => {
 
-            bookmarkHttpServiceStub.getBookmarks.returns($q.reject(new Error()));
+            bookmarkHttpStub.getBookmarks.returns($q.reject(new Error()));
 
             service.cacheBookmarks();
             $rootScope.$apply();
@@ -158,17 +158,17 @@ context('bookmark manager service unit test', () => {
             service.follow({});
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkHttpServiceStub.addBookmark);
+            sinonExpect.calledOnce(bookmarkHttpStub.addBookmark);
         });
 
         it('should cache bookmarks when added successfully', () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
-            bookmarkHttpServiceStub.getBookmarks.returns($q.resolve(expected));
+            bookmarkHttpStub.getBookmarks.returns($q.resolve(expected));
 
             service.follow({}).then(() => {
 
-                sinonExpect.calledOnce(bookmarkHttpServiceStub.getBookmarks);
+                sinonExpect.calledOnce(bookmarkHttpStub.getBookmarks);
                 expect(service.bookmarks).to.deep.equal(expected);
             });
 
@@ -195,17 +195,17 @@ context('bookmark manager service unit test', () => {
         it('should not cache bookmarks when failed to add bookmark', () => {
 
             const expected = { status: 400 };
-            bookmarkHttpServiceStub.addBookmark.returns($q.reject(expected));
+            bookmarkHttpStub.addBookmark.returns($q.reject(expected));
 
             service.follow({});
             $rootScope.$apply();
 
-            sinonExpect.notCalled(bookmarkHttpServiceStub.getBookmarks);
+            sinonExpect.notCalled(bookmarkHttpStub.getBookmarks);
         });
 
         it('should not raise event when failed to add bookmark', () => {
 
-            bookmarkHttpServiceStub.addBookmark.returns($q.reject(new Error()));
+            bookmarkHttpStub.addBookmark.returns($q.reject(new Error()));
 
             service.follow({});
             $rootScope.$apply();
@@ -215,7 +215,7 @@ context('bookmark manager service unit test', () => {
 
         it('should not throw error when failed to add bookmark', () => {
 
-            bookmarkHttpServiceStub.addBookmark.returns($q.reject(new Error()));
+            bookmarkHttpStub.addBookmark.returns($q.reject(new Error()));
 
             service.follow({});
             $rootScope.$apply();
@@ -245,8 +245,8 @@ context('bookmark manager service unit test', () => {
             service.unfollow(data);
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(bookmarkHttpServiceStub.deleteBookmark);
-            sinonExpect.calledWith(bookmarkHttpServiceStub.deleteBookmark, expected);
+            sinonExpect.calledOnce(bookmarkHttpStub.deleteBookmark);
+            sinonExpect.calledWith(bookmarkHttpStub.deleteBookmark, expected);
         });
 
         it('should remove bookmark from cache when successfully deleted bookmark', () => {
@@ -280,7 +280,7 @@ context('bookmark manager service unit test', () => {
         it('should not remove bookmark from cache when failed to delete bookmark', () => {
 
             const expected = service.bookmarks.slice();
-            bookmarkHttpServiceStub.deleteBookmark.returns($q.reject(new Error()));
+            bookmarkHttpStub.deleteBookmark.returns($q.reject(new Error()));
 
             service.unfollow(data);
             $rootScope.$apply();
@@ -291,7 +291,7 @@ context('bookmark manager service unit test', () => {
 
         it('should not raise event when failed to delete bookmark', () => {
 
-            bookmarkHttpServiceStub.deleteBookmark.returns($q.reject(new Error()));
+            bookmarkHttpStub.deleteBookmark.returns($q.reject(new Error()));
 
             service.unfollow(data);
             $rootScope.$apply();
@@ -301,7 +301,7 @@ context('bookmark manager service unit test', () => {
 
         it('should not throw error when failed to delete bookmark', () => {
 
-            bookmarkHttpServiceStub.deleteBookmark.returns($q.reject(new Error()));
+            bookmarkHttpStub.deleteBookmark.returns($q.reject(new Error()));
 
             service.unfollow(data);
             $rootScope.$apply();

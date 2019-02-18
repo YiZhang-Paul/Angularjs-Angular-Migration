@@ -11,26 +11,26 @@ export class UserLoginService {
 
     private _$rootScope: $rootScope;
     private _authenticator: Authenticator;
-    private _userHttpService: UserHttpService;
+    private _userHttp: UserHttpService;
 
     constructor(
 
         $rootScope: $rootScope,
         authenticator: Authenticator,
-        userHttpService: UserHttpService
+        userHttp: UserHttpService
 
     ) {
 
         this._$rootScope = $rootScope;
         this._authenticator = authenticator;
-        this._userHttpService = userHttpService;
+        this._userHttp = userHttp;
     }
 
     private async getUser(): Promise<any> {
 
         try {
 
-            return await this._userHttpService.getUser();
+            return await this._userHttp.getUser();
         }
         catch (error) {
 
