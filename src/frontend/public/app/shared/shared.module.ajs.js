@@ -4,8 +4,6 @@ import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 
-import { SidebarService } from './components/sidebar/sidebar.service';
-
 import { capitalizeFilter } from './filters/capitalize/capitalize.filter';
 import { shortViewCountFilter } from './filters/short-view-count/short-view-count.filter';
 import { uppercaseRomanNumeralsFilter } from './filters/uppercase-roman-numerals/uppercase-roman-numerals.filter';
@@ -20,7 +18,6 @@ angular.module(moduleName, [])
     .component('sidebarBadge', SidebarBadgeComponent)
     .component('sidebar', SidebarComponent)
     .component('topNavbar', TopNavigationBarComponent)
-    .service('sidebarService', SidebarService)
     .filter('capitalize', capitalizeFilter)
     .filter('shortViewCount', shortViewCountFilter)
     .filter('uppercaseRomanNumerals', uppercaseRomanNumeralsFilter);
