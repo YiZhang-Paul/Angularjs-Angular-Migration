@@ -38,8 +38,7 @@ export class GameChannelListController {
         return this.gameHttp.getGameByName(this.name).then(game => {
 
             this.game = game;
-        })
-        .catch(error => console.log(error));
+        });
     }
 
     _loadChannels() {
@@ -52,14 +51,16 @@ export class GameChannelListController {
 
     _loadComponent() {
 
-        if (this.$stateParams.channels) {
+        this._loadGame().then(() => {
+
+            if (!this.$stateParams.channels) {
+
+                return this._loadChannels();
+            }
 
             this.channels = this.$stateParams.channels;
-
-            return;
-        }
-
-        this._loadGame().then(() => this._loadChannels());
+        })
+        .catch(error => console.log(error));
     }
 
     _setupChannelLoading() {

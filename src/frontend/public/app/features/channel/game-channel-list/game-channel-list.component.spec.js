@@ -76,14 +76,16 @@ context('game channel list component unit test', () => {
 
         const gameId = 17;
         const name = 'some-game-5';
+        let game;
         let channels;
 
         beforeEach('$onInit() test setup', () => {
 
+            game = { id: gameId };
             channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             $stateParams.name = name;
             $stateParams.channels = channels;
-            gameHttpStub.getGameByName.returns($q.resolve({ id: gameId }));
+            gameHttpStub.getGameByName.returns($q.resolve(game));
         });
 
         it('should set name value with all dashes removed', () => {
@@ -94,17 +96,26 @@ context('game channel list component unit test', () => {
             expect(component.name).to.equal('some game 5');
         });
 
+        it('should always load game data', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            expect(component.game).to.deep.equal(game);
+            sinonExpect.calledOnce(gameHttpStub.getGameByName);
+            sinonExpect.calledWith(gameHttpStub.getGameByName, component.name);
+        });
+
         it('should load data from state parameters when channels data exist', () => {
 
             component.$onInit();
             $rootScope.$apply();
 
             expect(component.channels).to.deep.equal(channels);
-            sinonExpect.notCalled(gameHttpStub.getGameByName);
             sinonExpect.notCalled(channelServiceStub.loadGameChannels);
         });
 
-        it('should fetch game channels from game http service and channel service when channels data is missing from state parameters', () => {
+        it('should fetch game channels from channel service when channel data is missing from state parameters', () => {
 
             const expected = gameId;
             $stateParams.channels = null;
@@ -112,10 +123,19 @@ context('game channel list component unit test', () => {
             component.$onInit();
             $rootScope.$apply();
 
-            sinonExpect.calledOnce(gameHttpStub.getGameByName);
-            sinonExpect.calledWith(gameHttpStub.getGameByName, component.name);
             sinonExpect.calledOnce(channelServiceStub.loadGameChannels);
             sinonExpect.calledWith(channelServiceStub.loadGameChannels, [], expected);
+        });
+
+        it('should not load game channels when no game data found', () => {
+
+            $stateParams.channels = null;
+            gameHttpStub.getGameByName.returns($q.resolve(null));
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.notCalled(channelServiceStub.loadGameChannels);
         });
 
         it('should not load game channels when failed to load game data', () => {
