@@ -49,7 +49,7 @@ context('bookmark list component unit test', () => {
         it('should reference bookmark manager service cache', () => {
 
             const expected = [{ id: 1 }, { id: 4 }];
-            component.service.bookmarks = expected;
+            bookmarkManagerStub.bookmarks = expected;
 
             expect(component.bookmarks).to.deep.equal(expected);
         });
