@@ -13,6 +13,7 @@ export class ViewHistoryManagerService {
         return this.viewHistoryHttp.getHistories().then(histories => {
 
             this.histories = histories.length ? histories : this.histories;
+            this.$rootScope.$broadcast('historyCached');
         })
         .catch(error => console.log(error));
     }

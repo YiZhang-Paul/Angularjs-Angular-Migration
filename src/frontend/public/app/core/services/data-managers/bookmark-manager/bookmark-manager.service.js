@@ -19,7 +19,8 @@ export class BookmarkManagerService {
 
             return [];
         })
-        .then(bookmarks => this.bookmarks = bookmarks);
+        .then(bookmarks => this.bookmarks = bookmarks)
+        .then(() => this.$rootScope.$broadcast('bookmarkCached'));
     }
 
     _findBookmarkByChannelId(data) {

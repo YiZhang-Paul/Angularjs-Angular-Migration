@@ -73,12 +73,6 @@ export class SidebarController {
 
     _registerAuthenticationEvents() {
 
-        this.$scope.$on('userAuthenticated', () => {
-
-            this.bookmarkManager.cacheBookmarks().then(() => this._loadBookmarks());
-            this.viewHistoryManager.cacheHistories().then(() => this._loadHistories());
-        });
-
         this.$scope.$on('userLoggedOut', () => {
 
             this.badges.delete(this._options[0]);
@@ -88,13 +82,17 @@ export class SidebarController {
 
     _registerBookmarkEvents() {
 
-        this.$scope.$on('followedChannel', () => this._loadBookmarks());
-        this.$scope.$on('unfollowedChannel', () => this._loadBookmarks());
+        const events = ['bookmarkCached', 'followedChannel', 'unfollowedChannel'];
+
+        for (const event of events) {
+
+            this.$scope.$on(event, () => this._loadBookmarks());
+        }
     }
 
     _registerViewHistoryEvents() {
 
-        const events = ['Updated', 'Removed', 'Cleared'];
+        const events = ['Updated', 'Removed', 'Cleared', 'Cached'];
 
         for (const event of events) {
 

@@ -84,6 +84,15 @@ context('bookmark manager service unit test', () => {
             expect(Array.isArray(service.bookmarks)).to.be.true;
             expect(service.bookmarks).to.be.empty;
         });
+
+        it('should raise event when successfully cached bookmark', () => {
+
+            service.cacheBookmarks();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce($rootScope.$broadcast);
+            sinonExpect.calledWith($rootScope.$broadcast, 'bookmarkCached');
+        });
     });
 
     describe('isFollowed()', () => {
@@ -179,8 +188,8 @@ context('bookmark manager service unit test', () => {
 
             service.follow({});
             $rootScope.$apply();
-
-            sinonExpect.calledOnce($rootScope.$broadcast);
+            // caching bookmark will also raise event
+            sinonExpect.calledTwice($rootScope.$broadcast);
             sinonExpect.calledWith($rootScope.$broadcast, 'followedChannel');
         });
 
