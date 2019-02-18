@@ -12,6 +12,12 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/frontend/public')
     },
     mode: 'development',
+    devServer: {
+        contentBase: path.join(__dirname, './dist/frontend/public'),
+        watchContentBase: true,
+        historyApiFallback: true,
+        port: 3050
+    },
     plugins: [
         new ngAnnotatePlugin({
             add: true
@@ -44,7 +50,7 @@ module.exports = {
                 }
             },
             {
-                test:  /\.scss$/,
+                test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {

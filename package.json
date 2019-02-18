@@ -48,7 +48,7 @@
         "start-backend": "set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& concurrently \"npm run start-collector\" \"npm run start-api\"",
         "start": "npm run rebuild && concurrently \"npm run start-collector\" \"npm run start-api\" \"npm run start-frontend\"",
         "nodemon-frontend": "nodemon --verbose --watch src/frontend -e ts,js,html,css,scss --exec \"npm run rebuild-frontend && npm run start-frontend\"",
-        "dev-frontend": "concurrently \"npm run start-backend\" \"npm run nodemon-frontend\"",
+        "dev-frontend": "concurrently \"npm run start-backend\" \"webpack-dev-server\"",
         "dev-backend": "nodemon --verbose --watch src/backend -e ts --exec \"npm run rebuild && npm run start-backend\""
     },
     "repository": {
@@ -139,7 +139,6 @@
         "karma-mocha": "^1.3.0",
         "karma-mocha-reporter": "^2.2.5",
         "karma-ng-html2js-preprocessor": "^1.0.0",
-        "karma-phantomjs-launcher": "^1.0.4",
         "karma-remap-coverage": "^0.1.5",
         "karma-sinon": "^1.0.5",
         "karma-sourcemap-loader": "^0.3.7",
@@ -161,6 +160,7 @@
         "typescript": "^3.3.3",
         "url-loader": "^1.1.2",
         "webpack": "^4.29.3",
-        "webpack-cli": "^3.2.3"
+        "webpack-cli": "^3.2.3",
+        "webpack-dev-server": "^3.1.14"
     }
 }
