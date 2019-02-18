@@ -2,17 +2,32 @@ import './sidebar.scss';
 
 export class SidebarController {
 
-    constructor($scope, toastr, sidebarService, authenticatorService) {
+    constructor(
+
+        $scope,
+        toastr,
+        authenticatorService,
+        channelHttpService,
+        bookmarkManagerService,
+        viewHistoryManagerService
+
+    ) {
         'ngInject';
         this.$scope = $scope;
         this.toastr = toastr;
-        this.service = sidebarService;
         this.authenticator = authenticatorService;
+        this.channelHttp = channelHttpService;
+        this.bookmarkManager = bookmarkManagerService;
+        this.viewHistoryManager = viewHistoryManagerService;
 
         this._options = ['Followed Channels', 'Featured Channels', 'View History'];
-        this._targetRoutes = ['index.bookmarks', 'index.featured', 'index.histories'];
 
         this.badges = new Map();
+        this.routes = new Map();
+
+        this.routes.set(this._options[0], 'index.bookmarks');
+        this.routes.set(this._options[1], 'index.featured');
+        this.routes.set(this._options[2], 'index.histories');
     }
 
     get options() {
@@ -23,16 +38,6 @@ export class SidebarController {
         }
 
         return [this._options[1]];
-    }
-
-    get targetRoutes() {
-
-        if (this.authenticator.isAuthenticated) {
-
-            return this._targetRoutes;
-        }
-
-        return [this._targetRoutes[1]];
     }
 
     $onInit() {
@@ -49,40 +54,38 @@ export class SidebarController {
 
     _loadBookmarks() {
 
-        const key = this._options[0];
-
-        this.service.getBookmarks().then(bookmarks => {
-
-            this.badges.set(key, bookmarks.slice(0, 3));
-        });
+        const bookmarks = this.bookmarkManager.bookmarks;
+        this.badges.set(this._options[0], bookmarks.slice(0, 3));
     }
 
     _loadHistories() {
 
-        const key = this._options[2];
-
-        this.service.getHistories().then(histories => {
-
-            this.badges.set(key, histories.slice(0, 3));
-        });
+        const histories = this.viewHistoryManager.histories;
+        this.badges.set(this._options[2], histories.slice(0, 3));
     }
 
     _loadFeaturedChannels() {
 
-        const key = this._options[1];
+        this.channelHttp.getChannels().then(channels => {
 
-        this.service.getFeaturedChannels().then(channels => {
-
-            this.badges.set(key, channels.slice(0, 3));
-        });
+            this.badges.set(this._options[1], channels.slice(0, 3));
+        })
+        .catch(error => console.log(error));
     }
 
     _registerAuthenticationEvents() {
 
         this.$scope.$on('userAuthenticated', () => {
 
-            this._loadBookmarks();
-            this._loadHistories();
+            this.bookmarkManager.cacheBookmarks().then(() => {
+
+                this._loadBookmarks();
+            });
+
+            this.viewHistoryManager.cacheHistories().then(() => {
+
+                this._loadHistories();
+            });
         });
 
         this.$scope.$on('userLoggedOut', () => {
@@ -93,18 +96,20 @@ export class SidebarController {
     }
 
     _registerBookmarkEvents() {
-
+        // TODO: should move into bookmark manager
         const timeout = { timeOut: 2500 };
 
         this.$scope.$on('followedChannel', () => {
 
             this._loadBookmarks();
+            // TODO: should move into bookmark manager
             this.toastr.success('You just followed a channel.', timeout);
         });
 
         this.$scope.$on('unfollowedChannel', () => {
 
             this._loadBookmarks();
+            // TODO: should move into bookmark manager
             this.toastr.error('You just unfollowed a channel.', timeout);
         });
     }
@@ -115,10 +120,7 @@ export class SidebarController {
 
         for (const event of events) {
 
-            this.$scope.$on(`history${event}`, () => {
-
-                this._loadHistories();
-            });
+            this.$scope.$on(`history${event}`, () => this._loadHistories());
         }
     }
 
