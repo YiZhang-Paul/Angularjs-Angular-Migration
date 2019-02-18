@@ -19,13 +19,10 @@ export class ViewHistoryManagerService {
 
     addHistory(channel) {
 
-        return this.viewHistoryHttp.addHistory(channel).then(() => {
-
-            this.$rootScope.$broadcast('historyUpdated');
-
-            return this.cacheHistories();
-        })
-        .catch(error => console.log(error));
+        return this.viewHistoryHttp.addHistory(channel)
+            .then(() => this.cacheHistories())
+            .then(() => this.$rootScope.$broadcast('historyUpdated'))
+            .catch(error => console.log(error));
     }
 
     _removeCached(id) {
