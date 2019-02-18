@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { downgradeComponent } from '@angular/upgrade/static';
+import { ClickOutsideModule } from 'ng-click-outside';
 import * as angular from 'angular';
 
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
@@ -14,6 +15,7 @@ import { UserLoginComponent } from './components/user-login/user-login.component
     imports: [
         CommonModule,
         HttpClientModule,
+        ClickOutsideModule,
         BrowserAnimationsModule,
         MatExpansionModule,
         MatIconModule
