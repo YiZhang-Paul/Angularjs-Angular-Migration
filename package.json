@@ -32,9 +32,9 @@
         "clean-frontend": "rm -rf dist/frontend",
         "clean-backend": "rm -rf dist/backend",
         "clean": "rm -rf dist",
-        "build-frontend": "npm run lint-frontend && tsc && cp -r config dist/frontend && copyfiles -e **/*.{ts,js,scss} -u 1 src/frontend/**/*.* dist && webpack",
+        "build-frontend": "npm run lint-frontend && tsc && cp -r config dist/frontend && copyfiles -e **/*.{ts,js,scss} -u 1 src/frontend/**/*.* dist && webpack --config webpack/development.config.js",
         "build-backend": "npm run lint-backend && tsc && cp -r config dist/backend",
-        "build": "npm run lint && tsc && cp -r config dist/frontend && cp -r config dist/backend && copyfiles -e **/*.{ts,js,scss} -u 1 src/frontend/**/*.* dist && webpack",
+        "build": "npm run lint && tsc && cp -r config dist/frontend && cp -r config dist/backend && copyfiles -e **/*.{ts,js,scss} -u 1 src/frontend/**/*.* dist && webpack --config webpack/development.config.js",
         "rebuild-frontend": "npm run clean-frontend && npm run build-frontend",
         "rebuild-backend": "npm run clean-backend && npm run build-backend",
         "rebuild": "npm run clean && npm run build",
@@ -47,8 +47,7 @@
         "start-frontend": "cd dist/frontend && node server",
         "start-backend": "set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& concurrently \"npm run start-collector\" \"npm run start-api\"",
         "start": "npm run rebuild && concurrently \"npm run start-collector\" \"npm run start-api\" \"npm run start-frontend\"",
-        "nodemon-frontend": "nodemon --verbose --watch src/frontend -e ts,js,html,css,scss --exec \"npm run rebuild-frontend && npm run start-frontend\"",
-        "dev-frontend": "concurrently \"npm run start-backend\" \"webpack-dev-server\"",
+        "dev-frontend": "concurrently \"npm run start-backend\" \"webpack-dev-server --config webpack/development.config.js\"",
         "dev-backend": "nodemon --verbose --watch src/backend -e ts --exec \"npm run rebuild && npm run start-backend\""
     },
     "repository": {
@@ -131,6 +130,7 @@
         "css-loader": "^2.1.0",
         "file-loader": "^3.0.1",
         "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
         "istanbul-instrumenter-loader": "^3.0.1",
         "karma": "^4.0.0",
         "karma-chai": "^0.1.0",
@@ -162,6 +162,7 @@
         "url-loader": "^1.1.2",
         "webpack": "^4.29.3",
         "webpack-cli": "^3.2.3",
-        "webpack-dev-server": "^3.1.14"
+        "webpack-dev-server": "^3.1.14",
+        "webpack-merge": "^4.2.1"
     }
 }
