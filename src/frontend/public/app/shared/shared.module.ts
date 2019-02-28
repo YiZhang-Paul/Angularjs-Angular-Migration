@@ -8,8 +8,10 @@ import { downgradeComponent } from '@angular/upgrade/static';
 import { ClickOutsideModule } from 'ng-click-outside';
 import * as angular from 'angular';
 
+import * as SharedModuleAjs from './shared.module.ajs.js';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
+import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pipe';
 
 @NgModule({
     imports: [
@@ -22,7 +24,8 @@ import { UserLoginComponent } from './components/user-login/user-login.component
     ],
     declarations: [
         UserWidgetComponent,
-        UserLoginComponent
+        UserLoginComponent,
+        ShortViewCountPipe
     ],
     entryComponents: [
         UserWidgetComponent,
@@ -33,10 +36,13 @@ import { UserLoginComponent } from './components/user-login/user-login.component
         HttpClientModule,
         BrowserAnimationsModule,
         MatExpansionModule,
-        MatIconModule
+        MatIconModule,
+        UserWidgetComponent,
+        UserLoginComponent,
+        ShortViewCountPipe
     ]
 })
 export class SharedModule { }
 
-angular.module('migration-sample-app')
+angular.module(SharedModuleAjs.default)
     .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));

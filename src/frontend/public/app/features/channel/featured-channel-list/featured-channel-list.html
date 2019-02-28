@@ -2,9 +2,9 @@
     <channel-card
         ng-repeat="channel in $ctrl.channels"
         ng-click="$ctrl.addHistory(channel)"
-        on-follow="$ctrl.follow(channel)"
-        on-unfollow="$ctrl.unfollow(channel)"
-        is-followed="$ctrl.isFollowed(channel)"
-        channel="channel">
+        (on-follow)="$ctrl.follow(channel)"
+        (on-unfollow)="$ctrl.unfollow(channel)"
+        [is-followed]="$ctrl.isFollowed(channel)"
+        [channel]="channel">
     </channel-card>
 </div>
