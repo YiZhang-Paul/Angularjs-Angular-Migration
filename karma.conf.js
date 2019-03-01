@@ -1,3 +1,5 @@
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 const webpack = require('./webpack/testing.config');
 const templates = './src/frontend/public/**/*.html';
 const entry = './src/frontend/public/specs.ts';
@@ -21,10 +23,10 @@ module.exports = function (config) {
             noInfo: true,
             stats: { chunks: false }
         },
-        autoWatch: true,
-        browsers: ['Chrome'],
+        singleRun: true,
+        browsers: ['ChromeHeadless'],
         frameworks: ['mocha', 'chai', 'sinon'],
-        reporters: ['mocha', 'coverage-istanbul', 'remap-coverage'],
+        reporters: ['mocha', 'junit', 'coverage-istanbul', 'remap-coverage'],
         coverageReporter: { type: 'in-memory' },
         mochaReporter: {
             colors: {
@@ -41,7 +43,7 @@ module.exports = function (config) {
             }
         },
         coverageIstanbulReporter: {
-            reports: ['text', 'text-summary'],
+            reports: ['text', 'text-summary', 'html', 'cobertura'],
             fixWebpackSourcePaths: true
         },
         remapCoverageReporter: {
@@ -49,11 +51,18 @@ module.exports = function (config) {
             json: './coverage/coverage.json',
             html: './coverage/html'
         },
+        junitReporter: {
+            outputDir: './test-report',
+            outputFile: 'result.xml',
+            suite: '',
+            useBrowserName: true
+        },
         plugins: [
             'karma-webpack',
             'karma-chrome-launcher',
             'karma-mocha',
             'karma-mocha-reporter',
+            'karma-junit-reporter',
             'karma-chai',
             'karma-sinon',
             'karma-coverage',
