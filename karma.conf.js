@@ -23,7 +23,7 @@ module.exports = function (config) {
             noInfo: true,
             stats: { chunks: false }
         },
-        singleRun: true,
+        autoWatch: true,
         browsers: ['ChromeHeadless'],
         frameworks: ['mocha', 'chai', 'sinon'],
         reporters: ['mocha', 'junit', 'coverage-istanbul', 'remap-coverage'],

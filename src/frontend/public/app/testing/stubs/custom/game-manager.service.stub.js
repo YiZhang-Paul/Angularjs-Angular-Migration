@@ -7,6 +7,7 @@ export function stubGameManagerService() {
     const stubbed = {
 
         setupStub: () => stubbed,
+        games: [],
         cacheGames: stub()
     };
 

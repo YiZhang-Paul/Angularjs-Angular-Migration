@@ -17,6 +17,7 @@ context('top navigation bar component unit test', () => {
 
     beforeEach('stubs setup', () => {
 
+        stubComponentNg1(module, 'searchBox');
         stubComponentNg1(module, 'userLogin');
     });
 

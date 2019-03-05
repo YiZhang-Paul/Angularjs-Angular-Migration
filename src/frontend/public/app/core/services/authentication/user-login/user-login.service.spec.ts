@@ -40,6 +40,9 @@ context('user login service unit test', () => {
         });
 
         service = TestBed.get(UserLoginService);
+        $rootScopeStub = TestBed.get($rootScope);
+        authenticatorStub = TestBed.get(Authenticator);
+        userHttpStub = TestBed.get(UserHttpService);
     });
 
     it('should resolve', () => {
