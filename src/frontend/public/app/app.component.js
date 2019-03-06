@@ -7,7 +7,8 @@ export class AppController {
         $scope,
         authenticatorService,
         bookmarkManagerService,
-        viewHistoryManagerService
+        viewHistoryManagerService,
+        gameManagerService
 
     ) {
         'ngInject';
@@ -15,9 +16,16 @@ export class AppController {
         this.authenticator = authenticatorService;
         this.bookmarkManager = bookmarkManagerService;
         this.viewHistoryManager = viewHistoryManagerService;
+        this.gameManager = gameManagerService;
     }
 
     $onInit() {
+
+        this._cacheData();
+        this._registerAuthenticationEvents();
+    }
+
+    _cacheData() {
 
         if (this.authenticator.isAuthenticated) {
 
@@ -25,7 +33,7 @@ export class AppController {
             this.viewHistoryManager.cacheHistories();
         }
 
-        this._registerAuthenticationEvents();
+        this.gameManager.cacheGames();
     }
 
     _registerAuthenticationEvents() {

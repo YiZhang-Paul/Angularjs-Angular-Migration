@@ -4,6 +4,7 @@ import { stubComponentNg1 } from './testing/stubs/custom/components.stub';
 import { stubAuthenticatorServiceNg1 } from './testing/stubs/custom/authenticator.service.stub';
 import { stubBookmarkManagerServiceNg1 } from './testing/stubs/custom/bookmark-manager.service.stub';
 import { stubViewHistoryManagerServiceNg1 } from './testing/stubs/custom/view-history-manager.service.stub';
+import { stubGameManagerServiceNg1 } from './testing/stubs/custom/game-manager.service.stub';
 
 const module = angular.mock.module;
 const sinonExpect = sinon.assert;
@@ -20,6 +21,7 @@ context('app component unit test', () => {
     let authenticatorStub;
     let bookmarkManagerStub;
     let viewHistoryManagerStub;
+    let gameManagerStub;
 
     beforeEach(module(AppModule));
     beforeEach(module('component-templates'));
@@ -33,10 +35,12 @@ context('app component unit test', () => {
         authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
         bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
         viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
+        gameManagerStub = stubGameManagerServiceNg1(module, inject);
 
         authenticatorStub.setupStub();
         bookmarkManagerStub.setupStub();
         viewHistoryManagerStub.setupStub();
+        gameManagerStub.setupStub();
     });
 
     beforeEach('general test setup', inject(($injector, $componentController) => {
@@ -91,6 +95,14 @@ context('app component unit test', () => {
             $rootScope.$apply();
 
             sinonExpect.notCalled(viewHistoryManagerStub.cacheHistories);
+        });
+
+        it('should cache games on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce(gameManagerStub.cacheGames);
         });
 
         it('should register user authenticated event listener', () => {
