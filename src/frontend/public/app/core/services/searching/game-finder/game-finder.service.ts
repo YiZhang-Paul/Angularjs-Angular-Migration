@@ -35,14 +35,14 @@ export class GameFinder {
 
         const nameWithNoSpace = name.replace(/\s/g, '');
 
+        if (!nameWithNoSpace) {
+
+            return [];
+        }
+
         return this._gameManager.games.filter(_ => {
 
-            if (!_.name) {
-
-                return false;
-            }
-
-            return this.containsName(nameWithNoSpace, _.name);
+            return _.name && this.containsName(nameWithNoSpace, _.name);
         });
     }
 }

@@ -48,7 +48,7 @@
         "start-frontend": "cd dist/frontend && node server",
         "start-backend": "set NODE_ENV=testing&& set DB_USER=testdb2019&& set DB_PASSWORD=testdb2019&& concurrently \"npm run start-collector\" \"npm run start-api\"",
         "start": "npm run rebuild && concurrently \"npm run start-collector\" \"npm run start-api\" \"npm run start-frontend\"",
-        "dev-frontend": "concurrently \"npm run start-backend\" \"webpack-dev-server --config webpack/development.config.js\"",
+        "dev-frontend": "concurrently \"npm run start-backend\" \"copyfiles -e **/*.{ts,js,scss} -u 1 src/frontend/**/*.* dist\" \"webpack-dev-server --config webpack/development.config.js\"",
         "dev-backend": "nodemon --verbose --watch src/backend -e ts --exec \"npm run rebuild && npm run start-backend\""
     },
     "repository": {

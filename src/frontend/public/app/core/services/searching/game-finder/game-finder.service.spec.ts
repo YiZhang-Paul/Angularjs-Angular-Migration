@@ -63,6 +63,14 @@ context('game finder service unit test', () => {
             expect(result).to.deep.equal(expected);
         });
 
+        it('should return empty collection when search keyword is empty', () => {
+
+            const result = service.findByName('  ');
+
+            expect(result).to.be.instanceOf(Array);
+            expect(result).to.be.empty;
+        });
+
         it('should return empty collection when game cache is empty', () => {
 
             gameManagerStub.games = [];

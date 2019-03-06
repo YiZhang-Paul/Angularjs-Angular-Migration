@@ -9,9 +9,12 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import * as angular from 'angular';
 
 import * as SharedModuleAjs from './shared.module.ajs.js';
+import { GameBadgeComponent } from './components/badges/game-badge/game-badge.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
+import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dropdown-search-box.component';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
+import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pipe';
 
 @NgModule({
@@ -24,13 +27,18 @@ import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pi
         MatIconModule
     ],
     declarations: [
+        GameBadgeComponent,
         SearchBoxComponent,
+        DropdownSearchBoxComponent,
         UserWidgetComponent,
         UserLoginComponent,
+        CapitalizePipe,
         ShortViewCountPipe
     ],
     entryComponents: [
+        GameBadgeComponent,
         SearchBoxComponent,
+        DropdownSearchBoxComponent,
         UserWidgetComponent,
         UserLoginComponent
     ],
@@ -40,14 +48,19 @@ import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pi
         BrowserAnimationsModule,
         MatExpansionModule,
         MatIconModule,
+        GameBadgeComponent,
         SearchBoxComponent,
+        DropdownSearchBoxComponent,
         UserWidgetComponent,
         UserLoginComponent,
+        CapitalizePipe,
         ShortViewCountPipe
     ]
 })
 export class SharedModule { }
 
 angular.module(SharedModuleAjs.default)
+    .directive('gameBadge', downgradeComponent({ component: GameBadgeComponent }))
     .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
+    .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))
     .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));
