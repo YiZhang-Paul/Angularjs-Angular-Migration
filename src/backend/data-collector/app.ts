@@ -1,6 +1,6 @@
 import config = require('config');
 import Express = require('express');
-import { Request, Response } from 'Express';
+import { Request, Response } from 'express';
 import mongoose = require('mongoose');
 
 import channelDataCollectorPromise from '../shared/services/data-collector/channel-data-collector/channel-data-collector.factory';

@@ -154,28 +154,6 @@ context('sidebar component unit test', () => {
             expect(component.badges.has(viewHistoryKey)).to.be.false;
         });
 
-        it('should register user authenticated event listener on initialization', () => {
-
-            component.$onInit();
-            $rootScope.$apply();
-
-            bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
-            viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
-            const expectedBookmarks = bookmarkManagerStub.bookmarks.slice(0, 3);
-            const expectedHistories = viewHistoryManagerStub.histories.slice(0, 3);
-
-            $rootScope.$broadcast('userAuthenticated');
-            $rootScope.$apply();
-
-            const resultBookmarks = component.badges.get(followedChannelsKey);
-            const resultHistories = component.badges.get(viewHistoryKey);
-
-            expect(resultBookmarks).to.deep.equal(expectedBookmarks);
-            expect(resultHistories).to.deep.equal(expectedHistories);
-            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
-            sinonExpect.calledOnce(viewHistoryManagerStub.cacheHistories);
-        });
-
         it('should register user logged out event listener on initialization', () => {
 
             component.$onInit();
@@ -188,6 +166,22 @@ context('sidebar component unit test', () => {
 
             expect(component.badges.has(followedChannelsKey)).to.be.false;
             expect(component.badges.has(viewHistoryKey)).to.be.false;
+        });
+
+        it('should register bookmark cached event listener on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
+            const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
+
+            $rootScope.$broadcast('bookmarkCached');
+            $rootScope.$apply();
+
+            const result = component.badges.get(followedChannelsKey);
+
+            expect(result).to.deep.equal(expected);
         });
 
         it('should register followed channel event listener on initialization', () => {
@@ -218,6 +212,22 @@ context('sidebar component unit test', () => {
             $rootScope.$apply();
 
             const result = component.badges.get(followedChannelsKey);
+
+            expect(result).to.deep.equal(expected);
+        });
+
+        it('should register view history cached event listener on initialization', () => {
+
+            component.$onInit();
+            $rootScope.$apply();
+
+            viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
+            const expected = viewHistoryManagerStub.histories.slice(0, 3);
+
+            $rootScope.$broadcast('historyCached');
+            $rootScope.$apply();
+
+            const result = component.badges.get(viewHistoryKey);
 
             expect(result).to.deep.equal(expected);
         });

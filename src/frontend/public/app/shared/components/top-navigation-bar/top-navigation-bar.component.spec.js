@@ -1,5 +1,7 @@
 import SharedModule from '../../shared.module.ajs';
 
+import { stubComponentNg1 } from '../../../testing/stubs/custom/components.stub';
+
 const module = angular.mock.module;
 
 context('top navigation bar component unit test', () => {
@@ -12,6 +14,12 @@ context('top navigation bar component unit test', () => {
 
     beforeEach(module(SharedModule));
     beforeEach(module('component-templates'));
+
+    beforeEach('stubs setup', () => {
+
+        stubComponentNg1(module, 'dropdownSearchBox');
+        stubComponentNg1(module, 'userLogin');
+    });
 
     beforeEach('general test setup', inject($injector => {
 

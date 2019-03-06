@@ -96,6 +96,15 @@ context('view history manager service unit test', () => {
             expect(service.histories).to.deep.equal(expected);
             sinonExpect.calledOnce(viewHistoryHttpStub.getHistories);
         });
+
+        it('should raise event when successfully cached view histories', () => {
+
+            service.cacheHistories();
+            $rootScope.$apply();
+
+            sinonExpect.calledOnce($rootScope.$broadcast);
+            sinonExpect.calledWith($rootScope.$broadcast, 'historyCached');
+        });
     });
 
     describe('addHistory()', () => {
@@ -128,8 +137,8 @@ context('view history manager service unit test', () => {
 
             service.addHistory(channel);
             $rootScope.$apply();
-
-            sinonExpect.calledOnce($rootScope.$broadcast);
+            // caching view histories will also raise event
+            sinonExpect.calledTwice($rootScope.$broadcast);
             sinonExpect.calledWith($rootScope.$broadcast, 'historyUpdated');
         });
 

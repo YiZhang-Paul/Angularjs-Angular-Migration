@@ -25,20 +25,6 @@ export class ViewHistoryListController {
     $onInit() {
 
         this.viewHistoryManager.cacheHistories();
-        this._registerAuthenticationEvents();
-    }
-
-    _registerAuthenticationEvents() {
-
-        this.$scope.$on('userAuthenticated', () => {
-
-            this.viewHistoryManager.cacheHistories();
-        });
-
-        this.$scope.$on('userLoggedOut', () => {
-
-            this.viewHistoryManager.histories = [];
-        });
     }
 
     isStaticImage(url) {

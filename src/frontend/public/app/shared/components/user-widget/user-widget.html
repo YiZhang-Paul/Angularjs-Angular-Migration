@@ -1,5 +1,5 @@
 <div class="user-widget-container">
-    <mat-expansion-panel [hideToggle]="true" #menu>
+    <mat-expansion-panel [hideToggle]="true" (clickOutside)="menu.close()" #menu>
         <mat-expansion-panel-header>
             <div class="avatar"></div>
 

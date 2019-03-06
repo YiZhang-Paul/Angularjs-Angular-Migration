@@ -3,8 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import './app.module.ajs.js';
+import * as AppModuleAjs from './app.module.ajs.js';
 import { CoreModule } from './core/core.module';
+import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -13,6 +14,7 @@ import { SharedModule } from './shared/shared.module';
         UpgradeModule,
         UIRouterUpgradeModule.forRoot(),
         CoreModule,
+        FeaturesModule,
         SharedModule
     ]
 })
@@ -27,6 +29,6 @@ export class AppModule {
 
     public ngDoBootstrap(): void {
 
-        this._upgrade.bootstrap(document.body, ['migration-sample-app']);
+        this._upgrade.bootstrap(document.body, [AppModuleAjs.default]);
     }
 }

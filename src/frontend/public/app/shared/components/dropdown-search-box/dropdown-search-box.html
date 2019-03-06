@@ -1,0 +1,10 @@
+<div class="dropdown-search-box-container">
+    <search-box (onSearch)="result = $event"></search-box>
+
+    <div class="result-panel" *ngIf="result" (clickOutside)="result = null">
+        <game-badge *ngFor="let game of result.games"
+            [game]="game"
+            (click)="toChannelsView(game)">
+        </game-badge>
+    </div>
+</div>
