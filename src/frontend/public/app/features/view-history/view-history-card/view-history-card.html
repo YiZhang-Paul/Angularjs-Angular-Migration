@@ -1,25 +1,25 @@
 <div class="view-history-card-container">
     <div class="channel-thumbnail"
-        ng-show="$ctrl.isStaticThumbnail"
-        ng-style="$ctrl.viewHistory.thumbnail && { 'background-image': 'url(' + $ctrl.viewHistory.thumbnail + ')' }">
+        *ngIf="isStaticThumbnail"
+        [ngStyle]="{ 'background-image': 'url(' + viewHistory.thumbnail + ')' }">
     </div>
     <video class="channel-thumbnail"
-        ng-hide="$ctrl.isStaticThumbnail"
-        ng-src="{{ $ctrl.viewHistory.thumbnail }}"
+        *ngIf="!isStaticThumbnail"
+        [src]="viewHistory.thumbnail"
         type="video/mp4">
     </video>
 
     <div class="avatar"
-        ng-style="$ctrl.viewHistory.image && { 'background-image': 'url(' + $ctrl.viewHistory.image + ')' }">
+        [ngStyle]="{ 'background-image': 'url(' + viewHistory.image + ')' }">
     </div>
 
     <div class="view-history-details">
-        <span class="title">{{ $ctrl.viewHistory.title }}</span></br></br>
-        <span class="streamer">{{ $ctrl.viewHistory.streamer_name }}</span> was playing:
+        <span class="title">{{ viewHistory.title }}</span><br><br>
+        <span class="streamer">{{ viewHistory.streamer_name }}</span> was playing:
         <span class="game-name"
-            ng-click="$ctrl.onChannelNavigation()">{{ $ctrl.viewHistory.game_name | capitalize }}
+            (click)="onChannelNavigation.emit()">{{ viewHistory.game_name | capitalize }}
         </span>
     </div>
 
-    <div class="remove-button" ng-click="$ctrl.onDelete()"></div>
+    <div class="remove-button" (click)="onDelete.emit()"></div>
 </div>

@@ -17,6 +17,11 @@ export class CustomRoutingService {
         this.genericUtilities = genericUtilitiesService;
     }
 
+    toState(state) {
+
+        this.$state.go(state);
+    }
+
     toChannelsView(id) {
 
         const gamePromise = this.gameHttp.getGame(id);

@@ -3,8 +3,9 @@
         <li class="sidebar-option">{{ option }}</li>
 
         <sidebar-badge
-            channel-badges="$ctrl.badges.get(option)"
-            route="$ctrl.routes.get(option)">
+            *ngIf="$ctrl.badges.get(option)"
+            [channel-badges]="$ctrl.badges.get(option)"
+            [route]="$ctrl.routes.get(option)">
         </sidebar-badge>
     </ul>
 </div>

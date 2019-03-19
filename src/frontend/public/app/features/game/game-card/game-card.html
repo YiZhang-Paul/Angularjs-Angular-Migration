@@ -1,10 +1,10 @@
 <div class="game-card-container">
     <div class="game-image"
-        ng-style="$ctrl.game.image && { 'background-image': 'url(' + $ctrl.game.image + ')' }">
+        [ngStyle]="{ 'background-image': 'url(' + game.image + ')' }">
     </div>
 
     <div class="game-details">
-        <span>{{ $ctrl.game.name | capitalize | uppercaseRomanNumerals }}</span>
-        <span class="view-counts">{{ $ctrl.game.view_count | shortViewCount }}</span>
+        <span>{{ game.name | capitalize | uppercaseRomanNumerals }}</span>
+        <span class="view-counts">{{ game.view_count | shortViewCount }}</span>
     </div>
 </div>

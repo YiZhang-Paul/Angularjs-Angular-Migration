@@ -1,11 +1,12 @@
 <div class="sidebar-badge-container">
     <channel-badge
-        ng-repeat="badge in $ctrl.channelBadges"
-        ng-class="{ 'large-font': !badge.game_name }"
-        badge="badge">
+        *ngFor="let badge of channelBadges"
+        [ngClass]="{ 'large-font': !badge.game_name }"
+        [badge]="badge">
     </channel-badge>
 
-    <a class="view-all" ng-show="$ctrl.channelBadges.length" ui-sref="{{ $ctrl.route }}">
-        View All
+    <a class="view-all"
+        *ngIf="channelBadges.length"
+        (click)="toState()">View All
     </a>
 </div>

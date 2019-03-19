@@ -2,6 +2,6 @@
     <game-card
         ng-repeat="game in $ctrl.games"
         ng-click="$ctrl.toChannelsView(game)"
-        game="game">
+        [game]="game">
     </game-card>
 </div>

@@ -3,7 +3,7 @@ import { SinonStubbedInstance, stub } from 'sinon';
 
 type Stubbed = SinonStubbedInstance<Document>;
 
-export function createDocumentStub(object = {}, resolve = true): Stubbed {
+export function createDocumentStub(object = {}): Stubbed {
 
     const stubbed = stub({} as Document);
 
@@ -16,22 +16,16 @@ export function createDocumentStub(object = {}, resolve = true): Stubbed {
     stubbed.remove = stub();
     stubbed.remove.rejects(new Error());
 
-    if (resolve) {
-
-        stubbed.save.resolves(stubbed);
-        stubbed.remove.resolves(stubbed);
-    }
-
     return stubbed;
 }
 
-export function createDocumentStubs(objects = [{}], resolve = true): Stubbed[] {
+export function createDocumentStubs(objects = [{}]): Stubbed[] {
 
     const stubs: Stubbed[] = [];
 
     for (const object of objects) {
 
-        stubs.push(createDocumentStub(object, resolve));
+        stubs.push(createDocumentStub(object));
     }
 
     return stubs;

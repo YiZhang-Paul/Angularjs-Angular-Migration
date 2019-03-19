@@ -1,6 +1,6 @@
 <div class="game-channel-list-container non-selectable" ng-show="$ctrl.game">
     <div class="game-cover">
-        <game-card game="$ctrl.game"></game-card>
+        <game-card [game]="$ctrl.game"></game-card>
 
         <div class="game-details">
             <span class="game-title">{{ $ctrl.game.name | capitalize | uppercaseRomanNumerals }}</span></br></br>
