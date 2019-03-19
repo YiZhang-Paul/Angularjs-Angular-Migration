@@ -10,9 +10,9 @@
 
     <view-history-card
         ng-repeat="history in $ctrl.histories"
-        is-static-thumbnail="$ctrl.isStaticImage(history.thumbnail)"
-        on-channel-navigation="$ctrl.toChannelsView(history.game_id)"
-        on-delete="$ctrl.deleteHistory(history)"
-        view-history="history">
+        (on-delete)="$ctrl.deleteHistory(history)"
+        (on-channel-navigation)="$ctrl.toChannelsView(history.game_id)"
+        [is-static-thumbnail]="$ctrl.isStaticImage(history.thumbnail)"
+        [view-history]="history">
     </view-history-card>
 </div>
