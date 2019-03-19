@@ -16,6 +16,7 @@ import { UserWidgetComponent } from './components/user-widget/user-widget.compon
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pipe';
+import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/uppercase-roman-numerals.pipe';
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pi
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
-        ShortViewCountPipe
+        ShortViewCountPipe,
+        UppercaseRomanNumeralsPipe
     ],
     entryComponents: [
         GameBadgeComponent,
@@ -54,7 +56,8 @@ import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pi
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
-        ShortViewCountPipe
+        ShortViewCountPipe,
+        UppercaseRomanNumeralsPipe
     ]
 })
 export class SharedModule { }

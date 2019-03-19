@@ -5,13 +5,7 @@ type Stubbed = SinonStubbedInstance<DocumentQuery<Document[], Document, {}>>;
 
 export function createDocumentQueryStub(documents: Document[] = []): Stubbed {
 
-    const stubbed = stub({} as Stubbed);
-
-    stubbed.select = stub();
-    stubbed.select.returns(stubbed);
-
-    stubbed.sort = stub();
-    stubbed.sort.returns(stubbed);
+    const stubbed = stub({} as DocumentQuery<Document[], Document, {}>);
 
     stubbed.limit = stub();
     stubbed.limit.resolves(documents);
