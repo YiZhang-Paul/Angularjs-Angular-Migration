@@ -1,5 +1,4 @@
 import { LoginPanelComponent } from './components/user-login/login-panel/login-panel.component';
-import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 
 import { capitalizeFilter } from './filters/capitalize/capitalize.filter';
 import { shortViewCountFilter } from './filters/short-view-count/short-view-count.filter';
@@ -11,7 +10,6 @@ export default moduleName;
 
 angular.module(moduleName, ['ngAnimate', 'ngMaterial', 'toastr'])
     .component('loginPanel', LoginPanelComponent)
-    .component('topNavbar', TopNavigationBarComponent)
     .filter('capitalize', capitalizeFilter)
     .filter('shortViewCount', shortViewCountFilter)
     .filter('uppercaseRomanNumerals', uppercaseRomanNumeralsFilter);

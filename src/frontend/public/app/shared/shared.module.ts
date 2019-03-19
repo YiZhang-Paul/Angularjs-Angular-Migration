@@ -15,6 +15,7 @@ import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dropdown-search-box.component';
+import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
@@ -37,6 +38,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
@@ -50,6 +52,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent
     ],
@@ -65,6 +68,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
@@ -81,4 +85,5 @@ angular.module(SharedModuleAjs.default)
     .directive('sidebar', downgradeComponent({ component: SidebarComponent }))
     .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
     .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))
+    .directive('topNavbar', downgradeComponent({ component: TopNavigationBarComponent }))
     .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));
