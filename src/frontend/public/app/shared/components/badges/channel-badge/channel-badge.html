@@ -1,10 +1,10 @@
 <div class="channel-badge-container">
     <div class="avatar"
-        ng-style="$ctrl.badge.image && { 'background-image': 'url(' + $ctrl.badge.image + ')' }">
+        [ngStyle]="{ 'background-image': 'url(' + badge.image + ')' }">
     </div>
 
     <div class="badge-details">
-        <span>{{ $ctrl.badge.streamer_name }}</span></br>
-        <span>{{ $ctrl.badge.game_name || $ctrl.badge.provider_game_name }}</span>
+        <span>{{ badge.streamer_name }}</span><br>
+        <span>{{ badge.game_name || badge.provider_game_name }}</span>
     </div>
 </div>

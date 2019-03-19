@@ -9,6 +9,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import * as angular from 'angular';
 
 import * as SharedModuleAjs from './shared.module.ajs.js';
+import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
 import { GameBadgeComponent } from './components/badges/game-badge/game-badge.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dropdown-search-box.component';
@@ -28,6 +29,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         MatIconModule
     ],
     declarations: [
+        ChannelBadgeComponent,
         GameBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
@@ -38,6 +40,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         UppercaseRomanNumeralsPipe
     ],
     entryComponents: [
+        ChannelBadgeComponent,
         GameBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
@@ -50,6 +53,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         BrowserAnimationsModule,
         MatExpansionModule,
         MatIconModule,
+        ChannelBadgeComponent,
         GameBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
@@ -63,6 +67,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
 export class SharedModule { }
 
 angular.module(SharedModuleAjs.default)
+    .directive('channelBadge', downgradeComponent({ component: ChannelBadgeComponent }))
     .directive('gameBadge', downgradeComponent({ component: GameBadgeComponent }))
     .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
     .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))

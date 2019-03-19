@@ -1,4 +1,3 @@
-import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
 import { LoginPanelComponent } from './components/user-login/login-panel/login-panel.component';
 import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar-badge.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -13,7 +12,6 @@ const moduleName = 'sample-app-shared';
 export default moduleName;
 
 angular.module(moduleName, [])
-    .component('channelBadge', ChannelBadgeComponent)
     .component('loginPanel', LoginPanelComponent)
     .component('sidebarBadge', SidebarBadgeComponent)
     .component('sidebar', SidebarComponent)
