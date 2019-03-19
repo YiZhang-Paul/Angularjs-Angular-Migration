@@ -9,7 +9,7 @@ const moduleName = 'sample-app-shared';
 
 export default moduleName;
 
-angular.module(moduleName, [])
+angular.module(moduleName, ['ngAnimate', 'ngMaterial', 'toastr'])
     .component('loginPanel', LoginPanelComponent)
     .component('topNavbar', TopNavigationBarComponent)
     .filter('capitalize', capitalizeFilter)
