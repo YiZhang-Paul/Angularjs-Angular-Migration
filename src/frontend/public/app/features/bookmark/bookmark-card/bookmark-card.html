@@ -1,13 +1,13 @@
 <div class="bookmark-card-container"
-    ng-style="$ctrl.bookmark.banner && { 'background-image': 'url(' + $ctrl.bookmark.banner + ')' }">
+    [ngStyle]="{ 'background-image': 'url(' + bookmark.banner + ')' }">
 
     <div class="bookmark-image"
-        ng-style="$ctrl.bookmark.image && { 'background-image': 'url(' + $ctrl.bookmark.image + ')' }">
+        [ngStyle]="{ 'background-image': 'url(' + bookmark.image + ')' }">
     </div>
 
-    <span class="bookmark-name">{{ $ctrl.bookmark.streamer_name }}</span>
+    <span class="bookmark-name">{{ bookmark.streamer_name }}</span>
 
     <div class="bookmark-unfollow-button"
-        ng-click="$ctrl.onUnfollow()">unfollow
+        (click)="onUnfollow.emit()">unfollow
     </div>
 </div>
