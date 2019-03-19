@@ -1,66 +1,74 @@
-import SharedModule from '../../shared.module.ajs';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { assert as sinonExpect } from 'sinon';
+import { expect } from 'chai';
+import * as angular from 'angular';
 
-import { stubAuthenticatorServiceNg1 } from '../../../testing/stubs/custom/authenticator.service.stub';
-import { stubChannelHttpServiceNg1 } from '../../../testing/stubs/custom/channel-http.service.stub';
-import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
-import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
+import { $rootScope, $rootScopeFactory } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
+import { stub$rootScope } from '../../../testing/stubs/built-in/$root-scope.stub.js';
+import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
+import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
+import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 
-const module = angular.mock.module;
-const sinonExpect = sinon.assert;
+import { SidebarComponent } from './sidebar.component';
 
 context('sidebar component unit test', () => {
 
-    const tag = '<sidebar></sidebar>';
     const followedChannelsKey = 'Followed Channels';
     const featuredChannelsKey = 'Featured Channels';
     const viewHistoryKey = 'View History';
 
-    let $q;
-    let $compile;
-    let $rootScope;
-    let component;
-    let componentElement;
+    let $rootScopeAjs;
+    let fixture: ComponentFixture<SidebarComponent>;
+    let component: SidebarComponent;
 
+    let $rootScopeStub;
     let authenticatorStub;
     let channelHttpStub;
     let bookmarkManagerStub;
     let viewHistoryManagerStub;
 
-    beforeEach(module(SharedModule));
-    beforeEach(module('component-templates'));
-
     beforeEach('stubs setup', () => {
 
-        authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
-        channelHttpStub = stubChannelHttpServiceNg1(module, inject);
-        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
-        viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
-
-        authenticatorStub.setupStub();
-        channelHttpStub.setupStub();
-        bookmarkManagerStub.setupStub();
-        viewHistoryManagerStub.setupStub();
+        $rootScopeStub = stub$rootScope();
+        authenticatorStub = stubAuthenticatorService();
+        channelHttpStub = stubChannelHttpService();
+        bookmarkManagerStub = stubBookmarkManagerService();
+        viewHistoryManagerStub = stubViewHistoryManagerService();
 
         const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
         bookmarkManagerStub.bookmarks = data.slice();
         viewHistoryManagerStub.histories = data.slice();
     });
 
-    beforeEach('general test setup', inject(($injector, $componentController) => {
+    beforeEach('general test setup', () => {
 
-        $q = $injector.get('$q');
-        $compile = $injector.get('$compile');
-        $rootScope = $injector.get('$rootScope');
-        component = $componentController('sidebar');
-    }));
+        TestBed.configureTestingModule({
+
+            imports: [SidebarComponent],
+            providers: [
+
+                { provide: $rootScope, useValue: $rootScopeStub },
+                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: ChannelHttp, useValue: channelHttpStub },
+                { provide: BookmarkManager, useValue: bookmarkManagerStub },
+                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub }
+            ]
+        });
+
+        $rootScopeAjs = $rootScopeFactory(angular.injector);
+        fixture = TestBed.createComponent(SidebarComponent);
+        component = fixture.componentInstance;
+    });
 
     it('should resolve', () => {
 
-        componentElement = $compile(tag)($rootScope);
-        $rootScope.$apply();
-
         expect(component).is.not.null;
-        expect(componentElement.html()).is.not.empty;
+        expect(component).to.be.instanceOf(SidebarComponent);
     });
 
     it('should register routes on initialization', () => {
@@ -76,9 +84,6 @@ context('sidebar component unit test', () => {
 
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
 
-            component.$onInit();
-            $rootScope.$apply();
-
             const result = component.badges.get(followedChannelsKey);
 
             expect(result).to.deep.equal(expected);
@@ -88,16 +93,10 @@ context('sidebar component unit test', () => {
 
             authenticatorStub.isAuthenticated = false;
 
-            component.$onInit();
-            $rootScope.$apply();
-
             expect(component.badges.has(followedChannelsKey)).to.be.false;
         });
 
         it('should use channel http service to fetch channel data', () => {
-
-            component.$onInit();
-            $rootScope.$apply();
 
             sinonExpect.calledOnce(channelHttpStub.getChannels);
         });
@@ -114,10 +113,7 @@ context('sidebar component unit test', () => {
             ];
 
             const expected = channels.slice(0, 3);
-            channelHttpStub.getChannels.returns($q.resolve(channels));
-
-            component.$onInit();
-            $rootScope.$apply();
+            channelHttpStub.getChannels.resolves(channels);
 
             const result = component.badges.get(featuredChannelsKey);
 
@@ -126,18 +122,12 @@ context('sidebar component unit test', () => {
 
         it('should not throw error when failed to load featured channels', () => {
 
-            channelHttpStub.getChannels.returns($q.reject(new Error()));
-
-            component.$onInit();
-            $rootScope.$apply();
+            channelHttpStub.getChannels.rejects(new Error());
         });
 
         it('should load view histories on initialization', () => {
 
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
-
-            component.$onInit();
-            $rootScope.$apply();
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -148,21 +138,15 @@ context('sidebar component unit test', () => {
 
             authenticatorStub.isAuthenticated = false;
 
-            component.$onInit();
-            $rootScope.$apply();
-
             expect(component.badges.has(viewHistoryKey)).to.be.false;
         });
 
         it('should register user logged out event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             component.badges.set(followedChannelsKey, []);
             component.badges.set(viewHistoryKey, []);
 
-            $rootScope.$broadcast('userLoggedOut');
+            $rootScopeAjs.$broadcast('userLoggedOut');
 
             expect(component.badges.has(followedChannelsKey)).to.be.false;
             expect(component.badges.has(viewHistoryKey)).to.be.false;
@@ -170,14 +154,10 @@ context('sidebar component unit test', () => {
 
         it('should register bookmark cached event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
 
-            $rootScope.$broadcast('bookmarkCached');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('bookmarkCached');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -186,14 +166,10 @@ context('sidebar component unit test', () => {
 
         it('should register followed channel event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
 
-            $rootScope.$broadcast('followedChannel');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('followedChannel');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -202,14 +178,10 @@ context('sidebar component unit test', () => {
 
         it('should register unfollowed channel event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
 
-            $rootScope.$broadcast('unfollowedChannel');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('unfollowedChannel');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -218,14 +190,10 @@ context('sidebar component unit test', () => {
 
         it('should register view history cached event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
 
-            $rootScope.$broadcast('historyCached');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyCached');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -234,14 +202,10 @@ context('sidebar component unit test', () => {
 
         it('should register view history updated event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
 
-            $rootScope.$broadcast('historyUpdated');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyUpdated');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -250,14 +214,10 @@ context('sidebar component unit test', () => {
 
         it('should register view history removed event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
 
-            $rootScope.$broadcast('historyRemoved');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyRemoved');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -266,14 +226,10 @@ context('sidebar component unit test', () => {
 
         it('should register view history cleared event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
 
-            $rootScope.$broadcast('historyCleared');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyCleared');
 
             const result = component.badges.get(viewHistoryKey);
 
