@@ -15,9 +15,6 @@ export const app = angular.module(moduleName, [
 
     'ui.router',
     'ui.router.upgrade',
-    'ngAnimate',
-    'ngMaterial',
-    'toastr',
     CoreModule,
     FeaturesModule,
     SharedModule

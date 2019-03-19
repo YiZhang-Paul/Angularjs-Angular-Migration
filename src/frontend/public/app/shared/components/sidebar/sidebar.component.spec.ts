@@ -1,71 +1,87 @@
-import SharedModule from '../../shared.module.ajs';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { assert as sinonExpect } from 'sinon';
+import { expect } from 'chai';
+import * as angular from 'angular';
 
-import { stubAuthenticatorServiceNg1 } from '../../../testing/stubs/custom/authenticator.service.stub';
-import { stubChannelHttpServiceNg1 } from '../../../testing/stubs/custom/channel-http.service.stub';
-import { stubBookmarkManagerServiceNg1 } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
-import { stubViewHistoryManagerServiceNg1 } from '../../../testing/stubs/custom/view-history-manager.service.stub';
+import { SharedModule } from '../../shared.module';
+import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
+import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
+import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
+import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
+import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
 
-const module = angular.mock.module;
-const sinonExpect = sinon.assert;
+import { SidebarComponent } from './sidebar.component';
+
+const inject = angular.mock.inject;
 
 context('sidebar component unit test', () => {
 
-    const tag = '<sidebar></sidebar>';
     const followedChannelsKey = 'Followed Channels';
     const featuredChannelsKey = 'Featured Channels';
     const viewHistoryKey = 'View History';
 
-    let $q;
-    let $compile;
-    let $rootScope;
-    let component;
-    let componentElement;
+    let $rootScopeAjs;
+    let fixture: ComponentFixture<SidebarComponent>;
+    let component: SidebarComponent;
 
     let authenticatorStub;
     let channelHttpStub;
     let bookmarkManagerStub;
     let viewHistoryManagerStub;
 
-    beforeEach(module(SharedModule));
-    beforeEach(module('component-templates'));
-
     beforeEach('stubs setup', () => {
 
-        authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
-        channelHttpStub = stubChannelHttpServiceNg1(module, inject);
-        bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
-        viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
-
-        authenticatorStub.setupStub();
-        channelHttpStub.setupStub();
-        bookmarkManagerStub.setupStub();
-        viewHistoryManagerStub.setupStub();
+        authenticatorStub = stubAuthenticatorService();
+        channelHttpStub = stubChannelHttpService();
+        bookmarkManagerStub = stubBookmarkManagerService();
+        viewHistoryManagerStub = stubViewHistoryManagerService();
 
         const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
         bookmarkManagerStub.bookmarks = data.slice();
         viewHistoryManagerStub.histories = data.slice();
     });
 
-    beforeEach('general test setup', inject(($injector, $componentController) => {
+    beforeEach('general test setup', inject($injector => {
 
-        $q = $injector.get('$q');
-        $compile = $injector.get('$compile');
-        $rootScope = $injector.get('$rootScope');
-        component = $componentController('sidebar');
+        $rootScopeAjs = $injector.get('$rootScope');
+
+        TestBed.configureTestingModule({
+
+            imports: [SharedModule],
+            providers: [
+
+                { provide: $rootScope, useValue: $rootScopeAjs },
+                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: ChannelHttp, useValue: channelHttpStub },
+                { provide: BookmarkManager, useValue: bookmarkManagerStub },
+                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
+                { provide: CustomRoutingService, useValue: {} }
+            ]
+        });
+
+        fixture = TestBed.createComponent(SidebarComponent);
+        component = fixture.componentInstance;
+        authenticatorStub = TestBed.get(Authenticator);
+        channelHttpStub = TestBed.get(ChannelHttp);
+        bookmarkManagerStub = TestBed.get(BookmarkManager);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
     }));
 
     it('should resolve', () => {
 
-        componentElement = $compile(tag)($rootScope);
-        $rootScope.$apply();
-
         expect(component).is.not.null;
-        expect(componentElement.html()).is.not.empty;
+        expect(component).to.be.instanceOf(SidebarComponent);
     });
 
     it('should register routes on initialization', () => {
 
         const expected = component.options.length;
+        fixture.detectChanges();
 
         expect(component.routes.size).to.equal(expected);
     });
@@ -75,9 +91,7 @@ context('sidebar component unit test', () => {
         it('should load bookmarks on initialization', () => {
 
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
-
-            component.$onInit();
-            $rootScope.$apply();
+            fixture.detectChanges();
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -87,22 +101,20 @@ context('sidebar component unit test', () => {
         it('should not load bookmarks when not authenticated', () => {
 
             authenticatorStub.isAuthenticated = false;
+            fixture.detectChanges();
 
-            component.$onInit();
-            $rootScope.$apply();
-
-            expect(component.badges.has(followedChannelsKey)).to.be.false;
+            expect(component.badges.has(followedChannelsKey)).to.be.true;
+            expect(component.badges.get(followedChannelsKey)).to.be.empty;
         });
 
         it('should use channel http service to fetch channel data', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
+            fixture.detectChanges();
 
             sinonExpect.calledOnce(channelHttpStub.getChannels);
         });
 
-        it('should load featured channels on initialization', () => {
+        it('should load featured channels on initialization', fakeAsync(() => {
 
             const channels = [
 
@@ -114,30 +126,25 @@ context('sidebar component unit test', () => {
             ];
 
             const expected = channels.slice(0, 3);
-            channelHttpStub.getChannels.returns($q.resolve(channels));
-
-            component.$onInit();
-            $rootScope.$apply();
+            channelHttpStub.getChannels.resolves(channels);
+            fixture.detectChanges();
+            tick();
 
             const result = component.badges.get(featuredChannelsKey);
 
             expect(result).to.deep.equal(expected);
-        });
+        }));
 
         it('should not throw error when failed to load featured channels', () => {
 
-            channelHttpStub.getChannels.returns($q.reject(new Error()));
-
-            component.$onInit();
-            $rootScope.$apply();
+            channelHttpStub.getChannels.rejects(new Error());
+            fixture.detectChanges();
         });
 
         it('should load view histories on initialization', () => {
 
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
-
-            component.$onInit();
-            $rootScope.$apply();
+            fixture.detectChanges();
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -147,22 +154,19 @@ context('sidebar component unit test', () => {
         it('should not load view histories when not authenticated', () => {
 
             authenticatorStub.isAuthenticated = false;
+            fixture.detectChanges();
 
-            component.$onInit();
-            $rootScope.$apply();
-
-            expect(component.badges.has(viewHistoryKey)).to.be.false;
+            expect(component.badges.has(viewHistoryKey)).to.be.true;
+            expect(component.badges.get(viewHistoryKey)).to.be.empty;
         });
 
         it('should register user logged out event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             component.badges.set(followedChannelsKey, []);
             component.badges.set(viewHistoryKey, []);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('userLoggedOut');
+            $rootScopeAjs.$broadcast('userLoggedOut');
 
             expect(component.badges.has(followedChannelsKey)).to.be.false;
             expect(component.badges.has(viewHistoryKey)).to.be.false;
@@ -170,14 +174,11 @@ context('sidebar component unit test', () => {
 
         it('should register bookmark cached event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('bookmarkCached');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('bookmarkCached');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -186,14 +187,11 @@ context('sidebar component unit test', () => {
 
         it('should register followed channel event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('followedChannel');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('followedChannel');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -202,14 +200,11 @@ context('sidebar component unit test', () => {
 
         it('should register unfollowed channel event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             bookmarkManagerStub.bookmarks = bookmarkManagerStub.bookmarks.slice(1);
             const expected = bookmarkManagerStub.bookmarks.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('unfollowedChannel');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('unfollowedChannel');
 
             const result = component.badges.get(followedChannelsKey);
 
@@ -218,14 +213,11 @@ context('sidebar component unit test', () => {
 
         it('should register view history cached event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('historyCached');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyCached');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -234,14 +226,11 @@ context('sidebar component unit test', () => {
 
         it('should register view history updated event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('historyUpdated');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyUpdated');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -250,14 +239,11 @@ context('sidebar component unit test', () => {
 
         it('should register view history removed event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('historyRemoved');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyRemoved');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -266,14 +252,11 @@ context('sidebar component unit test', () => {
 
         it('should register view history cleared event listener on initialization', () => {
 
-            component.$onInit();
-            $rootScope.$apply();
-
             viewHistoryManagerStub.histories = viewHistoryManagerStub.histories.slice(1);
             const expected = viewHistoryManagerStub.histories.slice(0, 3);
+            fixture.detectChanges();
 
-            $rootScope.$broadcast('historyCleared');
-            $rootScope.$apply();
+            $rootScopeAjs.$broadcast('historyCleared');
 
             const result = component.badges.get(viewHistoryKey);
 
@@ -286,6 +269,7 @@ context('sidebar component unit test', () => {
         it('should return all options when authenticated', () => {
 
             authenticatorStub.isAuthenticated = true;
+            fixture.detectChanges();
 
             expect(component.options.length).to.equal(3);
         });
@@ -293,6 +277,7 @@ context('sidebar component unit test', () => {
         it('should return featured channel option only when not authenticated', () => {
 
             authenticatorStub.isAuthenticated = false;
+            fixture.detectChanges();
 
             expect(component.options.length).to.equal(1);
             expect(component.options[0]).to.equal(featuredChannelsKey);

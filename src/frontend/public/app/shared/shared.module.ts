@@ -12,8 +12,10 @@ import * as SharedModuleAjs from './shared.module.ajs.js';
 import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
 import { GameBadgeComponent } from './components/badges/game-badge/game-badge.component';
 import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar-badge.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dropdown-search-box.component';
+import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
@@ -33,8 +35,10 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         ChannelBadgeComponent,
         GameBadgeComponent,
         SidebarBadgeComponent,
+        SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
@@ -45,8 +49,10 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         ChannelBadgeComponent,
         GameBadgeComponent,
         SidebarBadgeComponent,
+        SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent
     ],
@@ -59,8 +65,10 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         ChannelBadgeComponent,
         GameBadgeComponent,
         SidebarBadgeComponent,
+        SidebarComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
+        TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
         CapitalizePipe,
@@ -74,6 +82,8 @@ angular.module(SharedModuleAjs.default)
     .directive('channelBadge', downgradeComponent({ component: ChannelBadgeComponent }))
     .directive('gameBadge', downgradeComponent({ component: GameBadgeComponent }))
     .directive('sidebarBadge', downgradeComponent({ component: SidebarBadgeComponent }))
+    .directive('sidebar', downgradeComponent({ component: SidebarComponent }))
     .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
     .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))
+    .directive('topNavbar', downgradeComponent({ component: TopNavigationBarComponent }))
     .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));

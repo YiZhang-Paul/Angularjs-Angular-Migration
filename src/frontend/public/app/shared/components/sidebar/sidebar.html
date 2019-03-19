@@ -1,11 +1,10 @@
 <div class="sidebar-container non-selectable">
-    <ul class="sidebar-options" ng-repeat="option in $ctrl.options">
+    <ul class="sidebar-options" *ngFor="let option of options">
         <li class="sidebar-option">{{ option }}</li>
 
         <sidebar-badge
-            *ngIf="$ctrl.badges.get(option)"
-            [channel-badges]="$ctrl.badges.get(option)"
-            [route]="$ctrl.routes.get(option)">
+            [channelBadges]="badges.get(option)"
+            [route]="routes.get(option)">
         </sidebar-badge>
     </ul>
 </div>
