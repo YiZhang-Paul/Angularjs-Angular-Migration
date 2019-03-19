@@ -11,6 +11,7 @@ import * as angular from 'angular';
 import * as SharedModuleAjs from './shared.module.ajs.js';
 import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
 import { GameBadgeComponent } from './components/badges/game-badge/game-badge.component';
+import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar-badge.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dropdown-search-box.component';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
@@ -31,6 +32,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
     declarations: [
         ChannelBadgeComponent,
         GameBadgeComponent,
+        SidebarBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
         UserWidgetComponent,
@@ -42,6 +44,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
     entryComponents: [
         ChannelBadgeComponent,
         GameBadgeComponent,
+        SidebarBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
         UserWidgetComponent,
@@ -55,6 +58,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         MatIconModule,
         ChannelBadgeComponent,
         GameBadgeComponent,
+        SidebarBadgeComponent,
         SearchBoxComponent,
         DropdownSearchBoxComponent,
         UserWidgetComponent,
@@ -69,6 +73,7 @@ export class SharedModule { }
 angular.module(SharedModuleAjs.default)
     .directive('channelBadge', downgradeComponent({ component: ChannelBadgeComponent }))
     .directive('gameBadge', downgradeComponent({ component: GameBadgeComponent }))
+    .directive('sidebarBadge', downgradeComponent({ component: SidebarBadgeComponent }))
     .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
     .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))
     .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));

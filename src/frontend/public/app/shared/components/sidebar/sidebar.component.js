@@ -19,13 +19,16 @@ export class SidebarController {
         this.viewHistoryManager = viewHistoryManagerService;
 
         this._options = ['Followed Channels', 'Featured Channels', 'View History'];
+        this._states = ['index.bookmarks', 'index.featured', 'index.histories'];
 
         this.badges = new Map();
         this.routes = new Map();
 
-        this.routes.set(this._options[0], 'index.bookmarks');
-        this.routes.set(this._options[1], 'index.featured');
-        this.routes.set(this._options[2], 'index.histories');
+        this._options.forEach((_, index) => {
+
+            this.badges.set(_, []);
+            this.routes.set(_, this._states[index]);
+        });
     }
 
     get options() {
