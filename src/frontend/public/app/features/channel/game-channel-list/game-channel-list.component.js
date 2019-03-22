@@ -96,6 +96,6 @@ export class GameChannelListController {
 
 export const GameChannelListComponent = {
 
-    templateUrl: 'app/features/channel/game-channel-list/game-channel-list.html',
+    template: `${require('./game-channel-list.html')}`,
     controller: GameChannelListController
 };

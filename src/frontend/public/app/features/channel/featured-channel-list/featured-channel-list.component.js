@@ -63,6 +63,6 @@ export class FeaturedChannelListController {
 
 export const FeaturedChannelListComponent = {
 
-    templateUrl: 'app/features/channel/featured-channel-list/featured-channel-list.html',
+    template: `${require('./featured-channel-list.html')}`,
     controller: FeaturedChannelListController
 };

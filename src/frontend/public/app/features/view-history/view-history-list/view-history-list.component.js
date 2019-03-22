@@ -54,6 +54,6 @@ export class ViewHistoryListController {
 
 export const ViewHistoryListComponent = {
 
-    templateUrl: 'app/features/view-history/view-history-list/view-history-list.html',
+    template: `${require('./view-history-list.html')}`,
     controller: ViewHistoryListController
 };

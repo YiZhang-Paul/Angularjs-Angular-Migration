@@ -46,6 +46,6 @@ export class GameListController {
 
 export const GameListComponent = {
 
-    templateUrl: 'app/features/game/game-list/game-list.html',
+    template: `${require('./game-list.html')}`,
     controller: GameListController
 };

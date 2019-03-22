@@ -54,6 +54,6 @@ export class AppController {
 
 export const AppComponent = {
 
-    templateUrl: 'app/app.html',
+    template: `${require('./app.html')}`,
     controller: AppController
 };

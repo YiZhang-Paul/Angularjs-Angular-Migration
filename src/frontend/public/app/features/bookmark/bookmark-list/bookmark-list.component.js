@@ -26,6 +26,6 @@ export class BookmarkListController {
 
 export const BookmarkListComponent = {
 
-    templateUrl: 'app/features/bookmark/bookmark-list/bookmark-list.html',
+    template: `${require('./bookmark-list.html')}`,
     controller: BookmarkListController
 };
