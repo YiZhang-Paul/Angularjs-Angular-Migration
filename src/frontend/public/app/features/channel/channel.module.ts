@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { ChannelCardComponent } from './channel-card/channel-card.component';
 import { FeaturedChannelListComponent } from './featured-channel-list/featured-channel-list.component';
+import { GameChannelListComponent } from './game-channel-list/game-channel-list.component';
 import { ChannelService } from './channel.service';
 import * as ChannelModuleAjs from './channel.module.ajs.js';
 
@@ -14,15 +15,18 @@ import * as ChannelModuleAjs from './channel.module.ajs.js';
     providers: [ChannelService],
     declarations: [
         ChannelCardComponent,
-        FeaturedChannelListComponent
+        FeaturedChannelListComponent,
+        GameChannelListComponent
     ],
     entryComponents: [
         ChannelCardComponent,
-        FeaturedChannelListComponent
+        FeaturedChannelListComponent,
+        GameChannelListComponent
     ]
 })
 export class ChannelModule { }
 
 angular.module(ChannelModuleAjs.default)
     .directive('channelCard', downgradeComponent({ component: ChannelCardComponent }))
-    .directive('featuredChannelList', downgradeComponent({ component: FeaturedChannelListComponent }));
+    .directive('featuredChannelList', downgradeComponent({ component: FeaturedChannelListComponent }))
+    .directive('gameChannelList', downgradeComponent({ component: GameChannelListComponent }));

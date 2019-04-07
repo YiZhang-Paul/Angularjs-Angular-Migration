@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { $mdDialogProvider } from './upgraded-providers/$mdDialog-provider/$mdDialog-provider';
 import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { $rootScopeProvider } from './upgraded-providers/$rootScope-provider/$rootScope-provider';
+import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { authenticatorProvider } from './upgraded-providers/authenticator-provider/authenticator-provider';
 import { bookmarkManagerProvider } from './upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { channelHttpProvider } from './upgraded-providers/channel-http-provider/channel-http-provider';
 import { customRoutingServiceProvider } from './upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { gameHttpProvider } from './upgraded-providers/game-http-provider/game-http-provider';
 import { gameManagerProvider } from './upgraded-providers/game-manager-provider/game-manager-provider';
 import { thumbnailPlayerProvider } from './upgraded-providers/thumbnail-player-provider/thumbnail-player-provider';
 import { viewHistoryManagerProvider } from './upgraded-providers/view-history-manager-provider/view-history-manager-provider';
@@ -16,10 +18,12 @@ import { viewHistoryManagerProvider } from './upgraded-providers/view-history-ma
         $mdDialogProvider,
         $mdPanelProvider,
         $rootScopeProvider,
+        $stateParamsProvider,
         authenticatorProvider,
         bookmarkManagerProvider,
         channelHttpProvider,
         customRoutingServiceProvider,
+        gameHttpProvider,
         gameManagerProvider,
         thumbnailPlayerProvider,
         viewHistoryManagerProvider

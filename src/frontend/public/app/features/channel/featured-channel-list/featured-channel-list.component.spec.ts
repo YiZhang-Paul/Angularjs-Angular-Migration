@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
-import { ChannelModule } from '../channel.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelService } from '../channel.service';
 import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
+import { ChannelCardComponent } from '../channel-card/channel-card.component';
 
 import { FeaturedChannelListComponent } from './featured-channel-list.component';
 
@@ -33,7 +34,12 @@ context('featured channel list component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [ChannelModule],
+            imports: [SharedModule],
+            declarations: [
+
+                ChannelCardComponent,
+                FeaturedChannelListComponent
+            ],
             providers: [
 
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
@@ -48,6 +54,11 @@ context('featured channel list component unit test', () => {
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         channelServiceStub = TestBed.get(ChannelService);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+    });
+
+    afterEach('test teardown', () => {
+
+        timer.restore();
     });
 
     it('should resolve', () => {

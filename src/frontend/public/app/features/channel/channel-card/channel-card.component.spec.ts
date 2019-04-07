@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
-import { ChannelModule } from '../channel.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { ThumbnailPlayer } from '../../../core/upgraded-providers/thumbnail-player-provider/thumbnail-player-provider';
 import { stubThumbnailPlayerService } from '../../../testing/stubs/custom/thumbnail-player.service.stub';
 
@@ -24,7 +24,8 @@ context('channel card component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [ChannelModule],
+            imports: [SharedModule],
+            declarations: [ChannelCardComponent],
             providers: [{ provide: ThumbnailPlayer, useValue: thumbnailPlayerStub }]
         });
 
