@@ -4,7 +4,7 @@ import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { GameHttp } from '../../../core/upgraded-providers/game-http-provider/game-http-provider';
+import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { ChannelService } from '../channel.service';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
@@ -53,7 +53,7 @@ context('game channel list component unit test', () => {
             ],
             providers: [
 
-                { provide: GameHttp, useValue: gameHttpStub },
+                { provide: GameHttpService, useValue: gameHttpStub },
                 { provide: ChannelService, useValue: channelServiceStub },
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
                 { provide: $stateParams, useValue: {} },
@@ -63,7 +63,7 @@ context('game channel list component unit test', () => {
 
         fixture = TestBed.createComponent(GameChannelListComponent);
         component = fixture.componentInstance;
-        gameHttpStub = TestBed.get(GameHttp);
+        gameHttpStub = TestBed.get(GameHttpService);
         channelServiceStub = TestBed.get(ChannelService);
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         $stateParamsStub = TestBed.get($stateParams);

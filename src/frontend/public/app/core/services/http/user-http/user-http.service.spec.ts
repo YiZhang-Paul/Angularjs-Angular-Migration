@@ -17,14 +17,16 @@ context('user http service unit test', () => {
 
     let authenticatorStub;
 
-    beforeEach('general test setup', () => {
+    beforeEach('stubs setup', () => {
 
         authenticatorStub = stubAuthenticatorService();
+    });
+
+    beforeEach('general test setup', () => {
 
         TestBed.configureTestingModule({
 
             imports: [HttpClientTestingModule],
-
             providers: [
 
                 UserHttpService,
