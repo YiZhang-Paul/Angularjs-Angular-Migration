@@ -86,7 +86,7 @@ context('sidebar component unit test', () => {
         expect(component.routes.size).to.equal(expected);
     });
 
-    describe('$onInit()', () => {
+    describe('ngOnInit()', () => {
 
         it('should load bookmarks on initialization', () => {
 
