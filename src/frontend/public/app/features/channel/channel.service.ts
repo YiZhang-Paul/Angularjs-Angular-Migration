@@ -1,11 +1,20 @@
+import { Injectable } from '@angular/core';
+
+import { ChannelHttp } from '../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ChannelService {
 
-    constructor(channelHttpService) {
-        'ngInject';
-        this.channelHttp = channelHttpService;
+    private _channelHttp: ChannelHttp;
+
+    constructor(channelHttp: ChannelHttp) {
+
+        this._channelHttp = channelHttp;
     }
 
-    _isSameChannel(a, b) {
+    private isSameChannel(a, b) {
 
         if (!a || !b || a.provider_id !== b.provider_id) {
 
@@ -15,11 +24,11 @@ export class ChannelService {
         return a.provider_channel_id === b.provider_channel_id;
     }
 
-    refreshChannels(outdated, updated) {
+    public refreshChannels(outdated, updated) {
 
         for (let i = 0; i < updated.length; i++) {
 
-            if (!this._isSameChannel(outdated[i], updated[i])) {
+            if (!this.isSameChannel(outdated[i], updated[i])) {
 
                 outdated[i] = updated[i];
 
@@ -32,18 +41,18 @@ export class ChannelService {
         }
     }
 
-    loadFeaturedChannels(cache) {
+    public loadFeaturedChannels(cache) {
 
-        return this.channelHttp.getChannels().then(channels => {
+        return this._channelHttp.getChannels().then(channels => {
 
             this.refreshChannels(cache, channels);
         })
         .catch(error => console.log(error));
     }
 
-    loadGameChannels(cache, id) {
+    public loadGameChannels(cache, id) {
 
-        return this.channelHttp.getChannelsByGameId(id).then(channels => {
+        return this._channelHttp.getChannelsByGameId(id).then(channels => {
 
             this.refreshChannels(cache, channels);
         })

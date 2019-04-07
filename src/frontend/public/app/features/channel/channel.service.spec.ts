@@ -1,37 +1,42 @@
-import ChannelModule from './channel.module.ajs';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { assert as sinonExpect } from 'sinon';
+import { expect } from 'chai';
 
-import { stubChannelHttpServiceNg1 } from '../../testing/stubs/custom/channel-http.service.stub';
+import { ChannelHttp } from '../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { stubChannelHttpService } from '../../testing/stubs/custom/channel-http.service.stub';
 
-const module = angular.mock.module;
-const sinonExpect = sinon.assert;
+import { ChannelService } from './channel.service';
 
 context('channel service unit test', () => {
 
-    let $q;
-    let $rootScope;
-    let service;
+    let service: ChannelService;
 
     let channelHttpStub;
 
-    beforeEach(module(ChannelModule));
-
     beforeEach('stubs setup', () => {
 
-        channelHttpStub = stubChannelHttpServiceNg1(module, inject);
-
-        channelHttpStub.setupStub();
+        channelHttpStub = stubChannelHttpService();
     });
 
-    beforeEach('general test setup', inject($injector => {
+    beforeEach('general test setup', () => {
 
-        $q = $injector.get('$q');
-        $rootScope = $injector.get('$rootScope');
-        service = $injector.get('channelService');
-    }));
+        TestBed.configureTestingModule({
+
+            providers: [
+
+                ChannelService,
+                { provide: ChannelHttp, useValue: channelHttpStub }
+            ]
+        });
+
+        service = TestBed.get(ChannelService);
+        channelHttpStub = TestBed.get(ChannelHttp);
+    });
 
     it('should resolve', () => {
 
         expect(service).is.not.null;
+        expect(service).to.be.instanceOf(ChannelService);
     });
 
     describe('refreshChannels()', () => {
@@ -133,42 +138,41 @@ context('channel service unit test', () => {
         it('should use channel http service to fetch data', () => {
 
             service.loadFeaturedChannels([]);
-            $rootScope.$apply();
 
             sinonExpect.calledOnce(channelHttpStub.getChannels);
         });
 
-        it('should load featured channels', () => {
+        it('should load featured channels', fakeAsync(() => {
 
             const cache = [];
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            channelHttpStub.getChannels.returns($q.resolve(expected));
+            channelHttpStub.getChannels.resolves(expected);
 
             service.loadFeaturedChannels(cache);
-            $rootScope.$apply();
+            tick();
 
             expect(cache).to.deep.equal(expected);
-        });
+        }));
 
-        it('should preserve original channels when failed to fetch featured channel data', () => {
+        it('should preserve original channels when failed to fetch featured channel data', fakeAsync(() => {
 
             const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = cache.slice();
-            channelHttpStub.getChannels.returns($q.reject(new Error()));
+            channelHttpStub.getChannels.rejects(new Error());
 
             service.loadFeaturedChannels(cache).catch(() => null);
-            $rootScope.$apply();
+            tick();
 
             expect(cache).to.deep.equal(expected);
-        });
+        }));
 
-        it('should not throw error when failed to fetch featured channel data', () => {
+        it('should not throw error when failed to fetch featured channel data', fakeAsync(() => {
 
-            channelHttpStub.getChannels.returns($q.reject(new Error()));
+            channelHttpStub.getChannels.rejects(new Error());
 
             service.loadFeaturedChannels([]);
-            $rootScope.$apply();
-        });
+            tick();
+        }));
     });
 
     describe('loadGameChannels()', () => {
@@ -178,42 +182,41 @@ context('channel service unit test', () => {
             const expected = 17;
 
             service.loadGameChannels([], expected);
-            $rootScope.$apply();
 
             sinonExpect.calledOnce(channelHttpStub.getChannelsByGameId);
             sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expected);
         });
 
-        it('should load game channels', () => {
+        it('should load game channels', fakeAsync(() => {
 
             const cache = [];
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            channelHttpStub.getChannelsByGameId.returns($q.resolve(expected));
+            channelHttpStub.getChannelsByGameId.resolves(expected);
 
             service.loadGameChannels(cache, 17);
-            $rootScope.$apply();
+            tick();
 
             expect(cache).to.deep.equal(expected);
-        });
+        }));
 
-        it('should preserve original channels when failed to fetch game channel data', () => {
+        it('should preserve original channels when failed to fetch game channel data', fakeAsync(() => {
 
             const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = cache.slice();
-            channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
+            channelHttpStub.getChannelsByGameId.rejects(new Error());
 
             service.loadGameChannels(cache, 17).catch(() => null);
-            $rootScope.$apply();
+            tick();
 
             expect(cache).to.deep.equal(expected);
-        });
+        }));
 
-        it('should not throw error when failed to fetch game channel data', () => {
+        it('should not throw error when failed to fetch game channel data', fakeAsync(() => {
 
-            channelHttpStub.getChannelsByGameId.returns($q.reject(new Error()));
+            channelHttpStub.getChannelsByGameId.rejects(new Error());
 
             service.loadGameChannels([], 17);
-            $rootScope.$apply();
-        });
+            tick();
+        }));
     });
 });
