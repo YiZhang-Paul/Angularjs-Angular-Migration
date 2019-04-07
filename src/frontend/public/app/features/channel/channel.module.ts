@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { downgradeComponent } from '@angular/upgrade/static';
 import * as angular from 'angular';
 
+import { GameModule } from '../game/game.module';
 import { SharedModule } from '../../shared/shared.module';
 
 import { ChannelCardComponent } from './channel-card/channel-card.component';
@@ -11,7 +12,10 @@ import { ChannelService } from './channel.service';
 import * as ChannelModuleAjs from './channel.module.ajs.js';
 
 @NgModule({
-    imports: [SharedModule],
+    imports: [
+        GameModule,
+        SharedModule
+    ],
     providers: [ChannelService],
     declarations: [
         ChannelCardComponent,

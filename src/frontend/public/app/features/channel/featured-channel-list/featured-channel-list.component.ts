@@ -11,8 +11,9 @@ import { ViewHistoryManager } from '../../../core/upgraded-providers/view-histor
 })
 export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
+    public channels = [];
+
     private _task: any = null;
-    private _channels = [];
 
     private _bookmarkManager: BookmarkManager;
     private _channelService: ChannelService;
@@ -32,7 +33,7 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        this._channelService.loadFeaturedChannels(this._channels);
+        this._channelService.loadFeaturedChannels(this.channels);
         this.setupChannelLoading();
     }
 
@@ -40,7 +41,7 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
         this._task = setInterval(() => {
 
-            this._channelService.loadFeaturedChannels(this._channels);
+            this._channelService.loadFeaturedChannels(this.channels);
 
         }, 10 * 1000);
     }

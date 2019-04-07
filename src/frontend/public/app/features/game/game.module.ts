@@ -17,7 +17,8 @@ import * as GameModuleAjs from './game.module.ajs.js';
     entryComponents: [
         GameCardComponent,
         GameListComponent
-    ]
+    ],
+    exports: [GameCardComponent]
 })
 export class GameModule { }
 
