@@ -7,6 +7,7 @@ import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPane
 import { $rootScopeProvider } from './upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
+import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http.service';
 import { bookmarkManagerProvider } from './upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
 import { customRoutingServiceProvider } from './upgraded-providers/custom-routing-provider/custom-routing-provider';
@@ -24,6 +25,7 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         $rootScopeProvider,
         $stateParamsProvider,
         AuthenticatorService,
+        BookmarkHttpService,
         bookmarkManagerProvider,
         ChannelHttpService,
         customRoutingServiceProvider,
@@ -38,7 +40,8 @@ export class CoreModule { }
 
 angular.module(CoreModuleAjs.default)
     .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
-    .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any)
+    .factory('bookmarkHttpService', downgradeInjectable(BookmarkHttpService) as any)
     .factory('channelHttpService', downgradeInjectable(ChannelHttpService) as any)
     .factory('gameHttpService', downgradeInjectable(GameHttpService) as any)
-    .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any);
+    .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any)
+    .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any);
