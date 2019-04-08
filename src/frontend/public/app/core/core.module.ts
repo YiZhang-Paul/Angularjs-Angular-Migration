@@ -12,7 +12,7 @@ import { channelHttpProvider } from './upgraded-providers/channel-http-provider/
 import { customRoutingServiceProvider } from './upgraded-providers/custom-routing-provider/custom-routing-provider';
 import { GameHttpService } from './services/http/game-http/game-http.service';
 import { gameManagerProvider } from './upgraded-providers/game-manager-provider/game-manager-provider';
-import { thumbnailPlayerProvider } from './upgraded-providers/thumbnail-player-provider/thumbnail-player-provider';
+import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { viewHistoryManagerProvider } from './upgraded-providers/view-history-manager-provider/view-history-manager-provider';
 import * as CoreModuleAjs from './core.module.ajs.js';
 
@@ -28,7 +28,7 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         customRoutingServiceProvider,
         GameHttpService,
         gameManagerProvider,
-        thumbnailPlayerProvider,
+        ThumbnailPlayerService,
         viewHistoryManagerProvider
     ]
 })
@@ -36,4 +36,5 @@ export class CoreModule { }
 
 angular.module(CoreModuleAjs.default)
     .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
+    .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any)
     .factory('gameHttpService', downgradeInjectable(GameHttpService) as any);

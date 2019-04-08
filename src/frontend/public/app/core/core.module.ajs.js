@@ -4,7 +4,6 @@ import { ChannelHttpService } from './services/http/channel-http/channel-http.se
 import { CustomRoutingService } from './services/custom-routing/custom-routing.service';
 import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
 import { GenericUtilitiesService } from './services/utilities/generic-utilities/generic-utilities.service';
-import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { ViewHistoryHttpService } from './services/http/view-history-http/view-history-http.service';
 import { ViewHistoryManagerService } from './services/data-managers/view-history-manager/view-history-manager.service';
 
@@ -19,6 +18,5 @@ angular.module(moduleName, [])
     .service('customRoutingService', CustomRoutingService)
     .service('gameManagerService', GameManagerService)
     .service('genericUtilitiesService', GenericUtilitiesService)
-    .service('thumbnailPlayerService', ThumbnailPlayerService)
     .service('viewHistoryHttpService', ViewHistoryHttpService)
     .service('viewHistoryManagerService', ViewHistoryManagerService);

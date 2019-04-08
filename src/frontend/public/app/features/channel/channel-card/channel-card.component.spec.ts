@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { ThumbnailPlayer } from '../../../core/upgraded-providers/thumbnail-player-provider/thumbnail-player-provider';
+import { ThumbnailPlayerService } from '../../../core/services/utilities/thumbnail-player/thumbnail-player.service';
 import { stubThumbnailPlayerService } from '../../../testing/stubs/custom/thumbnail-player.service.stub';
 
 import { ChannelCardComponent } from './channel-card.component';
@@ -26,7 +26,7 @@ context('channel card component unit test', () => {
 
             imports: [SharedModule],
             declarations: [ChannelCardComponent],
-            providers: [{ provide: ThumbnailPlayer, useValue: thumbnailPlayerStub }]
+            providers: [{ provide: ThumbnailPlayerService, useValue: thumbnailPlayerStub }]
         });
 
         fixture = TestBed.createComponent(ChannelCardComponent);

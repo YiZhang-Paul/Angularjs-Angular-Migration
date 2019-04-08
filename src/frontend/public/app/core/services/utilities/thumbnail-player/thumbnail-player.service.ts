@@ -1,11 +1,16 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ThumbnailPlayerService {
 
-    play(thumbnail) {
+    public play(thumbnail) {
 
         thumbnail.srcElement.play();
     }
 
-    stop(thumbnail) {
+    public stop(thumbnail) {
 
         thumbnail.srcElement.pause();
         thumbnail.srcElement.currentTime = 0;

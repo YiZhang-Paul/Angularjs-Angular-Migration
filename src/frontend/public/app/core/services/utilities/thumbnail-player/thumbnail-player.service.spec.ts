@@ -1,16 +1,14 @@
-import CoreModule from '../../../core.module.ajs';
+import { TestBed } from '@angular/core/testing';
+import { expect } from 'chai';
+import { assert as sinonExpect, stub } from 'sinon';
 
-const module = angular.mock.module;
-const stub = sinon.stub;
-const sinonExpect = sinon.assert;
+import { ThumbnailPlayerService } from './thumbnail-player.service';
 
 context('thumbnail player service unit test', () => {
 
     let service;
 
     let domElementStub;
-
-    beforeEach(module(CoreModule));
 
     beforeEach('stubs setup', () => {
 
@@ -22,14 +20,20 @@ context('thumbnail player service unit test', () => {
         };
     });
 
-    beforeEach('general test setup', inject($injector => {
+    beforeEach('general test setup', () => {
 
-        service = $injector.get('thumbnailPlayerService');
-    }));
+        TestBed.configureTestingModule({
+
+            providers: [ThumbnailPlayerService]
+        });
+
+        service = TestBed.get(ThumbnailPlayerService);
+    });
 
     it('should resolve', () => {
 
         expect(service).is.not.null;
+        expect(service).to.be.instanceOf(ThumbnailPlayerService);
     });
 
     describe('play()', () => {
