@@ -163,7 +163,7 @@ context('view history http service unit test', () => {
             const promise = service.addHistory({});
             httpController.expectOne(_ => true).flush(expected);
 
-            const result = await promise;
+            const result = JSON.parse(await promise);
 
             expect(result).to.deep.equal(expected);
         });
@@ -215,7 +215,7 @@ context('view history http service unit test', () => {
             const promise = service.deleteHistory(id);
             httpController.expectOne(_ => true).flush(expected);
 
-            const result = await promise;
+            const result = JSON.parse(await promise);
 
             expect(result).to.deep.equal(expected);
         });
@@ -265,7 +265,7 @@ context('view history http service unit test', () => {
             const promise = service.deleteHistories();
             httpController.expectOne(_ => true).flush(expected);
 
-            const result = await promise;
+            const result = JSON.parse(await promise);
 
             expect(result).to.deep.equal(expected);
         });

@@ -153,7 +153,7 @@ context('bookmark http service unit test', () => {
             const promise = service.addBookmark(expected);
             httpController.expectOne(_ => true).flush(expected);
 
-            const result = await promise;
+            const result = JSON.parse(await promise);
 
             expect(result).to.deep.equal(expected);
         });
@@ -205,7 +205,7 @@ context('bookmark http service unit test', () => {
             const promise = service.deleteBookmark(id);
             httpController.expectOne(_ => true).flush(expected);
 
-            const result = await promise;
+            const result = JSON.parse(await promise);
 
             expect(result).to.deep.equal(expected);
         });
