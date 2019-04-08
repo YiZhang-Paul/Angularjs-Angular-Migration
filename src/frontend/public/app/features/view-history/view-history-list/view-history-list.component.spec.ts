@@ -3,7 +3,7 @@ import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
 import { ViewHistoryModule } from '../view-history.module';
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
 import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub.js';

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
 
 @Component({

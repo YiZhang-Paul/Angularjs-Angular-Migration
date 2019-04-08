@@ -13,7 +13,7 @@ import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manag
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 
 import { SidebarComponent } from './sidebar.component';
 

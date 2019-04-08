@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
 
 import { ViewHistoryListService } from './view-history-list.service';

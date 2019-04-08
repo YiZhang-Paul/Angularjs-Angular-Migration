@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
 import { SharedModule } from '../../../shared.module';
-import { CustomRoutingService } from '../../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../../core/services/custom-routing/custom-routing.service';
 import { stubCustomRoutingService } from '../../../../testing/stubs/custom/custom-routing.service.stub.js';
 
 import { SidebarBadgeComponent } from './sidebar-badge.component';

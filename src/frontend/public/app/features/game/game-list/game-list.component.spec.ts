@@ -3,7 +3,7 @@ import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
 import { GameModule } from '../game.module';
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
 import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
 import { stubGameManagerService } from '../../../testing/stubs/custom/game-manager.service.stub.js';
