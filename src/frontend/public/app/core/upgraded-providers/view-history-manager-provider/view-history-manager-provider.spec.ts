@@ -2,7 +2,7 @@ import * as angular from 'angular';
 import { expect } from 'chai';
 
 import * as CoreModule from '../../core.module.ajs';
-import { stubAuthenticatorServiceNg1 } from '../../../testing/stubs/custom/authenticator.service.stub.js';
+import { stubViewHistoryHttpServiceNg1 } from '../../../testing/stubs/custom/view-history-http.service.stub.js';
 
 import { viewHistoryManagerFactory } from './view-history-manager-provider';
 
@@ -15,7 +15,7 @@ context('view history manager service upgraded provider unit test', () => {
 
     beforeEach('stubs setup', () => {
 
-        stubAuthenticatorServiceNg1(module, inject);
+        stubViewHistoryHttpServiceNg1(module, inject);
     });
 
     it('should resolve', inject($injector => {
