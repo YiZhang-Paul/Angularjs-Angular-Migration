@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 import { GameModule } from '../game.module';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
+import { GameManagerService } from '../../../core/services/data-managers/game-manager/game-manager.service';
 import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
 import { stubGameManagerService } from '../../../testing/stubs/custom/game-manager.service.stub.js';
 
@@ -33,7 +33,7 @@ context('game list component unit test', () => {
             providers: [
 
                 { provide: CustomRoutingService, useValue: customRoutingStub },
-                { provide: GameManager, useValue: gameManagerStub }
+                { provide: GameManagerService, useValue: gameManagerStub }
             ]
         });
 
@@ -41,7 +41,7 @@ context('game list component unit test', () => {
         fixture = TestBed.createComponent(GameListComponent);
         component = fixture.componentInstance;
         customRoutingStub = TestBed.get(CustomRoutingService);
-        gameManagerStub = TestBed.get(GameManager);
+        gameManagerStub = TestBed.get(GameManagerService);
     });
 
     afterEach('test teardown', () => {

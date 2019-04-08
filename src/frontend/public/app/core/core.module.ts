@@ -13,7 +13,7 @@ import { bookmarkManagerProvider } from './upgraded-providers/bookmark-manager-p
 import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
 import { CustomRoutingService } from './services/custom-routing/custom-routing.service';
 import { GameHttpService } from './services/http/game-http/game-http.service';
-import { gameManagerProvider } from './upgraded-providers/game-manager-provider/game-manager-provider';
+import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
 import { GenericUtilitiesService } from './services/utilities/generic-utilities/generic-utilities.service';
 import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { viewHistoryManagerProvider } from './upgraded-providers/view-history-manager-provider/view-history-manager-provider';
@@ -32,7 +32,7 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         ChannelHttpService,
         CustomRoutingService,
         GameHttpService,
-        gameManagerProvider,
+        GameManagerService,
         GenericUtilitiesService,
         ThumbnailPlayerService,
         viewHistoryManagerProvider
@@ -46,5 +46,6 @@ angular.module(CoreModuleAjs.default)
     .factory('channelHttpService', downgradeInjectable(ChannelHttpService) as any)
     .factory('customRoutingService', downgradeInjectable(CustomRoutingService) as any)
     .factory('gameHttpService', downgradeInjectable(GameHttpService) as any)
+    .factory('gameManagerService', downgradeInjectable(GameManagerService) as any)
     .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any)
     .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any);

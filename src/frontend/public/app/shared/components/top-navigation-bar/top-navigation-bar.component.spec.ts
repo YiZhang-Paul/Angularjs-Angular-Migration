@@ -6,7 +6,7 @@ import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$md
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
+import { GameManagerService } from '../../../core/services/data-managers/game-manager/game-manager.service';
 
 import { TopNavigationBarComponent } from './top-navigation-bar.component';
 
@@ -26,7 +26,7 @@ context('top navigation bar component unit test', () => {
                 { provide: $rootScope, useValue: {} },
                 { provide: AuthenticatorService, useValue: {} },
                 { provide: CustomRoutingService, useValue: {} },
-                { provide: GameManager, useValue: {} }
+                { provide: GameManagerService, useValue: {} }
             ]
         });
 
