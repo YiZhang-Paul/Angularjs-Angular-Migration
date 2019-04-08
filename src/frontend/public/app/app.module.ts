@@ -3,10 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import * as AppModuleAjs from './app.module.ajs.js';
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
+import * as AppModuleAjs from './app.module.ajs.js';
 
 @NgModule({
     imports: [

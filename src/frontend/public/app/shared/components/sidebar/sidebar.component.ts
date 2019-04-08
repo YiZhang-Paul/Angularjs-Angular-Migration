@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
 import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
     private _states = ['index.bookmarks', 'index.featured', 'index.histories'];
 
     private _$scope: any;
-    private _authenticator: Authenticator;
+    private _authenticator: AuthenticatorService;
     private _bookmarkManager: BookmarkManager;
     private _channelHttp: ChannelHttp;
     private _viewHistoryManager: ViewHistoryManager;
@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
     constructor(
 
         $rootScope: $rootScope,
-        authenticator: Authenticator,
+        authenticator: AuthenticatorService,
         bookmarkManager: BookmarkManager,
         channelHttp: ChannelHttp,
         viewHistoryManager: ViewHistoryManager

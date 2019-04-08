@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Authenticator } from '../../../upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,9 +11,9 @@ export class UserHttpService {
     private readonly _api = 'http://127.0.0.1:4150/api/v1/user';
 
     private _http: HttpClient;
-    private _authenticator: Authenticator;
+    private _authenticator: AuthenticatorService;
 
-    constructor(http: HttpClient, authenticator: Authenticator) {
+    constructor(http: HttpClient, authenticator: AuthenticatorService) {
 
         this._http = http;
         this._authenticator = authenticator;

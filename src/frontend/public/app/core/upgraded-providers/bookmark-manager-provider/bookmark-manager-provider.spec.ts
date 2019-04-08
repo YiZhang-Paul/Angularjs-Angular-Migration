@@ -3,6 +3,7 @@ import { expect } from 'chai';
 
 import * as CoreModule from '../../core.module.ajs';
 import * as SharedModule from '../../../shared/shared.module.ajs';
+import { stubAuthenticatorServiceNg1 } from '../../../testing/stubs/custom/authenticator.service.stub.js';
 
 import { bookmarkManagerFactory } from './bookmark-manager-provider';
 
@@ -13,6 +14,11 @@ context('bookmark manager service upgraded provider unit test', () => {
 
     beforeEach(module(CoreModule.default));
     beforeEach(module(SharedModule.default));
+
+    beforeEach('stubs setup', () => {
+
+        stubAuthenticatorServiceNg1(module, inject);
+    });
 
     it('should resolve', inject($injector => {
 

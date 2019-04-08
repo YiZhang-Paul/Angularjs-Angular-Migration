@@ -4,7 +4,7 @@ import { assert as sinonExpect } from 'sinon';
 
 import { SharedModule } from '../../shared.module';
 import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
-import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
 import { stub$mdPanel } from '../../../testing/stubs/built-in/$md-panel.stub.js';
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub.js';
@@ -36,7 +36,7 @@ context('user login component unit test', () => {
             providers: [
 
                 { provide: $mdPanel, useValue: $mdPanelStub },
-                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: AuthenticatorService, useValue: authenticatorStub },
                 { provide: UserLoginService, useValue: userLoginStub }
             ]
         });

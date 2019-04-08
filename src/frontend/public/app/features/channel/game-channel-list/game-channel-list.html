@@ -1,19 +1,19 @@
-<div class="game-channel-list-container non-selectable" ng-show="$ctrl.game">
+<div class="game-channel-list-container non-selectable" *ngIf="game">
     <div class="game-cover">
-        <game-card ng-if="$ctrl.game" [game]="$ctrl.game"></game-card>
+        <game-card *ngIf="game" [game]="game"></game-card>
 
         <div class="game-details">
-            <span class="game-title">{{ $ctrl.game.name | capitalize | uppercaseRomanNumerals }}</span></br></br>
-            <div class="game-view-counts">{{ $ctrl.game.view_count | shortViewCount }} {{ 'watching' }}</div>
+            <span class="game-title">{{ game.name | capitalize | uppercaseRomanNumerals }}</span><br><br>
+            <div class="game-view-counts">{{ game.view_count | shortViewCount }} {{ 'watching' }}</div>
         </div>
     </div>
 
     <channel-card
-        ng-repeat="channel in $ctrl.channels"
-        ng-click="$ctrl.addHistory(channel)"
-        (on-follow)="$ctrl.follow(channel)"
-        (on-unfollow)="$ctrl.unfollow(channel)"
-        [is-followed]="$ctrl.isFollowed(channel)"
+        *ngFor="let channel of channels"
+        (click)="addHistory(channel)"
+        (onFollow)="follow(channel)"
+        (onUnfollow)="unfollow(channel)"
+        [isFollowed]="isFollowed(channel)"
         [channel]="channel">
     </channel-card>
 </div>

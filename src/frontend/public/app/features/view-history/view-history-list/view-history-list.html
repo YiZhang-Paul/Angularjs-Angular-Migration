@@ -1,18 +1,18 @@
 <div class="view-history-list-container non-selectable">
     <div class="clear-view-history-button"
-        ng-show="$ctrl.histories.length"
-        ng-click="$ctrl.confirmClearHistories($event)">Clear History
+        *ngIf="histories.length"
+        (click)="confirmClearHistories($event)">Clear History
     </div>
 
     <span class="empty-view-history-message"
-        ng-hide="$ctrl.histories.length">This place is so quiet...
+        *ngIf="!histories.length">This place is so quiet...
     </span>
 
     <view-history-card
-        ng-repeat="history in $ctrl.histories"
-        (on-delete)="$ctrl.deleteHistory(history)"
-        (on-channel-navigation)="$ctrl.toChannelsView(history.game_id)"
-        [is-static-thumbnail]="$ctrl.isStaticImage(history.thumbnail)"
-        [view-history]="history">
+        *ngFor="let history of histories"
+        (onDelete)="deleteHistory(history)"
+        (onChannelNavigation)="toChannelsView(history.game_id)"
+        [isStaticThumbnail]="isStaticImage(history.thumbnail)"
+        [viewHistory]="history">
     </view-history-card>
 </div>

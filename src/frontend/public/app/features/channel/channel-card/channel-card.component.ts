@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { ThumbnailPlayer } from '../../../core/upgraded-providers/thumbnail-player-provider/thumbnail-player-provider';
+import { ThumbnailPlayerService } from '../../../core/services/utilities/thumbnail-player/thumbnail-player.service';
 
 @Component({
     selector: 'channel-card',
@@ -14,9 +14,9 @@ export class ChannelCardComponent {
     @Output() public onFollow = new EventEmitter();
     @Output() public onUnfollow = new EventEmitter();
 
-    private _thumbnailPlayer: ThumbnailPlayer;
+    private _thumbnailPlayer: ThumbnailPlayerService;
 
-    constructor(thumbnailPlayer: ThumbnailPlayer) {
+    constructor(thumbnailPlayer: ThumbnailPlayerService) {
 
         this._thumbnailPlayer = thumbnailPlayer;
     }

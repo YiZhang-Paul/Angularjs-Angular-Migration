@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import * as angular from 'angular';
 
 import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
-import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
 
 import { LoginPanelComponent } from './login-panel/login-panel.component.js';
@@ -16,13 +16,13 @@ export class UserLoginComponent {
 
     private _user: any = null;
     private _$mdPanel: $mdPanel;
-    private _authenticator: Authenticator;
+    private _authenticator: AuthenticatorService;
     private _userLogin: UserLoginService;
 
     constructor(
 
         $mdPanel: $mdPanel,
-        authenticator: Authenticator,
+        authenticator: AuthenticatorService,
         userLogin: UserLoginService
 
     ) {

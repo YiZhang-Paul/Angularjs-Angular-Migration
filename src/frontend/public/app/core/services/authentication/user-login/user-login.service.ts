@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Authenticator } from '../../../upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
 
 @Injectable({
@@ -10,13 +10,13 @@ import { UserHttpService } from '../../http/user-http/user-http.service';
 export class UserLoginService {
 
     private _$rootScope: $rootScope;
-    private _authenticator: Authenticator;
+    private _authenticator: AuthenticatorService;
     private _userHttp: UserHttpService;
 
     constructor(
 
         $rootScope: $rootScope,
-        authenticator: Authenticator,
+        authenticator: AuthenticatorService,
         userHttp: UserHttpService
 
     ) {

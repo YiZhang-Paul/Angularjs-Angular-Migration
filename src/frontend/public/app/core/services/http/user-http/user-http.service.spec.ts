@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { Authenticator } from '../../../upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
 import { hasAuthenticationToken } from '../../../../testing/test-verifications/test-verifications.js';
 
@@ -17,18 +17,20 @@ context('user http service unit test', () => {
 
     let authenticatorStub;
 
-    beforeEach('general test setup', () => {
+    beforeEach('stubs setup', () => {
 
         authenticatorStub = stubAuthenticatorService();
+    });
+
+    beforeEach('general test setup', () => {
 
         TestBed.configureTestingModule({
 
             imports: [HttpClientTestingModule],
-
             providers: [
 
                 UserHttpService,
-                { provide: Authenticator, useValue: authenticatorStub }
+                { provide: AuthenticatorService, useValue: authenticatorStub }
             ]
         });
 
