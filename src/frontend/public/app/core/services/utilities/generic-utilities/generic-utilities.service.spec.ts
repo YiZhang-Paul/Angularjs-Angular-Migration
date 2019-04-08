@@ -1,17 +1,21 @@
-import CoreModule from '../../../core.module.ajs';
+import { TestBed } from '@angular/core/testing';
+import { expect } from 'chai';
 
-const module = angular.mock.module;
+import { GenericUtilitiesService } from './generic-utilities.service';
 
 context('generic utilities service unit test', () => {
 
     let service;
 
-    beforeEach(module(CoreModule));
+    beforeEach('general test setup', () => {
 
-    beforeEach('general test setup', inject($injector => {
+        TestBed.configureTestingModule({
 
-        service = $injector.get('genericUtilitiesService');
-    }));
+            providers: [GenericUtilitiesService]
+        });
+
+        service = TestBed.get(GenericUtilitiesService);
+    });
 
     it('should resolve', () => {
 

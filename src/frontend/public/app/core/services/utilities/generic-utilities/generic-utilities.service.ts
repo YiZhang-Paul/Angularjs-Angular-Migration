@@ -1,28 +1,33 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root'
+})
 export class GenericUtilitiesService {
 
-    joinText(text, delimiter = '-') {
+    public joinText(text, delimiter = '-') {
 
         const trimmed = text.trim().replace(/\s{2,}/g, ' ');
 
         return trimmed.replace(/\s/g, delimiter);
     }
 
-    excludeIndex(collection, index) {
+    public excludeIndex(collection, index) {
 
         return excludeIndex(collection, index);
     }
 
-    hasMatchingValues(a, b, keys) {
+    public hasMatchingValues(a, b, keys) {
 
         return keys.every(key => a[key] === b[key]);
     }
 
-    hasOwnProperties(object, keys) {
+    public hasOwnProperties(object, keys) {
 
         return keys.every(key => object.hasOwnProperty(key));
     }
 
-    findByProperties(objects, object, keys) {
+    public findByProperties(objects, object, keys) {
 
         const result = objects.find(_ => {
 
