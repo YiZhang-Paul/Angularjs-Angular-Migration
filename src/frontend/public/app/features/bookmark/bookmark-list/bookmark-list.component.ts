@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 
 @Component({
     selector: 'bookmark-list',
@@ -9,9 +9,9 @@ import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manag
 })
 export class BookmarkListComponent implements OnInit {
 
-    private _bookmarkManager: BookmarkManager;
+    private _bookmarkManager: BookmarkManagerService;
 
-    constructor(bookmarkManager: BookmarkManager) {
+    constructor(bookmarkManager: BookmarkManagerService) {
 
         this._bookmarkManager = bookmarkManager;
     }

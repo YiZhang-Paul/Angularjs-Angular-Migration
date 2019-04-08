@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ChannelService } from '../channel.service';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
@@ -21,7 +21,7 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
 
     private _gameHttp: GameHttpService;
     private _channelService: ChannelService;
-    private _bookmarkManager: BookmarkManager;
+    private _bookmarkManager: BookmarkManagerService;
     private _$stateParams: $stateParams;
     private _viewHistoryManager: ViewHistoryManagerService;
 
@@ -29,7 +29,7 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
 
         gameHttp: GameHttpService,
         channelService: ChannelService,
-        bookmarkManager: BookmarkManager,
+        bookmarkManager: BookmarkManagerService,
         $stateParams: $stateParams,
         viewHistoryManager: ViewHistoryManagerService
 

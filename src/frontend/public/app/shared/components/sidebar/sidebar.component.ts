@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
@@ -22,7 +22,7 @@ export class SidebarComponent implements OnInit {
 
     private _$scope: any;
     private _authenticator: AuthenticatorService;
-    private _bookmarkManager: BookmarkManager;
+    private _bookmarkManager: BookmarkManagerService;
     private _channelHttp: ChannelHttpService;
     private _viewHistoryManager: ViewHistoryManagerService;
 
@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit {
 
         $rootScope: $rootScope,
         authenticator: AuthenticatorService,
-        bookmarkManager: BookmarkManager,
+        bookmarkManager: BookmarkManagerService,
         channelHttp: ChannelHttpService,
         viewHistoryManager: ViewHistoryManagerService
 

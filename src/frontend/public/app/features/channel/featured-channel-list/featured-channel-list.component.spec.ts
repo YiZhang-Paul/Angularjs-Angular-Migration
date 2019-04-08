@@ -3,7 +3,7 @@ import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelService } from '../channel.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
@@ -42,7 +42,7 @@ context('featured channel list component unit test', () => {
             ],
             providers: [
 
-                { provide: BookmarkManager, useValue: bookmarkManagerStub },
+                { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
                 { provide: ChannelService, useValue: channelServiceStub },
                 { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
@@ -51,7 +51,7 @@ context('featured channel list component unit test', () => {
         timer = useFakeTimers();
         fixture = TestBed.createComponent(FeaturedChannelListComponent);
         component = fixture.componentInstance;
-        bookmarkManagerStub = TestBed.get(BookmarkManager);
+        bookmarkManagerStub = TestBed.get(BookmarkManagerService);
         channelServiceStub = TestBed.get(ChannelService);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });

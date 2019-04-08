@@ -1,7 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
-import * as angular from 'angular';
 
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { ViewHistoryHttpService } from '../../http/view-history-http/view-history-http.service';
@@ -10,16 +9,12 @@ import { stubViewHistoryHttpService } from '../../../../testing/stubs/custom/vie
 
 import { ViewHistoryManagerService } from './view-history-manager.service';
 
-const module = angular.mock.module;
-
 context('view history manager service unit test', () => {
 
     let service: ViewHistoryManagerService;
 
     let $rootScopeStub;
     let viewHistoryHttpStub;
-
-    beforeEach(module('ngMaterial'));
 
     beforeEach('stubs setup', () => {
 

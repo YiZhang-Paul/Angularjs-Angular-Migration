@@ -9,7 +9,7 @@ import { AuthenticatorService } from '../../../core/services/authentication/auth
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
 import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
@@ -58,7 +58,7 @@ context('sidebar component unit test', () => {
                 { provide: $rootScope, useValue: $rootScopeAjs },
                 { provide: AuthenticatorService, useValue: authenticatorStub },
                 { provide: ChannelHttpService, useValue: channelHttpStub },
-                { provide: BookmarkManager, useValue: bookmarkManagerStub },
+                { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
                 { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub },
                 { provide: CustomRoutingService, useValue: {} }
             ]
@@ -68,7 +68,7 @@ context('sidebar component unit test', () => {
         component = fixture.componentInstance;
         authenticatorStub = TestBed.get(AuthenticatorService);
         channelHttpStub = TestBed.get(ChannelHttpService);
-        bookmarkManagerStub = TestBed.get(BookmarkManager);
+        bookmarkManagerStub = TestBed.get(BookmarkManagerService);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     }));
 
