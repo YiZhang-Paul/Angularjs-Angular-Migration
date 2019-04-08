@@ -6,7 +6,7 @@ import { $mdDialogProvider } from './upgraded-providers/$mdDialog-provider/$mdDi
 import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { $rootScopeProvider } from './upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
-import { authenticatorProvider } from './upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
 import { bookmarkManagerProvider } from './upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { channelHttpProvider } from './upgraded-providers/channel-http-provider/channel-http-provider';
 import { customRoutingServiceProvider } from './upgraded-providers/custom-routing-provider/custom-routing-provider';
@@ -22,7 +22,7 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         $mdPanelProvider,
         $rootScopeProvider,
         $stateParamsProvider,
-        authenticatorProvider,
+        AuthenticatorService,
         bookmarkManagerProvider,
         channelHttpProvider,
         customRoutingServiceProvider,
@@ -35,4 +35,5 @@ import * as CoreModuleAjs from './core.module.ajs.js';
 export class CoreModule { }
 
 angular.module(CoreModuleAjs.default)
+    .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
     .factory('gameHttpService', downgradeInjectable(GameHttpService) as any);

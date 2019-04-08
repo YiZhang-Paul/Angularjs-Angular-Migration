@@ -1,4 +1,3 @@
-import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
 import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http.service';
 import { BookmarkManagerService } from './services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
@@ -14,7 +13,6 @@ const moduleName = 'sample-app-core';
 export default moduleName;
 
 angular.module(moduleName, [])
-    .service('authenticatorService', AuthenticatorService)
     .service('bookmarkHttpService', BookmarkHttpService)
     .service('bookmarkManagerService', BookmarkManagerService)
     .service('channelHttpService', ChannelHttpService)

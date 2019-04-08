@@ -5,7 +5,7 @@ import * as angular from 'angular';
 
 import { SharedModule } from '../../shared.module';
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
 import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
@@ -56,7 +56,7 @@ context('sidebar component unit test', () => {
             providers: [
 
                 { provide: $rootScope, useValue: $rootScopeAjs },
-                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: AuthenticatorService, useValue: authenticatorStub },
                 { provide: ChannelHttp, useValue: channelHttpStub },
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
                 { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
@@ -66,7 +66,7 @@ context('sidebar component unit test', () => {
 
         fixture = TestBed.createComponent(SidebarComponent);
         component = fixture.componentInstance;
-        authenticatorStub = TestBed.get(Authenticator);
+        authenticatorStub = TestBed.get(AuthenticatorService);
         channelHttpStub = TestBed.get(ChannelHttp);
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManager);

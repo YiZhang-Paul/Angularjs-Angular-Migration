@@ -1,14 +1,21 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthenticatorService {
 
-    constructor($http) {
-        'ngInject';
-        this.$http = $http;
+    private readonly _api = 'http://127.0.0.1:4150/api/v1/authenticate';
+    private _header = '';
+    private _payload = '';
+    private _signature = '';
 
-        this._header = '';
-        this._payload = '';
-        this._signature = '';
+    private _http: HttpClient;
 
-        this.api = 'http://127.0.0.1:4150/api/v1/authenticate';
+    constructor(http: HttpClient) {
+
+        this._http = http;
     }
 
     get token() {
@@ -31,19 +38,20 @@ export class AuthenticatorService {
         return !!(this._header && this._payload && this._signature);
     }
 
-    requestToken(username, password) {
+    public requestToken(username, password) {
 
         const data = { username, password };
-        const options = [this.api, data];
 
-        return this.$http.post(...options).then(response => {
+        return this._http.post(this._api, data).toPromise().then((response: { token: any }) => {
 
-            const token = response.data.token;
+            const token = response.token;
             [this._header, this._payload, this._signature] = token.split('.');
+
+            return token;
         });
     }
 
-    clearToken() {
+    public clearToken() {
 
         this._header = '';
         this._payload = '';

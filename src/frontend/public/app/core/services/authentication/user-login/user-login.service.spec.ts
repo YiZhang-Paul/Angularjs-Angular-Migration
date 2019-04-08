@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Authenticator } from '../../../upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
 import { stub$rootScope } from '../../../../testing/stubs/built-in/$root-scope.stub.js';
 import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
@@ -34,14 +34,14 @@ context('user login service unit test', () => {
 
                 UserLoginService,
                 { provide: $rootScope, useValue: $rootScopeStub },
-                { provide: Authenticator, useValue: authenticatorStub },
+                { provide: AuthenticatorService, useValue: authenticatorStub },
                 { provide: UserHttpService, useValue: userHttpStub }
             ]
         });
 
         service = TestBed.get(UserLoginService);
         $rootScopeStub = TestBed.get($rootScope);
-        authenticatorStub = TestBed.get(Authenticator);
+        authenticatorStub = TestBed.get(AuthenticatorService);
         userHttpStub = TestBed.get(UserHttpService);
     });
 

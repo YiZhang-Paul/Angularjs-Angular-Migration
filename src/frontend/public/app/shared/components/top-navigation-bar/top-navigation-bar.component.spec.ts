@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { SharedModule } from '../../shared.module';
 import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Authenticator } from '../../../core/upgraded-providers/authenticator-provider/authenticator-provider';
+import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
 import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
 
@@ -24,7 +24,7 @@ context('top navigation bar component unit test', () => {
 
                 { provide: $mdPanel, useValue: {} },
                 { provide: $rootScope, useValue: {} },
-                { provide: Authenticator, useValue: {} },
+                { provide: AuthenticatorService, useValue: {} },
                 { provide: CustomRoutingService, useValue: {} },
                 { provide: GameManager, useValue: {} }
             ]
