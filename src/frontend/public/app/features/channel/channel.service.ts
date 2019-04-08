@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { ChannelHttp } from '../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { ChannelHttpService } from '../../core/services/http/channel-http/channel-http.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChannelService {
 
-    private _channelHttp: ChannelHttp;
+    private _channelHttp: ChannelHttpService;
 
-    constructor(channelHttp: ChannelHttp) {
+    constructor(channelHttp: ChannelHttpService) {
 
         this._channelHttp = channelHttp;
     }

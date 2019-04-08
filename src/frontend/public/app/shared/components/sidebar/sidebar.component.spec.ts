@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared.module';
 import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
-import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
 import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
@@ -57,7 +57,7 @@ context('sidebar component unit test', () => {
 
                 { provide: $rootScope, useValue: $rootScopeAjs },
                 { provide: AuthenticatorService, useValue: authenticatorStub },
-                { provide: ChannelHttp, useValue: channelHttpStub },
+                { provide: ChannelHttpService, useValue: channelHttpStub },
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
                 { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
                 { provide: CustomRoutingService, useValue: {} }
@@ -67,7 +67,7 @@ context('sidebar component unit test', () => {
         fixture = TestBed.createComponent(SidebarComponent);
         component = fixture.componentInstance;
         authenticatorStub = TestBed.get(AuthenticatorService);
-        channelHttpStub = TestBed.get(ChannelHttp);
+        channelHttpStub = TestBed.get(ChannelHttpService);
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
     }));

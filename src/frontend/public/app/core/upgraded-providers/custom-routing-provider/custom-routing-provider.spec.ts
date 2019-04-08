@@ -3,6 +3,7 @@ import { expect } from 'chai';
 
 import * as CoreModule from '../../core.module.ajs';
 import { stub$stateNg1 } from '../../../testing/stubs/third-party/$state.stub.js';
+import { stubChannelHttpServiceNg1 } from '../../../testing/stubs/custom/channel-http.service.stub.js';
 import { stubGameHttpServiceNg1 } from '../../../testing/stubs/custom/game-http.service.stub.js';
 import { stubGenericUtilitiesServiceNg1 } from '../../../testing/stubs/custom/generic-utilities.service.stub.js';
 
@@ -18,6 +19,7 @@ context('custom routing service upgraded provider unit test', () => {
     beforeEach('stubs setup', () => {
 
         stub$stateNg1(module, inject);
+        stubChannelHttpServiceNg1(module, inject);
         stubGameHttpServiceNg1(module, inject);
         stubGenericUtilitiesServiceNg1(module, inject);
     });
