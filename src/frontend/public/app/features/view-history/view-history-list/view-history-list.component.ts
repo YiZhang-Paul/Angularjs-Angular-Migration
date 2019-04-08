@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 import { ViewHistoryListService } from './view-history-list.service';
 
@@ -13,13 +13,13 @@ import { ViewHistoryListService } from './view-history-list.service';
 export class ViewHistoryListComponent implements OnInit {
 
     private _routingService: CustomRoutingService;
-    private _viewHistoryManager: ViewHistoryManager;
+    private _viewHistoryManager: ViewHistoryManagerService;
     private _viewHistoryListService: ViewHistoryListService;
 
     constructor(
 
         routingService: CustomRoutingService,
-        viewHistoryManager: ViewHistoryManager,
+        viewHistoryManager: ViewHistoryManagerService,
         viewHistoryListService: ViewHistoryListService
 
     ) {

@@ -4,7 +4,7 @@ import { ChannelService } from '../channel.service';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
     selector: 'game-channel-list',
@@ -23,7 +23,7 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
     private _channelService: ChannelService;
     private _bookmarkManager: BookmarkManager;
     private _$stateParams: $stateParams;
-    private _viewHistoryManager: ViewHistoryManager;
+    private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
@@ -31,7 +31,7 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         channelService: ChannelService,
         bookmarkManager: BookmarkManager,
         $stateParams: $stateParams,
-        viewHistoryManager: ViewHistoryManager
+        viewHistoryManager: ViewHistoryManagerService
 
     ) {
         this._gameHttp = gameHttp;

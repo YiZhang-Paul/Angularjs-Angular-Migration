@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 import { ViewHistoryModule } from '../view-history.module';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub.js';
 import { stubViewHistoryListService } from '../../../testing/stubs/custom/view-history-list.service.stub.js';
@@ -36,7 +36,7 @@ context('view history list component unit test', () => {
             providers: [
 
                 { provide: CustomRoutingService, useValue: customRoutingStub },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub },
                 { provide: ViewHistoryListService, useValue: viewHistoryListServiceStub }
             ]
         });
@@ -44,7 +44,7 @@ context('view history list component unit test', () => {
         fixture = TestBed.createComponent(ViewHistoryListComponent);
         component = fixture.componentInstance;
         customRoutingStub = TestBed.get(CustomRoutingService);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
         viewHistoryListServiceStub = TestBed.get(ViewHistoryListService);
     });
 

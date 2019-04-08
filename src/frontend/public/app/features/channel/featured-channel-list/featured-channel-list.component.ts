@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelService } from '../channel.service';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
     selector: 'featured-channel-list',
@@ -17,13 +17,13 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
     private _bookmarkManager: BookmarkManager;
     private _channelService: ChannelService;
-    private _viewHistoryManager: ViewHistoryManager;
+    private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
         bookmarkManager: BookmarkManager,
         channelService: ChannelService,
-        viewHistoryManager: ViewHistoryManager
+        viewHistoryManager: ViewHistoryManagerService
 
     ) {
         this._bookmarkManager = bookmarkManager;

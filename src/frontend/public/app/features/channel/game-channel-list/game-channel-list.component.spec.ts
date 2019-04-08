@@ -8,7 +8,7 @@ import { GameHttpService } from '../../../core/services/http/game-http/game-http
 import { ChannelService } from '../channel.service';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
@@ -57,7 +57,7 @@ context('game channel list component unit test', () => {
                 { provide: ChannelService, useValue: channelServiceStub },
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
                 { provide: $stateParams, useValue: {} },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub }
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
 
@@ -67,7 +67,7 @@ context('game channel list component unit test', () => {
         channelServiceStub = TestBed.get(ChannelService);
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         $stateParamsStub = TestBed.get($stateParams);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
     it('should resolve', () => {

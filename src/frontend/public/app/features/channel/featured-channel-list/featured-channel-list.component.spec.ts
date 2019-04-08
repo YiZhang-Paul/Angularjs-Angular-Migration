@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { SharedModule } from '../../../shared/shared.module';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelService } from '../channel.service';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
@@ -44,7 +44,7 @@ context('featured channel list component unit test', () => {
 
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
                 { provide: ChannelService, useValue: channelServiceStub },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub }
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
 
@@ -53,7 +53,7 @@ context('featured channel list component unit test', () => {
         component = fixture.componentInstance;
         bookmarkManagerStub = TestBed.get(BookmarkManager);
         channelServiceStub = TestBed.get(ChannelService);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
     afterEach('test teardown', () => {

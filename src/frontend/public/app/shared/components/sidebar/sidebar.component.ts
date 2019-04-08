@@ -4,7 +4,7 @@ import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
     selector: 'sidebar',
@@ -24,7 +24,7 @@ export class SidebarComponent implements OnInit {
     private _authenticator: AuthenticatorService;
     private _bookmarkManager: BookmarkManager;
     private _channelHttp: ChannelHttpService;
-    private _viewHistoryManager: ViewHistoryManager;
+    private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
@@ -32,7 +32,7 @@ export class SidebarComponent implements OnInit {
         authenticator: AuthenticatorService,
         bookmarkManager: BookmarkManager,
         channelHttp: ChannelHttpService,
-        viewHistoryManager: ViewHistoryManager
+        viewHistoryManager: ViewHistoryManagerService
 
     ) {
 

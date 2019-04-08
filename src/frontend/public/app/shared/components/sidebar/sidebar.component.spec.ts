@@ -11,7 +11,7 @@ import { ChannelHttpService } from '../../../core/services/http/channel-http/cha
 import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
 import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 
@@ -59,7 +59,7 @@ context('sidebar component unit test', () => {
                 { provide: AuthenticatorService, useValue: authenticatorStub },
                 { provide: ChannelHttpService, useValue: channelHttpStub },
                 { provide: BookmarkManager, useValue: bookmarkManagerStub },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub },
                 { provide: CustomRoutingService, useValue: {} }
             ]
         });
@@ -69,7 +69,7 @@ context('sidebar component unit test', () => {
         authenticatorStub = TestBed.get(AuthenticatorService);
         channelHttpStub = TestBed.get(ChannelHttpService);
         bookmarkManagerStub = TestBed.get(BookmarkManager);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     }));
 
     it('should resolve', () => {

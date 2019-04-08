@@ -17,7 +17,7 @@ import { GameManagerService } from './services/data-managers/game-manager/game-m
 import { GenericUtilitiesService } from './services/utilities/generic-utilities/generic-utilities.service';
 import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { ViewHistoryHttpService } from './services/http/view-history-http/view-history-http.service';
-import { viewHistoryManagerProvider } from './upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { ViewHistoryManagerService } from './services/data-managers/view-history-manager/view-history-manager.service';
 import * as CoreModuleAjs from './core.module.ajs.js';
 
 @NgModule({
@@ -37,7 +37,7 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         GenericUtilitiesService,
         ThumbnailPlayerService,
         ViewHistoryHttpService,
-        viewHistoryManagerProvider
+        ViewHistoryManagerService
     ]
 })
 export class CoreModule { }
@@ -51,4 +51,5 @@ angular.module(CoreModuleAjs.default)
     .factory('gameManagerService', downgradeInjectable(GameManagerService) as any)
     .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any)
     .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any)
-    .factory('viewHistoryHttpService', downgradeInjectable(ViewHistoryHttpService) as any);
+    .factory('viewHistoryHttpService', downgradeInjectable(ViewHistoryHttpService) as any)
+    .factory('viewHistoryManagerService', downgradeInjectable(ViewHistoryManagerService) as any);
