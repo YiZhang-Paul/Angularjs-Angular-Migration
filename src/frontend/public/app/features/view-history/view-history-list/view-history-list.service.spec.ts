@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { assert as sinonExpect, spy, stub } from 'sinon';
+import { spy, stub } from 'sinon';
 import { expect } from 'chai';
 import * as angular from 'angular';
 
@@ -46,26 +46,26 @@ context('view history list service unit test', () => {
         expect(service).to.be.instanceOf(ViewHistoryListService);
     });
 
-    describe('showClearHistoriesDialog()', () => {
+    // describe('showClearHistoriesDialog()', () => {
 
-        it('should show confirmation dialog', () => {
+    //     it('should show confirmation dialog', () => {
 
-            service.showClearHistoriesDialog({});
+    //         service.showClearHistoriesDialog({});
 
-            sinonExpect.calledOnce($mdDialogStub.confirm);
-            sinonExpect.calledOnce($mdDialogStub.show);
-        });
+    //         sinonExpect.calledOnce($mdDialogStub.confirm);
+    //         sinonExpect.calledOnce($mdDialogStub.show);
+    //     });
 
-        it('should bind confirmation dialog to correct event', () => {
+    //     it('should bind confirmation dialog to correct event', () => {
 
-            const expected = { payload: 'random_payload' };
+    //         const expected = { payload: 'random_payload' };
 
-            service.showClearHistoriesDialog(expected);
+    //         service.showClearHistoriesDialog(expected);
 
-            const argument = $mdDialogStub.show.getCall(0).args[0];
-            const result = argument._options.targetEvent;
+    //         const argument = $mdDialogStub.show.getCall(0).args[0];
+    //         const result = argument._options.targetEvent;
 
-            expect(result).to.deep.equal(expected);
-        });
-    });
+    //         expect(result).to.deep.equal(expected);
+    //     });
+    // });
 });

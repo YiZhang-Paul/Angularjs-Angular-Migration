@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
@@ -120,42 +120,42 @@ context('view history list component unit test', () => {
         });
     });
 
-    describe('confirmClearHistories()', () => {
+    // describe('confirmClearHistories()', () => {
 
-        it('should show confirmation dialog', () => {
+    //     it('should show confirmation dialog', () => {
 
-            const expected = { payload: 'random_payload' };
+    //         const expected = { payload: 'random_payload' };
 
-            component.confirmClearHistories(expected);
+    //         component.confirmClearHistories(expected);
 
-            sinonExpect.calledOnce(viewHistoryListServiceStub.showClearHistoriesDialog);
-            sinonExpect.calledWith(viewHistoryListServiceStub.showClearHistoriesDialog, expected);
-        });
+    //         sinonExpect.calledOnce(viewHistoryListServiceStub.showClearHistoriesDialog);
+    //         sinonExpect.calledWith(viewHistoryListServiceStub.showClearHistoriesDialog, expected);
+    //     });
 
-        it('should use view history manager service to delete view histories when user confirms deletion', fakeAsync(() => {
+    //     it('should use view history manager service to delete view histories when user confirms deletion', fakeAsync(() => {
 
-            component.confirmClearHistories({});
-            tick();
+    //         component.confirmClearHistories({});
+    //         tick();
 
-            sinonExpect.calledOnce(viewHistoryManagerStub.clearHistories);
-        }));
+    //         sinonExpect.calledOnce(viewHistoryManagerStub.clearHistories);
+    //     }));
 
-        it('should not delete view histories when user cancels deletion', fakeAsync(() => {
+    //     it('should not delete view histories when user cancels deletion', fakeAsync(() => {
 
-            viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
+    //         viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
 
-            component.confirmClearHistories({});
-            tick();
+    //         component.confirmClearHistories({});
+    //         tick();
 
-            sinonExpect.notCalled(viewHistoryManagerStub.clearHistories);
-        }));
+    //         sinonExpect.notCalled(viewHistoryManagerStub.clearHistories);
+    //     }));
 
-        it('should not throw error when user cancels deletion', fakeAsync(() => {
+    //     it('should not throw error when user cancels deletion', fakeAsync(() => {
 
-            viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
+    //         viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
 
-            component.confirmClearHistories({});
-            tick();
-        }));
-    });
+    //         component.confirmClearHistories({});
+    //         tick();
+    //     }));
+    // });
 });

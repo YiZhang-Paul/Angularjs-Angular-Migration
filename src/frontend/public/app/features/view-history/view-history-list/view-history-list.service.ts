@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 
-import { $mdDialog } from '../../../core/upgraded-providers/$mdDialog-provider/$mdDialog-provider';
+import { ClearHistoriesDialog } from './clear-histories-dialog/clear-histories-dialog';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ViewHistoryListService {
 
-    private _$mdDialog: $mdDialog;
+    private _dialog: MatDialog;
 
-    constructor($mdDialog: $mdDialog) {
+    constructor(dialog: MatDialog) {
 
-        this._$mdDialog = $mdDialog;
+        this._dialog = dialog;
     }
 
-    public showClearHistoriesDialog(event): Promise<any> {
+    public showClearHistoriesDialog(): Promise<any> {
 
-        const options = this._$mdDialog.confirm()
-            .title('Clear all view histories?')
-            .textContent('All view histories will be permanently deleted.')
-            .targetEvent(event)
-            .ok('Ok')
-            .cancel('Cancel');
+        const dialogRef = this._dialog.open(ClearHistoriesDialog, { width: '450px' });
 
-        return this._$mdDialog.show(options);
+        return dialogRef.afterClosed().toPromise();
     }
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -34,6 +36,8 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
             newestOnTop: true
         }),
         MatExpansionModule,
+        MatButtonModule,
+        MatDialogModule,
         MatIconModule
     ],
     declarations: [
@@ -67,6 +71,8 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         BrowserAnimationsModule,
         ToastrModule,
         MatExpansionModule,
+        MatButtonModule,
+        MatDialogModule,
         MatIconModule,
         ChannelBadgeComponent,
         GameBadgeComponent,

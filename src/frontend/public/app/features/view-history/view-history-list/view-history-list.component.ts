@@ -53,12 +53,14 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager.deleteHistory(history.id);
     }
 
-    public confirmClearHistories(event) {
+    public confirmClearHistories() {
 
-        this._viewHistoryListService.showClearHistoriesDialog(event).then(() => {
+        this._viewHistoryListService.showClearHistoriesDialog().then(_ => {
 
-            return this._viewHistoryManager.clearHistories();
-        })
-        .catch(error => console.log(error));
+            if (_) {
+
+                this._viewHistoryManager.clearHistories();
+            }
+        });
     }
 }
