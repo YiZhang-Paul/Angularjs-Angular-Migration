@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import * as angular from 'angular';
 
-import { $mdDialogProvider } from './upgraded-providers/$mdDialog-provider/$mdDialog-provider';
 import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { $stateProvider } from './upgraded-providers/$state-provider/$state-provider';
 import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
@@ -22,7 +21,6 @@ import * as CoreModuleAjs from './core.module.ajs.js';
 
 @NgModule({
     providers: [
-        $mdDialogProvider,
         $mdPanelProvider,
         $stateProvider,
         $stateParamsProvider,

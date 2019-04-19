@@ -7,9 +7,7 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub.js';
-import { stubViewHistoryListService } from '../../../testing/stubs/custom/view-history-list.service.stub.js';
 
-import { ViewHistoryListService } from './view-history-list.service';
 import { ViewHistoryListComponent } from './view-history-list.component';
 
 context('view history list component unit test', () => {
@@ -19,13 +17,11 @@ context('view history list component unit test', () => {
 
     let customRoutingStub;
     let viewHistoryManagerStub;
-    let viewHistoryListServiceStub;
 
     beforeEach('stubs setup', () => {
 
         customRoutingStub = stubCustomRoutingService();
         viewHistoryManagerStub = stubViewHistoryManagerService();
-        viewHistoryListServiceStub = stubViewHistoryListService();
     });
 
     beforeEach('general test setup', () => {
@@ -36,8 +32,7 @@ context('view history list component unit test', () => {
             providers: [
 
                 { provide: CustomRoutingService, useValue: customRoutingStub },
-                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub },
-                { provide: ViewHistoryListService, useValue: viewHistoryListServiceStub }
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
 
@@ -45,7 +40,6 @@ context('view history list component unit test', () => {
         component = fixture.componentInstance;
         customRoutingStub = TestBed.get(CustomRoutingService);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
-        viewHistoryListServiceStub = TestBed.get(ViewHistoryListService);
     });
 
     it('should resolve', () => {
