@@ -10,7 +10,7 @@ export class EventManagerService {
 
     private _emitter: EventEmitter<EmitData> = new EventEmitter<EmitData>();
 
-    public emit(name, payload): void {
+    public emit(name, payload = {}): void {
 
         this._emitter.emit({ name, payload });
     }

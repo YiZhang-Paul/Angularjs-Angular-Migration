@@ -4,6 +4,7 @@ import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
+import { EventManagerService } from '../../../core/services/events/event-manager.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class SidebarComponent implements OnInit {
     private _authenticator: AuthenticatorService;
     private _bookmarkManager: BookmarkManagerService;
     private _channelHttp: ChannelHttpService;
+    private _eventManager: EventManagerService;
     private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
@@ -32,6 +34,7 @@ export class SidebarComponent implements OnInit {
         authenticator: AuthenticatorService,
         bookmarkManager: BookmarkManagerService,
         channelHttp: ChannelHttpService,
+        eventManager: EventManagerService,
         viewHistoryManager: ViewHistoryManagerService
 
     ) {
@@ -40,6 +43,7 @@ export class SidebarComponent implements OnInit {
         this._authenticator = authenticator;
         this._bookmarkManager = bookmarkManager;
         this._channelHttp = channelHttp;
+        this._eventManager = eventManager;
         this._viewHistoryManager = viewHistoryManager;
     }
 
@@ -98,7 +102,7 @@ export class SidebarComponent implements OnInit {
 
     private registerAuthenticationEvents() {
 
-        this._$scope.$on('userLoggedOut', () => {
+        this._eventManager.subscribe('userLoggedOut', () => {
 
             this.badges.delete(this._options[0]);
             this.badges.delete(this._options[2]);

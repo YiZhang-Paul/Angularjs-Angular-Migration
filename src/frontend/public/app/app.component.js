@@ -8,7 +8,8 @@ export class AppController {
         authenticatorService,
         bookmarkManagerService,
         viewHistoryManagerService,
-        gameManagerService
+        gameManagerService,
+        eventManagerService
 
     ) {
         'ngInject';
@@ -17,6 +18,7 @@ export class AppController {
         this.bookmarkManager = bookmarkManagerService;
         this.viewHistoryManager = viewHistoryManagerService;
         this.gameManager = gameManagerService;
+        this.eventManager = eventManagerService;
     }
 
     $onInit() {
@@ -38,13 +40,13 @@ export class AppController {
 
     _registerAuthenticationEvents() {
 
-        this.$scope.$on('userAuthenticated', () => {
+        this.eventManager.subscribe('userAuthenticated', () => {
 
             this.bookmarkManager.cacheBookmarks();
             this.viewHistoryManager.cacheHistories();
         });
 
-        this.$scope.$on('userLoggedOut', () => {
+        this.eventManager.subscribe('userLoggedOut', () => {
 
             this.bookmarkManager.bookmarks = [];
             this.viewHistoryManager.histories = [];
