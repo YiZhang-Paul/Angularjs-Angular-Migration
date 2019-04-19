@@ -1,8 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ToastrService } from 'ngx-toastr';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { Toastr } from '../../../upgraded-providers/toastr-provider/toastr-provider';
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { BookmarkHttpService } from '../../../services/http/bookmark-http/bookmark-http.service';
 import { stubToastr } from '../../../../testing/stubs/third-party/toastr.stub';
@@ -33,14 +33,14 @@ context('bookmark manager service unit test', () => {
             providers: [
 
                 BookmarkManagerService,
-                { provide: Toastr, useValue: toastrStub },
+                { provide: ToastrService, useValue: toastrStub },
                 { provide: $rootScope, useValue: $rootScopeStub },
                 { provide: BookmarkHttpService, useValue: bookmarkHttpStub }
             ]
         });
 
         service = TestBed.get(BookmarkManagerService);
-        toastrStub = TestBed.get(Toastr);
+        toastrStub = TestBed.get(ToastrService);
         $rootScopeStub = TestBed.get($rootScope);
         bookmarkHttpStub = TestBed.get(BookmarkHttpService);
     });

@@ -1,4 +1,4 @@
-export default ($transitionsProvider, $windowProvider, $locationProvider, toastrConfig) => {
+export default ($transitionsProvider, $windowProvider, $locationProvider) => {
     'ngInject';
     const $transitions = $transitionsProvider.$get();
 
@@ -9,5 +9,4 @@ export default ($transitionsProvider, $windowProvider, $locationProvider, toastr
     });
 
     $locationProvider.html5Mode(true);
-    angular.extend(toastrConfig, { maxOpened: 5, newestOnTop: true });
 }

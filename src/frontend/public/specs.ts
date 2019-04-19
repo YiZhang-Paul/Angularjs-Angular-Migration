@@ -18,7 +18,6 @@ import 'angular-mocks';
 import 'angular-aria';
 import 'angular-animate';
 import 'angular-material';
-import 'angular-toastr';
 // angular
 import '@angular/animations';
 import '@angular/common';

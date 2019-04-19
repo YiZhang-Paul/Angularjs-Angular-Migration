@@ -4,5 +4,5 @@ const moduleName = 'sample-app-shared';
 
 export default moduleName;
 
-angular.module(moduleName, ['ngAnimate', 'ngMaterial', 'toastr'])
+angular.module(moduleName, ['ngAnimate', 'ngMaterial'])
     .component('loginPanel', LoginPanelComponent);

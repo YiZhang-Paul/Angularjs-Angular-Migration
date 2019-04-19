@@ -15,7 +15,6 @@ import { CustomRoutingService } from './services/custom-routing/custom-routing.s
 import { GameHttpService } from './services/http/game-http/game-http.service';
 import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
 import { GenericUtilitiesService } from './services/utilities/generic-utilities/generic-utilities.service';
-import { toastrProvider } from './upgraded-providers/toastr-provider/toastr-provider';
 import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { ViewHistoryHttpService } from './services/http/view-history-http/view-history-http.service';
 import { ViewHistoryManagerService } from './services/data-managers/view-history-manager/view-history-manager.service';
@@ -36,7 +35,6 @@ import * as CoreModuleAjs from './core.module.ajs.js';
         GameHttpService,
         GameManagerService,
         GenericUtilitiesService,
-        toastrProvider,
         ThumbnailPlayerService,
         ViewHistoryHttpService,
         ViewHistoryManagerService

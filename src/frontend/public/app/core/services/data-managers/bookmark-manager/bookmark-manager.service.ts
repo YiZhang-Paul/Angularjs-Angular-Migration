@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { Toastr } from '../../../upgraded-providers/toastr-provider/toastr-provider';
 import { BookmarkHttpService } from '../../../services/http/bookmark-http/bookmark-http.service';
 
 @Injectable({
@@ -14,13 +14,13 @@ export class BookmarkManagerService {
     private readonly _providerKeys = ['provider_id', 'provider_channel_id'];
 
     private _$rootScope: $rootScope;
-    private _toastr: Toastr;
+    private _toastr: ToastrService;
     private _bookmarkHttp: BookmarkHttpService;
 
     constructor(
 
         $rootScope: $rootScope,
-        toastr: Toastr,
+        toastr: ToastrService,
         bookmarkHttp: BookmarkHttpService
 
     ) {
@@ -88,7 +88,7 @@ export class BookmarkManagerService {
         return this._bookmarkHttp.addBookmark(data)
             .then(() => this.cacheBookmarks())
             .then(() => this._$rootScope.$broadcast('followedChannel'))
-            .then(() => this._toastr.success(message, { timeOut: 2500 }))
+            .then(() => this._toastr.success(message, '', { timeOut: 2500 }))
             .catch(error => console.log(error));
     }
 
@@ -107,7 +107,7 @@ export class BookmarkManagerService {
 
             this.removeCached(id);
             this._$rootScope.$broadcast('unfollowedChannel');
-            this._toastr.error(message, { timeOut: 2500 });
+            this._toastr.error(message, '', { timeOut: 2500 });
         })
         .catch(error => console.log(error));
     }

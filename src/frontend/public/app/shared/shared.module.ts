@@ -6,6 +6,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ToastrModule } from 'ngx-toastr';
 import * as angular from 'angular';
 
 import * as SharedModuleAjs from './shared.module.ajs.js';
@@ -28,6 +29,10 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         HttpClientModule,
         ClickOutsideModule,
         BrowserAnimationsModule,
+        ToastrModule.forRoot({
+            maxOpened: 5,
+            newestOnTop: true
+        }),
         MatExpansionModule,
         MatIconModule
     ],
@@ -60,6 +65,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         CommonModule,
         HttpClientModule,
         BrowserAnimationsModule,
+        ToastrModule,
         MatExpansionModule,
         MatIconModule,
         ChannelBadgeComponent,
