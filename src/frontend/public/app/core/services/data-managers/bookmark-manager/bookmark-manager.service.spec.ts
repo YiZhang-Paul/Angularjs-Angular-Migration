@@ -3,11 +3,11 @@ import { ToastrService } from 'ngx-toastr';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { BookmarkHttpService } from '../../../services/http/bookmark-http/bookmark-http.service';
+import { EventManagerService } from '../../../services/events/event-manager.service';
 import { stubToastr } from '../../../../testing/stubs/third-party/toastr.stub';
-import { stub$rootScope } from '../../../../testing/stubs/built-in/$root-scope.stub.js';
 import { stubBookmarkHttpService } from '../../../../testing/stubs/custom/bookmark-http.service.stub';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
 
 import { BookmarkManagerService } from './bookmark-manager.service';
 
@@ -16,14 +16,14 @@ context('bookmark manager service unit test', () => {
     let service: BookmarkManagerService;
 
     let toastrStub;
-    let $rootScopeStub;
     let bookmarkHttpStub;
+    let eventManagerStub;
 
     beforeEach('stubs setup', () => {
 
         toastrStub = stubToastr();
-        $rootScopeStub = stub$rootScope();
         bookmarkHttpStub = stubBookmarkHttpService();
+        eventManagerStub = stubEventManagerService();
     });
 
     beforeEach('general test setup', () => {
@@ -34,15 +34,15 @@ context('bookmark manager service unit test', () => {
 
                 BookmarkManagerService,
                 { provide: ToastrService, useValue: toastrStub },
-                { provide: $rootScope, useValue: $rootScopeStub },
-                { provide: BookmarkHttpService, useValue: bookmarkHttpStub }
+                { provide: BookmarkHttpService, useValue: bookmarkHttpStub },
+                { provide: EventManagerService, useValue: eventManagerStub }
             ]
         });
 
         service = TestBed.get(BookmarkManagerService);
         toastrStub = TestBed.get(ToastrService);
-        $rootScopeStub = TestBed.get($rootScope);
         bookmarkHttpStub = TestBed.get(BookmarkHttpService);
+        eventManagerStub = TestBed.get(EventManagerService);
     });
 
     it('should resolve', () => {
@@ -88,8 +88,8 @@ context('bookmark manager service unit test', () => {
             service.cacheBookmarks();
             tick();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'bookmarkCached');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'bookmarkCached');
         }));
     });
 
@@ -186,8 +186,8 @@ context('bookmark manager service unit test', () => {
             service.follow({});
             tick();
             // caching bookmark will also raise event
-            sinonExpect.calledTwice($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'followedChannel');
+            sinonExpect.calledTwice(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'followedChannel');
         }));
 
         it('should display notification when successfully added bookmark', fakeAsync(() => {
@@ -216,7 +216,7 @@ context('bookmark manager service unit test', () => {
             service.follow({});
             tick();
 
-            sinonExpect.notCalled($rootScopeStub.$broadcast);
+            sinonExpect.notCalled(eventManagerStub.emit);
         }));
 
         it('should not throw error when failed to add bookmark', fakeAsync(() => {
@@ -270,8 +270,8 @@ context('bookmark manager service unit test', () => {
             service.unfollow(data);
             tick();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'unfollowedChannel');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'unfollowedChannel');
         }));
 
         it('should display notification when successfully deleted bookmark', fakeAsync(() => {
@@ -301,7 +301,7 @@ context('bookmark manager service unit test', () => {
             service.unfollow(data);
             tick();
 
-            sinonExpect.notCalled($rootScopeStub.$broadcast);
+            sinonExpect.notCalled(eventManagerStub.emit);
         }));
 
         it('should not throw error when failed to delete bookmark', fakeAsync(() => {

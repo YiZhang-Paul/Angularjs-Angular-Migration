@@ -3,10 +3,7 @@ import { expect } from 'chai';
 
 import { SharedModule } from '../../shared.module';
 import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
-import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { GameManagerService } from '../../../core/services/data-managers/game-manager/game-manager.service';
 
 import { TopNavigationBarComponent } from './top-navigation-bar.component';
 
@@ -23,10 +20,7 @@ context('top navigation bar component unit test', () => {
             providers: [
 
                 { provide: $mdPanel, useValue: {} },
-                { provide: $rootScope, useValue: {} },
-                { provide: AuthenticatorService, useValue: {} },
-                { provide: CustomRoutingService, useValue: {} },
-                { provide: GameManagerService, useValue: {} }
+                { provide: CustomRoutingService, useValue: {} }
             ]
         });
 

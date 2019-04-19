@@ -4,7 +4,6 @@ import * as angular from 'angular';
 
 import { $mdDialogProvider } from './upgraded-providers/$mdDialog-provider/$mdDialog-provider';
 import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPanel-provider';
-import { $rootScopeProvider } from './upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { $stateProvider } from './upgraded-providers/$state-provider/$state-provider';
 import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
@@ -25,7 +24,6 @@ import * as CoreModuleAjs from './core.module.ajs.js';
     providers: [
         $mdDialogProvider,
         $mdPanelProvider,
-        $rootScopeProvider,
         $stateProvider,
         $stateParamsProvider,
         AuthenticatorService,

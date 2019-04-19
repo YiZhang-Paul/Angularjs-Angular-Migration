@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
+import { EventManagerService } from '../../../services/events/event-manager.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
-import { stub$rootScope } from '../../../../testing/stubs/built-in/$root-scope.stub.js';
 import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
 import { stubUserHttpService } from '../../../../testing/stubs/custom/user-http.service.stub';
 
 import { UserLoginService } from './user-login.service';
@@ -15,14 +15,14 @@ context('user login service unit test', () => {
 
     let service: UserLoginService;
 
-    let $rootScopeStub;
     let authenticatorStub;
+    let eventManagerStub;
     let userHttpStub;
 
     beforeEach('stubs setup', () => {
 
-        $rootScopeStub = stub$rootScope();
         authenticatorStub = stubAuthenticatorService();
+        eventManagerStub = stubEventManagerService();
         userHttpStub = stubUserHttpService();
     });
 
@@ -33,15 +33,15 @@ context('user login service unit test', () => {
             providers: [
 
                 UserLoginService,
-                { provide: $rootScope, useValue: $rootScopeStub },
                 { provide: AuthenticatorService, useValue: authenticatorStub },
+                { provide: EventManagerService, useValue: eventManagerStub },
                 { provide: UserHttpService, useValue: userHttpStub }
             ]
         });
 
         service = TestBed.get(UserLoginService);
-        $rootScopeStub = TestBed.get($rootScope);
         authenticatorStub = TestBed.get(AuthenticatorService);
+        eventManagerStub = TestBed.get(EventManagerService);
         userHttpStub = TestBed.get(UserHttpService);
     });
 
@@ -67,8 +67,8 @@ context('user login service unit test', () => {
 
             await service.login({});
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'userAuthenticated');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'userAuthenticated');
         });
 
         it('should throw error when login failed', async () => {
@@ -116,8 +116,8 @@ context('user login service unit test', () => {
 
             service.logout();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'userLoggedOut');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'userLoggedOut');
         });
     });
 });

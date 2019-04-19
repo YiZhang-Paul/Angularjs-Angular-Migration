@@ -2,9 +2,9 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
+import { EventManagerService } from '../../../services/events/event-manager.service';
 import { ViewHistoryHttpService } from '../../http/view-history-http/view-history-http.service';
-import { stub$rootScope } from '../../../../testing/stubs/built-in/$root-scope.stub.js';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
 import { stubViewHistoryHttpService } from '../../../../testing/stubs/custom/view-history-http.service.stub';
 
 import { ViewHistoryManagerService } from './view-history-manager.service';
@@ -13,12 +13,12 @@ context('view history manager service unit test', () => {
 
     let service: ViewHistoryManagerService;
 
-    let $rootScopeStub;
+    let eventManagerStub;
     let viewHistoryHttpStub;
 
     beforeEach('stubs setup', () => {
 
-        $rootScopeStub = stub$rootScope();
+        eventManagerStub = stubEventManagerService();
         viewHistoryHttpStub = stubViewHistoryHttpService();
     });
 
@@ -29,13 +29,13 @@ context('view history manager service unit test', () => {
             providers: [
 
                 ViewHistoryManagerService,
-                { provide: $rootScope, useValue: $rootScopeStub },
+                { provide: EventManagerService, useValue: eventManagerStub },
                 { provide: ViewHistoryHttpService, useValue: viewHistoryHttpStub }
             ]
         });
 
         service = TestBed.get(ViewHistoryManagerService);
-        $rootScopeStub = TestBed.get($rootScope);
+        eventManagerStub = TestBed.get(EventManagerService);
         viewHistoryHttpStub = TestBed.get(ViewHistoryHttpService);
     });
 
@@ -97,8 +97,8 @@ context('view history manager service unit test', () => {
             service.cacheHistories();
             tick();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'historyCached');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'historyCached');
         }));
     });
 
@@ -132,8 +132,8 @@ context('view history manager service unit test', () => {
             service.addHistory(channel);
             tick();
             // caching view histories will also raise event
-            sinonExpect.calledTwice($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'historyUpdated');
+            sinonExpect.calledTwice(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'historyUpdated');
         }));
 
         it('should not cache view histories on failure', fakeAsync(() => {
@@ -153,7 +153,7 @@ context('view history manager service unit test', () => {
             service.addHistory(channel).catch(() => null);
             tick();
 
-            sinonExpect.notCalled($rootScopeStub.$broadcast);
+            sinonExpect.notCalled(eventManagerStub.emit);
         }));
 
         it('should not throw error when failed to add history', fakeAsync(() => {
@@ -194,8 +194,8 @@ context('view history manager service unit test', () => {
             service.deleteHistory(id);
             tick();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'historyRemoved');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'historyRemoved');
         }));
 
         it('should not remove cached view history on failure', fakeAsync(() => {
@@ -218,7 +218,7 @@ context('view history manager service unit test', () => {
             service.deleteHistory(id);
             tick();
 
-            sinonExpect.notCalled($rootScopeStub.$broadcast);
+            sinonExpect.notCalled(eventManagerStub.emit);
         }));
 
         it('should not throw error when failed to delete view history', fakeAsync(() => {
@@ -255,8 +255,8 @@ context('view history manager service unit test', () => {
             service.clearHistories();
             tick();
 
-            sinonExpect.calledOnce($rootScopeStub.$broadcast);
-            sinonExpect.calledWith($rootScopeStub.$broadcast, 'historyCleared');
+            sinonExpect.calledOnce(eventManagerStub.emit);
+            sinonExpect.calledWith(eventManagerStub.emit, 'historyCleared');
         }));
 
         it('should not clear cache on failure', fakeAsync(() => {
@@ -279,7 +279,7 @@ context('view history manager service unit test', () => {
             service.clearHistories();
             tick();
 
-            sinonExpect.notCalled($rootScopeStub.$broadcast);
+            sinonExpect.notCalled(eventManagerStub.emit);
         }));
 
         it('should not throw error when failed to delete histories', fakeAsync(() => {
