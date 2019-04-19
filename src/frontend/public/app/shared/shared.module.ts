@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -21,6 +22,7 @@ import { DropdownSearchBoxComponent } from './components/dropdown-search-box/dro
 import { TopNavigationBarComponent } from './components/top-navigation-bar/top-navigation-bar.component';
 import { UserWidgetComponent } from './components/user-widget/user-widget.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
+import { UserLoginDialog } from './components/user-login/user-login-dialog/user-login-dialog';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { ShortViewCountPipe } from './pipes/short-view-count/short-view-count.pipe';
 import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/uppercase-roman-numerals.pipe';
@@ -28,6 +30,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
         HttpClientModule,
         ClickOutsideModule,
         BrowserAnimationsModule,
@@ -50,6 +53,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
+        UserLoginDialog,
         CapitalizePipe,
         ShortViewCountPipe,
         UppercaseRomanNumeralsPipe
@@ -63,10 +67,12 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         DropdownSearchBoxComponent,
         TopNavigationBarComponent,
         UserWidgetComponent,
-        UserLoginComponent
+        UserLoginComponent,
+        UserLoginDialog
     ],
     exports: [
         CommonModule,
+        FormsModule,
         HttpClientModule,
         BrowserAnimationsModule,
         ToastrModule,
@@ -83,6 +89,7 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         TopNavigationBarComponent,
         UserWidgetComponent,
         UserLoginComponent,
+        UserLoginDialog,
         CapitalizePipe,
         ShortViewCountPipe,
         UppercaseRomanNumeralsPipe
