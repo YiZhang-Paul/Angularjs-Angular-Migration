@@ -57,7 +57,7 @@ export class ViewHistoryListComponent implements OnInit {
 
     public confirmClearHistories() {
 
-        const width = '450px';
+        const width = '25%';
         const dialog = this._dialog.open(ClearHistoriesDialog, { width });
 
         dialog.afterClosed().toPromise().then(isConfirmed => {

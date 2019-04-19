@@ -50,7 +50,7 @@ export class UserLoginComponent {
     public tryLogin(): void {
 
         const callback = this.onLogin.bind(this);
-        const option = { width: '500px', data: { callback } };
+        const option = { width: '20%', data: { callback } };
         this._dialog.open(UserLoginDialog, option);
     }
 
