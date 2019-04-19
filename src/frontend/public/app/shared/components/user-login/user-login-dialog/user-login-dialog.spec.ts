@@ -1,132 +1,97 @@
-// import SharedModule from '../../../shared.module.ajs';
+import { fakeAsync, tick } from '@angular/core/testing';
+import { expect } from 'chai';
+import { assert as sinonExpect, stub } from 'sinon';
 
-// import { stubMdPanelRefNg1 } from '../../../../testing/stubs/built-in/md-panel-ref.stub';
+import { stubMatDialogRef } from '../../../../testing/stubs/built-in/mat-dialog-ref.stub';
 
-// const module = angular.mock.module;
-// const stub = sinon.stub;
-// const sinonExpect = sinon.assert;
+import { UserLoginDialog } from './user-login-dialog';
 
-// context('login panel component unit test', () => {
+context('user login dialog unit test', () => {
 
-//     const tag = '<login-panel></login-panel>';
+    let dialog: UserLoginDialog;
 
-//     let $q;
-//     let $compile;
-//     let $rootScope;
-//     let component;
-//     let componentElement;
+    let callbackStub;
+    let matDialogRefStub;
 
-//     let mdPanelRefStub;
+    beforeEach('stubs setup', () => {
 
-//     beforeEach(module(SharedModule));
-//     beforeEach(module('component-templates'));
+        callbackStub = stub().resolves();
+        matDialogRefStub = stubMatDialogRef();
+    });
 
-//     beforeEach('stubs setup', () => {
+    beforeEach('general test setup', () => {
 
-//         mdPanelRefStub = stubMdPanelRefNg1(module, inject);
+        const data = { callback: callbackStub };
+        dialog = new UserLoginDialog(data, matDialogRefStub);
+    });
 
-//         mdPanelRefStub.setupStub();
-//     });
+    it('should resolve', () => {
 
-//     beforeEach('general test setup', inject(($injector, $componentController) => {
+        expect(dialog).is.not.null;
+        expect(dialog).to.be.instanceOf(UserLoginDialog);
+    });
 
-//         $q = $injector.get('$q');
-//         $compile = $injector.get('$compile');
-//         $rootScope = $injector.get('$rootScope');
-//         component = $componentController('loginPanel');
+    describe('onLogin()', () => {
 
-//         component.loginCallback = stub().returns($q.resolve({}));
-//     }));
+        it('should invoke login callback with user credentials', () => {
 
-//     it('should resolve', () => {
+            const expected = { username: 'username_1', password: 'password_1' };
+            dialog.username = expected.username;
+            dialog.password = expected.password;
 
-//         componentElement = $compile(tag)($rootScope);
-//         $rootScope.$apply();
+            dialog.onLogin();
 
-//         expect(component).is.not.null;
-//         expect(componentElement.html()).is.not.empty;
-//     });
+            sinonExpect.calledOnce(callbackStub);
+            sinonExpect.calledWith(callbackStub, expected);
+        });
 
-//     describe('onLogin()', () => {
+        it('should close panel on successful login', fakeAsync(() => {
 
-//         it('should invoke login callback with user credentials', () => {
+            dialog.onLogin();
+            tick();
 
-//             const expected = { username: 'username_1', password: 'password_1' };
-//             component.username = expected.username;
-//             component.password = expected.password;
+            sinonExpect.calledOnce(matDialogRefStub.close);
+        }));
 
-//             component.onLogin();
-//             $rootScope.$apply();
+        it('should not close panel on login failure', fakeAsync(() => {
 
-//             sinonExpect.calledOnce(component.loginCallback);
-//             sinonExpect.calledWith(component.loginCallback, expected);
-//         });
+            callbackStub.rejects(new Error());
 
-//         it('should close panel on successful login', () => {
+            dialog.onLogin();
+            tick();
 
-//             component.onLogin();
-//             $rootScope.$apply();
+            sinonExpect.notCalled(matDialogRefStub.close);
+        }));
 
-//             sinonExpect.calledOnce(mdPanelRefStub.close);
-//         });
+        it('should indicate login error on login failure', fakeAsync(() => {
 
-//         it('should not close panel on login failure', () => {
+            callbackStub.rejects(new Error());
 
-//             component.loginCallback.returns($q.reject(new Error()));
+            dialog.onLogin();
+            tick();
 
-//             component.onLogin();
-//             $rootScope.$apply();
+            expect(dialog.noError).to.be.false;
+        }));
+    });
 
-//             sinonExpect.notCalled(mdPanelRefStub.close);
-//         });
+    describe('onKeyup()', () => {
 
-//         it('should destroy panel on successful login', () => {
+        it('should login when user hits enter key', () => {
 
-//             component.onLogin();
-//             $rootScope.$apply();
+            const event = { keyCode: 13 };
 
-//             sinonExpect.calledOnce(mdPanelRefStub.destroy);
-//         });
+            dialog.onKeyup(event);
 
-//         it('should not destroy panel on login failure', () => {
+            sinonExpect.calledOnce(callbackStub);
+        });
 
-//             component.loginCallback.returns($q.reject(new Error()));
+        it('should not login when user hits other keys', () => {
 
-//             component.onLogin();
-//             $rootScope.$apply();
+            const event = { keyCode: 97 };
 
-//             sinonExpect.notCalled(mdPanelRefStub.destroy);
-//         });
+            dialog.onKeyup(event);
 
-//         it('should indicate login error on login failure', () => {
-
-//             component.loginCallback.returns($q.reject(new Error()));
-
-//             component.onLogin();
-//             $rootScope.$apply();
-
-//             expect(component.noError).to.be.false;
-//         });
-//     });
-
-//     describe('onKeyup()', () => {
-
-//         it('should login when user hits enter key', () => {
-
-//             const event = { keyCode: 13 };
-
-//             component.onKeyup(event);
-
-//             sinonExpect.calledOnce(component.loginCallback);
-//         });
-
-//         it('should not login when user hits other keys', () => {
-
-//             const event = { keyCode: 97 };
-
-//             component.onKeyup(event);
-
-//             sinonExpect.notCalled(component.loginCallback);
-//         });
-//     });
-// });
+            sinonExpect.notCalled(callbackStub);
+        });
+    });
+});
