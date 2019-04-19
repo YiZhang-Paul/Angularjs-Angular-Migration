@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { ViewHistoryHttpService } from '../../http/view-history-http/view-history-http.service';
+import { EventManagerService } from '../../events/event-manager.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,13 +10,18 @@ export class ViewHistoryManagerService {
 
     public histories = [];
 
-    private _$rootScope: $rootScope;
     private _viewHistoryHttp: ViewHistoryHttpService;
+    private _eventManager: EventManagerService;
 
-    constructor($rootScope: $rootScope, viewHistoryHttp: ViewHistoryHttpService) {
+    constructor(
 
-        this._$rootScope = $rootScope;
+        viewHistoryHttp: ViewHistoryHttpService,
+        eventManager: EventManagerService
+
+    ) {
+
         this._viewHistoryHttp = viewHistoryHttp;
+        this._eventManager = eventManager;
     }
 
     public cacheHistories() {
@@ -24,7 +29,7 @@ export class ViewHistoryManagerService {
         return this._viewHistoryHttp.getHistories().then(histories => {
 
             this.histories = histories.length ? histories : this.histories;
-            this._$rootScope.$broadcast('historyCached');
+            this._eventManager.emit('historyCached');
         })
         .catch(error => console.log(error));
     }
@@ -33,7 +38,7 @@ export class ViewHistoryManagerService {
 
         return this._viewHistoryHttp.addHistory(channel)
             .then(() => this.cacheHistories())
-            .then(() => this._$rootScope.$broadcast('historyUpdated'))
+            .then(() => this._eventManager.emit('historyUpdated'))
             .catch(error => console.log(error));
     }
 
@@ -52,7 +57,7 @@ export class ViewHistoryManagerService {
         this._viewHistoryHttp.deleteHistory(id).then(() => {
 
             this.removeCached(id);
-            this._$rootScope.$broadcast('historyRemoved');
+            this._eventManager.emit('historyRemoved');
         })
         .catch(error => console.log(error));
     }
@@ -62,7 +67,7 @@ export class ViewHistoryManagerService {
         return this._viewHistoryHttp.deleteHistories().then(() => {
 
             this.histories = [];
-            this._$rootScope.$broadcast('historyCleared');
+            this._eventManager.emit('historyCleared');
         })
         .catch(error => console.log(error));
     }

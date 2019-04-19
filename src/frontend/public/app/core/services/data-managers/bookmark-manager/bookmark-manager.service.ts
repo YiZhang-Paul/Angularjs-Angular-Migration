@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { BookmarkHttpService } from '../../../services/http/bookmark-http/bookmark-http.service';
+import { EventManagerService } from '../../../services/events/event-manager.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,20 +13,21 @@ export class BookmarkManagerService {
 
     private readonly _providerKeys = ['provider_id', 'provider_channel_id'];
 
-    private _$rootScope: $rootScope;
     private _toastr: ToastrService;
     private _bookmarkHttp: BookmarkHttpService;
+    private _eventManager: EventManagerService;
 
     constructor(
 
-        $rootScope: $rootScope,
         toastr: ToastrService,
-        bookmarkHttp: BookmarkHttpService
+        bookmarkHttp: BookmarkHttpService,
+        eventManager: EventManagerService
 
     ) {
-        this._$rootScope = $rootScope;
+
         this._toastr = toastr;
         this._bookmarkHttp = bookmarkHttp;
+        this._eventManager = eventManager;
     }
 
     public cacheBookmarks() {
@@ -38,7 +39,7 @@ export class BookmarkManagerService {
             return [];
         })
         .then(bookmarks => this.bookmarks = bookmarks)
-        .then(() => this._$rootScope.$broadcast('bookmarkCached'));
+        .then(() => this._eventManager.emit('bookmarkCached'));
     }
 
     private findBookmarkByChannelId(data) {
@@ -87,7 +88,7 @@ export class BookmarkManagerService {
 
         return this._bookmarkHttp.addBookmark(data)
             .then(() => this.cacheBookmarks())
-            .then(() => this._$rootScope.$broadcast('followedChannel'))
+            .then(() => this._eventManager.emit('followedChannel'))
             .then(() => this._toastr.success(message, '', { timeOut: 2500 }))
             .catch(error => console.log(error));
     }
@@ -106,7 +107,7 @@ export class BookmarkManagerService {
         return this._bookmarkHttp.deleteBookmark(id).then(() => {
 
             this.removeCached(id);
-            this._$rootScope.$broadcast('unfollowedChannel');
+            this._eventManager.emit('unfollowedChannel');
             this._toastr.error(message, '', { timeOut: 2500 });
         })
         .catch(error => console.log(error));

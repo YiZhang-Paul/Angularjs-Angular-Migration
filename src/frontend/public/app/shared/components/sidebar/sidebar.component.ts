@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
@@ -21,7 +20,6 @@ export class SidebarComponent implements OnInit {
     private _options = ['Followed Channels', 'Featured Channels', 'View History'];
     private _states = ['index.bookmarks', 'index.featured', 'index.histories'];
 
-    private _$scope: any;
     private _authenticator: AuthenticatorService;
     private _bookmarkManager: BookmarkManagerService;
     private _channelHttp: ChannelHttpService;
@@ -30,7 +28,6 @@ export class SidebarComponent implements OnInit {
 
     constructor(
 
-        $rootScope: $rootScope,
         authenticator: AuthenticatorService,
         bookmarkManager: BookmarkManagerService,
         channelHttp: ChannelHttpService,
@@ -39,7 +36,6 @@ export class SidebarComponent implements OnInit {
 
     ) {
 
-        this._$scope = $rootScope.$new();
         this._authenticator = authenticator;
         this._bookmarkManager = bookmarkManager;
         this._channelHttp = channelHttp;
@@ -115,7 +111,7 @@ export class SidebarComponent implements OnInit {
 
         for (const event of events) {
 
-            this._$scope.$on(event, () => this.loadBookmarks());
+            this._eventManager.subscribe(event, () => this.loadBookmarks());
         }
     }
 
@@ -125,7 +121,7 @@ export class SidebarComponent implements OnInit {
 
         for (const event of events) {
 
-            this._$scope.$on(`history${event}`, () => this.loadHistories());
+            this._eventManager.subscribe(`history${event}`, () => this.loadHistories());
         }
     }
 
