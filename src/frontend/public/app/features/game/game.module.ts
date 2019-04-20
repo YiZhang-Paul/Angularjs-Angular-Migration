@@ -12,7 +12,6 @@ import { GameListComponent } from './game-list/game-list.component';
         GameListComponent
     ],
     entryComponents: [
-        GameCardComponent,
         GameListComponent
     ],
     exports: [GameCardComponent]

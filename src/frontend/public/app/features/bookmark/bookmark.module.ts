@@ -12,7 +12,6 @@ import { BookmarkListComponent } from './bookmark-list/bookmark-list.component';
         BookmarkListComponent
     ],
     entryComponents: [
-        BookmarkCardComponent,
         BookmarkListComponent
     ]
 })

@@ -14,7 +14,6 @@ import { ClearHistoriesDialog } from './view-history-list/clear-histories-dialog
         ClearHistoriesDialog
     ],
     entryComponents: [
-        ViewHistoryCardComponent,
         ViewHistoryListComponent,
         ClearHistoriesDialog
     ]

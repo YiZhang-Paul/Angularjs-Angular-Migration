@@ -20,7 +20,6 @@ import { ChannelService } from './channel.service';
         GameChannelListComponent
     ],
     entryComponents: [
-        ChannelCardComponent,
         FeaturedChannelListComponent,
         GameChannelListComponent
     ]
