@@ -28,7 +28,7 @@ import '@angular/platform-browser-dynamic';
 import '@angular/router';
 import '@angular/upgrade';
 // ui-router
-import '@uirouter/angular-hybrid';
+import '@uirouter/angular';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { stub } from 'sinon';

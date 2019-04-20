@@ -75,7 +75,6 @@
         "@angular/router": "^7.2.13",
         "@angular/upgrade": "^7.2.13",
         "@uirouter/angular": "^3.0.0",
-        "@uirouter/angular-hybrid": "^6.0.3",
         "angular": "^1.7.8",
         "axios": "^0.18.0",
         "bcryptjs": "^2.4.3",
