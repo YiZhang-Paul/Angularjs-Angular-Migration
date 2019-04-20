@@ -1,3 +1,5 @@
+import { GameListComponent } from './game-list/game-list.component';
+
 export const GameState = {
 
     name: 'game',
@@ -5,6 +7,6 @@ export const GameState = {
     state: {
 
         url: '^/games',
-        component: 'gameList'
+        component: GameListComponent
     }
 };
