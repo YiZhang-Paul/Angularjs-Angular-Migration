@@ -1,103 +1,97 @@
-// import AppModule from './app.module.ajs';
+import { TestBed } from '@angular/core/testing';
+import { StateService } from '@uirouter/angular';
+import { expect } from 'chai';
 
-// const module = angular.mock.module;
+import { AppModule } from './app.module';
 
-// context('app route unit test', () => {
+context('app route integration test', () => {
 
-//     let $state;
-//     let $location;
-//     let $rootScope;
+    let state;
 
-//     beforeEach(module(AppModule));
-//     beforeEach(module('component-templates'));
+    beforeEach('general test setup', () => {
 
-//     beforeEach('general test setup', inject($injector => {
+        TestBed.configureTestingModule({
 
-//         $state = $injector.get('$state');
-//         $location = $injector.get('$location');
-//         $rootScope = $injector.get('$rootScope');
-//     }));
+            imports: [AppModule]
+        });
 
-//     it('should turn on HTML5 mode', () => {
+        state = TestBed.get(StateService);
+    });
 
-//         expect($location.$$html5).to.be.true;
-//     });
+    describe('/', () => {
 
-//     describe('/', () => {
+        it('should redirect to game state at /games url', async () => {
 
-//         it('should redirect to game state at /games url', () => {
+            await state.go('game');
 
-//             $state.go('index');
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('game');
+            expect(state.current.url).to.equal('^/games');
+        });
+    });
 
-//             expect($state.current.name).to.equal('index.game');
-//             expect($state.current.url).to.equal('^/games');
-//         });
-//     });
+    describe('*', () => {
 
-//     describe('*', () => {
+        it('should redirect to error state at /error url', async () => {
 
-//         it('should redirect to error state at /error url', () => {
+            await state.go('error');
 
-//             $state.go('error');
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('error');
+            expect(state.current.url).to.equal('/error');
+        });
+    });
 
-//             expect($state.current.url).to.equal('/error');
-//         });
-//     });
+    describe('/bookmarks', () => {
 
-//     describe('/bookmarks', () => {
+        it('should navigate to bookmarks state at /bookmarks url', async () => {
 
-//         it('should navigate to bookmarks state at /bookmarks url', () => {
+            await state.go('bookmarks');
 
-//             $state.go('index.bookmarks');
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('bookmarks');
+            expect(state.current.url).to.equal('^/bookmarks');
+        });
+    });
 
-//             expect($state.current.url).to.equal('^/bookmarks');
-//         });
-//     });
+    describe('/featured', () => {
 
-//     describe('/featured', () => {
+        it('should navigate to featured state at /featured url', async () => {
 
-//         it('should navigate to featured state at /featured url', () => {
+            await state.go('featured');
 
-//             $state.go('index.featured');
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('featured');
+            expect(state.current.url).to.equal('^/featured');
+        });
+    });
 
-//             expect($state.current.url).to.equal('^/featured');
-//         });
-//     });
+    describe('/games', () => {
 
-//     describe('/games', () => {
+        it('should navigate to game state at /games url', async () => {
 
-//         it('should navigate to game state at /games url', () => {
+            await state.go('game');
 
-//             $state.go('index.game');
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('game');
+            expect(state.current.url).to.equal('^/games');
+        });
+    });
 
-//             expect($state.current.url).to.equal('^/games');
-//         });
-//     });
+    describe('/games/:name', () => {
 
-//     describe('/games/:name', () => {
+        it('should navigate to channels state at /games/:name url', async () => {
 
-//         it('should navigate to channels state at /games/:name url', () => {
+            await state.go('channels', { name: 'game-name' });
 
-//             $state.go('index.channels', { name: 'some-game-name' });
-//             $rootScope.$apply();
+            expect(state.current.name).to.equal('channels');
+            expect(state.current.url).to.equal('^/games/:name');
+        });
+    });
 
-//             expect($state.current.url).to.equal('^/games/:name');
-//         });
-//     });
+    describe('/histories', () => {
 
-//     describe('/histories', () => {
+        it('should navigate to histories state at /histories url', async () => {
 
-//         it('should navigate to histories state at /histories url', () => {
+            await state.go('histories');
 
-//             $state.go('index.histories');
-//             $rootScope.$apply();
-
-//             expect($state.current.url).to.equal('^/histories');
-//         });
-//     });
-// });
+            expect(state.current.name).to.equal('histories');
+            expect(state.current.url).to.equal('^/histories');
+        });
+    });
+});
