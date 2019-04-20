@@ -7,7 +7,7 @@ import * as angular from 'angular';
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
-import { config, states } from './app.route';
+import { routeSetup } from './app.route';
 import { AppComponent } from './app.component';
 import { ErrorComponent } from './error.component';
 import * as AppModuleAjs from './app.module.ajs.js';
@@ -16,7 +16,7 @@ import * as AppModuleAjs from './app.module.ajs.js';
     imports: [
         BrowserModule,
         UpgradeModule,
-        UIRouterModule.forRoot({ states, useHash: false, config }),
+        UIRouterModule.forRoot(routeSetup),
         CoreModule,
         FeaturesModule,
         SharedModule

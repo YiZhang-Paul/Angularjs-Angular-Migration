@@ -6,7 +6,7 @@ import { GameState } from './features/game/game.route';
 import { HistoriesState } from './features/view-history/view-history.route';
 import { ErrorComponent } from './error.component';
 
-export const states = [
+const states = [
 
     {
         name: 'index',
@@ -25,7 +25,9 @@ export const states = [
     HistoriesState
 ];
 
-export const config = (router: UIRouter) => {
+const config = (router: UIRouter) => {
 
     router.urlService.rules.otherwise({ state: 'error' });
 };
+
+export const routeSetup = { states, useHash: false, config };
