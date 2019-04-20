@@ -1,112 +1,123 @@
-// import AppModule from './app.module.ajs';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { assert as sinonExpect } from 'sinon';
+import { expect } from 'chai';
 
-// import { stubComponentNg1 } from './testing/stubs/custom/components.stub';
-// import { stubAuthenticatorServiceNg1 } from './testing/stubs/custom/authenticator.service.stub';
-// import { stubBookmarkManagerServiceNg1 } from './testing/stubs/custom/bookmark-manager.service.stub';
-// import { stubViewHistoryManagerServiceNg1 } from './testing/stubs/custom/view-history-manager.service.stub';
-// import { stubGameManagerServiceNg1 } from './testing/stubs/custom/game-manager.service.stub';
-// import { stubEventManagerServiceNg1 } from './testing/stubs/custom/event-manager.service.stub';
+import { AuthenticatorService } from './core/services/authentication/authenticator/authenticator.service';
+import { BookmarkManagerService } from './core/services/data-managers/bookmark-manager/bookmark-manager.service';
+import { GameManagerService } from './core/services/data-managers/game-manager/game-manager.service';
+import { ViewHistoryManagerService } from './core/services/data-managers/view-history-manager/view-history-manager.service';
+import { EventManagerService } from './core/services/events/event-manager.service';
+import { stubAuthenticatorService } from './testing/stubs/custom/authenticator.service.stub';
+import { stubBookmarkManagerService } from './testing/stubs/custom/bookmark-manager.service.stub';
+import { stubGameManagerService } from './testing/stubs/custom/game-manager.service.stub';
+import { stubViewHistoryManagerService } from './testing/stubs/custom/view-history-manager.service.stub';
+import { stubEventManagerService } from './testing/stubs/custom/event-manager.service.stub';
+import { AppComponent } from './app.component';
 
-// const module = angular.mock.module;
-// const sinonExpect = sinon.assert;
+@Component({ selector: 'top-navigation-bar', template: '<div></div>' })
+class TopNavigationBarComponentForTest { }
 
-// context('app component unit test', () => {
+@Component({ selector: 'sidebar', template: '<div></div>' })
+class SidebarComponentForTest { }
 
-//     const tag = '<app></app>';
+@Component({ selector: 'ui-view', template: '<div></div>' })
+class UIViewForTest { }
 
-//     let $compile;
-//     let $rootScope;
-//     let component;
-//     let componentElement;
+context('app component unit test', () => {
 
-//     let authenticatorStub;
-//     let bookmarkManagerStub;
-//     let viewHistoryManagerStub;
-//     let gameManagerStub;
-//     let eventManagerStub;
+    let fixture: ComponentFixture<AppComponent>;
+    let component: AppComponent;
 
-//     beforeEach(module(AppModule));
-//     beforeEach(module('component-templates'));
+    let authenticatorStub;
+    let bookmarkManagerStub;
+    let gameManagerStub;
+    let viewHistoryManagerStub;
+    let eventManagerStub;
 
-//     beforeEach('stubs setup', () => {
+    beforeEach('stubs setup', () => {
 
-//         stubComponentNg1(module, 'sidebar');
-//         stubComponentNg1(module, 'topNavbar');
-//         stubComponentNg1(module, 'gameList');
+        authenticatorStub = stubAuthenticatorService();
+        bookmarkManagerStub = stubBookmarkManagerService();
+        gameManagerStub = stubGameManagerService();
+        viewHistoryManagerStub = stubViewHistoryManagerService();
+        eventManagerStub = stubEventManagerService();
+    });
 
-//         authenticatorStub = stubAuthenticatorServiceNg1(module, inject);
-//         bookmarkManagerStub = stubBookmarkManagerServiceNg1(module, inject);
-//         viewHistoryManagerStub = stubViewHistoryManagerServiceNg1(module, inject);
-//         gameManagerStub = stubGameManagerServiceNg1(module, inject);
-//         eventManagerStub = stubEventManagerServiceNg1(module, inject);
+    beforeEach('general test setup', () => {
 
-//         authenticatorStub.setupStub();
-//         bookmarkManagerStub.setupStub();
-//         viewHistoryManagerStub.setupStub();
-//         gameManagerStub.setupStub();
-//         eventManagerStub.setupStub();
-//     });
+        TestBed.configureTestingModule({
 
-//     beforeEach('general test setup', inject(($injector, $componentController) => {
+            declarations: [
+                AppComponent,
+                TopNavigationBarComponentForTest,
+                SidebarComponentForTest,
+                UIViewForTest
+            ],
+            providers: [
 
-//         $compile = $injector.get('$compile');
-//         $rootScope = $injector.get('$rootScope');
-//         component = $componentController('app');
-//     }));
+                { provide: AuthenticatorService, useValue: authenticatorStub },
+                { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
+                { provide: GameManagerService, useValue: gameManagerStub },
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub },
+                { provide: EventManagerService, useValue: eventManagerStub }
+            ]
+        });
 
-//     it('should resolve', () => {
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.componentInstance;
+        authenticatorStub = TestBed.get(AuthenticatorService);
+        bookmarkManagerStub = TestBed.get(BookmarkManagerService);
+        gameManagerStub = TestBed.get(GameManagerService);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
+        eventManagerStub = TestBed.get(EventManagerService);
+    });
 
-//         componentElement = $compile(tag)($rootScope);
-//         $rootScope.$apply();
+    it('should resolve', () => {
 
-//         expect(component).is.not.null;
-//         expect(componentElement.html()).is.not.empty;
-//     });
+        expect(component).is.not.null;
+        expect(component).to.be.instanceOf(AppComponent);
+    });
 
-//     describe('$onInit()', () => {
+    describe('$onInit()', () => {
 
-//         it('should cache bookmarks on initialization when user is authenticated', () => {
+        it('should cache bookmarks on initialization when user is authenticated', () => {
 
-//             component.$onInit();
-//             $rootScope.$apply();
+            fixture.detectChanges();
 
-//             sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
-//         });
+            sinonExpect.calledOnce(bookmarkManagerStub.cacheBookmarks);
+        });
 
-//         it('should not cache bookmarks on initialization when user is not authenticated', () => {
+        it('should not cache bookmarks on initialization when user is not authenticated', () => {
 
-//             authenticatorStub.isAuthenticated = false;
+            authenticatorStub.isAuthenticated = false;
 
-//             component.$onInit();
-//             $rootScope.$apply();
+            fixture.detectChanges();
 
-//             sinonExpect.notCalled(bookmarkManagerStub.cacheBookmarks);
-//         });
+            sinonExpect.notCalled(bookmarkManagerStub.cacheBookmarks);
+        });
 
-//         it('should cache view histories on initialization when user is authenticated', () => {
+        it('should cache view histories on initialization when user is authenticated', () => {
 
-//             component.$onInit();
-//             $rootScope.$apply();
+            fixture.detectChanges();
 
-//             sinonExpect.calledOnce(viewHistoryManagerStub.cacheHistories);
-//         });
+            sinonExpect.calledOnce(viewHistoryManagerStub.cacheHistories);
+        });
 
-//         it('should not cache view histories on initialization when user is not authenticated', () => {
+        it('should not cache view histories on initialization when user is not authenticated', () => {
 
-//             authenticatorStub.isAuthenticated = false;
+            authenticatorStub.isAuthenticated = false;
 
-//             component.$onInit();
-//             $rootScope.$apply();
+            fixture.detectChanges();
 
-//             sinonExpect.notCalled(viewHistoryManagerStub.cacheHistories);
-//         });
+            sinonExpect.notCalled(viewHistoryManagerStub.cacheHistories);
+        });
 
-//         it('should cache games on initialization', () => {
+        it('should cache games on initialization', () => {
 
-//             component.$onInit();
-//             $rootScope.$apply();
+            fixture.detectChanges();
 
-//             sinonExpect.calledOnce(gameManagerStub.cacheGames);
-//         });
-//     });
-// });
+            sinonExpect.calledOnce(gameManagerStub.cacheGames);
+        });
+    });
+});
