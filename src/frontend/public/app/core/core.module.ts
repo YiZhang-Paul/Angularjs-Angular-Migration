@@ -40,14 +40,7 @@ export class CoreModule { }
 
 angular.module(CoreModuleAjs.default)
     .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
-    .factory('bookmarkHttpService', downgradeInjectable(BookmarkHttpService) as any)
     .factory('bookmarkManagerService', downgradeInjectable(BookmarkManagerService) as any)
-    .factory('channelHttpService', downgradeInjectable(ChannelHttpService) as any)
-    .factory('customRoutingService', downgradeInjectable(CustomRoutingService) as any)
     .factory('eventManagerService', downgradeInjectable(EventManagerService) as any)
-    .factory('gameHttpService', downgradeInjectable(GameHttpService) as any)
     .factory('gameManagerService', downgradeInjectable(GameManagerService) as any)
-    .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any)
-    .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any)
-    .factory('viewHistoryHttpService', downgradeInjectable(ViewHistoryHttpService) as any)
     .factory('viewHistoryManagerService', downgradeInjectable(ViewHistoryManagerService) as any);
