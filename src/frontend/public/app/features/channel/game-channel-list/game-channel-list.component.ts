@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Transition } from '@uirouter/angular';
 
 import { ChannelService } from '../channel.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
-import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
@@ -18,32 +18,33 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
     public channels = [];
 
     private _task: any = null;
+    private _stateParams: any;
 
     private _gameHttp: GameHttpService;
     private _channelService: ChannelService;
     private _bookmarkManager: BookmarkManagerService;
-    private _$stateParams: $stateParams;
     private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
+        transition: Transition,
         gameHttp: GameHttpService,
         channelService: ChannelService,
         bookmarkManager: BookmarkManagerService,
-        $stateParams: $stateParams,
         viewHistoryManager: ViewHistoryManagerService
 
     ) {
+
+        this._stateParams = transition.params();
         this._gameHttp = gameHttp;
         this._channelService = channelService;
         this._bookmarkManager = bookmarkManager;
-        this._$stateParams = $stateParams;
         this._viewHistoryManager = viewHistoryManager;
     }
 
     public ngOnInit(): void {
 
-        this.name = this._$stateParams.name.replace(/-/g, ' ');
+        this.name = this._stateParams.name.replace(/-/g, ' ');
         this.loadComponent();
         this.setupChannelLoading();
     }
@@ -68,12 +69,12 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
 
         this.loadGame().then(() => {
 
-            if (!this._$stateParams.channels) {
+            if (!this._stateParams.channels) {
 
                 return this.loadChannels();
             }
 
-            this.channels = this._$stateParams.channels;
+            this.channels = this._stateParams.channels;
         })
         .catch(error => console.log(error));
     }

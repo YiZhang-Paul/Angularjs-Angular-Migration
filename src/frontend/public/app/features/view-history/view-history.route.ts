@@ -3,10 +3,6 @@ import { ViewHistoryListComponent } from './view-history-list/view-history-list.
 export const HistoriesState = {
 
     name: 'histories',
-
-    state: {
-
-        url: '^/histories',
-        component: ViewHistoryListComponent
-    }
+    url: '^/histories',
+    component: ViewHistoryListComponent
 };

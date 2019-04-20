@@ -4,22 +4,14 @@ import { FeaturedChannelListComponent } from './featured-channel-list/featured-c
 export const ChannelsState = {
 
     name: 'channels',
-
-    state: {
-
-        url: '^/games/:name',
-        component: GameChannelListComponent,
-        params: { channels: null }
-    }
+    url: '^/games/:name',
+    component: GameChannelListComponent,
+    params: { channels: null }
 };
 
 export const FeaturedState = {
 
     name: 'featured',
-
-    state: {
-
-        url: '^/featured',
-        component: FeaturedChannelListComponent
-    }
+    url: '^/featured',
+    component: FeaturedChannelListComponent
 };

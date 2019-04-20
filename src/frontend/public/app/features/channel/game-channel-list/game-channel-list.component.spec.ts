@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { StateParams } from '@uirouter/angular';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
@@ -7,7 +8,6 @@ import { SharedModule } from '../../../shared/shared.module';
 import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { ChannelService } from '../channel.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
-import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
@@ -29,7 +29,7 @@ context('game channel list component unit test', () => {
     let gameHttpStub;
     let channelServiceStub;
     let bookmarkManagerStub;
-    let $stateParamsStub;
+    let stateParamsStub;
     let viewHistoryManagerStub;
 
     beforeEach('stubs setup', () => {
@@ -56,7 +56,7 @@ context('game channel list component unit test', () => {
                 { provide: GameHttpService, useValue: gameHttpStub },
                 { provide: ChannelService, useValue: channelServiceStub },
                 { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
-                { provide: $stateParams, useValue: {} },
+                { provide: StateParams, useValue: {} },
                 { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
@@ -66,7 +66,7 @@ context('game channel list component unit test', () => {
         gameHttpStub = TestBed.get(GameHttpService);
         channelServiceStub = TestBed.get(ChannelService);
         bookmarkManagerStub = TestBed.get(BookmarkManagerService);
-        $stateParamsStub = TestBed.get($stateParams);
+        stateParamsStub = TestBed.get(StateParams);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
@@ -87,8 +87,8 @@ context('game channel list component unit test', () => {
 
             game = { id: gameId };
             channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            $stateParamsStub.name = name;
-            $stateParamsStub.channels = channels;
+            stateParamsStub.name = name;
+            stateParamsStub.channels = channels;
             gameHttpStub.getGameByName.resolves(game);
         });
 
@@ -123,7 +123,7 @@ context('game channel list component unit test', () => {
         it('should fetch game channels from channel service when channel data is missing from state parameters', fakeAsync(() => {
 
             const expected = gameId;
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
 
             fixture.detectChanges();
             component.ngOnDestroy();
@@ -135,7 +135,7 @@ context('game channel list component unit test', () => {
 
         it('should not load game channels when no game data found', fakeAsync(() => {
 
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
             gameHttpStub.getGameByName.resolves(null);
 
             fixture.detectChanges();
@@ -147,7 +147,7 @@ context('game channel list component unit test', () => {
 
         it('should not load game channels when failed to load game data', fakeAsync(() => {
 
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
             gameHttpStub.getGameByName.rejects(new Error());
 
             fixture.detectChanges();
@@ -192,8 +192,8 @@ context('game channel list component unit test', () => {
 
         it('should cancel interval', () => {
 
-            $stateParamsStub.name = 'some-game-5';
-            $stateParamsStub.channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            stateParamsStub.name = 'some-game-5';
+            stateParamsStub.channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             gameHttpStub.getGameByName.resolves({ id: 17 });
 
             timer = useFakeTimers();

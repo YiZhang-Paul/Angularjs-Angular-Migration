@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
     public routes = new Map();
 
     private _options = ['Followed Channels', 'Featured Channels', 'View History'];
-    private _states = ['index.bookmarks', 'index.featured', 'index.histories'];
+    private _states = ['bookmarks', 'featured', 'histories'];
 
     private _authenticator: AuthenticatorService;
     private _bookmarkManager: BookmarkManagerService;

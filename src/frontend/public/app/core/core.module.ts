@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
-import { downgradeInjectable } from '@angular/upgrade/static';
-import * as angular from 'angular';
 
-import { $stateProvider } from './upgraded-providers/$state-provider/$state-provider';
-import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
 import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http.service';
 import { BookmarkManagerService } from './services/data-managers/bookmark-manager/bookmark-manager.service';
@@ -16,12 +12,9 @@ import { GenericUtilitiesService } from './services/utilities/generic-utilities/
 import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
 import { ViewHistoryHttpService } from './services/http/view-history-http/view-history-http.service';
 import { ViewHistoryManagerService } from './services/data-managers/view-history-manager/view-history-manager.service';
-import * as CoreModuleAjs from './core.module.ajs.js';
 
 @NgModule({
     providers: [
-        $stateProvider,
-        $stateParamsProvider,
         AuthenticatorService,
         BookmarkHttpService,
         BookmarkManagerService,
@@ -37,10 +30,3 @@ import * as CoreModuleAjs from './core.module.ajs.js';
     ]
 })
 export class CoreModule { }
-
-angular.module(CoreModuleAjs.default)
-    .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
-    .factory('bookmarkManagerService', downgradeInjectable(BookmarkManagerService) as any)
-    .factory('eventManagerService', downgradeInjectable(EventManagerService) as any)
-    .factory('gameManagerService', downgradeInjectable(GameManagerService) as any)
-    .factory('viewHistoryManagerService', downgradeInjectable(ViewHistoryManagerService) as any);

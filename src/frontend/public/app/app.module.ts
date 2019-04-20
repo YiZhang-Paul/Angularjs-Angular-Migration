@@ -1,22 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { UIRouterModule } from '@uirouter/angular';
+import { downgradeComponent, UpgradeModule } from '@angular/upgrade/static';
+import * as angular from 'angular';
 
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
+import { states } from './app.route';
+import { AppComponent } from './app.component';
 import * as AppModuleAjs from './app.module.ajs.js';
 
 @NgModule({
     imports: [
         BrowserModule,
         UpgradeModule,
-        UIRouterUpgradeModule.forRoot(),
+        UIRouterModule.forRoot({ states, useHash: false }),
         CoreModule,
         FeaturesModule,
         SharedModule
-    ]
+    ],
+    declarations: [AppComponent],
+    entryComponents: [AppComponent]
 })
 export class AppModule {
 
@@ -32,3 +37,6 @@ export class AppModule {
         this._upgrade.bootstrap(document.body, [AppModuleAjs.default]);
     }
 }
+
+angular.module(AppModuleAjs.default)
+    .directive('app', downgradeComponent({ component: AppComponent }));

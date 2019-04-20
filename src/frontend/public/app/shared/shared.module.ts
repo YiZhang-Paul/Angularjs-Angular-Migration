@@ -7,12 +7,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { downgradeComponent } from '@angular/upgrade/static';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ToastrModule } from 'ngx-toastr';
-import * as angular from 'angular';
 
-import * as SharedModuleAjs from './shared.module.ajs.js';
 import { ChannelBadgeComponent } from './components/badges/channel-badge/channel-badge.component';
 import { GameBadgeComponent } from './components/badges/game-badge/game-badge.component';
 import { SidebarBadgeComponent } from './components/badges/sidebar-badge/sidebar-badge.component';
@@ -59,8 +56,6 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         UppercaseRomanNumeralsPipe
     ],
     entryComponents: [
-        SidebarComponent,
-        TopNavigationBarComponent,
         UserLoginDialog
     ],
     exports: [
@@ -89,7 +84,3 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
     ]
 })
 export class SharedModule { }
-
-angular.module(SharedModuleAjs.default)
-    .directive('sidebar', downgradeComponent({ component: SidebarComponent }))
-    .directive('topNavbar', downgradeComponent({ component: TopNavigationBarComponent }));
