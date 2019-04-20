@@ -1,3 +1,5 @@
+import { UIRouter } from '@uirouter/angular';
+
 import { BookmarksState } from './features/bookmark/bookmark.route';
 import { ChannelsState, FeaturedState } from './features/channel/channel.route';
 import { GameState } from './features/game/game.route';
@@ -22,3 +24,8 @@ export const states = [
     BookmarksState,
     HistoriesState
 ];
+
+export const config = (router: UIRouter) => {
+
+    router.urlService.rules.otherwise({ state: 'error' });
+};
