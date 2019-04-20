@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 import { EventManagerService } from '../../../services/events/event-manager.service';
 import { ViewHistoryHttpService } from '../../http/view-history-http/view-history-http.service';
-import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub';
 import { stubViewHistoryHttpService } from '../../../../testing/stubs/custom/view-history-http.service.stub';
 
 import { ViewHistoryManagerService } from './view-history-manager.service';

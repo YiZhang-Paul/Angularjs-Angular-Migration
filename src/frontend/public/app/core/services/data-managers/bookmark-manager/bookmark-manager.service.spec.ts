@@ -5,9 +5,9 @@ import { expect } from 'chai';
 
 import { BookmarkHttpService } from '../../../services/http/bookmark-http/bookmark-http.service';
 import { EventManagerService } from '../../../services/events/event-manager.service';
-import { stubToastr } from '../../../../testing/stubs/third-party/toastr.stub';
+import { stubToastrService } from '../../../../testing/stubs/third-party/toastr.stub';
 import { stubBookmarkHttpService } from '../../../../testing/stubs/custom/bookmark-http.service.stub';
-import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub';
 
 import { BookmarkManagerService } from './bookmark-manager.service';
 
@@ -21,7 +21,7 @@ context('bookmark manager service unit test', () => {
 
     beforeEach('stubs setup', () => {
 
-        toastrStub = stubToastr();
+        toastrStub = stubToastrService();
         bookmarkHttpStub = stubBookmarkHttpService();
         eventManagerStub = stubEventManagerService();
     });

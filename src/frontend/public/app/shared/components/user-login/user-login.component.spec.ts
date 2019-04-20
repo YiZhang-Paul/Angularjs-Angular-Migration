@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared.module';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
 import { stubMatDialog } from '../../../testing/stubs/built-in/mat-dialog.stub';
-import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub.js';
+import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { stubUserLoginService } from '../../../testing/stubs/custom/user-login.service.stub';
 
 import { UserLoginComponent } from './user-login.component';

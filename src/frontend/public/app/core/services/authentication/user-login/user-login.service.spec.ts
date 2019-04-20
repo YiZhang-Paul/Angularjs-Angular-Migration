@@ -5,8 +5,8 @@ import { assert as sinonExpect } from 'sinon';
 import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 import { EventManagerService } from '../../../services/events/event-manager.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
-import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
-import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub.js';
+import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub';
+import { stubEventManagerService } from '../../../../testing/stubs/custom/event-manager.service.stub';
 import { stubUserHttpService } from '../../../../testing/stubs/custom/user-http.service.stub';
 
 import { UserLoginService } from './user-login.service';

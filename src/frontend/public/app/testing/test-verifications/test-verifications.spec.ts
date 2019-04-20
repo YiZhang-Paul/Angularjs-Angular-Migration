@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+
 import utilities from './test-verifications';
 
 context('test verifications utilities unit test', () => {

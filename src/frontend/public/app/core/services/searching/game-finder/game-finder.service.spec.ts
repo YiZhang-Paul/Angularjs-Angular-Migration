@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
 import { GameManagerService } from '../../../services/data-managers/game-manager/game-manager.service';
-import { stubGameManagerService } from '../../../../testing/stubs/custom/game-manager.service.stub.js';
+import { stubGameManagerService } from '../../../../testing/stubs/custom/game-manager.service.stub';
 
 import { GameFinder } from './game-finder.service';
 

@@ -5,8 +5,8 @@ import { expect } from 'chai';
 import { ViewHistoryModule } from '../view-history.module';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
-import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
-import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub.js';
+import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
+import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 
 import { ViewHistoryListComponent } from './view-history-list.component';
 

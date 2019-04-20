@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 import { SharedModule } from '../../../shared.module';
 import { CustomRoutingService } from '../../../../core/services/custom-routing/custom-routing.service';
-import { stubCustomRoutingService } from '../../../../testing/stubs/custom/custom-routing.service.stub.js';
+import { stubCustomRoutingService } from '../../../../testing/stubs/custom/custom-routing.service.stub';
 
 import { SidebarBadgeComponent } from './sidebar-badge.component';
 

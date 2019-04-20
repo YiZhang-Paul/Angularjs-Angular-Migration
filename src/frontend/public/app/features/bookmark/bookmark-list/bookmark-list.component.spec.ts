@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 import { BookmarkModule } from '../bookmark.module';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
-import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub.js';
+import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 
 import { BookmarkListComponent } from './bookmark-list.component';
 

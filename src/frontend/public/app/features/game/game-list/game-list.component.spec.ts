@@ -5,8 +5,8 @@ import { expect } from 'chai';
 import { GameModule } from '../game.module';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { GameManagerService } from '../../../core/services/data-managers/game-manager/game-manager.service';
-import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
-import { stubGameManagerService } from '../../../testing/stubs/custom/game-manager.service.stub.js';
+import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
+import { stubGameManagerService } from '../../../testing/stubs/custom/game-manager.service.stub';
 
 import { GameListComponent } from './game-list.component';
 
