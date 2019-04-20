@@ -1,3 +1,6 @@
+import { GameChannelListComponent } from './game-channel-list/game-channel-list.component';
+import { FeaturedChannelListComponent } from './featured-channel-list/featured-channel-list.component';
+
 export const ChannelsState = {
 
     name: 'channels',
@@ -5,7 +8,7 @@ export const ChannelsState = {
     state: {
 
         url: '^/games/:name',
-        component: 'gameChannelList',
+        component: GameChannelListComponent,
         params: { channels: null }
     }
 };
@@ -17,6 +20,6 @@ export const FeaturedState = {
     state: {
 
         url: '^/featured',
-        component: 'featuredChannelList'
+        component: FeaturedChannelListComponent
     }
 };
