@@ -2,4 +2,4 @@ const moduleName = 'sample-app-shared';
 
 export default moduleName;
 
-angular.module(moduleName, ['ngAnimate']);
+angular.module(moduleName, []);
