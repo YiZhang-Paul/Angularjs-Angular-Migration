@@ -59,15 +59,8 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         UppercaseRomanNumeralsPipe
     ],
     entryComponents: [
-        ChannelBadgeComponent,
-        GameBadgeComponent,
-        SidebarBadgeComponent,
         SidebarComponent,
-        SearchBoxComponent,
-        DropdownSearchBoxComponent,
         TopNavigationBarComponent,
-        UserWidgetComponent,
-        UserLoginComponent,
         UserLoginDialog
     ],
     exports: [
@@ -98,11 +91,5 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
 export class SharedModule { }
 
 angular.module(SharedModuleAjs.default)
-    .directive('channelBadge', downgradeComponent({ component: ChannelBadgeComponent }))
-    .directive('gameBadge', downgradeComponent({ component: GameBadgeComponent }))
-    .directive('sidebarBadge', downgradeComponent({ component: SidebarBadgeComponent }))
     .directive('sidebar', downgradeComponent({ component: SidebarComponent }))
-    .directive('searchBox', downgradeComponent({ component: SearchBoxComponent }))
-    .directive('dropdownSearchBox', downgradeComponent({ component: DropdownSearchBoxComponent }))
-    .directive('topNavbar', downgradeComponent({ component: TopNavigationBarComponent }))
-    .directive('userLogin', downgradeComponent({ component: UserLoginComponent }));
+    .directive('topNavbar', downgradeComponent({ component: TopNavigationBarComponent }));
