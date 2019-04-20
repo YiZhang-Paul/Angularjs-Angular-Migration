@@ -1,5 +1,4 @@
 import CoreModule from './core/core.module.ajs';
-import FeaturesModule from './features/features.module.ajs';
 import SharedModule from './shared/shared.module.ajs';
 
 import { AppComponent } from './app.component';
@@ -16,7 +15,6 @@ export const app = angular.module(moduleName, [
     'ui.router',
     'ui.router.upgrade',
     CoreModule,
-    FeaturesModule,
     SharedModule
 ]);
 

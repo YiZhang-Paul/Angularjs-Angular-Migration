@@ -1,3 +1,5 @@
+import { ViewHistoryListComponent } from './view-history-list/view-history-list.component';
+
 export const HistoriesState = {
 
     name: 'histories',
@@ -5,6 +7,6 @@ export const HistoriesState = {
     state: {
 
         url: '^/histories',
-        component: 'viewHistoryList'
+        component: ViewHistoryListComponent
     }
 };
