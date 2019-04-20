@@ -1,3 +1,5 @@
+import { BookmarkListComponent } from './bookmark-list/bookmark-list.component';
+
 export const BookmarksState = {
 
     name: 'bookmarks',
@@ -5,6 +7,6 @@ export const BookmarksState = {
     state: {
 
         url: '^/bookmarks',
-        component: 'bookmarkList'
+        component: BookmarkListComponent
     }
 };
