@@ -18,7 +18,7 @@ export class SearchBoxComponent {
         this._gameFinder = gameFinder;
     }
 
-    public search(keyword) {
+    public search(keyword: string): void {
 
         const result = {
 

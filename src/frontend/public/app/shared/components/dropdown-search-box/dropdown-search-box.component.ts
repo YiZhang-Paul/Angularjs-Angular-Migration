@@ -9,7 +9,7 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 })
 export class DropdownSearchBoxComponent {
 
-    public result: any = null;
+    public result: { games: any[] } = null;
 
     private _routingService: CustomRoutingService;
 
@@ -18,7 +18,7 @@ export class DropdownSearchBoxComponent {
         this._routingService = routingService;
     }
 
-    public toChannelsView(game) {
+    public toChannelsView(game: any): void {
 
         this._routingService.toChannelsView(game.id);
         this.result = null;

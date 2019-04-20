@@ -14,7 +14,7 @@ export class ChannelService {
         this._channelHttp = channelHttp;
     }
 
-    private isSameChannel(a, b) {
+    private isSameChannel(a: any, b: any): boolean {
 
         if (!a || !b || a.provider_id !== b.provider_id) {
 
@@ -24,7 +24,7 @@ export class ChannelService {
         return a.provider_channel_id === b.provider_channel_id;
     }
 
-    public refreshChannels(outdated, updated) {
+    public refreshChannels(outdated: any[], updated: any[]): void {
 
         for (let i = 0; i < updated.length; i++) {
 
@@ -41,7 +41,7 @@ export class ChannelService {
         }
     }
 
-    public loadFeaturedChannels(cache) {
+    public loadFeaturedChannels(cache: any[]): Promise<void> {
 
         return this._channelHttp.getChannels().then(channels => {
 
@@ -50,7 +50,7 @@ export class ChannelService {
         .catch(error => console.log(error));
     }
 
-    public loadGameChannels(cache, id) {
+    public loadGameChannels(cache: any[], id: number): Promise<void> {
 
         return this._channelHttp.getChannelsByGameId(id).then(channels => {
 

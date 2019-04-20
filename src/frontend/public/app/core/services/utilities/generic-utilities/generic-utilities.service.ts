@@ -5,29 +5,29 @@ import { Injectable } from '@angular/core';
 })
 export class GenericUtilitiesService {
 
-    public joinText(text, delimiter = '-') {
+    public joinText(text: string, delimiter = '-'): string {
 
         const trimmed = text.trim().replace(/\s{2,}/g, ' ');
 
         return trimmed.replace(/\s/g, delimiter);
     }
 
-    public excludeIndex(collection, index) {
+    public excludeIndex<T>(collection: T[], index: number): T[] {
 
         return excludeIndex(collection, index);
     }
 
-    public hasMatchingValues(a, b, keys) {
+    public hasMatchingValues(a: any, b: any, keys: string[]): boolean {
 
         return keys.every(key => a[key] === b[key]);
     }
 
-    public hasOwnProperties(object, keys) {
+    public hasOwnProperties(object: any, keys: string[]): boolean {
 
         return keys.every(key => object.hasOwnProperty(key));
     }
 
-    public findByProperties(objects, object, keys) {
+    public findByProperties(objects: any[], object: any, keys: string[]): any {
 
         const result = objects.find(_ => {
 
@@ -38,7 +38,7 @@ export class GenericUtilitiesService {
     }
 }
 
-export function excludeIndex(collection, index) {
+export function excludeIndex<T>(collection: T[], index: number): T[] {
 
     if (index < 0 || index > collection.length - 1) {
 

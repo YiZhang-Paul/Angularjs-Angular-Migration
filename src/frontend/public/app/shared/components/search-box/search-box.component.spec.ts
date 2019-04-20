@@ -13,7 +13,7 @@ context('search box component unit test', () => {
     let fixture: ComponentFixture<SearchBoxComponent>;
     let component: SearchBoxComponent;
 
-    let gameFinderStub;
+    let gameFinderStub: any;
 
     beforeEach('stubs setup', () => {
 

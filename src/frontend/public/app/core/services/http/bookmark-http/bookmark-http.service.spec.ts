@@ -15,7 +15,7 @@ context('bookmark http service unit test', () => {
     let httpController: HttpTestingController;
     let service: BookmarkHttpService;
 
-    let authenticatorStub;
+    let authenticatorStub: any;
 
     beforeEach('stubs setup', () => {
 

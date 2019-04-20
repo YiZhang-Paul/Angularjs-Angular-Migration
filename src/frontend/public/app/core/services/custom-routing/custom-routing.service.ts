@@ -30,12 +30,12 @@ export class CustomRoutingService {
         this._utilities = utilities;
     }
 
-    public toState(state) {
+    public toState(state: string): void {
 
         this._state.go(state);
     }
 
-    public toChannelsView(id, stateName = 'channels') {
+    public toChannelsView(id: number, state = 'channels'): void {
 
         const gamePromise = this._gameHttp.getGame(id);
         const channelsPromise = this._channelHttp.getChannelsByGameId(id);
@@ -45,7 +45,7 @@ export class CustomRoutingService {
             const [game, channels] = responses;
             const name = this._utilities.joinText(game.name);
 
-            this._state.go(stateName, { name, channels });
+            this._state.go(state, { name, channels });
         })
         .catch(error => console.log(error));
     }

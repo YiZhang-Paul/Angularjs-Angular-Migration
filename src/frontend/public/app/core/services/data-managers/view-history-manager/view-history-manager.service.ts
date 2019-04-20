@@ -8,7 +8,7 @@ import { EventManagerService } from '../../events/event-manager.service';
 })
 export class ViewHistoryManagerService {
 
-    public histories = [];
+    public histories: any[] = [];
 
     private _viewHistoryHttp: ViewHistoryHttpService;
     private _eventManager: EventManagerService;
@@ -24,7 +24,7 @@ export class ViewHistoryManagerService {
         this._eventManager = eventManager;
     }
 
-    public cacheHistories() {
+    public cacheHistories(): Promise<void> {
 
         return this._viewHistoryHttp.getHistories().then(histories => {
 
@@ -34,7 +34,7 @@ export class ViewHistoryManagerService {
         .catch(error => console.log(error));
     }
 
-    public addHistory(channel) {
+    public addHistory(channel: any): Promise<void> {
 
         return this._viewHistoryHttp.addHistory(channel)
             .then(() => this.cacheHistories())
@@ -42,7 +42,7 @@ export class ViewHistoryManagerService {
             .catch(error => console.log(error));
     }
 
-    private removeCached(id) {
+    private removeCached(id: number): void {
 
         const index = this.histories.findIndex(_ => _.id === id);
 
@@ -52,9 +52,9 @@ export class ViewHistoryManagerService {
         }
     }
 
-    public deleteHistory(id) {
+    public deleteHistory(id: number): Promise<void> {
 
-        this._viewHistoryHttp.deleteHistory(id).then(() => {
+        return this._viewHistoryHttp.deleteHistory(id).then(() => {
 
             this.removeCached(id);
             this._eventManager.emit('historyRemoved');
@@ -62,7 +62,7 @@ export class ViewHistoryManagerService {
         .catch(error => console.log(error));
     }
 
-    public clearHistories() {
+    public clearHistories(): Promise<void> {
 
         return this._viewHistoryHttp.deleteHistories().then(() => {
 

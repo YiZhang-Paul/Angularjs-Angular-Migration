@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
         this.registerAuthenticationEvents();
     }
 
-    private cacheData() {
+    private cacheData(): void {
 
         if (this._authenticator.isAuthenticated) {
 
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
         this._gameManager.cacheGames();
     }
 
-    private registerAuthenticationEvents() {
+    private registerAuthenticationEvents(): void {
 
         this._eventManager.subscribe('userAuthenticated', () => {
 

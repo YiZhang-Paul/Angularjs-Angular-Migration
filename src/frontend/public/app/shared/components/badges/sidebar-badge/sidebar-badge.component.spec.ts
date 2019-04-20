@@ -12,7 +12,7 @@ context('sidebar badge component unit test', () => {
     let fixture: ComponentFixture<SidebarBadgeComponent>;
     let component: SidebarBadgeComponent;
 
-    let customRoutingServiceStub;
+    let customRoutingServiceStub: any;
 
     beforeEach('stubs setup', () => {
 

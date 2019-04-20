@@ -11,7 +11,7 @@ context('channel service unit test', () => {
 
     let service: ChannelService;
 
-    let channelHttpStub;
+    let channelHttpStub: any;
 
     beforeEach('stubs setup', () => {
 

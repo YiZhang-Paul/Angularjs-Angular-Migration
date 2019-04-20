@@ -13,7 +13,7 @@ context('channel card component unit test', () => {
     let fixture: ComponentFixture<ChannelCardComponent>;
     let component: ChannelCardComponent;
 
-    let thumbnailPlayerStub;
+    let thumbnailPlayerStub: any;
 
     beforeEach('stubs setup', () => {
 

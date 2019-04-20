@@ -17,10 +17,10 @@ context('custom routing service unit test', () => {
 
     let service: CustomRoutingService;
 
-    let stateStub;
-    let gameHttpStub;
-    let channelHttpStub;
-    let genericUtilitiesStub;
+    let stateStub: any;
+    let gameHttpStub: any;
+    let channelHttpStub: any;
+    let genericUtilitiesStub: any;
 
     beforeEach('stubs setup', () => {
 

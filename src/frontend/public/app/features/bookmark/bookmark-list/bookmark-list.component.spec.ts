@@ -13,7 +13,7 @@ context('bookmark list component unit test', () => {
     let fixture: ComponentFixture<BookmarkListComponent>;
     let component: BookmarkListComponent;
 
-    let bookmarkManagerStub;
+    let bookmarkManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

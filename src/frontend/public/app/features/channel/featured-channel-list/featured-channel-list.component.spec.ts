@@ -19,9 +19,9 @@ context('featured channel list component unit test', () => {
     let fixture: ComponentFixture<FeaturedChannelListComponent>;
     let component: FeaturedChannelListComponent;
 
-    let bookmarkManagerStub;
-    let channelServiceStub;
-    let viewHistoryManagerStub;
+    let bookmarkManagerStub: any;
+    let channelServiceStub: any;
+    let viewHistoryManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

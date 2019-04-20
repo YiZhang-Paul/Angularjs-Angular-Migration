@@ -9,8 +9,8 @@ import { CustomRoutingService } from '../../../../core/services/custom-routing/c
 })
 export class SidebarBadgeComponent {
 
-    @Input() public channelBadges: any;
-    @Input() public route: any;
+    @Input() public channelBadges: any[];
+    @Input() public route: string;
 
     private _routingService: CustomRoutingService;
 
@@ -19,7 +19,7 @@ export class SidebarBadgeComponent {
         this._routingService = routingService;
     }
 
-    public toState() {
+    public toState(): void {
 
         this._routingService.toState(this.route);
     }

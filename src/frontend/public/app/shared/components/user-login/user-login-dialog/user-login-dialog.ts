@@ -13,12 +13,12 @@ export class UserLoginDialog {
 
     private _noError = true;
 
-    private _data: any;
+    private _data: { callback: Function };
     private _dialogRef: MatDialogRef<UserLoginDialog>;
 
     constructor(
 
-        @Inject(MAT_DIALOG_DATA) data: any,
+        @Inject(MAT_DIALOG_DATA) data: { callback: Function },
         dialogRef: MatDialogRef<UserLoginDialog>
 
     ) {
@@ -32,7 +32,7 @@ export class UserLoginDialog {
         return this._noError;
     }
 
-    public onKeyup(event): void {
+    public onKeyup(event: any): void {
 
         if (event.keyCode === 13) {
 

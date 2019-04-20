@@ -10,8 +10,8 @@ context('user login dialog unit test', () => {
 
     let dialog: UserLoginDialog;
 
-    let callbackStub;
-    let matDialogRefStub;
+    let callbackStub: any;
+    let matDialogRefStub: any;
 
     beforeEach('stubs setup', () => {
 

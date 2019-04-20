@@ -4,7 +4,7 @@ import { ShortViewCountPipe } from './short-view-count.pipe';
 
 context('short view count pipe unit test', () => {
 
-    let pipe;
+    let pipe: ShortViewCountPipe;
 
     beforeEach('general test setup', () => {
 
@@ -15,7 +15,7 @@ context('short view count pipe unit test', () => {
 
         it('should return same number when number is smaller than 1000', () => {
 
-            const expected = 999;
+            const expected = '999';
 
             expect(pipe.transform(+expected)).to.equal(expected);
         });

@@ -15,7 +15,7 @@ export class GameHttpService {
         this._http = http;
     }
 
-    public getGame(id): Promise<any> {
+    public getGame(id: number): Promise<any> {
 
         const url = `${this._api}/${id}`;
 
@@ -25,7 +25,7 @@ export class GameHttpService {
         });
     }
 
-    public getGameByName(name): Promise<any> {
+    public getGameByName(name: string): Promise<any> {
 
         return this.getGames().then(games => {
 

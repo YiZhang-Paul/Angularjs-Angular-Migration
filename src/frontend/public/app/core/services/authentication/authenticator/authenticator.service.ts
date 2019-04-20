@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { IBasicCredential } from '../../../interfaces/authentication/basic-credential.interface';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -18,31 +20,31 @@ export class AuthenticatorService {
         this._http = http;
     }
 
-    get token() {
+    get token(): string {
 
         return `${this._header}.${this._payload}.${this._signature}`;
     }
 
-    get defaultHeaders() {
+    get defaultHeaders(): { Authorization: string } {
 
         return ({ 'Authorization': `bearer ${this.token}` });
     }
 
-    get defaultOptions() {
+    get defaultOptions(): { headers: any } {
 
         return ({ headers: this.defaultHeaders });
     }
 
-    get isAuthenticated() {
+    get isAuthenticated(): boolean {
 
         return !!(this._header && this._payload && this._signature);
     }
 
-    public requestToken(username, password) {
+    public requestToken(username: string, password: string): Promise<string> {
 
-        const data = { username, password };
+        const data: IBasicCredential = { username, password };
 
-        return this._http.post(this._api, data).toPromise().then((response: { token: any }) => {
+        return this._http.post(this._api, data).toPromise().then((response: { token: string }) => {
 
             const token = response.token;
             [this._header, this._payload, this._signature] = token.split('.');
@@ -51,7 +53,7 @@ export class AuthenticatorService {
         });
     }
 
-    public clearToken() {
+    public clearToken(): void {
 
         this._header = '';
         this._payload = '';

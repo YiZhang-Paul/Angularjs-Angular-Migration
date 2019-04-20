@@ -10,7 +10,7 @@ context('game finder service unit test', () => {
 
     let service: GameFinder;
 
-    let gameManagerStub;
+    let gameManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

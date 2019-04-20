@@ -16,7 +16,7 @@ export class BookmarkListComponent implements OnInit {
         this._bookmarkManager = bookmarkManager;
     }
 
-    get bookmarks(): any {
+    get bookmarks(): any[] {
 
         return this._bookmarkManager.bookmarks;
     }
@@ -26,7 +26,7 @@ export class BookmarkListComponent implements OnInit {
         this._bookmarkManager.cacheBookmarks();
     }
 
-    public unfollow(bookmark): void {
+    public unfollow(bookmark: any): void {
 
         this._bookmarkManager.unfollow(bookmark).catch(error => console.log(error));
     }

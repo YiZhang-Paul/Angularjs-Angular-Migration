@@ -29,11 +29,11 @@ context('app component unit test', () => {
     let fixture: ComponentFixture<AppComponent>;
     let component: AppComponent;
 
-    let authenticatorStub;
-    let bookmarkManagerStub;
-    let gameManagerStub;
-    let viewHistoryManagerStub;
-    let eventManagerStub;
+    let authenticatorStub: any;
+    let bookmarkManagerStub: any;
+    let gameManagerStub: any;
+    let viewHistoryManagerStub: any;
+    let eventManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

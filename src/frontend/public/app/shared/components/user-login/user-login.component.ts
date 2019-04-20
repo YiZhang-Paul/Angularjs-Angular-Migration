@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
+import { IBasicCredential } from '../../../core/interfaces/authentication/basic-credential.interface';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
 
@@ -42,7 +43,7 @@ export class UserLoginComponent {
         return this._authenticator.isAuthenticated;
     }
 
-    private async onLogin(credentials: any): Promise<any> {
+    private async onLogin(credentials: IBasicCredential): Promise<any> {
 
         this._user = await this._userLogin.login(credentials);
     }

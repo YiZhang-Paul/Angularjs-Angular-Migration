@@ -15,8 +15,8 @@ context('view history list component unit test', () => {
     let fixture: ComponentFixture<ViewHistoryListComponent>;
     let component: ViewHistoryListComponent;
 
-    let customRoutingStub;
-    let viewHistoryManagerStub;
+    let customRoutingStub: any;
+    let viewHistoryManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

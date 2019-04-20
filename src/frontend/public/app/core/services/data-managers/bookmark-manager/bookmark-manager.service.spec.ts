@@ -15,9 +15,9 @@ context('bookmark manager service unit test', () => {
 
     let service: BookmarkManagerService;
 
-    let toastrStub;
-    let bookmarkHttpStub;
-    let eventManagerStub;
+    let toastrStub: any;
+    let bookmarkHttpStub: any;
+    let eventManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

@@ -4,7 +4,7 @@ import { CapitalizePipe } from './capitalize.pipe';
 
 context('capitalize pipe unit test', () => {
 
-    let pipe;
+    let pipe: CapitalizePipe;
 
     beforeEach('general test setup', () => {
 

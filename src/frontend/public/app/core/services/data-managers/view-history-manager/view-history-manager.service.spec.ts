@@ -13,8 +13,8 @@ context('view history manager service unit test', () => {
 
     let service: ViewHistoryManagerService;
 
-    let eventManagerStub;
-    let viewHistoryHttpStub;
+    let eventManagerStub: any;
+    let viewHistoryHttpStub: any;
 
     beforeEach('stubs setup', () => {
 

@@ -6,9 +6,9 @@ import { ThumbnailPlayerService } from './thumbnail-player.service';
 
 context('thumbnail player service unit test', () => {
 
-    let service;
+    let service: ThumbnailPlayerService;
 
-    let domElementStub;
+    let domElementStub: any;
 
     beforeEach('stubs setup', () => {
 

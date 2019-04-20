@@ -15,7 +15,7 @@ export class ClearHistoriesDialog {
         this._dialogRef = dialogRef;
     }
 
-    public onClose(isConfirmed): void {
+    public onClose(isConfirmed: boolean): void {
 
         this._dialogRef.close(isConfirmed);
     }

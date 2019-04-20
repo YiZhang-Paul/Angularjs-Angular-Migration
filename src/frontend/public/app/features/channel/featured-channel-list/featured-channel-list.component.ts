@@ -11,9 +11,9 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 })
 export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
-    public channels = [];
+    public channels: any[] = [];
 
-    private _task: any = null;
+    private _task: NodeJS.Timeout = null;
 
     private _bookmarkManager: BookmarkManagerService;
     private _channelService: ChannelService;
@@ -37,7 +37,7 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
         this.setupChannelLoading();
     }
 
-    private setupChannelLoading() {
+    private setupChannelLoading(): void {
 
         this._task = setInterval(() => {
 
@@ -46,22 +46,22 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
         }, 10 * 1000);
     }
 
-    public isFollowed(channel) {
+    public isFollowed(channel: any): boolean {
 
         return this._bookmarkManager.isFollowed(channel);
     }
 
-    public follow(channel) {
+    public follow(channel: any): void {
 
         this._bookmarkManager.follow(channel);
     }
 
-    public unfollow(channel) {
+    public unfollow(channel: any): void {
 
         this._bookmarkManager.unfollow(channel);
     }
 
-    public addHistory(channel) {
+    public addHistory(channel: any): void {
 
         this._viewHistoryManager.addHistory(channel);
     }

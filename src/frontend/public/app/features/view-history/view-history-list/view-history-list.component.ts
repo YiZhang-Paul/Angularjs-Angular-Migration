@@ -30,7 +30,7 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager = viewHistoryManager;
     }
 
-    get histories(): any {
+    get histories(): any[] {
 
         return this._viewHistoryManager.histories;
     }
@@ -40,22 +40,22 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager.cacheHistories();
     }
 
-    public isStaticImage(url): any {
+    public isStaticImage(url: string): boolean {
 
         return !/(mp4|m4v)$/i.test(url);
     }
 
-    public toChannelsView(id) {
+    public toChannelsView(id: number): void {
 
         this._routingService.toChannelsView(id);
     }
 
-    public deleteHistory(history) {
+    public deleteHistory(history: any): void {
 
         this._viewHistoryManager.deleteHistory(history.id);
     }
 
-    public confirmClearHistories() {
+    public confirmClearHistories(): void {
 
         const width = '25%';
         const dialog = this._dialog.open(ClearHistoriesDialog, { width });

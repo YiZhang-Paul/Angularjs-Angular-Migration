@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ViewHistoryCardComponent {
 
     @Input() public viewHistory: any;
-    @Input() public isStaticThumbnail: any;
+    @Input() public isStaticThumbnail: boolean;
     @Output() public onChannelNavigation = new EventEmitter();
     @Output() public onDelete = new EventEmitter();
 }

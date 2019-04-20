@@ -10,7 +10,7 @@ import { ThumbnailPlayerService } from '../../../core/services/utilities/thumbna
 export class ChannelCardComponent {
 
     @Input() public channel: any;
-    @Input() public isFollowed: any;
+    @Input() public isFollowed: boolean;
     @Output() public onFollow = new EventEmitter();
     @Output() public onUnfollow = new EventEmitter();
 

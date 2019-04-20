@@ -27,12 +27,12 @@ context('game channel list component unit test', () => {
     let fixture: ComponentFixture<GameChannelListComponent>;
     let component: GameChannelListComponent;
 
-    let gameHttpStub;
-    let channelServiceStub;
-    let bookmarkManagerStub;
-    let stateParamsStub;
-    let transitionStub;
-    let viewHistoryManagerStub;
+    let gameHttpStub: any;
+    let channelServiceStub: any;
+    let bookmarkManagerStub: any;
+    let stateParamsStub: any;
+    let transitionStub: any;
+    let viewHistoryManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

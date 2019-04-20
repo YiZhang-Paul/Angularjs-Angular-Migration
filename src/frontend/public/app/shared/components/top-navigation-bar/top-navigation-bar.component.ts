@@ -16,7 +16,7 @@ export class TopNavigationBarComponent {
         this._routingService = routingService;
     }
 
-    public toMainPage() {
+    public toMainPage(): void {
 
         this._routingService.toState('index');
     }

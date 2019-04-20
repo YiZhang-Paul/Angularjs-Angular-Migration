@@ -5,12 +5,12 @@ import { Injectable } from '@angular/core';
 })
 export class ThumbnailPlayerService {
 
-    public play(thumbnail) {
+    public play(thumbnail: any): void {
 
         thumbnail.srcElement.play();
     }
 
-    public stop(thumbnail) {
+    public stop(thumbnail: any): void {
 
         thumbnail.srcElement.pause();
         thumbnail.srcElement.currentTime = 0;

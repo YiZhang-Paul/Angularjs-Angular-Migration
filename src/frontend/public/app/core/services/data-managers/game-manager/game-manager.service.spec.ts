@@ -11,7 +11,7 @@ context('game manager service unit test', () => {
 
     let service: GameManagerService;
 
-    let gameHttpStub;
+    let gameHttpStub: any;
 
     beforeEach('stubs setup', () => {
 
