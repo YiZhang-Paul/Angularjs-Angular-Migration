@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { StateParams } from '@uirouter/angular';
+import { Transition } from '@uirouter/angular';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
@@ -12,6 +12,7 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { stubTransition } from '../../../testing/stubs/third-party/transition.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 import { ChannelCardComponent } from '../channel-card/channel-card.component';
 
@@ -30,6 +31,7 @@ context('game channel list component unit test', () => {
     let channelServiceStub;
     let bookmarkManagerStub;
     let stateParamsStub;
+    let transitionStub;
     let viewHistoryManagerStub;
 
     beforeEach('stubs setup', () => {
@@ -37,6 +39,9 @@ context('game channel list component unit test', () => {
         gameHttpStub = stubGameHttpService();
         channelServiceStub = stubChannelService();
         bookmarkManagerStub = stubBookmarkManagerService();
+        stateParamsStub = {};
+        transitionStub = stubTransition();
+        transitionStub.params.returns(stateParamsStub);
         viewHistoryManagerStub = stubViewHistoryManagerService();
     });
 
@@ -56,7 +61,7 @@ context('game channel list component unit test', () => {
                 { provide: GameHttpService, useValue: gameHttpStub },
                 { provide: ChannelService, useValue: channelServiceStub },
                 { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
-                { provide: StateParams, useValue: {} },
+                { provide: Transition, useValue: transitionStub },
                 { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
@@ -66,7 +71,7 @@ context('game channel list component unit test', () => {
         gameHttpStub = TestBed.get(GameHttpService);
         channelServiceStub = TestBed.get(ChannelService);
         bookmarkManagerStub = TestBed.get(BookmarkManagerService);
-        stateParamsStub = TestBed.get(StateParams);
+        transitionStub = TestBed.get(Transition);
         viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
