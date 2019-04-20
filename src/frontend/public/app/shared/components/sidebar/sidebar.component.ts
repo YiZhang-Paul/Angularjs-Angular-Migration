@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { $rootScope } from '../../../core/upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
-import { ChannelHttp } from '../../../core/upgraded-providers/channel-http-provider/channel-http-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
+import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
+import { EventManagerService } from '../../../core/services/events/event-manager.service';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
 @Component({
     selector: 'sidebar',
@@ -18,28 +18,28 @@ export class SidebarComponent implements OnInit {
     public routes = new Map();
 
     private _options = ['Followed Channels', 'Featured Channels', 'View History'];
-    private _states = ['index.bookmarks', 'index.featured', 'index.histories'];
+    private _states = ['bookmarks', 'featured', 'histories'];
 
-    private _$scope: any;
     private _authenticator: AuthenticatorService;
-    private _bookmarkManager: BookmarkManager;
-    private _channelHttp: ChannelHttp;
-    private _viewHistoryManager: ViewHistoryManager;
+    private _bookmarkManager: BookmarkManagerService;
+    private _channelHttp: ChannelHttpService;
+    private _eventManager: EventManagerService;
+    private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
-        $rootScope: $rootScope,
         authenticator: AuthenticatorService,
-        bookmarkManager: BookmarkManager,
-        channelHttp: ChannelHttp,
-        viewHistoryManager: ViewHistoryManager
+        bookmarkManager: BookmarkManagerService,
+        channelHttp: ChannelHttpService,
+        eventManager: EventManagerService,
+        viewHistoryManager: ViewHistoryManagerService
 
     ) {
 
-        this._$scope = $rootScope.$new();
         this._authenticator = authenticator;
         this._bookmarkManager = bookmarkManager;
         this._channelHttp = channelHttp;
+        this._eventManager = eventManager;
         this._viewHistoryManager = viewHistoryManager;
     }
 
@@ -98,7 +98,7 @@ export class SidebarComponent implements OnInit {
 
     private registerAuthenticationEvents() {
 
-        this._$scope.$on('userLoggedOut', () => {
+        this._eventManager.subscribe('userLoggedOut', () => {
 
             this.badges.delete(this._options[0]);
             this.badges.delete(this._options[2]);
@@ -111,7 +111,7 @@ export class SidebarComponent implements OnInit {
 
         for (const event of events) {
 
-            this._$scope.$on(event, () => this.loadBookmarks());
+            this._eventManager.subscribe(event, () => this.loadBookmarks());
         }
     }
 
@@ -121,7 +121,7 @@ export class SidebarComponent implements OnInit {
 
         for (const event of events) {
 
-            this._$scope.$on(`history${event}`, () => this.loadHistories());
+            this._eventManager.subscribe(`history${event}`, () => this.loadHistories());
         }
     }
 

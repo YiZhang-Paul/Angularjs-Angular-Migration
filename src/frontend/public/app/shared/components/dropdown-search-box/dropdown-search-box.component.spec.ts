@@ -3,8 +3,8 @@ import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
 import { SharedModule } from '../../shared.module';
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
-import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
+import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
 import { GameFinder } from '../../../core/services/searching/game-finder/game-finder.service';
 import { stubGameFinder } from '../../../testing/stubs/custom/game-finder.service.stub';
 

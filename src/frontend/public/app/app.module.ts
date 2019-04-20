@@ -1,34 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { UIRouterModule } from '@uirouter/angular';
 
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
-import * as AppModuleAjs from './app.module.ajs.js';
+import { routeSetup } from './app.route';
+import { AppComponent } from './app.component';
+import { ErrorComponent } from './error.component';
 
 @NgModule({
     imports: [
         BrowserModule,
-        UpgradeModule,
-        UIRouterUpgradeModule.forRoot(),
+        UIRouterModule.forRoot(routeSetup),
         CoreModule,
         FeaturesModule,
         SharedModule
-    ]
+    ],
+    declarations: [
+        AppComponent,
+        ErrorComponent
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {
-
-    private _upgrade: UpgradeModule;
-
-    constructor(upgrade: UpgradeModule) {
-
-        this._upgrade = upgrade;
-    }
-
-    public ngDoBootstrap(): void {
-
-        this._upgrade.bootstrap(document.body, [AppModuleAjs.default]);
-    }
-}
+export class AppModule { }

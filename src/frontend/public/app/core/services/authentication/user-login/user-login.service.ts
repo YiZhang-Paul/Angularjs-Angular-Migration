@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { $rootScope } from '../../../upgraded-providers/$rootScope-provider/$rootScope-provider';
 import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
+import { EventManagerService } from '../../events/event-manager.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
 
 @Injectable({
@@ -9,20 +9,20 @@ import { UserHttpService } from '../../http/user-http/user-http.service';
 })
 export class UserLoginService {
 
-    private _$rootScope: $rootScope;
     private _authenticator: AuthenticatorService;
+    private _eventManager: EventManagerService;
     private _userHttp: UserHttpService;
 
     constructor(
 
-        $rootScope: $rootScope,
         authenticator: AuthenticatorService,
+        eventManager: EventManagerService,
         userHttp: UserHttpService
 
     ) {
 
-        this._$rootScope = $rootScope;
         this._authenticator = authenticator;
+        this._eventManager = eventManager;
         this._userHttp = userHttp;
     }
 
@@ -44,7 +44,7 @@ export class UserLoginService {
 
         const { username, password } = credentials;
         await this._authenticator.requestToken(username, password);
-        this._$rootScope.$broadcast('userAuthenticated');
+        this._eventManager.emit('userAuthenticated');
 
         return this.getUser();
     }
@@ -52,6 +52,6 @@ export class UserLoginService {
     public logout(): void {
 
         this._authenticator.clearToken();
-        this._$rootScope.$broadcast('userLoggedOut');
+        this._eventManager.emit('userLoggedOut');
     }
 }

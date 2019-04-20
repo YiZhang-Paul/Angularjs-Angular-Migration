@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
 import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
-import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub.js';
-import { hasAuthenticationToken } from '../../../../testing/test-verifications/test-verifications.js';
+import { stubAuthenticatorService } from '../../../../testing/stubs/custom/authenticator.service.stub';
+import { hasAuthenticationToken } from '../../../../testing/test-verifications/test-verifications';
 
 import { UserHttpService } from './user-http.service';
 

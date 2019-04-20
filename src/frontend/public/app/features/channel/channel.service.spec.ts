@@ -2,7 +2,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { ChannelHttp } from '../../core/upgraded-providers/channel-http-provider/channel-http-provider';
+import { ChannelHttpService } from '../../core/services/http/channel-http/channel-http.service';
 import { stubChannelHttpService } from '../../testing/stubs/custom/channel-http.service.stub';
 
 import { ChannelService } from './channel.service';
@@ -25,12 +25,12 @@ context('channel service unit test', () => {
             providers: [
 
                 ChannelService,
-                { provide: ChannelHttp, useValue: channelHttpStub }
+                { provide: ChannelHttpService, useValue: channelHttpStub }
             ]
         });
 
         service = TestBed.get(ChannelService);
-        channelHttpStub = TestBed.get(ChannelHttp);
+        channelHttpStub = TestBed.get(ChannelHttpService);
     });
 
     it('should resolve', () => {

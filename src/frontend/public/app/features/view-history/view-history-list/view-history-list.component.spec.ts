@@ -1,15 +1,13 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
 import { ViewHistoryModule } from '../view-history.module';
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
-import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub.js';
-import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub.js';
-import { stubViewHistoryListService } from '../../../testing/stubs/custom/view-history-list.service.stub.js';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
+import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
+import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 
-import { ViewHistoryListService } from './view-history-list.service';
 import { ViewHistoryListComponent } from './view-history-list.component';
 
 context('view history list component unit test', () => {
@@ -19,13 +17,11 @@ context('view history list component unit test', () => {
 
     let customRoutingStub;
     let viewHistoryManagerStub;
-    let viewHistoryListServiceStub;
 
     beforeEach('stubs setup', () => {
 
         customRoutingStub = stubCustomRoutingService();
         viewHistoryManagerStub = stubViewHistoryManagerService();
-        viewHistoryListServiceStub = stubViewHistoryListService();
     });
 
     beforeEach('general test setup', () => {
@@ -36,16 +32,14 @@ context('view history list component unit test', () => {
             providers: [
 
                 { provide: CustomRoutingService, useValue: customRoutingStub },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub },
-                { provide: ViewHistoryListService, useValue: viewHistoryListServiceStub }
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
 
         fixture = TestBed.createComponent(ViewHistoryListComponent);
         component = fixture.componentInstance;
         customRoutingStub = TestBed.get(CustomRoutingService);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
-        viewHistoryListServiceStub = TestBed.get(ViewHistoryListService);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
     it('should resolve', () => {
@@ -118,44 +112,5 @@ context('view history list component unit test', () => {
             sinonExpect.calledOnce(viewHistoryManagerStub.deleteHistory);
             sinonExpect.calledWith(viewHistoryManagerStub.deleteHistory, id);
         });
-    });
-
-    describe('confirmClearHistories()', () => {
-
-        it('should show confirmation dialog', () => {
-
-            const expected = { payload: 'random_payload' };
-
-            component.confirmClearHistories(expected);
-
-            sinonExpect.calledOnce(viewHistoryListServiceStub.showClearHistoriesDialog);
-            sinonExpect.calledWith(viewHistoryListServiceStub.showClearHistoriesDialog, expected);
-        });
-
-        it('should use view history manager service to delete view histories when user confirms deletion', fakeAsync(() => {
-
-            component.confirmClearHistories({});
-            tick();
-
-            sinonExpect.calledOnce(viewHistoryManagerStub.clearHistories);
-        }));
-
-        it('should not delete view histories when user cancels deletion', fakeAsync(() => {
-
-            viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
-
-            component.confirmClearHistories({});
-            tick();
-
-            sinonExpect.notCalled(viewHistoryManagerStub.clearHistories);
-        }));
-
-        it('should not throw error when user cancels deletion', fakeAsync(() => {
-
-            viewHistoryListServiceStub.showClearHistoriesDialog.rejects(new Error());
-
-            component.confirmClearHistories({});
-            tick();
-        }));
     });
 });

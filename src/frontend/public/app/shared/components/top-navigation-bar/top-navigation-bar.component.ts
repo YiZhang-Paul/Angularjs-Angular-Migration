@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 
 @Component({
     selector: 'top-navigation-bar',
@@ -9,15 +9,15 @@ import { CustomRoutingService } from '../../../core/upgraded-providers/custom-ro
 })
 export class TopNavigationBarComponent {
 
-    private _customRoutingService: CustomRoutingService;
+    private _routingService: CustomRoutingService;
 
-    constructor(customRoutingService: CustomRoutingService) {
+    constructor(routingService: CustomRoutingService) {
 
-        this._customRoutingService = customRoutingService;
+        this._routingService = routingService;
     }
 
     public toMainPage() {
 
-        this._customRoutingService.toState('index');
+        this._routingService.toState('index');
     }
 }

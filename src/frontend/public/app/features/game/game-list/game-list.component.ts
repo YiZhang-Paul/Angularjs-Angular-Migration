@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
-import { GameManager } from '../../../core/upgraded-providers/game-manager-provider/game-manager-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
+import { GameManagerService } from '../../../core/services/data-managers/game-manager/game-manager.service';
 
 @Component({
     selector: 'game-list',
@@ -12,12 +12,12 @@ export class GameListComponent implements OnInit, OnDestroy {
 
     private _task: any = null;
     private _routingService: CustomRoutingService;
-    private _gameManager: GameManager;
+    private _gameManager: GameManagerService;
 
     constructor(
 
         routingService: CustomRoutingService,
-        gameManager: GameManager
+        gameManager: GameManagerService
 
     ) {
 

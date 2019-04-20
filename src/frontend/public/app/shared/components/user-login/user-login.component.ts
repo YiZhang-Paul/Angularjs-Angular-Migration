@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import * as angular from 'angular';
+import { MatDialog } from '@angular/material';
 
-import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
 
-import { LoginPanelComponent } from './login-panel/login-panel.component.js';
+import { UserLoginDialog } from './user-login-dialog/user-login-dialog';
 
 @Component({
     selector: 'user-login',
@@ -15,19 +14,20 @@ import { LoginPanelComponent } from './login-panel/login-panel.component.js';
 export class UserLoginComponent {
 
     private _user: any = null;
-    private _$mdPanel: $mdPanel;
+
+    private _dialog: MatDialog;
     private _authenticator: AuthenticatorService;
     private _userLogin: UserLoginService;
 
     constructor(
 
-        $mdPanel: $mdPanel,
+        dialog: MatDialog,
         authenticator: AuthenticatorService,
         userLogin: UserLoginService
 
     ) {
 
-        this._$mdPanel = $mdPanel;
+        this._dialog = dialog;
         this._authenticator = authenticator;
         this._userLogin = userLogin;
     }
@@ -47,33 +47,11 @@ export class UserLoginComponent {
         this._user = await this._userLogin.login(credentials);
     }
 
-    private openLoginPanel(loginCallback: Function): Promise<any> {
-
-        const position = this._$mdPanel.newPanelPosition();
-
-        return this._$mdPanel.open({
-
-            locals: { loginCallback },
-            controller: LoginPanelComponent.controller,
-            controllerAs: '$ctrl',
-            templateUrl: LoginPanelComponent.templateUrl,
-            panelClass: 'login-panel-container',
-            position: position.absolute().center(),
-            zIndex: 150,
-            attachTo: angular.element(document.body),
-            disableParentScroll: true,
-            clickOutsideToClose: true,
-            escapeToClose: true,
-            hasBackdrop: true,
-            focusOnOpen: true,
-            trapFocus: true
-        });
-    }
-
     public tryLogin(): void {
 
-        const onLogin = this.onLogin.bind(this);
-        this.openLoginPanel(onLogin);
+        const callback = this.onLogin.bind(this);
+        const option = { width: '20%', data: { callback } };
+        this._dialog.open(UserLoginDialog, option);
     }
 
     public logout(): void {

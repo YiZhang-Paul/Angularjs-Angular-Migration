@@ -3,8 +3,8 @@ import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
 import { BookmarkModule } from '../bookmark.module';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
-import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub.js';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
+import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
 
 import { BookmarkListComponent } from './bookmark-list.component';
 
@@ -25,12 +25,12 @@ context('bookmark list component unit test', () => {
         TestBed.configureTestingModule({
 
             imports: [BookmarkModule],
-            providers: [{ provide: BookmarkManager, useValue: bookmarkManagerStub }]
+            providers: [{ provide: BookmarkManagerService, useValue: bookmarkManagerStub }]
         });
 
         fixture = TestBed.createComponent(BookmarkListComponent);
         component = fixture.componentInstance;
-        bookmarkManagerStub = TestBed.get(BookmarkManager);
+        bookmarkManagerStub = TestBed.get(BookmarkManagerService);
     });
 
     it('should resolve', () => {

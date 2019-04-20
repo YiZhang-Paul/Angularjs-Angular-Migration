@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
 import { SharedModule } from '../../shared.module';
-import { $mdPanel } from '../../../core/upgraded-providers/$mdPanel-provider/$mdPanel-provider';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
-import { stub$mdPanel } from '../../../testing/stubs/built-in/$md-panel.stub.js';
-import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub.js';
+import { stubMatDialog } from '../../../testing/stubs/built-in/mat-dialog.stub';
+import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { stubUserLoginService } from '../../../testing/stubs/custom/user-login.service.stub';
 
 import { UserLoginComponent } from './user-login.component';
@@ -17,15 +17,15 @@ context('user login component unit test', () => {
     let fixture: ComponentFixture<UserLoginComponent>;
     let component: UserLoginComponent;
 
-    let $mdPanelStub;
     let authenticatorStub;
     let userLoginStub;
+    let matDialogStub;
 
     beforeEach('stubs setup', () => {
 
-        $mdPanelStub = stub$mdPanel();
         authenticatorStub = stubAuthenticatorService();
         userLoginStub = stubUserLoginService();
+        matDialogStub = stubMatDialog();
     });
 
     beforeEach('general test setup', () => {
@@ -35,14 +35,17 @@ context('user login component unit test', () => {
             imports: [SharedModule],
             providers: [
 
-                { provide: $mdPanel, useValue: $mdPanelStub },
                 { provide: AuthenticatorService, useValue: authenticatorStub },
-                { provide: UserLoginService, useValue: userLoginStub }
+                { provide: UserLoginService, useValue: userLoginStub },
+                { provide: MatDialog, useValue: matDialogStub }
             ]
         });
 
         fixture = TestBed.createComponent(UserLoginComponent);
         component = fixture.componentInstance;
+        authenticatorStub = TestBed.get(AuthenticatorService);
+        userLoginStub = TestBed.get(UserLoginService);
+        matDialogStub = TestBed.get(MatDialog);
     });
 
     it('should resolve', () => {
@@ -67,7 +70,7 @@ context('user login component unit test', () => {
 
             component.tryLogin();
 
-            sinonExpect.calledOnce($mdPanelStub.open);
+            sinonExpect.calledOnce(matDialogStub.open);
         });
 
         it('should use login service to log in', async () => {
@@ -75,8 +78,8 @@ context('user login component unit test', () => {
             const expected = { username: 'username_1', password: 'password_1' };
 
             component.tryLogin();
-            const argument = $mdPanelStub.open.getCall(0).args[0];
-            const callback = argument.locals.loginCallback;
+            const argument = matDialogStub.open.getCall(0).args[1];
+            const callback = argument.data.callback;
 
             await callback(expected);
 
@@ -90,8 +93,8 @@ context('user login component unit test', () => {
             userLoginStub.login.returns(Promise.resolve(expected));
 
             component.tryLogin();
-            const argument = $mdPanelStub.open.getCall(0).args[0];
-            const callback = argument.locals.loginCallback;
+            const argument = matDialogStub.open.getCall(0).args[1];
+            const callback = argument.data.callback;
 
             await callback({});
 

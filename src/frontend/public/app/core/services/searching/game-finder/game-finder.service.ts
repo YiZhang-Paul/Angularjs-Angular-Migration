@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { GameManager } from '../../../upgraded-providers/game-manager-provider/game-manager-provider';
+import { GameManagerService } from '../../../services/data-managers/game-manager/game-manager.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GameFinder {
 
-    private _gameManager: GameManager;
+    private _gameManager: GameManagerService;
 
-    constructor(gameManager: GameManager) {
+    constructor(gameManager: GameManagerService) {
 
         this._gameManager = gameManager;
     }

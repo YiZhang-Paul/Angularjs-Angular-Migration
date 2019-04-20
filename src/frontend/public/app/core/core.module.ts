@@ -1,43 +1,32 @@
 import { NgModule } from '@angular/core';
-import { downgradeInjectable } from '@angular/upgrade/static';
-import * as angular from 'angular';
 
-import { $mdDialogProvider } from './upgraded-providers/$mdDialog-provider/$mdDialog-provider';
-import { $mdPanelProvider } from './upgraded-providers/$mdPanel-provider/$mdPanel-provider';
-import { $rootScopeProvider } from './upgraded-providers/$rootScope-provider/$rootScope-provider';
-import { $stateParamsProvider } from './upgraded-providers/$stateParams-provider/$stateParams-provider';
 import { AuthenticatorService } from './services/authentication/authenticator/authenticator.service';
-import { bookmarkManagerProvider } from './upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
-import { channelHttpProvider } from './upgraded-providers/channel-http-provider/channel-http-provider';
-import { customRoutingServiceProvider } from './upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { BookmarkHttpService } from './services/http/bookmark-http/bookmark-http.service';
+import { BookmarkManagerService } from './services/data-managers/bookmark-manager/bookmark-manager.service';
+import { ChannelHttpService } from './services/http/channel-http/channel-http.service';
+import { CustomRoutingService } from './services/custom-routing/custom-routing.service';
+import { EventManagerService } from './services/events/event-manager.service';
 import { GameHttpService } from './services/http/game-http/game-http.service';
-import { gameManagerProvider } from './upgraded-providers/game-manager-provider/game-manager-provider';
+import { GameManagerService } from './services/data-managers/game-manager/game-manager.service';
 import { GenericUtilitiesService } from './services/utilities/generic-utilities/generic-utilities.service';
 import { ThumbnailPlayerService } from './services/utilities/thumbnail-player/thumbnail-player.service';
-import { viewHistoryManagerProvider } from './upgraded-providers/view-history-manager-provider/view-history-manager-provider';
-import * as CoreModuleAjs from './core.module.ajs.js';
+import { ViewHistoryHttpService } from './services/http/view-history-http/view-history-http.service';
+import { ViewHistoryManagerService } from './services/data-managers/view-history-manager/view-history-manager.service';
 
 @NgModule({
     providers: [
-        $mdDialogProvider,
-        $mdPanelProvider,
-        $rootScopeProvider,
-        $stateParamsProvider,
         AuthenticatorService,
-        bookmarkManagerProvider,
-        channelHttpProvider,
-        customRoutingServiceProvider,
+        BookmarkHttpService,
+        BookmarkManagerService,
+        ChannelHttpService,
+        CustomRoutingService,
+        EventManagerService,
         GameHttpService,
-        gameManagerProvider,
+        GameManagerService,
         GenericUtilitiesService,
         ThumbnailPlayerService,
-        viewHistoryManagerProvider
+        ViewHistoryHttpService,
+        ViewHistoryManagerService
     ]
 })
 export class CoreModule { }
-
-angular.module(CoreModuleAjs.default)
-    .factory('authenticatorService', downgradeInjectable(AuthenticatorService) as any)
-    .factory('thumbnailPlayerService', downgradeInjectable(ThumbnailPlayerService) as any)
-    .factory('gameHttpService', downgradeInjectable(GameHttpService) as any)
-    .factory('genericUtilitiesService', downgradeInjectable(GenericUtilitiesService) as any);

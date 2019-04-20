@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 
-import { CustomRoutingService } from '../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 
-import { ViewHistoryListService } from './view-history-list.service';
+import { ClearHistoriesDialog } from './clear-histories-dialog/clear-histories-dialog';
 
 @Component({
     selector: 'view-history-list',
@@ -12,20 +13,21 @@ import { ViewHistoryListService } from './view-history-list.service';
 })
 export class ViewHistoryListComponent implements OnInit {
 
+    private _dialog: MatDialog;
     private _routingService: CustomRoutingService;
-    private _viewHistoryManager: ViewHistoryManager;
-    private _viewHistoryListService: ViewHistoryListService;
+    private _viewHistoryManager: ViewHistoryManagerService;
 
     constructor(
 
+        dialog: MatDialog,
         routingService: CustomRoutingService,
-        viewHistoryManager: ViewHistoryManager,
-        viewHistoryListService: ViewHistoryListService
+        viewHistoryManager: ViewHistoryManagerService
 
     ) {
+
+        this._dialog = dialog;
         this._routingService = routingService;
         this._viewHistoryManager = viewHistoryManager;
-        this._viewHistoryListService = viewHistoryListService;
     }
 
     get histories(): any {
@@ -53,12 +55,17 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager.deleteHistory(history.id);
     }
 
-    public confirmClearHistories(event) {
+    public confirmClearHistories() {
 
-        this._viewHistoryListService.showClearHistoriesDialog(event).then(() => {
+        const width = '25%';
+        const dialog = this._dialog.open(ClearHistoriesDialog, { width });
 
-            return this._viewHistoryManager.clearHistories();
-        })
-        .catch(error => console.log(error));
+        dialog.afterClosed().toPromise().then(isConfirmed => {
+
+            if (isConfirmed) {
+
+                this._viewHistoryManager.clearHistories();
+            }
+        });
     }
 }

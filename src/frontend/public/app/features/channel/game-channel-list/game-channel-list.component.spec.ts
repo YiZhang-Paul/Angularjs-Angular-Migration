@@ -1,17 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Transition } from '@uirouter/angular';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
 import { SharedModule } from '../../../shared/shared.module';
 import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { ChannelService } from '../channel.service';
-import { BookmarkManager } from '../../../core/upgraded-providers/bookmark-manager-provider/bookmark-manager-provider';
-import { $stateParams } from '../../../core/upgraded-providers/$stateParams-provider/$stateParams-provider';
-import { ViewHistoryManager } from '../../../core/upgraded-providers/view-history-manager-provider/view-history-manager-provider';
+import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
+import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { stubTransition } from '../../../testing/stubs/third-party/transition.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
 import { ChannelCardComponent } from '../channel-card/channel-card.component';
 
@@ -29,7 +30,8 @@ context('game channel list component unit test', () => {
     let gameHttpStub;
     let channelServiceStub;
     let bookmarkManagerStub;
-    let $stateParamsStub;
+    let stateParamsStub;
+    let transitionStub;
     let viewHistoryManagerStub;
 
     beforeEach('stubs setup', () => {
@@ -37,6 +39,9 @@ context('game channel list component unit test', () => {
         gameHttpStub = stubGameHttpService();
         channelServiceStub = stubChannelService();
         bookmarkManagerStub = stubBookmarkManagerService();
+        stateParamsStub = {};
+        transitionStub = stubTransition();
+        transitionStub.params.returns(stateParamsStub);
         viewHistoryManagerStub = stubViewHistoryManagerService();
     });
 
@@ -55,9 +60,9 @@ context('game channel list component unit test', () => {
 
                 { provide: GameHttpService, useValue: gameHttpStub },
                 { provide: ChannelService, useValue: channelServiceStub },
-                { provide: BookmarkManager, useValue: bookmarkManagerStub },
-                { provide: $stateParams, useValue: {} },
-                { provide: ViewHistoryManager, useValue: viewHistoryManagerStub }
+                { provide: BookmarkManagerService, useValue: bookmarkManagerStub },
+                { provide: Transition, useValue: transitionStub },
+                { provide: ViewHistoryManagerService, useValue: viewHistoryManagerStub }
             ]
         });
 
@@ -65,9 +70,9 @@ context('game channel list component unit test', () => {
         component = fixture.componentInstance;
         gameHttpStub = TestBed.get(GameHttpService);
         channelServiceStub = TestBed.get(ChannelService);
-        bookmarkManagerStub = TestBed.get(BookmarkManager);
-        $stateParamsStub = TestBed.get($stateParams);
-        viewHistoryManagerStub = TestBed.get(ViewHistoryManager);
+        bookmarkManagerStub = TestBed.get(BookmarkManagerService);
+        transitionStub = TestBed.get(Transition);
+        viewHistoryManagerStub = TestBed.get(ViewHistoryManagerService);
     });
 
     it('should resolve', () => {
@@ -87,8 +92,8 @@ context('game channel list component unit test', () => {
 
             game = { id: gameId };
             channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
-            $stateParamsStub.name = name;
-            $stateParamsStub.channels = channels;
+            stateParamsStub.name = name;
+            stateParamsStub.channels = channels;
             gameHttpStub.getGameByName.resolves(game);
         });
 
@@ -123,7 +128,7 @@ context('game channel list component unit test', () => {
         it('should fetch game channels from channel service when channel data is missing from state parameters', fakeAsync(() => {
 
             const expected = gameId;
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
 
             fixture.detectChanges();
             component.ngOnDestroy();
@@ -135,7 +140,7 @@ context('game channel list component unit test', () => {
 
         it('should not load game channels when no game data found', fakeAsync(() => {
 
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
             gameHttpStub.getGameByName.resolves(null);
 
             fixture.detectChanges();
@@ -147,7 +152,7 @@ context('game channel list component unit test', () => {
 
         it('should not load game channels when failed to load game data', fakeAsync(() => {
 
-            $stateParamsStub.channels = null;
+            stateParamsStub.channels = null;
             gameHttpStub.getGameByName.rejects(new Error());
 
             fixture.detectChanges();
@@ -192,8 +197,8 @@ context('game channel list component unit test', () => {
 
         it('should cancel interval', () => {
 
-            $stateParamsStub.name = 'some-game-5';
-            $stateParamsStub.channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
+            stateParamsStub.name = 'some-game-5';
+            stateParamsStub.channels = [{ id: 1 }, { id: 4 }, { id: 7 }];
             gameHttpStub.getGameByName.resolves({ id: 17 });
 
             timer = useFakeTimers();

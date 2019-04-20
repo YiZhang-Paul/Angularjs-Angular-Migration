@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { CustomRoutingService } from '../../../../core/upgraded-providers/custom-routing-provider/custom-routing-provider';
+import { CustomRoutingService } from '../../../../core/services/custom-routing/custom-routing.service';
 
 @Component({
     selector: 'sidebar-badge',
@@ -12,15 +12,15 @@ export class SidebarBadgeComponent {
     @Input() public channelBadges: any;
     @Input() public route: any;
 
-    private _customRouting: CustomRoutingService;
+    private _routingService: CustomRoutingService;
 
-    constructor(customRouting: CustomRoutingService) {
+    constructor(routingService: CustomRoutingService) {
 
-        this._customRouting = customRouting;
+        this._routingService = routingService;
     }
 
     public toState() {
 
-        this._customRouting.toState(this.route);
+        this._routingService.toState(this.route);
     }
 }

@@ -12,13 +12,6 @@ import 'zone.js/dist/fake-async-test';
 import 'zone.js/dist/mocha-patch';
 // rxjs
 import 'rxjs';
-// angularjs
-import 'angular';
-import 'angular-mocks';
-import 'angular-aria';
-import 'angular-animate';
-import 'angular-material';
-import 'angular-toastr';
 // angular
 import '@angular/animations';
 import '@angular/common';
@@ -30,9 +23,8 @@ import '@angular/material';
 import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 import '@angular/router';
-import '@angular/upgrade';
 // ui-router
-import '@uirouter/angular-hybrid';
+import '@uirouter/angular';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { stub } from 'sinon';

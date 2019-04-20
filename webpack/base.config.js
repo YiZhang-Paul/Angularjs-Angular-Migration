@@ -3,8 +3,7 @@ const path = require('path');
 module.exports = {
     mode: 'none',
     entry: {
-        vendor: path.join(__dirname, '../src/frontend/public/app/assets/libraries/vendor.js'),
-        polyfills: path.join(__dirname, '../src/frontend/public/app/assets/libraries/polyfills.js'),
+        polyfills: path.join(__dirname, '../src/frontend/public/app/assets/libraries/polyfills.ts'),
         app: path.join(__dirname, '../src/frontend/public/main.ts')
     },
     output: {

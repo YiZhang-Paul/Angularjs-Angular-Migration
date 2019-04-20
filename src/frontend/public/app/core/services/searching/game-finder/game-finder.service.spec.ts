@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { GameManager } from '../../../upgraded-providers/game-manager-provider/game-manager-provider';
-import { stubGameManagerService } from '../../../../testing/stubs/custom/game-manager.service.stub.js';
+import { GameManagerService } from '../../../services/data-managers/game-manager/game-manager.service';
+import { stubGameManagerService } from '../../../../testing/stubs/custom/game-manager.service.stub';
 
 import { GameFinder } from './game-finder.service';
 
@@ -24,12 +24,12 @@ context('game finder service unit test', () => {
             providers: [
 
                 GameFinder,
-                { provide: GameManager, useValue: gameManagerStub }
+                { provide: GameManagerService, useValue: gameManagerStub }
             ]
         });
 
         service = TestBed.get(GameFinder);
-        gameManagerStub = TestBed.get(GameManager);
+        gameManagerStub = TestBed.get(GameManagerService);
     });
 
     it('should resolve', () => {
