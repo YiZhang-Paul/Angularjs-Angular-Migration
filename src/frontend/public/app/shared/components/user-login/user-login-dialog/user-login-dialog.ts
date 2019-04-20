@@ -40,15 +40,21 @@ export class UserLoginDialog {
         }
     }
 
-    public onLogin(): void {
+    public async onLogin(): Promise<void> {
 
         const input = { username: this.username, password: this.password };
 
         if (this._data.callback) {
 
-            this._data.callback(input)
-                .then(() => this._dialogRef.close())
-                .catch(() => this._noError = false);
+            try {
+
+                await this._data.callback(input);
+                this._dialogRef.close();
+            }
+            catch (error) {
+
+                this._noError = false;
+            }
         }
     }
 }

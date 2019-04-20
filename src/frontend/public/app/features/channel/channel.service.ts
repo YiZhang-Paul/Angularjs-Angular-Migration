@@ -41,21 +41,29 @@ export class ChannelService {
         }
     }
 
-    public loadFeaturedChannels(cache: any[]): Promise<void> {
+    public async loadFeaturedChannels(cache: any[]): Promise<void> {
 
-        return this._channelHttp.getChannels().then(channels => {
+        try {
 
+            const channels = await this._channelHttp.getChannels();
             this.refreshChannels(cache, channels);
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    public loadGameChannels(cache: any[], id: number): Promise<void> {
+    public async loadGameChannels(cache: any[], id: number): Promise<void> {
 
-        return this._channelHttp.getChannelsByGameId(id).then(channels => {
+        try {
 
+            const channels = await this._channelHttp.getChannelsByGameId(id);
             this.refreshChannels(cache, channels);
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

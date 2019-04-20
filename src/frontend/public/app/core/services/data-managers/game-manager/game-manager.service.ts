@@ -31,12 +31,15 @@ export class GameManagerService {
         }
     }
 
-    public cacheGames(): Promise<void> {
+    public async cacheGames(): Promise<void> {
 
-        return this._gameHttp.getGames().then(games => {
+        try {
 
-            this.syncGames(games);
-        })
-        .catch(error => console.log(error));
+            this.syncGames(await this._gameHttp.getGames());
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

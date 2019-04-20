@@ -26,8 +26,15 @@ export class BookmarkListComponent implements OnInit {
         this._bookmarkManager.cacheBookmarks();
     }
 
-    public unfollow(bookmark: any): void {
+    public async unfollow(bookmark: any): Promise<void> {
 
-        this._bookmarkManager.unfollow(bookmark).catch(error => console.log(error));
+        try {
+
+            await this._bookmarkManager.unfollow(bookmark);
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

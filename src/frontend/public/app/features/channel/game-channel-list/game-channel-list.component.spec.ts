@@ -104,6 +104,12 @@ context('game channel list component unit test', () => {
             expect(component.name).to.equal('some game 5');
         });
 
+        /*
+         * we have to use fakeAsync/tick instead of async/await since the
+         * async call is made inside of ngOnInit() and we cannot await on it.
+         * we also need to call ngOnDestroy() here to cancel the interval
+         * in order to avoid error '1 periodic timer(s) still in the queue'.
+         */
         it('should always load game data', fakeAsync(() => {
 
             fixture.detectChanges();
@@ -193,7 +199,7 @@ context('game channel list component unit test', () => {
         });
     });
 
-    describe('$onDestroy()', () => {
+    describe('ngOnDestroy()', () => {
 
         it('should cancel interval', () => {
 

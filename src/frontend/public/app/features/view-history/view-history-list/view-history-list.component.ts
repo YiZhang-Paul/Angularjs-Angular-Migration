@@ -55,17 +55,15 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager.deleteHistory(history.id);
     }
 
-    public confirmClearHistories(): void {
+    public async confirmClearHistories(): Promise<void> {
 
         const width = '25%';
         const dialog = this._dialog.open(ClearHistoriesDialog, { width });
+        const isConfirmed = await dialog.afterClosed().toPromise();
 
-        dialog.afterClosed().toPromise().then(isConfirmed => {
+        if (isConfirmed) {
 
-            if (isConfirmed) {
-
-                this._viewHistoryManager.clearHistories();
-            }
-        });
+            this._viewHistoryManager.clearHistories();
+        }
     }
 }

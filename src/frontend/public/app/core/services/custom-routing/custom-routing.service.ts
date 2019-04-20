@@ -35,18 +35,21 @@ export class CustomRoutingService {
         this._state.go(state);
     }
 
-    public toChannelsView(id: number, state = 'channels'): void {
+    public async toChannelsView(id: number, state = 'channels'): Promise<void> {
 
         const gamePromise = this._gameHttp.getGame(id);
         const channelsPromise = this._channelHttp.getChannelsByGameId(id);
 
-        Promise.all([gamePromise, channelsPromise]).then(responses => {
+        try {
 
-            const [game, channels] = responses;
+            const [game, channels] = await Promise.all([gamePromise, channelsPromise]);
             const name = this._utilities.joinText(game.name);
 
             this._state.go(state, { name, channels });
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

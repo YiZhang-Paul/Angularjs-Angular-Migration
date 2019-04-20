@@ -13,7 +13,7 @@ export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 
     public channels: any[] = [];
 
-    private _task: NodeJS.Timeout = null;
+    private _task: any = null;
 
     private _bookmarkManager: BookmarkManagerService;
     private _channelService: ChannelService;

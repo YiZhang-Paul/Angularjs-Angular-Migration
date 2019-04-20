@@ -10,7 +10,7 @@ import { GameManagerService } from '../../../core/services/data-managers/game-ma
 })
 export class GameListComponent implements OnInit, OnDestroy {
 
-    private _task: NodeJS.Timeout = null;
+    private _task: any = null;
 
     private _routingService: CustomRoutingService;
     private _gameManager: GameManagerService;

@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { StateService } from '@uirouter/angular';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
@@ -73,19 +73,18 @@ context('custom routing service unit test', () => {
             sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expected);
         });
 
-        it('should format game name before route transition', fakeAsync(() => {
+        it('should format game name before route transition', async () => {
 
             const expected = 'some game name';
             gameHttpStub.getGame.resolves({ name: expected });
 
-            service.toChannelsView(id);
-            tick();
+            await service.toChannelsView(id);
 
             sinonExpect.calledOnce(genericUtilitiesStub.joinText);
             sinonExpect.calledWith(genericUtilitiesStub.joinText, expected);
-        }));
+        });
 
-        it('should route to correct state along with route data', fakeAsync(() => {
+        it('should route to correct state along with route data', async () => {
 
             const game = { id, name: 'name_1' };
             const expectedState = 'channels';
@@ -100,19 +99,17 @@ context('custom routing service unit test', () => {
             channelHttpStub.getChannelsByGameId.resolves(expectedData.channels);
             genericUtilitiesStub.joinText.returns(expectedData.name);
 
-            service.toChannelsView(id);
-            tick();
+            await service.toChannelsView(id);
 
             sinonExpect.calledOnce(stateStub.go);
             sinonExpect.calledWith(stateStub.go, expectedState, expectedData);
-        }));
+        });
 
-        it('should not throw error when failed to fetch route data', fakeAsync(() => {
+        it('should not throw error when failed to fetch route data', async () => {
 
             channelHttpStub.getChannelsByGameId.rejects(new Error());
 
-            service.toChannelsView(id);
-            tick();
-        }));
+            await service.toChannelsView(id);
+        });
     });
 });

@@ -17,7 +17,7 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
     public name: string = null;
     public channels: any[] = [];
 
-    private _task: NodeJS.Timeout = null;
+    private _task: any = null;
     private _stateParams: any;
 
     private _gameHttp: GameHttpService;
@@ -49,12 +49,9 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         this.setupChannelLoading();
     }
 
-    private loadGame(): Promise<void> {
+    private async loadGame(): Promise<void> {
 
-        return this._gameHttp.getGameByName(this.name).then(game => {
-
-            this.game = game;
-        });
+        this.game = await this._gameHttp.getGameByName(this.name);
     }
 
     private loadChannels(): void {
@@ -65,9 +62,11 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadComponent(): void {
+    private async loadComponent(): Promise<void> {
 
-        this.loadGame().then(() => {
+        try {
+
+            await this.loadGame();
 
             if (!this._stateParams.channels) {
 
@@ -75,8 +74,11 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
             }
 
             this.channels = this._stateParams.channels;
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
     private setupChannelLoading(): void {

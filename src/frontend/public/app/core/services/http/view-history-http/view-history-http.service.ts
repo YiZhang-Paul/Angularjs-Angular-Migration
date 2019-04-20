@@ -34,14 +34,12 @@ export class ViewHistoryHttpService {
         });
     }
 
-    public getHistories(): Promise<any> {
+    public async getHistories(): Promise<any> {
 
         const options = this._authenticator.defaultOptions;
+        const histories = await this._http.get<any>(this._api, options).toPromise();
 
-        return this._http.get<any>(this._api, options).toPromise().then(response => {
-
-            return this.sortByTimestamp(response);
-        });
+        return this.sortByTimestamp(histories);
     }
 
     public addHistory(channel: any): Promise<any> {

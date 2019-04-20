@@ -86,13 +86,17 @@ export class SidebarComponent implements OnInit {
         this.badges.set(this._options[2], histories.slice(0, 3));
     }
 
-    private loadFeaturedChannels(): void {
+    private async loadFeaturedChannels(): Promise<void> {
 
-        this._channelHttp.getChannels().then(channels => {
+        try {
 
+            const channels = await this._channelHttp.getChannels();
             this.badges.set(this._options[1], channels.slice(0, 3));
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
     private registerAuthenticationEvents(): void {

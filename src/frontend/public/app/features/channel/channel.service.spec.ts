@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
@@ -142,37 +142,34 @@ context('channel service unit test', () => {
             sinonExpect.calledOnce(channelHttpStub.getChannels);
         });
 
-        it('should load featured channels', fakeAsync(() => {
+        it('should load featured channels', async () => {
 
             const cache = [];
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
             channelHttpStub.getChannels.resolves(expected);
 
-            service.loadFeaturedChannels(cache);
-            tick();
+            await service.loadFeaturedChannels(cache);
 
             expect(cache).to.deep.equal(expected);
-        }));
+        });
 
-        it('should preserve original channels when failed to fetch featured channel data', fakeAsync(() => {
+        it('should preserve original channels when failed to fetch featured channel data', async () => {
 
             const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = cache.slice();
             channelHttpStub.getChannels.rejects(new Error());
 
-            service.loadFeaturedChannels(cache).catch(() => null);
-            tick();
+            await service.loadFeaturedChannels(cache).catch(() => null);
 
             expect(cache).to.deep.equal(expected);
-        }));
+        });
 
-        it('should not throw error when failed to fetch featured channel data', fakeAsync(() => {
+        it('should not throw error when failed to fetch featured channel data', async () => {
 
             channelHttpStub.getChannels.rejects(new Error());
 
-            service.loadFeaturedChannels([]);
-            tick();
-        }));
+            await service.loadFeaturedChannels([]);
+        });
     });
 
     describe('loadGameChannels()', () => {
@@ -187,36 +184,33 @@ context('channel service unit test', () => {
             sinonExpect.calledWith(channelHttpStub.getChannelsByGameId, expected);
         });
 
-        it('should load game channels', fakeAsync(() => {
+        it('should load game channels', async () => {
 
             const cache = [];
             const expected = [{ id: 1 }, { id: 4 }, { id: 7 }];
             channelHttpStub.getChannelsByGameId.resolves(expected);
 
-            service.loadGameChannels(cache, 17);
-            tick();
+            await service.loadGameChannels(cache, 17);
 
             expect(cache).to.deep.equal(expected);
-        }));
+        });
 
-        it('should preserve original channels when failed to fetch game channel data', fakeAsync(() => {
+        it('should preserve original channels when failed to fetch game channel data', async () => {
 
             const cache = [{ id: 1 }, { id: 4 }, { id: 7 }];
             const expected = cache.slice();
             channelHttpStub.getChannelsByGameId.rejects(new Error());
 
-            service.loadGameChannels(cache, 17).catch(() => null);
-            tick();
+            await service.loadGameChannels(cache, 17).catch(() => null);
 
             expect(cache).to.deep.equal(expected);
-        }));
+        });
 
-        it('should not throw error when failed to fetch game channel data', fakeAsync(() => {
+        it('should not throw error when failed to fetch game channel data', async () => {
 
             channelHttpStub.getChannelsByGameId.rejects(new Error());
 
-            service.loadGameChannels([], 17);
-            tick();
-        }));
+            await service.loadGameChannels([], 17);
+        });
     });
 });

@@ -9,7 +9,7 @@ module.exports = function (config) {
         basePath: '',
         customContextFile: './src/frontend/public/app/testing/karma-test-pages/context.html',
         customDebugFile: './src/frontend/public/app/testing/karma-test-pages/debug.html',
-        files: ['./node_modules/angular/angular.js', templates, entry],
+        files: [entry],
         preprocessors: {
             [entry]: ['webpack', 'sourcemap'],
             [templates]: ['ng-html2js']

@@ -40,17 +40,14 @@ export class AuthenticatorService {
         return !!(this._header && this._payload && this._signature);
     }
 
-    public requestToken(username: string, password: string): Promise<string> {
+    public async requestToken(username: string, password: string): Promise<string> {
 
         const data: IBasicCredential = { username, password };
+        const response = this._http.post<any>(this._api, data);
+        const token = (await response.toPromise()).token;
+        [this._header, this._payload, this._signature] = token.split('.');
 
-        return this._http.post(this._api, data).toPromise().then((response: { token: string }) => {
-
-            const token = response.token;
-            [this._header, this._payload, this._signature] = token.split('.');
-
-            return token;
-        });
+        return token;
     }
 
     public clearToken(): void {

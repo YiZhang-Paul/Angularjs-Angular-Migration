@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
@@ -60,37 +60,34 @@ context('bookmark manager service unit test', () => {
             sinonExpect.calledOnce(bookmarkHttpStub.getBookmarks);
         });
 
-        it('should cache bookmarks on success', fakeAsync(() => {
+        it('should cache bookmarks on success', async () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
             bookmarkHttpStub.getBookmarks.resolves(expected);
 
-            service.cacheBookmarks();
-            tick();
+            await service.cacheBookmarks();
 
             expect(service.bookmarks).is.not.empty;
             expect(service.bookmarks).to.deep.equal(expected);
-        }));
+        });
 
-        it('should default to empty collection on failure', fakeAsync(() => {
+        it('should default to empty collection on failure', async () => {
 
             bookmarkHttpStub.getBookmarks.rejects(new Error());
 
-            service.cacheBookmarks();
-            tick();
+            await service.cacheBookmarks();
 
             expect(Array.isArray(service.bookmarks)).to.be.true;
             expect(service.bookmarks).to.be.empty;
-        }));
+        });
 
-        it('should raise event when successfully cached bookmark', fakeAsync(() => {
+        it('should raise event when successfully cached bookmark', async () => {
 
-            service.cacheBookmarks();
-            tick();
+            await service.cacheBookmarks();
 
             sinonExpect.calledOnce(eventManagerStub.emit);
             sinonExpect.calledWith(eventManagerStub.emit, 'bookmarkCached');
-        }));
+        });
     });
 
     describe('isFollowed()', () => {
@@ -167,65 +164,57 @@ context('bookmark manager service unit test', () => {
             sinonExpect.calledOnce(bookmarkHttpStub.addBookmark);
         });
 
-        it('should cache bookmarks when added successfully', fakeAsync(() => {
+        it('should cache bookmarks when added successfully', async () => {
 
             const expected = [{ id: 1 }, { id: 5 }];
             bookmarkHttpStub.getBookmarks.resolves(expected);
 
-            service.follow({}).then(() => {
+            await service.follow({});
 
-                sinonExpect.calledOnce(bookmarkHttpStub.getBookmarks);
-                expect(service.bookmarks).to.deep.equal(expected);
-            });
+            sinonExpect.calledOnce(bookmarkHttpStub.getBookmarks);
+            expect(service.bookmarks).to.deep.equal(expected);
+        });
 
-            tick();
-        }));
+        it('should raise event when successfully added bookmark', async () => {
 
-        it('should raise event when successfully added bookmark', fakeAsync(() => {
-
-            service.follow({});
-            tick();
+            await service.follow({});
             // caching bookmark will also raise event
             sinonExpect.calledTwice(eventManagerStub.emit);
             sinonExpect.calledWith(eventManagerStub.emit, 'followedChannel');
-        }));
+        });
 
-        it('should display notification when successfully added bookmark', fakeAsync(() => {
+        it('should display notification when successfully added bookmark', async () => {
 
-            service.follow({});
-            tick();
+            await service.follow({});
 
             sinonExpect.calledOnce(toastrStub.success);
-        }));
+        });
 
-        it('should not cache bookmarks when failed to add bookmark', fakeAsync(() => {
+        it('should not cache bookmarks when failed to add bookmark', async () => {
 
             const expected = { status: 400 };
             bookmarkHttpStub.addBookmark.rejects(expected);
 
-            service.follow({});
-            tick();
+            await service.follow({});
 
             sinonExpect.notCalled(bookmarkHttpStub.getBookmarks);
-        }));
+        });
 
-        it('should not raise event when failed to add bookmark', fakeAsync(() => {
+        it('should not raise event when failed to add bookmark', async () => {
 
             bookmarkHttpStub.addBookmark.rejects(new Error());
 
-            service.follow({});
-            tick();
+            await service.follow({});
 
             sinonExpect.notCalled(eventManagerStub.emit);
-        }));
+        });
 
-        it('should not throw error when failed to add bookmark', fakeAsync(() => {
+        it('should not throw error when failed to add bookmark', async () => {
 
             bookmarkHttpStub.addBookmark.rejects(new Error());
 
-            service.follow({});
-            tick();
-        }));
+            await service.follow({});
+        });
     });
 
     describe('unfollow()', () => {
@@ -254,62 +243,56 @@ context('bookmark manager service unit test', () => {
             sinonExpect.calledWith(bookmarkHttpStub.deleteBookmark, expected);
         });
 
-        it('should remove bookmark from cache when successfully deleted bookmark', fakeAsync(() => {
+        it('should remove bookmark from cache when successfully deleted bookmark', async () => {
 
             const expected = service.bookmarks.slice(0, -1);
 
-            service.unfollow(data);
-            tick();
+            await service.unfollow(data);
 
             expect(service.bookmarks).is.not.empty;
             expect(service.bookmarks).to.deep.equal(expected);
-        }));
+        });
 
-        it('should raise event when successfully deleted bookmark', fakeAsync(() => {
+        it('should raise event when successfully deleted bookmark', async () => {
 
-            service.unfollow(data);
-            tick();
+            await service.unfollow(data);
 
             sinonExpect.calledOnce(eventManagerStub.emit);
             sinonExpect.calledWith(eventManagerStub.emit, 'unfollowedChannel');
-        }));
+        });
 
-        it('should display notification when successfully deleted bookmark', fakeAsync(() => {
+        it('should display notification when successfully deleted bookmark', async () => {
 
-            service.unfollow(data);
-            tick();
+            await service.unfollow(data);
 
             sinonExpect.calledOnce(toastrStub.error);
-        }));
+        });
 
-        it('should not remove bookmark from cache when failed to delete bookmark', fakeAsync(() => {
+        it('should not remove bookmark from cache when failed to delete bookmark', async () => {
 
             const expected = service.bookmarks.slice();
             bookmarkHttpStub.deleteBookmark.rejects(new Error());
 
-            service.unfollow(data);
-            tick();
+            await service.unfollow(data);
 
             expect(service.bookmarks).is.not.empty;
             expect(service.bookmarks).to.deep.equal(expected);
-        }));
+        });
 
-        it('should not raise event when failed to delete bookmark', fakeAsync(() => {
+        it('should not raise event when failed to delete bookmark', async () => {
 
             bookmarkHttpStub.deleteBookmark.rejects(new Error());
 
-            service.unfollow(data);
-            tick();
+            await service.unfollow(data);
 
             sinonExpect.notCalled(eventManagerStub.emit);
-        }));
+        });
 
-        it('should not throw error when failed to delete bookmark', fakeAsync(() => {
+        it('should not throw error when failed to delete bookmark', async () => {
 
             bookmarkHttpStub.deleteBookmark.rejects(new Error());
 
-            service.unfollow(data);
-            tick();
-        }));
+            await service.unfollow(data);
+        });
     });
 });
