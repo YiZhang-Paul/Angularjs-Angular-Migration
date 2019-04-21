@@ -4,7 +4,7 @@ import { UppercaseRomanNumeralsPipe } from './uppercase-roman-numerals.pipe';
 
 context('uppercase roman numerals pipe unit test', () => {
 
-    let pipe;
+    let pipe: UppercaseRomanNumeralsPipe;
 
     beforeEach('general test setup', () => {
 

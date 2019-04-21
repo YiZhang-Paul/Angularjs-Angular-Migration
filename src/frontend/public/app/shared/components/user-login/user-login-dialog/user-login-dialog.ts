@@ -3,8 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
     selector: 'user-login-dialog',
-    styles: [`${require('./user-login-dialog.scss')}`],
-    template: `${require('./user-login-dialog.html')}`
+    styleUrls: ['./user-login-dialog.scss'],
+    templateUrl: './user-login-dialog.html'
 })
 export class UserLoginDialog {
 
@@ -13,12 +13,12 @@ export class UserLoginDialog {
 
     private _noError = true;
 
-    private _data: any;
+    private _data: { callback: Function };
     private _dialogRef: MatDialogRef<UserLoginDialog>;
 
     constructor(
 
-        @Inject(MAT_DIALOG_DATA) data: any,
+        @Inject(MAT_DIALOG_DATA) data: { callback: Function },
         dialogRef: MatDialogRef<UserLoginDialog>
 
     ) {
@@ -32,7 +32,7 @@ export class UserLoginDialog {
         return this._noError;
     }
 
-    public onKeyup(event): void {
+    public onKeyup(event: any): void {
 
         if (event.keyCode === 13) {
 
@@ -40,15 +40,21 @@ export class UserLoginDialog {
         }
     }
 
-    public onLogin(): void {
+    public async onLogin(): Promise<void> {
 
         const input = { username: this.username, password: this.password };
 
         if (this._data.callback) {
 
-            this._data.callback(input)
-                .then(() => this._dialogRef.close())
-                .catch(() => this._noError = false);
+            try {
+
+                await this._data.callback(input);
+                this._dialogRef.close();
+            }
+            catch (error) {
+
+                this._noError = false;
+            }
         }
     }
 }

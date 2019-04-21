@@ -5,12 +5,13 @@ import { GameManagerService } from '../../../core/services/data-managers/game-ma
 
 @Component({
     selector: 'game-list',
-    styles: [`${require('./game-list.scss')}`],
-    template: require('./game-list.html')
+    styleUrls: ['./game-list.scss'],
+    templateUrl: './game-list.html'
 })
 export class GameListComponent implements OnInit, OnDestroy {
 
     private _task: any = null;
+
     private _routingService: CustomRoutingService;
     private _gameManager: GameManagerService;
 
@@ -25,7 +26,7 @@ export class GameListComponent implements OnInit, OnDestroy {
         this._gameManager = gameManager;
     }
 
-    get games(): any {
+    get games(): any[] {
 
         return this._gameManager.games;
     }

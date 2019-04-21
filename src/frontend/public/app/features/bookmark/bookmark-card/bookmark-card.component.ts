@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'bookmark-card',
-    styles: [`${require('./bookmark-card.scss')}`],
-    template: require('./bookmark-card.html')
+    styleUrls: ['./bookmark-card.scss'],
+    templateUrl: './bookmark-card.html'
 })
 export class BookmarkCardComponent {
 

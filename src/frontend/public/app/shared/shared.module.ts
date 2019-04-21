@@ -33,7 +33,8 @@ import { UppercaseRomanNumeralsPipe } from './pipes/uppercase-roman-numerals/upp
         BrowserAnimationsModule,
         ToastrModule.forRoot({
             maxOpened: 5,
-            newestOnTop: true
+            newestOnTop: true,
+            timeOut: 2500
         }),
         MatExpansionModule,
         MatButtonModule,

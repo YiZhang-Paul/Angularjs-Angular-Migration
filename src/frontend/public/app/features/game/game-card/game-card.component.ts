@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'game-card',
-    styles: [`${require('./game-card.scss')}`],
-    template: require('./game-card.html')
+    styleUrls: ['./game-card.scss'],
+    templateUrl: './game-card.html'
 })
 export class GameCardComponent {
 

@@ -16,8 +16,8 @@ context('game list component unit test', () => {
     let fixture: ComponentFixture<GameListComponent>;
     let component: GameListComponent;
 
-    let customRoutingStub;
-    let gameManagerStub;
+    let customRoutingStub: any;
+    let gameManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

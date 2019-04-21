@@ -13,7 +13,7 @@ context('bookmark list component unit test', () => {
     let fixture: ComponentFixture<BookmarkListComponent>;
     let component: BookmarkListComponent;
 
-    let bookmarkManagerStub;
+    let bookmarkManagerStub: any;
 
     beforeEach('stubs setup', () => {
 
@@ -72,11 +72,11 @@ context('bookmark list component unit test', () => {
             sinonExpect.calledWith(bookmarkManagerStub.unfollow, expected);
         });
 
-        it('should not throw error when failed to delete bookmark', () => {
+        it('should not throw error when failed to delete bookmark', async () => {
 
             bookmarkManagerStub.unfollow.rejects(new Error());
 
-            component.unfollow({});
+            await component.unfollow({});
 
             sinonExpect.calledOnce(bookmarkManagerStub.unfollow);
         });

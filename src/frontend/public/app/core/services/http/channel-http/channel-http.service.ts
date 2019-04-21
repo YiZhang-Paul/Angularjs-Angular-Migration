@@ -22,7 +22,7 @@ export class ChannelHttpService {
         return this._http.get<any>(url).toPromise();
     }
 
-    public getChannelsByGameId(id): Promise<any> {
+    public getChannelsByGameId(id: number): Promise<any> {
 
         const url = `${this._baseApi}/games/${id}/channels`;
 

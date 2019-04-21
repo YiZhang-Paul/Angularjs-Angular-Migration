@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { IBasicCredential } from '../../../interfaces/authentication/basic-credential.interface';
 import { AuthenticatorService } from '../../../services/authentication/authenticator/authenticator.service';
 import { EventManagerService } from '../../events/event-manager.service';
 import { UserHttpService } from '../../http/user-http/user-http.service';
@@ -40,7 +41,7 @@ export class UserLoginService {
         }
     }
 
-    public async login(credentials: any): Promise<any> {
+    public async login(credentials: IBasicCredential): Promise<any> {
 
         const { username, password } = credentials;
         await this._authenticator.requestToken(username, password);

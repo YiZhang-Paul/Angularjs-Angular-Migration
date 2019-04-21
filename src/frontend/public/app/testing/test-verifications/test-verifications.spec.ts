@@ -7,7 +7,7 @@ context('test verifications utilities unit test', () => {
     describe('hasMatchingValue()', () => {
 
         const key = 'given_key';
-        let object;
+        let object: { [key: string]: number };
 
         beforeEach('hasMatchingValue() test setup', () => {
 

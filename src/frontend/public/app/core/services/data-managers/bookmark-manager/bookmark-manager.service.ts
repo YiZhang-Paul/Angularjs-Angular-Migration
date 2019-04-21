@@ -9,7 +9,7 @@ import { EventManagerService } from '../../../services/events/event-manager.serv
 })
 export class BookmarkManagerService {
 
-    public bookmarks = [];
+    public bookmarks: any[] = [];
 
     private readonly _providerKeys = ['provider_id', 'provider_channel_id'];
 
@@ -30,24 +30,27 @@ export class BookmarkManagerService {
         this._eventManager = eventManager;
     }
 
-    public cacheBookmarks() {
+    public async cacheBookmarks(): Promise<void> {
 
-        return this._bookmarkHttp.getBookmarks().catch(error => {
+        try {
 
+            this.bookmarks = await this._bookmarkHttp.getBookmarks();
+        }
+        catch (error) {
+
+            this.bookmarks = [];
             console.log(error);
+        }
 
-            return [];
-        })
-        .then(bookmarks => this.bookmarks = bookmarks)
-        .then(() => this._eventManager.emit('bookmarkCached'));
+        this._eventManager.emit('bookmarkCached');
     }
 
-    private findBookmarkByChannelId(data) {
+    private findBookmarkByChannelId(data: any): any {
 
         return this.bookmarks.find(_ => _.channel_id === data.channel_id);
     }
 
-    private findBookmarkByProvider(data) {
+    private findBookmarkByProvider(data: any): any {
 
         return this.bookmarks.find(_ => {
 
@@ -55,7 +58,7 @@ export class BookmarkManagerService {
         });
     }
 
-    private findBookmark(data) {
+    private findBookmark(data: any): any {
 
         if (data.hasOwnProperty('channel_id')) {
 
@@ -70,46 +73,52 @@ export class BookmarkManagerService {
         return null;
     }
 
-    private getBookmarkId(data) {
+    private getBookmarkId(data: any): number {
 
         const bookmark = this.findBookmark(data);
 
         return bookmark ? bookmark.id : -1;
     }
 
-    public isFollowed(data) {
+    public isFollowed(data: any): boolean {
 
         return this.getBookmarkId(data) !== -1;
     }
 
-    public follow(data) {
+    public async follow(data: any): Promise<void> {
 
-        const message = 'You just followed a channel.';
+        try {
 
-        return this._bookmarkHttp.addBookmark(data)
-            .then(() => this.cacheBookmarks())
-            .then(() => this._eventManager.emit('followedChannel'))
-            .then(() => this._toastr.success(message, '', { timeOut: 2500 }))
-            .catch(error => console.log(error));
+            await this._bookmarkHttp.addBookmark(data);
+            await this.cacheBookmarks();
+            this._eventManager.emit('followedChannel');
+            this._toastr.success('You just followed a channel.');
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    private removeCached(id) {
+    private removeCached(id: number): void {
 
         const index = this.bookmarks.findIndex(_ => _.id === id);
         this.bookmarks.splice(index, 1);
     }
 
-    public unfollow(data) {
+    public async unfollow(data: any): Promise<void> {
 
-        const id = this.getBookmarkId(data);
-        const message = 'You just unfollowed a channel.';
+        try {
 
-        return this._bookmarkHttp.deleteBookmark(id).then(() => {
-
+            const id = this.getBookmarkId(data);
+            await this._bookmarkHttp.deleteBookmark(id);
             this.removeCached(id);
             this._eventManager.emit('unfollowedChannel');
-            this._toastr.error(message, '', { timeOut: 2500 });
-        })
-        .catch(error => console.log(error));
+            this._toastr.error('You just unfollowed a channel.');
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

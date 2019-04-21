@@ -1,23 +1,23 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-type EmitData = { name: string; payload: any };
+import { IEmitData } from '../../interfaces/events/emit-data.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EventManagerService {
 
-    private _emitter: EventEmitter<EmitData> = new EventEmitter<EmitData>();
+    private _emitter: EventEmitter<IEmitData> = new EventEmitter<IEmitData>();
 
-    public emit(name, payload = {}): void {
+    public emit(name: string, payload: any = {}): void {
 
         this._emitter.emit({ name, payload });
     }
 
-    public subscribe(name, callback: Function): Subscription {
+    public subscribe(name: string, callback: Function): Subscription {
 
-        return this._emitter.subscribe((data: EmitData) => {
+        return this._emitter.subscribe((data: IEmitData) => {
 
             if (data.name === name) {
 

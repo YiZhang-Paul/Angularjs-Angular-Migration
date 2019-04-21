@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 
 context('app route integration test', () => {
 
-    let state;
+    let state: StateService;
 
     beforeEach('general test setup', () => {
 

@@ -5,7 +5,7 @@ import { GenericUtilitiesService } from './generic-utilities.service';
 
 context('generic utilities service unit test', () => {
 
-    let service;
+    let service: GenericUtilitiesService;
 
     beforeEach('general test setup', () => {
 

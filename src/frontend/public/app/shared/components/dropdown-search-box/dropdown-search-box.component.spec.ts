@@ -15,8 +15,8 @@ context('dropdown search box component unit test', () => {
     let fixture: ComponentFixture<DropdownSearchBoxComponent>;
     let component: DropdownSearchBoxComponent;
 
-    let customRoutingStub;
-    let gameFinderStub;
+    let customRoutingStub: any;
+    let gameFinderStub: any;
 
     beforeEach('stubs setup', () => {
 

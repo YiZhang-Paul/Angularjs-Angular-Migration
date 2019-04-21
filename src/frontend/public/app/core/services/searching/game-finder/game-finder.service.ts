@@ -14,7 +14,7 @@ export class GameFinder {
         this._gameManager = gameManager;
     }
 
-    private containsName(contained, containing) {
+    private containsName(contained: string, containing: string): boolean {
 
         let index = -1;
 
@@ -31,7 +31,7 @@ export class GameFinder {
         return true;
     }
 
-    public findByName(name) {
+    public findByName(name: string): any[] {
 
         const nameWithNoSpace = name.replace(/\s/g, '');
 

@@ -19,7 +19,7 @@ export class BookmarkHttpService {
         this._authenticator = authenticator;
     }
 
-    private getDefaultOptions() {
+    private getDefaultOptions(): any {
 
         const options = this._authenticator.defaultOptions;
 
@@ -33,14 +33,14 @@ export class BookmarkHttpService {
         return this._http.get<any>(this._api, options).toPromise();
     }
 
-    public addBookmark(data): Promise<any> {
+    public addBookmark(data: any): Promise<any> {
 
         const options = this.getDefaultOptions();
 
         return this._http.post(this._api, data, options).toPromise();
     }
 
-    public deleteBookmark(id): Promise<any> {
+    public deleteBookmark(id: number): Promise<any> {
 
         const url = `${this._api}/${id}`;
         const options = this.getDefaultOptions();

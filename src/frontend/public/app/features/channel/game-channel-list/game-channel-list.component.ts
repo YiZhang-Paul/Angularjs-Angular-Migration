@@ -8,14 +8,14 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 
 @Component({
     selector: 'game-channel-list',
-    styles: [`${require('./game-channel-list.scss')}`],
-    template: require('./game-channel-list.html')
+    styleUrls: ['./game-channel-list.scss'],
+    templateUrl: './game-channel-list.html'
 })
 export class GameChannelListComponent implements OnInit, OnDestroy {
 
     public game: any = null;
-    public name: any = null;
-    public channels = [];
+    public name: string = null;
+    public channels: any[] = [];
 
     private _task: any = null;
     private _stateParams: any;
@@ -49,15 +49,12 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         this.setupChannelLoading();
     }
 
-    private loadGame() {
+    private async loadGame(): Promise<void> {
 
-        return this._gameHttp.getGameByName(this.name).then(game => {
-
-            this.game = game;
-        });
+        this.game = await this._gameHttp.getGameByName(this.name);
     }
 
-    private loadChannels() {
+    private loadChannels(): void {
 
         if (this.game) {
 
@@ -65,9 +62,11 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadComponent() {
+    private async loadComponent(): Promise<void> {
 
-        this.loadGame().then(() => {
+        try {
+
+            await this.loadGame();
 
             if (!this._stateParams.channels) {
 
@@ -75,31 +74,34 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
             }
 
             this.channels = this._stateParams.channels;
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    private setupChannelLoading() {
+    private setupChannelLoading(): void {
 
         this._task = setInterval(() => this.loadChannels(), 10 * 1000);
     }
 
-    public isFollowed(channel) {
+    public isFollowed(channel: any): boolean {
 
         return this._bookmarkManager.isFollowed(channel);
     }
 
-    public follow(channel) {
+    public follow(channel: any): void {
 
         this._bookmarkManager.follow(channel);
     }
 
-    public unfollow(channel) {
+    public unfollow(channel: any): void {
 
         this._bookmarkManager.unfollow(channel);
     }
 
-    public addHistory(channel) {
+    public addHistory(channel: any): void {
 
         this._viewHistoryManager.addHistory(channel);
     }

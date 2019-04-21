@@ -26,10 +26,10 @@ context('sidebar component unit test', () => {
     let fixture: ComponentFixture<SidebarComponent>;
     let component: SidebarComponent;
 
-    let authenticatorStub;
-    let channelHttpStub;
-    let bookmarkManagerStub;
-    let viewHistoryManagerStub;
+    let authenticatorStub: any;
+    let channelHttpStub: any;
+    let bookmarkManagerStub: any;
+    let viewHistoryManagerStub: any;
 
     beforeEach('stubs setup', () => {
 

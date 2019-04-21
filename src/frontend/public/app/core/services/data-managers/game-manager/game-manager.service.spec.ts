@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
@@ -11,7 +11,7 @@ context('game manager service unit test', () => {
 
     let service: GameManagerService;
 
-    let gameHttpStub;
+    let gameHttpStub: any;
 
     beforeEach('stubs setup', () => {
 
@@ -58,7 +58,7 @@ context('game manager service unit test', () => {
             sinonExpect.calledOnce(gameHttpStub.getGames);
         });
 
-        it('should overwrite old game data when new game data is from different game', fakeAsync(() => {
+        it('should overwrite old game data when new game data is from different game', async () => {
 
             const expected = [
 
@@ -69,13 +69,12 @@ context('game manager service unit test', () => {
 
             gameHttpStub.getGames.resolves(expected);
 
-            service.cacheGames();
-            tick();
+            await service.cacheGames();
 
             expect(service.games).to.deep.equal(expected);
-        }));
+        });
 
-        it('should update old game details when new game data is from same game', fakeAsync(() => {
+        it('should update old game details when new game data is from same game', async () => {
 
             const expected = [
 
@@ -86,42 +85,38 @@ context('game manager service unit test', () => {
 
             gameHttpStub.getGames.resolves(expected);
 
-            service.cacheGames();
-            tick();
+            await service.cacheGames();
 
             expect(service.games).to.deep.equal(expected);
-        }));
+        });
 
-        it('should include all new games when they are more than total number of old games', fakeAsync(() => {
+        it('should include all new games when they are more than total number of old games', async () => {
 
             const newGame = { id: 5, view_count: 9 };
             const expected = [...service.games, newGame];
             gameHttpStub.getGames.resolves(expected);
 
-            service.cacheGames();
-            tick();
+            await service.cacheGames();
 
             expect(service.games).to.deep.equal(expected);
-        }));
+        });
 
-        it('should keep old games when they are more than total number of new games', fakeAsync(() => {
+        it('should keep old games when they are more than total number of new games', async () => {
 
             const expected = service.games.slice();
             const newGames = service.games.slice(0, 1);
             gameHttpStub.getGames.resolves(newGames);
 
-            service.cacheGames();
-            tick();
+            await service.cacheGames();
 
             expect(service.games).to.deep.equal(expected);
-        }));
+        });
 
-        it('should not throw error when failed to fetch games', fakeAsync(() => {
+        it('should not throw error when failed to fetch games', async () => {
 
             gameHttpStub.getGames.rejects(new Error());
 
-            service.cacheGames();
-            tick();
-        }));
+            await service.cacheGames();
+        });
     });
 });

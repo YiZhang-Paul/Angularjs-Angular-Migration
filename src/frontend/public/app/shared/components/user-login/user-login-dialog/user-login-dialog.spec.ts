@@ -1,4 +1,3 @@
-import { fakeAsync, tick } from '@angular/core/testing';
 import { expect } from 'chai';
 import { assert as sinonExpect, stub } from 'sinon';
 
@@ -10,8 +9,8 @@ context('user login dialog unit test', () => {
 
     let dialog: UserLoginDialog;
 
-    let callbackStub;
-    let matDialogRefStub;
+    let callbackStub: any;
+    let matDialogRefStub: any;
 
     beforeEach('stubs setup', () => {
 
@@ -45,33 +44,30 @@ context('user login dialog unit test', () => {
             sinonExpect.calledWith(callbackStub, expected);
         });
 
-        it('should close panel on successful login', fakeAsync(() => {
+        it('should close panel on successful login', async () => {
 
-            dialog.onLogin();
-            tick();
+            await dialog.onLogin();
 
             sinonExpect.calledOnce(matDialogRefStub.close);
-        }));
+        });
 
-        it('should not close panel on login failure', fakeAsync(() => {
+        it('should not close panel on login failure', async () => {
 
             callbackStub.rejects(new Error());
 
-            dialog.onLogin();
-            tick();
+            await dialog.onLogin();
 
             sinonExpect.notCalled(matDialogRefStub.close);
-        }));
+        });
 
-        it('should indicate login error on login failure', fakeAsync(() => {
+        it('should indicate login error on login failure', async () => {
 
             callbackStub.rejects(new Error());
 
-            dialog.onLogin();
-            tick();
+            await dialog.onLogin();
 
             expect(dialog.noError).to.be.false;
-        }));
+        });
     });
 
     describe('onKeyup()', () => {

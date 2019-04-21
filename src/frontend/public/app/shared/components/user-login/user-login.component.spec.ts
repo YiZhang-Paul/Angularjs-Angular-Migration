@@ -17,9 +17,9 @@ context('user login component unit test', () => {
     let fixture: ComponentFixture<UserLoginComponent>;
     let component: UserLoginComponent;
 
-    let authenticatorStub;
-    let userLoginStub;
-    let matDialogStub;
+    let authenticatorStub: any;
+    let userLoginStub: any;
+    let matDialogStub: any;
 
     beforeEach('stubs setup', () => {
 

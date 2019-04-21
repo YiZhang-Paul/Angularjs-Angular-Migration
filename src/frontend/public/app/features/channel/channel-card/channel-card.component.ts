@@ -4,13 +4,13 @@ import { ThumbnailPlayerService } from '../../../core/services/utilities/thumbna
 
 @Component({
     selector: 'channel-card',
-    styles: [`${require('./channel-card.scss')}`],
-    template: require('./channel-card.html')
+    styleUrls: ['./channel-card.scss'],
+    templateUrl: './channel-card.html'
 })
 export class ChannelCardComponent {
 
     @Input() public channel: any;
-    @Input() public isFollowed: any;
+    @Input() public isFollowed: boolean;
     @Output() public onFollow = new EventEmitter();
     @Output() public onUnfollow = new EventEmitter();
 

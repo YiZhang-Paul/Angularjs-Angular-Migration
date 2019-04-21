@@ -4,8 +4,8 @@ import { BookmarkManagerService } from '../../../core/services/data-managers/boo
 
 @Component({
     selector: 'bookmark-list',
-    styles: [`${require('./bookmark-list.scss')}`],
-    template: require('./bookmark-list.html')
+    styleUrls: ['./bookmark-list.scss'],
+    templateUrl: './bookmark-list.html'
 })
 export class BookmarkListComponent implements OnInit {
 
@@ -16,7 +16,7 @@ export class BookmarkListComponent implements OnInit {
         this._bookmarkManager = bookmarkManager;
     }
 
-    get bookmarks(): any {
+    get bookmarks(): any[] {
 
         return this._bookmarkManager.bookmarks;
     }
@@ -26,8 +26,15 @@ export class BookmarkListComponent implements OnInit {
         this._bookmarkManager.cacheBookmarks();
     }
 
-    public unfollow(bookmark): void {
+    public async unfollow(bookmark: any): Promise<void> {
 
-        this._bookmarkManager.unfollow(bookmark).catch(error => console.log(error));
+        try {
+
+            await this._bookmarkManager.unfollow(bookmark);
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

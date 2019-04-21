@@ -15,7 +15,7 @@ context('user http service unit test', () => {
     let httpController: HttpTestingController;
     let service: UserHttpService;
 
-    let authenticatorStub;
+    let authenticatorStub: any;
 
     beforeEach('stubs setup', () => {
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
@@ -8,14 +8,13 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 
 @Component({
     selector: 'sidebar',
-    styles: [`${require('./sidebar.scss')}`],
-    template: require('./sidebar.html')
+    styleUrls: ['./sidebar.scss'],
+    templateUrl: './sidebar.html'
 })
 export class SidebarComponent implements OnInit {
 
-    @Input() public hideOptions: any;
-    public badges = new Map();
-    public routes = new Map();
+    public badges = new Map<string, any[]>();
+    public routes = new Map<string, string>();
 
     private _options = ['Followed Channels', 'Featured Channels', 'View History'];
     private _states = ['bookmarks', 'featured', 'histories'];
@@ -43,7 +42,7 @@ export class SidebarComponent implements OnInit {
         this._viewHistoryManager = viewHistoryManager;
     }
 
-    get options() {
+    get options(): any[] {
 
         if (this._authenticator.isAuthenticated) {
 
@@ -53,7 +52,7 @@ export class SidebarComponent implements OnInit {
         return [this._options[1]];
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
 
         this.initializeMaps();
         this.registerEvents();
@@ -66,7 +65,7 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    private initializeMaps() {
+    private initializeMaps(): void {
 
         this._options.forEach((_, index) => {
 
@@ -75,28 +74,32 @@ export class SidebarComponent implements OnInit {
         });
     }
 
-    private loadBookmarks() {
+    private loadBookmarks(): void {
 
         const bookmarks = this._bookmarkManager.bookmarks;
         this.badges.set(this._options[0], bookmarks.slice(0, 3));
     }
 
-    private loadHistories() {
+    private loadHistories(): void {
 
         const histories = this._viewHistoryManager.histories;
         this.badges.set(this._options[2], histories.slice(0, 3));
     }
 
-    private loadFeaturedChannels() {
+    private async loadFeaturedChannels(): Promise<void> {
 
-        this._channelHttp.getChannels().then(channels => {
+        try {
 
+            const channels = await this._channelHttp.getChannels();
             this.badges.set(this._options[1], channels.slice(0, 3));
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    private registerAuthenticationEvents() {
+    private registerAuthenticationEvents(): void {
 
         this._eventManager.subscribe('userLoggedOut', () => {
 
@@ -105,7 +108,7 @@ export class SidebarComponent implements OnInit {
         });
     }
 
-    private registerBookmarkEvents() {
+    private registerBookmarkEvents(): void {
 
         const events = ['bookmarkCached', 'followedChannel', 'unfollowedChannel'];
 
@@ -115,7 +118,7 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    private registerViewHistoryEvents() {
+    private registerViewHistoryEvents(): void {
 
         const events = ['Updated', 'Removed', 'Cleared', 'Cached'];
 
@@ -125,7 +128,7 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    private registerEvents() {
+    private registerEvents(): void {
 
         this.registerAuthenticationEvents();
         this.registerBookmarkEvents();

@@ -4,8 +4,8 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 
 @Component({
     selector: 'top-navigation-bar',
-    styles: [`${require('./top-navigation-bar.scss')}`],
-    template: require('./top-navigation-bar.html')
+    styleUrls: ['./top-navigation-bar.scss'],
+    templateUrl: './top-navigation-bar.html'
 })
 export class TopNavigationBarComponent {
 
@@ -16,7 +16,7 @@ export class TopNavigationBarComponent {
         this._routingService = routingService;
     }
 
-    public toMainPage() {
+    public toMainPage(): void {
 
         this._routingService.toState('index');
     }

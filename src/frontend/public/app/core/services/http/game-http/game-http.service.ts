@@ -15,24 +15,20 @@ export class GameHttpService {
         this._http = http;
     }
 
-    public getGame(id): Promise<any> {
+    public async getGame(id: number): Promise<any> {
 
         const url = `${this._api}/${id}`;
+        const response = await this._http.get<any>(url).toPromise();
 
-        return this._http.get<any>(url).toPromise().then(response => {
-
-            return response[0] ? response[0] : null;
-        });
+        return response[0] ? response[0] : null;
     }
 
-    public getGameByName(name): Promise<any> {
+    public async getGameByName(name: string): Promise<any> {
 
-        return this.getGames().then(games => {
+        const games = await this.getGames();
+        const game = games.find(_ => _.name === name);
 
-            const game = games.find(_ => _.name === name);
-
-            return game ? game : null;
-        });
+        return game ? game : null;
     }
 
     public getGames(): Promise<any> {

@@ -8,7 +8,7 @@ import { EventManagerService } from '../../events/event-manager.service';
 })
 export class ViewHistoryManagerService {
 
-    public histories = [];
+    public histories: any[] = [];
 
     private _viewHistoryHttp: ViewHistoryHttpService;
     private _eventManager: EventManagerService;
@@ -24,25 +24,35 @@ export class ViewHistoryManagerService {
         this._eventManager = eventManager;
     }
 
-    public cacheHistories() {
+    public async cacheHistories(): Promise<void> {
 
-        return this._viewHistoryHttp.getHistories().then(histories => {
+        try {
 
+            const histories = await this._viewHistoryHttp.getHistories();
             this.histories = histories.length ? histories : this.histories;
             this._eventManager.emit('historyCached');
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    public addHistory(channel) {
+    public async addHistory(channel: any): Promise<void> {
 
-        return this._viewHistoryHttp.addHistory(channel)
-            .then(() => this.cacheHistories())
-            .then(() => this._eventManager.emit('historyUpdated'))
-            .catch(error => console.log(error));
+        try {
+
+            await this._viewHistoryHttp.addHistory(channel);
+            this.cacheHistories();
+            this._eventManager.emit('historyUpdated');
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    private removeCached(id) {
+    private removeCached(id: number): void {
 
         const index = this.histories.findIndex(_ => _.id === id);
 
@@ -52,23 +62,31 @@ export class ViewHistoryManagerService {
         }
     }
 
-    public deleteHistory(id) {
+    public async deleteHistory(id: number): Promise<void> {
 
-        this._viewHistoryHttp.deleteHistory(id).then(() => {
+        try {
 
+            await this._viewHistoryHttp.deleteHistory(id);
             this.removeCached(id);
             this._eventManager.emit('historyRemoved');
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
-    public clearHistories() {
+    public async clearHistories(): Promise<void> {
 
-        return this._viewHistoryHttp.deleteHistories().then(() => {
+        try {
 
+            await this._viewHistoryHttp.deleteHistories();
             this.histories = [];
             this._eventManager.emit('historyCleared');
-        })
-        .catch(error => console.log(error));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 }

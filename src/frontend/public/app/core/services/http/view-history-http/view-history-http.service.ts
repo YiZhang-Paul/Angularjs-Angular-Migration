@@ -19,14 +19,14 @@ export class ViewHistoryHttpService {
         this._authenticator = authenticator;
     }
 
-    private getDefaultOptions() {
+    private getDefaultOptions(): any {
 
         const options = this._authenticator.defaultOptions;
 
         return Object.assign({ responseType: 'text' }, options);
     }
 
-    private sortByTimestamp(data) {
+    private sortByTimestamp(data: any[]): any[] {
 
         return data.slice().sort((a, b) => {
 
@@ -34,17 +34,15 @@ export class ViewHistoryHttpService {
         });
     }
 
-    public getHistories(): Promise<any> {
+    public async getHistories(): Promise<any> {
 
         const options = this._authenticator.defaultOptions;
+        const histories = await this._http.get<any>(this._api, options).toPromise();
 
-        return this._http.get<any>(this._api, options).toPromise().then(response => {
-
-            return this.sortByTimestamp(response);
-        });
+        return this.sortByTimestamp(histories);
     }
 
-    public addHistory(channel): Promise<any> {
+    public addHistory(channel: any): Promise<any> {
 
         const name = channel.provider_game_name;
         const data = Object.assign({ game_name: name }, channel);
@@ -53,7 +51,7 @@ export class ViewHistoryHttpService {
         return this._http.post(this._api, data, options).toPromise();
     }
 
-    public deleteHistory(id): Promise<any> {
+    public deleteHistory(id: number): Promise<any> {
 
         const url = `${this._api}/${id}`;
         const options = this.getDefaultOptions();

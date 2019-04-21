@@ -15,9 +15,9 @@ context('user login service unit test', () => {
 
     let service: UserLoginService;
 
-    let authenticatorStub;
-    let eventManagerStub;
-    let userHttpStub;
+    let authenticatorStub: any;
+    let eventManagerStub: any;
+    let userHttpStub: any;
 
     beforeEach('stubs setup', () => {
 
@@ -65,7 +65,7 @@ context('user login service unit test', () => {
 
         it('should raise user authenticated event on successful login', async () => {
 
-            await service.login({});
+            await service.login({ username: '', password: '' });
 
             sinonExpect.calledOnce(eventManagerStub.emit);
             sinonExpect.calledWith(eventManagerStub.emit, 'userAuthenticated');
@@ -76,7 +76,7 @@ context('user login service unit test', () => {
             const expected = { status: 400 };
             authenticatorStub.requestToken.returns(Promise.reject(expected));
 
-            await service.login({}).catch(result => {
+            await service.login({ username: '', password: '' }).catch(result => {
 
                 expect(result).to.deep.equal(expected);
             });
@@ -87,7 +87,7 @@ context('user login service unit test', () => {
             const expected = { id: 1, name: 'name_1' };
             userHttpStub.getUser.returns(Promise.resolve(expected));
 
-            const result = await service.login({});
+            const result = await service.login({ username: '', password: '' });
 
             expect(result).to.deep.equal(expected);
             sinonExpect.calledOnce(userHttpStub.getUser);
@@ -97,7 +97,7 @@ context('user login service unit test', () => {
 
             userHttpStub.getUser.returns(Promise.reject(new Error()));
 
-            const result = await service.login({});
+            const result = await service.login({ username: '', password: '' });
 
             expect(result).to.be.null;
         });

@@ -4,12 +4,12 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 
 @Component({
     selector: 'dropdown-search-box',
-    styles: [`${require('./dropdown-search-box.scss')}`],
-    template: require('./dropdown-search-box.html')
+    styleUrls: ['./dropdown-search-box.scss'],
+    templateUrl: './dropdown-search-box.html'
 })
 export class DropdownSearchBoxComponent {
 
-    public result: any = null;
+    public result: { games: any[] } = null;
 
     private _routingService: CustomRoutingService;
 
@@ -18,7 +18,7 @@ export class DropdownSearchBoxComponent {
         this._routingService = routingService;
     }
 
-    public toChannelsView(game) {
+    public toChannelsView(game: any): void {
 
         this._routingService.toChannelsView(game.id);
         this.result = null;

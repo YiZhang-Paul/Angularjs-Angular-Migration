@@ -8,8 +8,8 @@ import { ClearHistoriesDialog } from './clear-histories-dialog/clear-histories-d
 
 @Component({
     selector: 'view-history-list',
-    styles: [`${require('./view-history-list.scss')}`],
-    template: require('./view-history-list.html')
+    styleUrls: ['./view-history-list.scss'],
+    templateUrl: './view-history-list.html'
 })
 export class ViewHistoryListComponent implements OnInit {
 
@@ -30,7 +30,7 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager = viewHistoryManager;
     }
 
-    get histories(): any {
+    get histories(): any[] {
 
         return this._viewHistoryManager.histories;
     }
@@ -40,32 +40,30 @@ export class ViewHistoryListComponent implements OnInit {
         this._viewHistoryManager.cacheHistories();
     }
 
-    public isStaticImage(url): any {
+    public isStaticImage(url: string): boolean {
 
         return !/(mp4|m4v)$/i.test(url);
     }
 
-    public toChannelsView(id) {
+    public toChannelsView(id: number): void {
 
         this._routingService.toChannelsView(id);
     }
 
-    public deleteHistory(history) {
+    public deleteHistory(history: any): void {
 
         this._viewHistoryManager.deleteHistory(history.id);
     }
 
-    public confirmClearHistories() {
+    public async confirmClearHistories(): Promise<void> {
 
         const width = '25%';
         const dialog = this._dialog.open(ClearHistoriesDialog, { width });
+        const isConfirmed = await dialog.afterClosed().toPromise();
 
-        dialog.afterClosed().toPromise().then(isConfirmed => {
+        if (isConfirmed) {
 
-            if (isConfirmed) {
-
-                this._viewHistoryManager.clearHistories();
-            }
-        });
+            this._viewHistoryManager.clearHistories();
+        }
     }
 }

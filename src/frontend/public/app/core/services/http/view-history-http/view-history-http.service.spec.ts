@@ -15,7 +15,7 @@ context('view history http service unit test', () => {
     let httpController: HttpTestingController;
     let service: ViewHistoryHttpService;
 
-    let authenticatorStub;
+    let authenticatorStub: any;
 
     beforeEach('stubs setup', () => {
 
