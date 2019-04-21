@@ -3,8 +3,8 @@ import { MatDialogRef } from '@angular/material';
 
 @Component({
     selector: 'clear-histories-dialog',
-    styles: [`${require('./clear-histories-dialog.scss')}`],
-    template: `${require('./clear-histories-dialog.html')}`
+    styleUrls: ['./clear-histories-dialog.scss'],
+    templateUrl: './clear-histories-dialog.html'
 })
 export class ClearHistoriesDialog {
 

@@ -4,8 +4,8 @@ import { CustomRoutingService } from '../../../../core/services/custom-routing/c
 
 @Component({
     selector: 'sidebar-badge',
-    styles: [`${require('./sidebar-badge.scss')}`],
-    template: require('./sidebar-badge.html')
+    styleUrls: ['./sidebar-badge.scss'],
+    templateUrl: './sidebar-badge.html'
 })
 export class SidebarBadgeComponent {
 

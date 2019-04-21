@@ -4,8 +4,8 @@ import { BookmarkManagerService } from '../../../core/services/data-managers/boo
 
 @Component({
     selector: 'bookmark-list',
-    styles: [`${require('./bookmark-list.scss')}`],
-    template: require('./bookmark-list.html')
+    styleUrls: ['./bookmark-list.scss'],
+    templateUrl: './bookmark-list.html'
 })
 export class BookmarkListComponent implements OnInit {
 

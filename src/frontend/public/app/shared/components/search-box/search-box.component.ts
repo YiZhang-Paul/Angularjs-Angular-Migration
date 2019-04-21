@@ -4,8 +4,8 @@ import { GameFinder } from '../../../core/services/searching/game-finder/game-fi
 
 @Component({
     selector: 'search-box',
-    styles: [`${require('./search-box.scss')}`],
-    template: require('./search-box.html')
+    styleUrls: ['./search-box.scss'],
+    templateUrl: './search-box.html'
 })
 export class SearchBoxComponent {
 

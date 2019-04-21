@@ -8,8 +8,8 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 
 @Component({
     selector: 'game-channel-list',
-    styles: [`${require('./game-channel-list.scss')}`],
-    template: require('./game-channel-list.html')
+    styleUrls: ['./game-channel-list.scss'],
+    templateUrl: './game-channel-list.html'
 })
 export class GameChannelListComponent implements OnInit, OnDestroy {
 

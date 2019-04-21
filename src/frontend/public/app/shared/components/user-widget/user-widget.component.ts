@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'user-widget',
-    styles: [`${require('./user-widget.scss')}`],
-    template: require('./user-widget.html')
+    styleUrls: ['./user-widget.scss'],
+    templateUrl: './user-widget.html'
 })
 export class UserWidgetComponent {
 

@@ -9,8 +9,8 @@ import { UserLoginDialog } from './user-login-dialog/user-login-dialog';
 
 @Component({
     selector: 'user-login',
-    styles: [`${require('./user-login.scss')}`],
-    template: require('./user-login.html')
+    styleUrls: ['./user-login.scss'],
+    templateUrl: './user-login.html'
 })
 export class UserLoginComponent {
 

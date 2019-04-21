@@ -6,8 +6,8 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 
 @Component({
     selector: 'featured-channel-list',
-    styles: [`${require('./featured-channel-list.scss')}`],
-    template: require('./featured-channel-list.html')
+    styleUrls: ['./featured-channel-list.scss'],
+    templateUrl: './featured-channel-list.html'
 })
 export class FeaturedChannelListComponent implements OnInit, OnDestroy {
 

@@ -8,8 +8,8 @@ import { ViewHistoryManagerService } from './core/services/data-managers/view-hi
 
 @Component({
     selector: 'app',
-    styles: [`${require('../style.scss')}`],
-    template: require('./app.html')
+    styleUrls: ['../style.scss'],
+    templateUrl: './app.html'
 })
 export class AppComponent implements OnInit {
 

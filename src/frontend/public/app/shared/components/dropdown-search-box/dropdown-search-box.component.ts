@@ -4,8 +4,8 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 
 @Component({
     selector: 'dropdown-search-box',
-    styles: [`${require('./dropdown-search-box.scss')}`],
-    template: require('./dropdown-search-box.html')
+    styleUrls: ['./dropdown-search-box.scss'],
+    templateUrl: './dropdown-search-box.html'
 })
 export class DropdownSearchBoxComponent {
 

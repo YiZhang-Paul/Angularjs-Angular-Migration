@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'view-history-card',
-    styles: [`${require('./view-history-card.scss')}`],
-    template: require('./view-history-card.html')
+    styleUrls: ['./view-history-card.scss'],
+    templateUrl: './view-history-card.html'
 })
 export class ViewHistoryCardComponent {
 

@@ -8,8 +8,8 @@ import { ClearHistoriesDialog } from './clear-histories-dialog/clear-histories-d
 
 @Component({
     selector: 'view-history-list',
-    styles: [`${require('./view-history-list.scss')}`],
-    template: require('./view-history-list.html')
+    styleUrls: ['./view-history-list.scss'],
+    templateUrl: './view-history-list.html'
 })
 export class ViewHistoryListComponent implements OnInit {
 

@@ -8,8 +8,8 @@ import { ViewHistoryManagerService } from '../../../core/services/data-managers/
 
 @Component({
     selector: 'sidebar',
-    styles: [`${require('./sidebar.scss')}`],
-    template: require('./sidebar.html')
+    styleUrls: ['./sidebar.scss'],
+    templateUrl: './sidebar.html'
 })
 export class SidebarComponent implements OnInit {
 

@@ -18,7 +18,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
-                use: 'ts-loader'
+                use: ['ts-loader', 'angular2-template-loader']
             },
             {
                 test: /\.m?js$/,
@@ -31,11 +31,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: ['to-string-loader', 'style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
