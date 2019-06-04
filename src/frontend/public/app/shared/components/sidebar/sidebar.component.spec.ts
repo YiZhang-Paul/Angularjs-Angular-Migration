@@ -2,17 +2,17 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../shared.module';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
-import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
-import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
-import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
-import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { ChannelHttpService } from '../../../core/services/http/channel-http/channel-http.service';
+import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 import { EventManagerService } from '../../../core/services/events/event-manager.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
+import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
+import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { stubChannelHttpService } from '../../../testing/stubs/custom/channel-http.service.stub';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
-import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 
 import { SidebarComponent } from './sidebar.component';
 
@@ -47,7 +47,10 @@ context('sidebar component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [
+                SidebarComponent,
+                stubComponent({ selector: 'sidebar-badge', inputs: ['channelBadges', 'route'] })
+            ],
             providers: [
 
                 EventManagerService,

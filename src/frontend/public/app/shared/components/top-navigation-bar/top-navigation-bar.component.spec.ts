@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../shared.module';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
 
 import { TopNavigationBarComponent } from './top-navigation-bar.component';
@@ -15,7 +15,11 @@ context('top navigation bar component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [
+                TopNavigationBarComponent,
+                stubComponent({ selector: 'dropdown-search-box' }),
+                stubComponent({ selector: 'user-login' })
+            ],
             providers: [
 
                 { provide: CustomRoutingService, useValue: {} }

@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { expect } from 'chai';
 import { assert as sinonExpect } from 'sinon';
 
-import { SharedModule } from '../../shared.module';
 import { AuthenticatorService } from '../../../core/services/authentication/authenticator/authenticator.service';
 import { UserLoginService } from '../../../core/services/authentication/user-login/user-login.service';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
 import { stubMatDialog } from '../../../testing/stubs/built-in/mat-dialog.stub';
 import { stubAuthenticatorService } from '../../../testing/stubs/custom/authenticator.service.stub';
 import { stubUserLoginService } from '../../../testing/stubs/custom/user-login.service.stub';
@@ -32,7 +32,10 @@ context('user login component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [
+                UserLoginComponent,
+                stubComponent({ selector: 'user-widget', inputs: ['user'] })
+            ],
             providers: [
 
                 { provide: AuthenticatorService, useValue: authenticatorStub },

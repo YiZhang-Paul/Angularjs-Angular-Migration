@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../shared.module';
 import { CustomRoutingService } from '../../../core/services/custom-routing/custom-routing.service';
-import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
 import { GameFinder } from '../../../core/services/searching/game-finder/game-finder.service';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
+import { stubCustomRoutingService } from '../../../testing/stubs/custom/custom-routing.service.stub';
 import { stubGameFinder } from '../../../testing/stubs/custom/game-finder.service.stub';
 
 import { DropdownSearchBoxComponent } from './dropdown-search-box.component';
@@ -28,7 +28,11 @@ context('dropdown search box component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [
+                DropdownSearchBoxComponent,
+                stubComponent({ selector: 'search-box' }),
+                stubComponent({ selector: 'game-badge', inputs: ['game'] })
+            ],
             providers: [
 
                 { provide: CustomRoutingService, useValue: customRoutingStub },

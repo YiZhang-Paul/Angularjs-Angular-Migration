@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared/shared.module';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
 
 import { UserWidgetComponent } from './user-widget.component';
 
@@ -14,7 +14,12 @@ context('user widget component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule]
+            declarations: [
+                UserWidgetComponent,
+                stubComponent({ selector: 'mat-icon' }),
+                stubComponent({ selector: 'mat-expansion-panel', inputs: ['hideToggle'] }),
+                stubComponent({ selector: 'mat-expansion-panel-header' })
+            ]
         });
 
         fixture = TestBed.createComponent(UserWidgetComponent);

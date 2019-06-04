@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared.module';
+import { CapitalizePipe } from '../../../pipes/capitalize/capitalize.pipe';
 
 import { GameBadgeComponent } from './game-badge.component';
 
@@ -14,7 +14,10 @@ context('game badge component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule]
+            declarations: [
+                GameBadgeComponent,
+                CapitalizePipe
+            ]
         });
 
         fixture = TestBed.createComponent(GameBadgeComponent);

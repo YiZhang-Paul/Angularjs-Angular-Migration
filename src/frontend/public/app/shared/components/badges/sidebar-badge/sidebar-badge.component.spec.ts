@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared.module';
 import { CustomRoutingService } from '../../../../core/services/custom-routing/custom-routing.service';
+import { stubComponent } from '../../../../testing/stubs/custom/component.stub';
 import { stubCustomRoutingService } from '../../../../testing/stubs/custom/custom-routing.service.stub';
 
 import { SidebarBadgeComponent } from './sidebar-badge.component';
@@ -23,7 +23,10 @@ context('sidebar badge component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [
+                SidebarBadgeComponent,
+                stubComponent({ selector: 'channel-badge', inputs: ['badge'] })
+            ],
             providers: [{ provide: CustomRoutingService, useValue: customRoutingServiceStub }]
         });
 

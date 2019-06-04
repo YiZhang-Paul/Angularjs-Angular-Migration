@@ -1,25 +1,23 @@
-import { Component, Input } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Transition } from '@uirouter/angular';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared/shared.module';
-import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
-import { ChannelService } from '../channel.service';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
+import { ChannelService } from '../channel.service';
+import { GameHttpService } from '../../../core/services/http/game-http/game-http.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
-import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
-import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize/capitalize.pipe';
+import { ShortViewCountPipe } from '../../../shared/pipes/short-view-count/short-view-count.pipe';
+import { UppercaseRomanNumeralsPipe } from '../../../shared/pipes/uppercase-roman-numerals/uppercase-roman-numerals.pipe';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
+import { stubGameHttpService } from '../../../testing/stubs/custom/game-http.service.stub';
 import { stubTransition } from '../../../testing/stubs/third-party/transition.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
-import { ChannelCardComponent } from '../channel-card/channel-card.component';
 
 import { GameChannelListComponent } from './game-channel-list.component';
-
-@Component({ selector: 'game-card', template: '<div></div>' })
-class GameCardComponentForTest { @Input() public game: any; }
 
 context('game channel list component unit test', () => {
 
@@ -49,12 +47,14 @@ context('game channel list component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
             declarations: [
 
-                GameCardComponentForTest,
-                ChannelCardComponent,
-                GameChannelListComponent
+                stubComponent({ selector: 'channel-card', inputs: ['channel', 'isFollowed'] }),
+                stubComponent({ selector: 'game-card', inputs: ['game'] }),
+                GameChannelListComponent,
+                CapitalizePipe,
+                ShortViewCountPipe,
+                UppercaseRomanNumeralsPipe
             ],
             providers: [
 

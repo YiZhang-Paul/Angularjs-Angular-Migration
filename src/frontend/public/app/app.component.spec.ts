@@ -1,4 +1,3 @@
-import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
@@ -10,19 +9,11 @@ import { ViewHistoryManagerService } from './core/services/data-managers/view-hi
 import { EventManagerService } from './core/services/events/event-manager.service';
 import { stubAuthenticatorService } from './testing/stubs/custom/authenticator.service.stub';
 import { stubBookmarkManagerService } from './testing/stubs/custom/bookmark-manager.service.stub';
+import { stubComponent } from './testing/stubs/custom/component.stub';
 import { stubGameManagerService } from './testing/stubs/custom/game-manager.service.stub';
 import { stubViewHistoryManagerService } from './testing/stubs/custom/view-history-manager.service.stub';
 import { stubEventManagerService } from './testing/stubs/custom/event-manager.service.stub';
 import { AppComponent } from './app.component';
-
-@Component({ selector: 'top-navigation-bar', template: '<div></div>' })
-class TopNavigationBarComponentForTest { }
-
-@Component({ selector: 'sidebar', template: '<div></div>' })
-class SidebarComponentForTest { }
-
-@Component({ selector: 'ui-view', template: '<div></div>' })
-class UIViewForTest { }
 
 context('app component unit test', () => {
 
@@ -50,9 +41,9 @@ context('app component unit test', () => {
 
             declarations: [
                 AppComponent,
-                TopNavigationBarComponentForTest,
-                SidebarComponentForTest,
-                UIViewForTest
+                stubComponent({ selector: 'top-navigation-bar' }),
+                stubComponent({ selector: 'sidebar' }),
+                stubComponent({ selector: 'ui-view' })
             ],
             providers: [
 

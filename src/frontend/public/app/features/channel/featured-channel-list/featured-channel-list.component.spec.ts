@@ -2,14 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect, SinonFakeTimers, useFakeTimers } from 'sinon';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared/shared.module';
 import { BookmarkManagerService } from '../../../core/services/data-managers/bookmark-manager/bookmark-manager.service';
 import { ChannelService } from '../channel.service';
 import { ViewHistoryManagerService } from '../../../core/services/data-managers/view-history-manager/view-history-manager.service';
 import { stubBookmarkManagerService } from '../../../testing/stubs/custom/bookmark-manager.service.stub';
+import { stubComponent } from '../../../testing/stubs/custom/component.stub';
 import { stubChannelService } from '../../../testing/stubs/custom/channel.service.stub';
 import { stubViewHistoryManagerService } from '../../../testing/stubs/custom/view-history-manager.service.stub';
-import { ChannelCardComponent } from '../channel-card/channel-card.component';
 
 import { FeaturedChannelListComponent } from './featured-channel-list.component';
 
@@ -34,10 +33,9 @@ context('featured channel list component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
             declarations: [
 
-                ChannelCardComponent,
+                stubComponent({ selector: 'channel-card', inputs: ['channel', 'isFollowed'] }),
                 FeaturedChannelListComponent
             ],
             providers: [

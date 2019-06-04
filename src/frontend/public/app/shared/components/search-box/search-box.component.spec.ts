@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assert as sinonExpect } from 'sinon';
 import { expect } from 'chai';
 
-import { SharedModule } from '../../../shared/shared.module';
 import { GameFinder } from '../../../core/services/searching/game-finder/game-finder.service';
 import { stubGameFinder } from '../../../testing/stubs/custom/game-finder.service.stub';
 
@@ -24,7 +23,7 @@ context('search box component unit test', () => {
 
         TestBed.configureTestingModule({
 
-            imports: [SharedModule],
+            declarations: [SearchBoxComponent],
             providers: [{ provide: GameFinder, useValue: gameFinderStub }]
         });
 
