@@ -11,12 +11,7 @@ export class SearchBoxComponent {
 
     @Output() public onSearch = new EventEmitter();
 
-    private _gameFinder: GameFinder;
-
-    constructor(gameFinder: GameFinder) {
-
-        this._gameFinder = gameFinder;
-    }
+    constructor(private _gameFinder: GameFinder) { }
 
     public search(keyword: string): void {
 

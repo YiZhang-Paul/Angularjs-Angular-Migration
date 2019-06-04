@@ -8,21 +8,10 @@ import { EventManagerService } from '../../events/event-manager.service';
 })
 export class ViewHistoryManagerService {
 
-    public histories: any[] = [];
+    public histories = [];
 
-    private _viewHistoryHttp: ViewHistoryHttpService;
-    private _eventManager: EventManagerService;
-
-    constructor(
-
-        viewHistoryHttp: ViewHistoryHttpService,
-        eventManager: EventManagerService
-
-    ) {
-
-        this._viewHistoryHttp = viewHistoryHttp;
-        this._eventManager = eventManager;
-    }
+    constructor(private _viewHistoryHttp: ViewHistoryHttpService,
+                private _eventManager: EventManagerService) { }
 
     public async cacheHistories(): Promise<void> {
 
@@ -52,16 +41,6 @@ export class ViewHistoryManagerService {
         }
     }
 
-    private removeCached(id: number): void {
-
-        const index = this.histories.findIndex(_ => _.id === id);
-
-        if (index !== -1) {
-
-            this.histories.splice(index, 1);
-        }
-    }
-
     public async deleteHistory(id: number): Promise<void> {
 
         try {
@@ -73,6 +52,16 @@ export class ViewHistoryManagerService {
         catch (error) {
 
             console.log(error);
+        }
+    }
+
+    private removeCached(id: number): void {
+
+        const index = this.histories.findIndex(_ => _.id === id);
+
+        if (index !== -1) {
+
+            this.histories.splice(index, 1);
         }
     }
 

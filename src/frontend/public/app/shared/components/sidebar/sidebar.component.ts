@@ -19,28 +19,11 @@ export class SidebarComponent implements OnInit {
     private _options = ['Followed Channels', 'Featured Channels', 'View History'];
     private _states = ['bookmarks', 'featured', 'histories'];
 
-    private _authenticator: AuthenticatorService;
-    private _bookmarkManager: BookmarkManagerService;
-    private _channelHttp: ChannelHttpService;
-    private _eventManager: EventManagerService;
-    private _viewHistoryManager: ViewHistoryManagerService;
-
-    constructor(
-
-        authenticator: AuthenticatorService,
-        bookmarkManager: BookmarkManagerService,
-        channelHttp: ChannelHttpService,
-        eventManager: EventManagerService,
-        viewHistoryManager: ViewHistoryManagerService
-
-    ) {
-
-        this._authenticator = authenticator;
-        this._bookmarkManager = bookmarkManager;
-        this._channelHttp = channelHttp;
-        this._eventManager = eventManager;
-        this._viewHistoryManager = viewHistoryManager;
-    }
+    constructor(private _authenticator: AuthenticatorService,
+                private _bookmarkManager: BookmarkManagerService,
+                private _channelHttp: ChannelHttpService,
+                private _eventManager: EventManagerService,
+                private _viewHistoryManager: ViewHistoryManagerService) { }
 
     get options(): any[] {
 
@@ -74,29 +57,11 @@ export class SidebarComponent implements OnInit {
         });
     }
 
-    private loadBookmarks(): void {
+    private registerEvents(): void {
 
-        const bookmarks = this._bookmarkManager.bookmarks;
-        this.badges.set(this._options[0], bookmarks.slice(0, 3));
-    }
-
-    private loadHistories(): void {
-
-        const histories = this._viewHistoryManager.histories;
-        this.badges.set(this._options[2], histories.slice(0, 3));
-    }
-
-    private async loadFeaturedChannels(): Promise<void> {
-
-        try {
-
-            const channels = await this._channelHttp.getChannels();
-            this.badges.set(this._options[1], channels.slice(0, 3));
-        }
-        catch (error) {
-
-            console.log(error);
-        }
+        this.registerAuthenticationEvents();
+        this.registerBookmarkEvents();
+        this.registerViewHistoryEvents();
     }
 
     private registerAuthenticationEvents(): void {
@@ -128,10 +93,28 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    private registerEvents(): void {
+    private async loadFeaturedChannels(): Promise<void> {
 
-        this.registerAuthenticationEvents();
-        this.registerBookmarkEvents();
-        this.registerViewHistoryEvents();
+        try {
+
+            const channels = await this._channelHttp.getChannels();
+            this.badges.set(this._options[1], channels.slice(0, 3));
+        }
+        catch (error) {
+
+            console.log(error);
+        }
+    }
+
+    private loadBookmarks(): void {
+
+        const bookmarks = this._bookmarkManager.bookmarks;
+        this.badges.set(this._options[0], bookmarks.slice(0, 3));
+    }
+
+    private loadHistories(): void {
+
+        const histories = this._viewHistoryManager.histories;
+        this.badges.set(this._options[2], histories.slice(0, 3));
     }
 }

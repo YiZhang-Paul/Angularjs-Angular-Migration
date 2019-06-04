@@ -15,31 +15,19 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
 
     public game: any = null;
     public name: string = null;
-    public channels: any[] = [];
+    public channels = [];
 
     private _task: any = null;
     private _stateParams: any;
 
-    private _gameHttp: GameHttpService;
-    private _channelService: ChannelService;
-    private _bookmarkManager: BookmarkManagerService;
-    private _viewHistoryManager: ViewHistoryManagerService;
-
-    constructor(
-
-        transition: Transition,
-        gameHttp: GameHttpService,
-        channelService: ChannelService,
-        bookmarkManager: BookmarkManagerService,
-        viewHistoryManager: ViewHistoryManagerService
-
+    constructor(transition: Transition,
+                private _gameHttp: GameHttpService,
+                private _channelService: ChannelService,
+                private _bookmarkManager: BookmarkManagerService,
+                private _viewHistoryManager: ViewHistoryManagerService
     ) {
 
         this._stateParams = transition.params();
-        this._gameHttp = gameHttp;
-        this._channelService = channelService;
-        this._bookmarkManager = bookmarkManager;
-        this._viewHistoryManager = viewHistoryManager;
     }
 
     public ngOnInit(): void {
@@ -49,17 +37,9 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         this.setupChannelLoading();
     }
 
-    private async loadGame(): Promise<void> {
+    public ngOnDestroy(): void {
 
-        this.game = await this._gameHttp.getGameByName(this.name);
-    }
-
-    private loadChannels(): void {
-
-        if (this.game) {
-
-            this._channelService.loadGameChannels(this.channels, this.game.id);
-        }
+        clearInterval(this._task);
     }
 
     private async loadComponent(): Promise<void> {
@@ -78,6 +58,19 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
         catch (error) {
 
             console.log(error);
+        }
+    }
+
+    private async loadGame(): Promise<void> {
+
+        this.game = await this._gameHttp.getGameByName(this.name);
+    }
+
+    private loadChannels(): void {
+
+        if (this.game) {
+
+            this._channelService.loadGameChannels(this.channels, this.game.id);
         }
     }
 
@@ -104,10 +97,5 @@ export class GameChannelListComponent implements OnInit, OnDestroy {
     public addHistory(channel: any): void {
 
         this._viewHistoryManager.addHistory(channel);
-    }
-
-    public ngOnDestroy(): void {
-
-        clearInterval(this._task);
     }
 }

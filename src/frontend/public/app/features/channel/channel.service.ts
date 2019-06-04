@@ -7,22 +7,7 @@ import { ChannelHttpService } from '../../core/services/http/channel-http/channe
 })
 export class ChannelService {
 
-    private _channelHttp: ChannelHttpService;
-
-    constructor(channelHttp: ChannelHttpService) {
-
-        this._channelHttp = channelHttp;
-    }
-
-    private isSameChannel(a: any, b: any): boolean {
-
-        if (!a || !b || a.provider_id !== b.provider_id) {
-
-            return false;
-        }
-
-        return a.provider_channel_id === b.provider_channel_id;
-    }
+    constructor(private _channelHttp: ChannelHttpService) { }
 
     public refreshChannels(outdated: any[], updated: any[]): void {
 
@@ -39,6 +24,16 @@ export class ChannelService {
             outdated[i].view_count = updated[i].view_count;
             outdated[i].streamer_name = updated[i].streamer_name;
         }
+    }
+
+    private isSameChannel(a: any, b: any): boolean {
+
+        if (!a || !b || a.provider_id !== b.provider_id) {
+
+            return false;
+        }
+
+        return a.provider_channel_id === b.provider_channel_id;
     }
 
     public async loadFeaturedChannels(cache: any[]): Promise<void> {

@@ -13,19 +13,8 @@ export class UserLoginDialog {
 
     private _noError = true;
 
-    private _data: { callback: Function };
-    private _dialogRef: MatDialogRef<UserLoginDialog>;
-
-    constructor(
-
-        @Inject(MAT_DIALOG_DATA) data: { callback: Function },
-        dialogRef: MatDialogRef<UserLoginDialog>
-
-    ) {
-
-        this._data = data;
-        this._dialogRef = dialogRef;
-    }
+    constructor(@Inject(MAT_DIALOG_DATA) private _data: { callback: Function },
+                private _dialogRef: MatDialogRef<UserLoginDialog>) { }
 
     get noError(): boolean {
 

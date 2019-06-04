@@ -9,26 +9,13 @@ import { EventManagerService } from '../../../services/events/event-manager.serv
 })
 export class BookmarkManagerService {
 
-    public bookmarks: any[] = [];
+    public bookmarks = [];
 
     private readonly _providerKeys = ['provider_id', 'provider_channel_id'];
 
-    private _toastr: ToastrService;
-    private _bookmarkHttp: BookmarkHttpService;
-    private _eventManager: EventManagerService;
-
-    constructor(
-
-        toastr: ToastrService,
-        bookmarkHttp: BookmarkHttpService,
-        eventManager: EventManagerService
-
-    ) {
-
-        this._toastr = toastr;
-        this._bookmarkHttp = bookmarkHttp;
-        this._eventManager = eventManager;
-    }
+    constructor(private _toastr: ToastrService,
+                private _bookmarkHttp: BookmarkHttpService,
+                private _eventManager: EventManagerService) { }
 
     public async cacheBookmarks(): Promise<void> {
 
@@ -43,19 +30,6 @@ export class BookmarkManagerService {
         }
 
         this._eventManager.emit('bookmarkCached');
-    }
-
-    private findBookmarkByChannelId(data: any): any {
-
-        return this.bookmarks.find(_ => _.channel_id === data.channel_id);
-    }
-
-    private findBookmarkByProvider(data: any): any {
-
-        return this.bookmarks.find(_ => {
-
-            return this._providerKeys.every(key => _[key] === data[key]);
-        });
     }
 
     private findBookmark(data: any): any {
@@ -73,16 +47,29 @@ export class BookmarkManagerService {
         return null;
     }
 
-    private getBookmarkId(data: any): number {
+    private findBookmarkByChannelId(data: any): any {
 
-        const bookmark = this.findBookmark(data);
+        return this.bookmarks.find(_ => _.channel_id === data.channel_id);
+    }
 
-        return bookmark ? bookmark.id : -1;
+    private findBookmarkByProvider(data: any): any {
+
+        return this.bookmarks.find(_ => {
+
+            return this._providerKeys.every(key => _[key] === data[key]);
+        });
     }
 
     public isFollowed(data: any): boolean {
 
         return this.getBookmarkId(data) !== -1;
+    }
+
+    private getBookmarkId(data: any): number {
+
+        const bookmark = this.findBookmark(data);
+
+        return bookmark ? bookmark.id : -1;
     }
 
     public async follow(data: any): Promise<void> {
@@ -100,12 +87,6 @@ export class BookmarkManagerService {
         }
     }
 
-    private removeCached(id: number): void {
-
-        const index = this.bookmarks.findIndex(_ => _.id === id);
-        this.bookmarks.splice(index, 1);
-    }
-
     public async unfollow(data: any): Promise<void> {
 
         try {
@@ -120,5 +101,11 @@ export class BookmarkManagerService {
 
             console.log(error);
         }
+    }
+
+    private removeCached(id: number): void {
+
+        const index = this.bookmarks.findIndex(_ => _.id === id);
+        this.bookmarks.splice(index, 1);
     }
 }

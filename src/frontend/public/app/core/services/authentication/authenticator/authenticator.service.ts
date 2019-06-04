@@ -13,12 +13,7 @@ export class AuthenticatorService {
     private _payload = '';
     private _signature = '';
 
-    private _http: HttpClient;
-
-    constructor(http: HttpClient) {
-
-        this._http = http;
-    }
+    constructor(private _http: HttpClient) { }
 
     get token(): string {
 

@@ -9,12 +9,7 @@ import { CustomRoutingService } from '../../../core/services/custom-routing/cust
 })
 export class TopNavigationBarComponent {
 
-    private _routingService: CustomRoutingService;
-
-    constructor(routingService: CustomRoutingService) {
-
-        this._routingService = routingService;
-    }
+    constructor(private _routingService: CustomRoutingService) { }
 
     public toMainPage(): void {
 

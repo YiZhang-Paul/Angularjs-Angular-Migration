@@ -13,28 +13,11 @@ import { ViewHistoryManagerService } from './core/services/data-managers/view-hi
 })
 export class AppComponent implements OnInit {
 
-    private _authenticator: AuthenticatorService;
-    private _bookmarkManager: BookmarkManagerService;
-    private _eventManager: EventManagerService;
-    private _gameManager: GameManagerService;
-    private _viewHistoryManager: ViewHistoryManagerService;
-
-    constructor(
-
-        authenticator: AuthenticatorService,
-        bookmarkManager: BookmarkManagerService,
-        eventManager: EventManagerService,
-        gameManager: GameManagerService,
-        viewHistoryManager: ViewHistoryManagerService
-
-    ) {
-
-        this._authenticator = authenticator;
-        this._bookmarkManager = bookmarkManager;
-        this._eventManager = eventManager;
-        this._gameManager = gameManager;
-        this._viewHistoryManager = viewHistoryManager;
-    }
+    constructor(private _authenticator: AuthenticatorService,
+                private _bookmarkManager: BookmarkManagerService,
+                private _eventManager: EventManagerService,
+                private _gameManager: GameManagerService,
+                private _viewHistoryManager: ViewHistoryManagerService) { }
 
     public ngOnInit(): void {
 

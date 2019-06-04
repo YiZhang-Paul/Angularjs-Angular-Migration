@@ -12,12 +12,7 @@ export class SidebarBadgeComponent {
     @Input() public channelBadges: any[];
     @Input() public route: string;
 
-    private _routingService: CustomRoutingService;
-
-    constructor(routingService: CustomRoutingService) {
-
-        this._routingService = routingService;
-    }
+    constructor(private _routingService: CustomRoutingService) { }
 
     public toState(): void {
 

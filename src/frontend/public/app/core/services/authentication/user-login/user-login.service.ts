@@ -10,21 +10,17 @@ import { UserHttpService } from '../../http/user-http/user-http.service';
 })
 export class UserLoginService {
 
-    private _authenticator: AuthenticatorService;
-    private _eventManager: EventManagerService;
-    private _userHttp: UserHttpService;
+    constructor(private _authenticator: AuthenticatorService,
+                private _eventManager: EventManagerService,
+                private _userHttp: UserHttpService) { }
 
-    constructor(
+    public async login(credentials: IBasicCredential): Promise<any> {
 
-        authenticator: AuthenticatorService,
-        eventManager: EventManagerService,
-        userHttp: UserHttpService
+        const { username, password } = credentials;
+        await this._authenticator.requestToken(username, password);
+        this._eventManager.emit('userAuthenticated');
 
-    ) {
-
-        this._authenticator = authenticator;
-        this._eventManager = eventManager;
-        this._userHttp = userHttp;
+        return this.getUser();
     }
 
     private async getUser(): Promise<any> {
@@ -39,15 +35,6 @@ export class UserLoginService {
 
             return null;
         }
-    }
-
-    public async login(credentials: IBasicCredential): Promise<any> {
-
-        const { username, password } = credentials;
-        await this._authenticator.requestToken(username, password);
-        this._eventManager.emit('userAuthenticated');
-
-        return this.getUser();
     }
 
     public logout(): void {

@@ -10,14 +10,7 @@ export class UserHttpService {
 
     private readonly _api = 'http://127.0.0.1:4150/api/v1/user';
 
-    private _http: HttpClient;
-    private _authenticator: AuthenticatorService;
-
-    constructor(http: HttpClient, authenticator: AuthenticatorService) {
-
-        this._http = http;
-        this._authenticator = authenticator;
-    }
+    constructor(private _http: HttpClient, private _authenticator: AuthenticatorService) { }
 
     public getUser(): Promise<any> {
 

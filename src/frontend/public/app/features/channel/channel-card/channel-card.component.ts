@@ -14,12 +14,7 @@ export class ChannelCardComponent {
     @Output() public onFollow = new EventEmitter();
     @Output() public onUnfollow = new EventEmitter();
 
-    private _thumbnailPlayer: ThumbnailPlayerService;
-
-    constructor(thumbnailPlayer: ThumbnailPlayerService) {
-
-        this._thumbnailPlayer = thumbnailPlayer;
-    }
+    constructor(private _thumbnailPlayer: ThumbnailPlayerService) { }
 
     public playThumbnail(thumbnail: any): void {
 

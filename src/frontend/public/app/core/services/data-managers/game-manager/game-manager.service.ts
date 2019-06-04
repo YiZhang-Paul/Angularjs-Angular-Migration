@@ -7,13 +7,20 @@ import { GameHttpService } from '../../http/game-http/game-http.service';
 })
 export class GameManagerService {
 
-    public games: any[] = [];
+    public games = [];
 
-    private _gameHttp: GameHttpService;
+    constructor(private _gameHttp: GameHttpService) { }
 
-    constructor(gameHttp: GameHttpService) {
+    public async cacheGames(): Promise<void> {
 
-        this._gameHttp = gameHttp;
+        try {
+
+            this.syncGames(await this._gameHttp.getGames());
+        }
+        catch (error) {
+
+            console.log(error);
+        }
     }
 
     private syncGames(games: any[]): void {
@@ -28,18 +35,6 @@ export class GameManagerService {
             }
 
             this.games[i] = games[i];
-        }
-    }
-
-    public async cacheGames(): Promise<void> {
-
-        try {
-
-            this.syncGames(await this._gameHttp.getGames());
-        }
-        catch (error) {
-
-            console.log(error);
         }
     }
 }

@@ -10,25 +10,10 @@ import { GenericUtilitiesService } from '../utilities/generic-utilities/generic-
 })
 export class CustomRoutingService {
 
-    private _state: StateService;
-    private _channelHttp: ChannelHttpService;
-    private _gameHttp: GameHttpService;
-    private _utilities: GenericUtilitiesService;
-
-    constructor(
-
-        state: StateService,
-        channelHttp: ChannelHttpService,
-        gameHttp: GameHttpService,
-        utilities: GenericUtilitiesService
-
-    ) {
-
-        this._state = state;
-        this._channelHttp = channelHttp;
-        this._gameHttp = gameHttp;
-        this._utilities = utilities;
-    }
+    constructor(private _state: StateService,
+                private _channelHttp: ChannelHttpService,
+                private _gameHttp: GameHttpService,
+                private _utilities: GenericUtilitiesService) { }
 
     public toState(state: string): void {
 

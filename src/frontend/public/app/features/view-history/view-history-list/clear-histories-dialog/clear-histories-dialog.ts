@@ -8,12 +8,7 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ClearHistoriesDialog {
 
-    private _dialogRef: MatDialogRef<ClearHistoriesDialog>;
-
-    constructor(dialogRef: MatDialogRef<ClearHistoriesDialog>) {
-
-        this._dialogRef = dialogRef;
-    }
+    constructor(private _dialogRef: MatDialogRef<ClearHistoriesDialog>) { }
 
     public onClose(isConfirmed: boolean): void {
 

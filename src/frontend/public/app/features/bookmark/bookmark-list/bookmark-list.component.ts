@@ -9,12 +9,7 @@ import { BookmarkManagerService } from '../../../core/services/data-managers/boo
 })
 export class BookmarkListComponent implements OnInit {
 
-    private _bookmarkManager: BookmarkManagerService;
-
-    constructor(bookmarkManager: BookmarkManagerService) {
-
-        this._bookmarkManager = bookmarkManager;
-    }
+    constructor(private _bookmarkManager: BookmarkManagerService) { }
 
     get bookmarks(): any[] {
 

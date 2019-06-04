@@ -13,22 +13,9 @@ import { ClearHistoriesDialog } from './clear-histories-dialog/clear-histories-d
 })
 export class ViewHistoryListComponent implements OnInit {
 
-    private _dialog: MatDialog;
-    private _routingService: CustomRoutingService;
-    private _viewHistoryManager: ViewHistoryManagerService;
-
-    constructor(
-
-        dialog: MatDialog,
-        routingService: CustomRoutingService,
-        viewHistoryManager: ViewHistoryManagerService
-
-    ) {
-
-        this._dialog = dialog;
-        this._routingService = routingService;
-        this._viewHistoryManager = viewHistoryManager;
-    }
+    constructor(private _dialog: MatDialog,
+                private _routingService: CustomRoutingService,
+                private _viewHistoryManager: ViewHistoryManagerService) { }
 
     get histories(): any[] {
 

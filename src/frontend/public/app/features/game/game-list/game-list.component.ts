@@ -12,19 +12,7 @@ export class GameListComponent implements OnInit, OnDestroy {
 
     private _task: any = null;
 
-    private _routingService: CustomRoutingService;
-    private _gameManager: GameManagerService;
-
-    constructor(
-
-        routingService: CustomRoutingService,
-        gameManager: GameManagerService
-
-    ) {
-
-        this._routingService = routingService;
-        this._gameManager = gameManager;
-    }
+    constructor(private _routingService: CustomRoutingService, private _gameManager: GameManagerService) { }
 
     get games(): any[] {
 
@@ -42,13 +30,13 @@ export class GameListComponent implements OnInit, OnDestroy {
         }, 10 * 1000);
     }
 
-    public toChannelsView(game: any): void {
-
-        this._routingService.toChannelsView(game.id);
-    }
-
     public ngOnDestroy(): void {
 
         clearInterval(this._task);
+    }
+
+    public toChannelsView(game: any): void {
+
+        this._routingService.toChannelsView(game.id);
     }
 }

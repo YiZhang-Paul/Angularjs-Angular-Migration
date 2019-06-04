@@ -7,11 +7,21 @@ import { GameManagerService } from '../../../services/data-managers/game-manager
 })
 export class GameFinder {
 
-    private _gameManager: GameManagerService;
+    constructor(private _gameManager: GameManagerService) { }
 
-    constructor(gameManager: GameManagerService) {
+    public findByName(name: string): any[] {
 
-        this._gameManager = gameManager;
+        const nameWithNoSpace = name.replace(/\s/g, '');
+
+        if (!nameWithNoSpace) {
+
+            return [];
+        }
+
+        return this._gameManager.games.filter(_ => {
+
+            return _.name && this.containsName(nameWithNoSpace, _.name);
+        });
     }
 
     private containsName(contained: string, containing: string): boolean {
@@ -29,20 +39,5 @@ export class GameFinder {
         }
 
         return true;
-    }
-
-    public findByName(name: string): any[] {
-
-        const nameWithNoSpace = name.replace(/\s/g, '');
-
-        if (!nameWithNoSpace) {
-
-            return [];
-        }
-
-        return this._gameManager.games.filter(_ => {
-
-            return _.name && this.containsName(nameWithNoSpace, _.name);
-        });
     }
 }

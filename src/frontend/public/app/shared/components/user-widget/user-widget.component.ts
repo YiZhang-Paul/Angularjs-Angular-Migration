@@ -13,6 +13,5 @@ export class UserWidgetComponent {
     public statusOptions = ['Online', 'Invisible'];
     public channelOptions = ['Channel', 'Video Producer', 'Dashboard'];
     public userOptions = ['Friends', 'Subscriptions', 'Inventory', 'Payments'];
-
     public statusText = this.statusOptions[1];
 }

@@ -8,12 +8,7 @@ export class GameHttpService {
 
     private readonly _api = 'http://127.0.0.1:4150/api/v1/games';
 
-    private _http: HttpClient;
-
-    constructor(http: HttpClient) {
-
-        this._http = http;
-    }
+    constructor(private _http: HttpClient) { }
 
     public async getGame(id: number): Promise<any> {
 

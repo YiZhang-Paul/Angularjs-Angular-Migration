@@ -16,22 +16,9 @@ export class UserLoginComponent {
 
     private _user: any = null;
 
-    private _dialog: MatDialog;
-    private _authenticator: AuthenticatorService;
-    private _userLogin: UserLoginService;
-
-    constructor(
-
-        dialog: MatDialog,
-        authenticator: AuthenticatorService,
-        userLogin: UserLoginService
-
-    ) {
-
-        this._dialog = dialog;
-        this._authenticator = authenticator;
-        this._userLogin = userLogin;
-    }
+    constructor(private _dialog: MatDialog,
+                private _authenticator: AuthenticatorService,
+                private _userLogin: UserLoginService) { }
 
     get user(): any {
 
@@ -43,16 +30,16 @@ export class UserLoginComponent {
         return this._authenticator.isAuthenticated;
     }
 
-    private async onLogin(credentials: IBasicCredential): Promise<any> {
-
-        this._user = await this._userLogin.login(credentials);
-    }
-
     public tryLogin(): void {
 
         const callback = this.onLogin.bind(this);
         const option = { width: '20%', data: { callback } };
         this._dialog.open(UserLoginDialog, option);
+    }
+
+    private async onLogin(credentials: IBasicCredential): Promise<any> {
+
+        this._user = await this._userLogin.login(credentials);
     }
 
     public logout(): void {

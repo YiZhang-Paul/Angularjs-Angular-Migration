@@ -8,7 +8,7 @@ import { IEmitData } from '../../interfaces/events/emit-data.interface';
 })
 export class EventManagerService {
 
-    private _emitter: EventEmitter<IEmitData> = new EventEmitter<IEmitData>();
+    private _emitter = new EventEmitter<IEmitData>();
 
     public emit(name: string, payload: any = {}): void {
 

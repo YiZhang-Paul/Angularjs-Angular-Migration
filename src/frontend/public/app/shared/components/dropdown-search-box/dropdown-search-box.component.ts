@@ -11,12 +11,7 @@ export class DropdownSearchBoxComponent {
 
     public result: { games: any[] } = null;
 
-    private _routingService: CustomRoutingService;
-
-    constructor(routingService: CustomRoutingService) {
-
-        this._routingService = routingService;
-    }
+    constructor(private _routingService: CustomRoutingService) { }
 
     public toChannelsView(game: any): void {
 

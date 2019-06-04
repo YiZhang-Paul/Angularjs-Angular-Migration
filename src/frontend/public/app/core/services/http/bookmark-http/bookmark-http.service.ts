@@ -10,16 +10,9 @@ export class BookmarkHttpService {
 
     private _api = 'http://127.0.0.1:4150/api/v1/user/bookmarks';
 
-    private _http: HttpClient;
-    private _authenticator: AuthenticatorService;
+    constructor(private _http: HttpClient, private _authenticator: AuthenticatorService) { }
 
-    constructor(http: HttpClient, authenticator: AuthenticatorService) {
-
-        this._http = http;
-        this._authenticator = authenticator;
-    }
-
-    private getDefaultOptions(): any {
+    private get _defaultOptions(): any {
 
         const options = this._authenticator.defaultOptions;
 
@@ -35,7 +28,7 @@ export class BookmarkHttpService {
 
     public addBookmark(data: any): Promise<any> {
 
-        const options = this.getDefaultOptions();
+        const options = this._defaultOptions;
 
         return this._http.post(this._api, data, options).toPromise();
     }
@@ -43,7 +36,7 @@ export class BookmarkHttpService {
     public deleteBookmark(id: number): Promise<any> {
 
         const url = `${this._api}/${id}`;
-        const options = this.getDefaultOptions();
+        const options = this._defaultOptions;
 
         return this._http.delete(url, options).toPromise();
     }
